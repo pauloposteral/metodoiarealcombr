@@ -1,3 +1,4 @@
+// Certificate system routes
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +15,8 @@ import LessonPlayer from "./pages/members/LessonPlayer";
 import MembersMaterials from "./pages/members/MembersMaterials";
 import MembersBonus from "./pages/members/MembersBonus";
 import MembersSupport from "./pages/members/MembersSupport";
+import MembersCertificate from "./pages/members/MembersCertificate";
+import ValidateCertificate from "./pages/ValidateCertificate";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +37,9 @@ const App = () => (
             <Route path="/membros/materiais" element={<MembersMaterials />} />
             <Route path="/membros/bonus" element={<MembersBonus />} />
             <Route path="/membros/suporte" element={<MembersSupport />} />
+            <Route path="/membros/certificado" element={<MembersCertificate />} />
             <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
+            <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
