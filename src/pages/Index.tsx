@@ -7,6 +7,8 @@ import { ModulesSection } from '@/components/sections/ModulesSection';
 import { DifferentialsSection } from '@/components/sections/DifferentialsSection';
 import { BonusSection } from '@/components/sections/BonusSection';
 import { HowItWorksSection } from '@/components/sections/HowItWorksSection';
+import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { FAQSection } from '@/components/sections/FAQSection';
 import { FinalCTASection } from '@/components/sections/FinalCTASection';
 import { Footer } from '@/components/Footer';
 import { Helmet } from 'react-helmet-async';
@@ -37,6 +39,8 @@ const Index = () => {
         <DifferentialsSection />
         <BonusSection />
         <HowItWorksSection />
+        <TestimonialsSection />
+        <FAQSection />
         <FinalCTASection />
         <Footer />
       </main>
