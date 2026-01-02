@@ -5,23 +5,23 @@ export const ProblemSection = () => {
   const problems = [
     {
       icon: Shuffle,
-      title: 'Excesso de informação',
-      description: 'Milhares de tutoriais, ferramentas e dicas que mais confundem do que ajudam.',
+      title: 'Informação demais',
+      description: 'Milhares de vídeos, tutoriais e dicas. Tudo ao mesmo tempo. E nada faz sentido junto.',
     },
     {
       icon: HelpCircle,
-      title: 'Falta de método',
-      description: 'Conteúdos dispersos sem uma sequência lógica de aprendizado.',
+      title: 'Nenhum caminho claro',
+      description: 'Você vê gente usando IA, mas não sabe por onde começar de verdade.',
     },
     {
       icon: AlertCircle,
-      title: 'Linguagem confusa',
-      description: 'Termos técnicos e jargões que afastam quem está começando.',
+      title: 'Linguagem de outro planeta',
+      description: 'Tokens, embeddings, fine-tuning... parece que não foi feito pra você.',
     },
     {
       icon: Clock,
-      title: 'Dificuldade de aplicar',
-      description: 'Saber que a IA existe, mas não conseguir usar no dia a dia.',
+      title: 'Não sai do lugar',
+      description: 'Você até tentou usar, mas não consegue aplicar no seu trabalho real.',
     },
   ];
 
@@ -34,8 +34,12 @@ export const ProblemSection = () => {
               O Problema
             </span>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Por que a maioria das pessoas ainda não consegue usar a IA?
+              Você sabe que IA é importante. Mas{' '}
+              <span className="text-gradient-gold">não sabe como usar.</span>
             </h2>
+            <p className="text-lg text-muted-foreground">
+              E não é culpa sua. É que ninguém te mostrou do jeito certo.
+            </p>
           </div>
         </ScrollReveal>
 
