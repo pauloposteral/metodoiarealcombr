@@ -9,7 +9,7 @@ import { CommentItem } from './CommentItem';
 interface Comment {
   id: string;
   content: string;
-  is_pinned: boolean;
+  is_pinned: boolean | null;
   created_at: string;
   user_id: string;
   parent_id: string | null;
@@ -37,10 +37,6 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
   const [isModerator, setIsModerator] = useState(false);
   const { toast } = useToast();
 
-  const tableName = type === 'community' ? 'community_comments' : 'lesson_comments';
-  const foreignKey = type === 'community' ? 'post_id' : 'lesson_id';
-  const foreignValue = type === 'community' ? postId : lessonId;
-
   useEffect(() => {
     fetchCurrentUser();
     fetchComments();
@@ -63,17 +59,42 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await supabase
-        .from(tableName)
-        .select(`
-          *,
-          profiles:user_id (full_name, avatar_url)
-        `)
-        .eq(foreignKey, foreignValue)
-        .order('is_pinned', { ascending: false })
-        .order('created_at', { ascending: true });
+      let rawData: any[] = [];
+      
+      if (type === 'community' && postId) {
+        const { data, error } = await supabase
+          .from('community_comments')
+          .select('*')
+          .eq('post_id', postId)
+          .order('is_pinned', { ascending: false })
+          .order('created_at', { ascending: true });
+        if (error) throw error;
+        rawData = data || [];
+      } else if (type === 'lesson' && lessonId) {
+        const { data, error } = await supabase
+          .from('lesson_comments')
+          .select('*')
+          .eq('lesson_id', lessonId)
+          .order('is_pinned', { ascending: false })
+          .order('created_at', { ascending: true });
+        if (error) throw error;
+        rawData = data || [];
+      }
 
-      if (error) throw error;
+      // Get profiles for all users
+      const userIds = [...new Set(rawData.map(c => c.user_id))];
+      let profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
+      
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url')
+          .in('id', userIds);
+        
+        profiles?.forEach(p => {
+          profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };
+        });
+      }
 
       // Get likes
       const { data: { user } } = await supabase.auth.getUser();
@@ -81,8 +102,8 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       
       let likes: { [key: string]: { count: number; userLiked: boolean } } = {};
       
-      if (data && data.length > 0) {
-        const commentIds = data.map(c => c.id);
+      if (rawData.length > 0) {
+        const commentIds = rawData.map(c => c.id);
         
         const { data: likesData } = await supabase
           .from('comment_likes')
@@ -91,21 +112,29 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
         if (likesData) {
           likesData.forEach(like => {
-            const commentId = like[likeColumn];
-            if (!likes[commentId]) {
+            const commentId = type === 'community' ? like.community_comment_id : like.lesson_comment_id;
+            if (commentId && !likes[commentId]) {
               likes[commentId] = { count: 0, userLiked: false };
             }
-            likes[commentId].count++;
-            if (user && like.user_id === user.id) {
-              likes[commentId].userLiked = true;
+            if (commentId) {
+              likes[commentId].count++;
+              if (user && like.user_id === user.id) {
+                likes[commentId].userLiked = true;
+              }
             }
           });
         }
       }
 
       // Organize comments into threads
-      const commentsWithData = (data || []).map(comment => ({
-        ...comment,
+      const commentsWithData: Comment[] = rawData.map(comment => ({
+        id: comment.id,
+        content: comment.content,
+        is_pinned: comment.is_pinned,
+        created_at: comment.created_at,
+        user_id: comment.user_id,
+        parent_id: comment.parent_id,
+        profiles: profilesMap[comment.user_id] || { full_name: null, avatar_url: null },
         likes_count: likes[comment.id]?.count || 0,
         isLiked: likes[comment.id]?.userLiked || false,
         replies: [] as Comment[]
@@ -142,17 +171,25 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Usuário não autenticado');
 
-      const insertData: Record<string, unknown> = {
-        user_id: user.id,
-        content: newComment.trim(),
-        [foreignKey]: foreignValue
-      };
-
-      const { error } = await supabase
-        .from(tableName)
-        .insert(insertData);
-
-      if (error) throw error;
+      if (type === 'community' && postId) {
+        const { error } = await supabase
+          .from('community_comments')
+          .insert({
+            user_id: user.id,
+            content: newComment.trim(),
+            post_id: postId
+          });
+        if (error) throw error;
+      } else if (type === 'lesson' && lessonId) {
+        const { error } = await supabase
+          .from('lesson_comments')
+          .insert({
+            user_id: user.id,
+            content: newComment.trim(),
+            lesson_id: lessonId
+          });
+        if (error) throw error;
+      }
 
       setNewComment('');
       fetchComments();
@@ -191,10 +228,17 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       if (existingLike) {
         await supabase.from('comment_likes').delete().eq('id', existingLike.id);
       } else {
-        await supabase.from('comment_likes').insert({
-          user_id: user.id,
-          [likeColumn]: commentId
-        });
+        if (type === 'community') {
+          await supabase.from('comment_likes').insert({
+            user_id: user.id,
+            community_comment_id: commentId
+          });
+        } else {
+          await supabase.from('comment_likes').insert({
+            user_id: user.id,
+            lesson_comment_id: commentId
+          });
+        }
       }
 
       fetchComments();
@@ -208,18 +252,27 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Usuário não autenticado');
 
-      const insertData: Record<string, unknown> = {
-        user_id: user.id,
-        content,
-        parent_id: parentId,
-        [foreignKey]: foreignValue
-      };
-
-      const { error } = await supabase
-        .from(tableName)
-        .insert(insertData);
-
-      if (error) throw error;
+      if (type === 'community' && postId) {
+        const { error } = await supabase
+          .from('community_comments')
+          .insert({
+            user_id: user.id,
+            content,
+            parent_id: parentId,
+            post_id: postId
+          });
+        if (error) throw error;
+      } else if (type === 'lesson' && lessonId) {
+        const { error } = await supabase
+          .from('lesson_comments')
+          .insert({
+            user_id: user.id,
+            content,
+            parent_id: parentId,
+            lesson_id: lessonId
+          });
+        if (error) throw error;
+      }
 
       fetchComments();
     } catch (error) {
@@ -234,12 +287,19 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
   const handleDelete = async (commentId: string) => {
     try {
-      const { error } = await supabase
-        .from(tableName)
-        .delete()
-        .eq('id', commentId);
-
-      if (error) throw error;
+      if (type === 'community') {
+        const { error } = await supabase
+          .from('community_comments')
+          .delete()
+          .eq('id', commentId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('lesson_comments')
+          .delete()
+          .eq('id', commentId);
+        if (error) throw error;
+      }
 
       fetchComments();
       toast({
@@ -263,12 +323,19 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       const comment = comments.find(c => c.id === commentId) || 
         comments.flatMap(c => c.replies || []).find(r => r.id === commentId);
       
-      const { error } = await supabase
-        .from(tableName)
-        .update({ is_pinned: !comment?.is_pinned })
-        .eq('id', commentId);
-
-      if (error) throw error;
+      if (type === 'community') {
+        const { error } = await supabase
+          .from('community_comments')
+          .update({ is_pinned: !comment?.is_pinned })
+          .eq('id', commentId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('lesson_comments')
+          .update({ is_pinned: !comment?.is_pinned })
+          .eq('id', commentId);
+        if (error) throw error;
+      }
 
       fetchComments();
     } catch (error) {

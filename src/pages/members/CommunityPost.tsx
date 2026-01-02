@@ -70,14 +70,18 @@ const CommunityPost = () => {
     try {
       const { data, error } = await supabase
         .from('community_posts')
-        .select(`
-          *,
-          profiles:user_id (full_name, avatar_url)
-        `)
+        .select('*')
         .eq('id', postId)
         .single();
 
       if (error) throw error;
+
+      // Get profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('id', data.user_id)
+        .maybeSingle();
 
       // Get likes
       const { count: likesCount } = await supabase
@@ -99,6 +103,7 @@ const CommunityPost = () => {
 
       setPost({
         ...data,
+        profiles: profile || { full_name: null, avatar_url: null },
         likes_count: likesCount || 0,
         isLiked
       });
