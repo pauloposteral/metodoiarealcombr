@@ -16,6 +16,8 @@ import MembersMaterials from "./pages/members/MembersMaterials";
 import MembersBonus from "./pages/members/MembersBonus";
 import MembersSupport from "./pages/members/MembersSupport";
 import MembersCertificate from "./pages/members/MembersCertificate";
+import MembersCommunity from "./pages/members/MembersCommunity";
+import CommunityPost from "./pages/members/CommunityPost";
 import ValidateCertificate from "./pages/ValidateCertificate";
 
 const queryClient = new QueryClient();
@@ -38,6 +40,8 @@ const App = () => (
             <Route path="/membros/bonus" element={<MembersBonus />} />
             <Route path="/membros/suporte" element={<MembersSupport />} />
             <Route path="/membros/certificado" element={<MembersCertificate />} />
+            <Route path="/membros/comunidade" element={<MembersCommunity />} />
+            <Route path="/membros/comunidade/post/:postId" element={<CommunityPost />} />
             <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="*" element={<NotFound />} />
