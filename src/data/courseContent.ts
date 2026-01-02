@@ -12,15 +12,32 @@ export interface ExampleBox {
   content: string;
 }
 
+export interface VisualElement {
+  type: 'image' | 'diagram' | 'comparison' | 'tip';
+  imageSrc?: string;
+  alt?: string;
+  caption?: string;
+  tipType?: 'tip' | 'warning' | 'info' | 'success';
+  tipTitle?: string;
+  tipContent?: string;
+  before?: { label: string; content: string };
+  after?: { label: string; content: string };
+  comparisonTitle?: string;
+}
+
+export interface LessonSection {
+  title: string;
+  content: string;
+  examples?: ExampleBox[];
+  visual?: VisualElement;
+}
+
 export interface LessonContent {
   id: string;
   title: string;
   introduction: string;
-  sections: {
-    title: string;
-    content: string;
-    examples?: ExampleBox[];
-  }[];
+  headerImage?: string;
+  sections: LessonSection[];
   summary: string[];
   exercise?: Exercise;
   checklist?: Checklist;
@@ -31,6 +48,7 @@ export interface ModuleData {
   number: number;
   title: string;
   description: string;
+  headerImage?: string;
   lessons: LessonContent[];
 }
 
@@ -40,11 +58,13 @@ export const courseContent: ModuleData[] = [
     number: 1,
     title: "Fundamentos da IA",
     description: "Entenda o que é IA de verdade, como ela funciona e como pensar para usá-la bem.",
+    headerImage: "person-working-laptop",
     lessons: [
       {
         id: "m1-aula-1",
         title: "O que é IA (sem tecnicismo)",
         introduction: "Você já ouviu falar de Inteligência Artificial milhares de vezes. Mas o que ela realmente é? Vamos tirar o mistério e entender de forma simples.",
+        headerImage: "person-working-laptop",
         sections: [
           {
             title: "Esquece o que você viu nos filmes",
@@ -54,15 +74,33 @@ export const courseContent: ModuleData[] = [
                 title: "Exemplo prático",
                 content: "Quando você digita \"Bom dia, como você...\", a IA prevê que a próxima palavra provavelmente é \"está\". Ela faz isso milhares de vezes por segundo até formar uma resposta completa."
               }
-            ]
+            ],
+            visual: {
+              type: "tip",
+              tipType: "info",
+              tipTitle: "Conceito-chave",
+              tipContent: "IA não pensa como humanos. Ela reconhece padrões em dados e faz previsões estatísticas muito precisas."
+            }
           },
           {
             title: "A analogia do assistente",
-            content: "Imagine que você contratou um assistente que leu todos os livros do mundo, viu todos os sites, analisou milhões de conversas. Esse assistente não é genial — ele é muito bem informado.\n\nQuando você pede algo, ele busca padrões no que já viu e tenta montar a melhor resposta possível. Às vezes acerta em cheio. Às vezes erra feio. Depende de como você pede.\n\nE é aqui que entra o segredo: a qualidade da resposta depende da qualidade da pergunta. Isso você vai aprender ao longo do curso."
+            content: "Imagine que você contratou um assistente que leu todos os livros do mundo, viu todos os sites, analisou milhões de conversas. Esse assistente não é genial — ele é muito bem informado.\n\nQuando você pede algo, ele busca padrões no que já viu e tenta montar a melhor resposta possível. Às vezes acerta em cheio. Às vezes erra feio. Depende de como você pede.\n\nE é aqui que entra o segredo: a qualidade da resposta depende da qualidade da pergunta. Isso você vai aprender ao longo do curso.",
+            visual: {
+              type: "diagram",
+              imageSrc: "ai-flow-diagram",
+              alt: "Fluxo de funcionamento da IA: Pergunta → Processamento → Resposta",
+              caption: "Fluxo básico de interação com IA: você pergunta, ela processa e responde"
+            }
           },
           {
             title: "Por que isso importa agora?",
-            content: "A IA chegou num ponto em que qualquer pessoa pode usar. Você não precisa saber programar. Não precisa entender algoritmos. Você só precisa saber se comunicar.\n\nIsso muda tudo. Pela primeira vez na história, uma tecnologia de ponta está acessível para todo mundo. E quem souber usar bem, vai sair na frente.\n\nNão é sobre substituir pessoas. É sobre amplificar o que você já faz. Escrever mais rápido. Pensar com mais clareza. Resolver problemas com menos esforço."
+            content: "A IA chegou num ponto em que qualquer pessoa pode usar. Você não precisa saber programar. Não precisa entender algoritmos. Você só precisa saber se comunicar.\n\nIsso muda tudo. Pela primeira vez na história, uma tecnologia de ponta está acessível para todo mundo. E quem souber usar bem, vai sair na frente.\n\nNão é sobre substituir pessoas. É sobre amplificar o que você já faz. Escrever mais rápido. Pensar com mais clareza. Resolver problemas com menos esforço.",
+            visual: {
+              type: "diagram",
+              imageSrc: "method-comparison",
+              alt: "Comparação: Sem Método vs Com Método",
+              caption: "A diferença entre usar IA de forma aleatória e usar com método estruturado"
+            }
           }
         ],
         summary: [
@@ -80,6 +118,7 @@ export const courseContent: ModuleData[] = [
         id: "m1-aula-2",
         title: "Como a IA funciona na prática",
         introduction: "Agora que você sabe o que é IA, vamos entender como ela realmente funciona quando você usa. Sem complicação.",
+        headerImage: "ai-flow-diagram",
         sections: [
           {
             title: "O fluxo básico: entrada, processamento, saída",
@@ -89,11 +128,29 @@ export const courseContent: ModuleData[] = [
                 title: "Exemplo prático",
                 content: "Entrada: \"Escreva um post sobre produtividade\"\nProcessamento: IA busca padrões de posts sobre produtividade\nSaída: Um texto genérico sobre produtividade\n\nAgora compare:\nEntrada: \"Escreva um post de Instagram sobre como usar 15 minutos por dia para organizar a semana, tom leve e prático, com emojis\"\nProcessamento: IA busca padrões mais específicos\nSaída: Um texto muito mais útil e direcionado"
               }
-            ]
+            ],
+            visual: {
+              type: "comparison",
+              comparisonTitle: "Prompt Vago vs Prompt Específico",
+              before: {
+                label: "Antes",
+                content: "Escreva um post sobre produtividade"
+              },
+              after: {
+                label: "Depois",
+                content: "Escreva um post de Instagram sobre como usar 15 minutos por dia para organizar a semana, tom leve e prático, com emojis"
+              }
+            }
           },
           {
             title: "A IA não lê sua mente",
-            content: "Esse é um erro comum: achar que a IA vai \"entender\" o que você quer. Não vai.\n\nEla trabalha com o que você dá. Se você der pouco, ela inventa. Se você der muito e bem organizado, ela entrega melhor.\n\nPense como se estivesse dando instruções para alguém que nunca te viu, não conhece seu negócio e não sabe o que você quer. Quanto mais contexto, melhor."
+            content: "Esse é um erro comum: achar que a IA vai \"entender\" o que você quer. Não vai.\n\nEla trabalha com o que você dá. Se você der pouco, ela inventa. Se você der muito e bem organizado, ela entrega melhor.\n\nPense como se estivesse dando instruções para alguém que nunca te viu, não conhece seu negócio e não sabe o que você quer. Quanto mais contexto, melhor.",
+            visual: {
+              type: "tip",
+              tipType: "warning",
+              tipTitle: "Atenção",
+              tipContent: "Não espere que a IA adivinhe o que você quer. Ela responde exatamente ao que você pergunta — nem mais, nem menos."
+            }
           },
           {
             title: "O ciclo de refinamento",
@@ -103,7 +160,13 @@ export const courseContent: ModuleData[] = [
                 title: "Exemplo prático",
                 content: "Primeira tentativa: \"Escreva um e-mail de vendas\"\nResposta: Texto genérico\n\nRefinamento: \"Esse e-mail é para donos de pequenos negócios que querem economizar tempo. Tom direto, sem enrolação, máximo 5 linhas.\"\nResposta: Muito melhor\n\nRefinamento final: \"Adicione uma pergunta no início para gerar curiosidade\"\nResposta: Exatamente o que você queria"
               }
-            ]
+            ],
+            visual: {
+              type: "diagram",
+              imageSrc: "refinement-cycle",
+              alt: "Ciclo de refinamento: Perguntar → Receber → Refinar → Repetir",
+              caption: "O ciclo contínuo de refinamento é o segredo para melhores resultados"
+            }
           }
         ],
         summary: [
@@ -477,10 +540,17 @@ export const courseContent: ModuleData[] = [
         id: "m3-aula-2",
         title: "Estrutura de prompt",
         introduction: "Existe uma estrutura que funciona para quase qualquer situação. Vamos aprender e praticar.",
+        headerImage: "prompt-structure",
         sections: [
           {
             title: "A estrutura universal",
-            content: "Use essa estrutura como base:\n\n[PAPEL] Aja como [tipo de especialista]\n[CONTEXTO] Eu preciso de [situação/necessidade]\n[TAREFA] Faça [ação específica]\n[FORMATO] Responda em [formato desejado]\n[REGRAS] Siga essas diretrizes: [restrições]\n\nNão precisa usar todas as partes sempre, mas quanto mais completo, melhor o resultado."
+            content: "Use essa estrutura como base:\n\n[PAPEL] Aja como [tipo de especialista]\n[CONTEXTO] Eu preciso de [situação/necessidade]\n[TAREFA] Faça [ação específica]\n[FORMATO] Responda em [formato desejado]\n[REGRAS] Siga essas diretrizes: [restrições]\n\nNão precisa usar todas as partes sempre, mas quanto mais completo, melhor o resultado.",
+            visual: {
+              type: "diagram",
+              imageSrc: "prompt-structure",
+              alt: "Estrutura de um prompt: Contexto, Papel, Tarefa, Formato e Restrições",
+              caption: "Os 5 blocos de construção de um prompt eficaz"
+            }
           },
           {
             title: "Exemplos da estrutura em ação",
@@ -498,7 +568,13 @@ export const courseContent: ModuleData[] = [
           },
           {
             title: "Ajustando a estrutura",
-            content: "Você não precisa ser rígido. Adapte conforme a necessidade:\n\n• Para pedidos simples: contexto + tarefa é suficiente\n• Para pedidos complexos: use todos os elementos\n• Para conversas: comece simples e adicione detalhes conforme necessário\n\nO importante é dar informação suficiente para a IA entregar o que você precisa."
+            content: "Você não precisa ser rígido. Adapte conforme a necessidade:\n\n• Para pedidos simples: contexto + tarefa é suficiente\n• Para pedidos complexos: use todos os elementos\n• Para conversas: comece simples e adicione detalhes conforme necessário\n\nO importante é dar informação suficiente para a IA entregar o que você precisa.",
+            visual: {
+              type: "tip",
+              tipType: "success",
+              tipTitle: "Dica Pro",
+              tipContent: "Comece com prompts simples e vá adicionando detalhes. Isso te ensina o que cada elemento muda no resultado."
+            }
           },
           {
             title: "Templates prontos",
@@ -708,11 +784,13 @@ export const courseContent: ModuleData[] = [
     number: 4,
     title: "IA para Conteúdo",
     description: "Aprenda a criar conteúdo consistente e de qualidade usando IA como sua aliada.",
+    headerImage: "content-repurposing",
     lessons: [
       {
         id: "m4-aula-1",
         title: "Ideias infinitas",
         introduction: "O bloqueio criativo acabou. Com as técnicas certas, você nunca mais vai ficar sem ideias de conteúdo.",
+        headerImage: "team-collaboration",
         sections: [
           {
             title: "O método da multiplicação",
@@ -722,7 +800,13 @@ export const courseContent: ModuleData[] = [
                 title: "Exemplo prático",
                 content: "Tema: Produtividade\n\nÂngulos possíveis:\n• Produtividade para mães\n• Produtividade para quem trabalha de casa\n• Erros de produtividade\n• Mitos sobre produtividade\n• Produtividade sem app\n• Produtividade em 15 minutos\n• Produtividade para preguiçosos\n\nCada um vira um post, um vídeo, um artigo."
               }
-            ]
+            ],
+            visual: {
+              type: "diagram",
+              imageSrc: "content-repurposing",
+              alt: "Fluxo de reaproveitamento de conteúdo",
+              caption: "Uma ideia central pode se transformar em múltiplos formatos de conteúdo"
+            }
           },
           {
             title: "Formatos que geram ideias",
@@ -734,7 +818,13 @@ export const courseContent: ModuleData[] = [
           },
           {
             title: "Repositório de ideias",
-            content: "Crie um banco de ideias:\n\n1. Gere 30-50 ideias de uma vez\n2. Classifique por tipo (educativo, engajamento, vendas)\n3. Guarde em um documento ou app\n4. Vá usando e reabastecendo\n\nNunca mais comece do zero."
+            content: "Crie um banco de ideias:\n\n1. Gere 30-50 ideias de uma vez\n2. Classifique por tipo (educativo, engajamento, vendas)\n3. Guarde em um documento ou app\n4. Vá usando e reabastecendo\n\nNunca mais comece do zero.",
+            visual: {
+              type: "tip",
+              tipType: "success",
+              tipTitle: "Dica de Ouro",
+              tipContent: "Gere 30 ideias de uma vez e guarde em um documento. Você terá conteúdo para um mês inteiro."
+            }
           }
         ],
         summary: [
@@ -917,15 +1007,23 @@ export const courseContent: ModuleData[] = [
     number: 5,
     title: "IA para Negócios",
     description: "Use IA como aliada estratégica para crescer seu negócio.",
+    headerImage: "business-growth",
     lessons: [
       {
         id: "m5-aula-1",
         title: "IA como assistente de negócios",
         introduction: "A IA pode ser seu braço direito nos negócios. Vamos ver como usar ela de forma estratégica.",
+        headerImage: "entrepreneur-cafe",
         sections: [
           {
             title: "Mudando a mentalidade",
-            content: "Pare de ver IA como ferramenta isolada. Veja como assistente que:\n\n• Está disponível 24 horas\n• Não reclama de refazer trabalho\n• Processa informação muito mais rápido que você\n• Não esquece o que você pediu (na mesma conversa)\n• Pode assumir tarefas repetitivas"
+            content: "Pare de ver IA como ferramenta isolada. Veja como assistente que:\n\n• Está disponível 24 horas\n• Não reclama de refazer trabalho\n• Processa informação muito mais rápido que você\n• Não esquece o que você pediu (na mesma conversa)\n• Pode assumir tarefas repetitivas",
+            visual: {
+              type: "diagram",
+              imageSrc: "business-growth",
+              alt: "Crescimento de negócios com IA",
+              caption: "IA como catalisador de eficiência e crescimento"
+            }
           },
           {
             title: "Tarefas estratégicas para delegar",
@@ -943,7 +1041,13 @@ export const courseContent: ModuleData[] = [
           },
           {
             title: "Tomada de decisão assistida",
-            content: "Use IA para pensar melhor:\n\n• Peça análise de prós e contras\n• Solicite cenários possíveis\n• Questione suas premissas\n• Explore alternativas não consideradas\n• Valide sua lógica"
+            content: "Use IA para pensar melhor:\n\n• Peça análise de prós e contras\n• Solicite cenários possíveis\n• Questione suas premissas\n• Explore alternativas não consideradas\n• Valide sua lógica",
+            visual: {
+              type: "diagram",
+              imageSrc: "sales-funnel",
+              alt: "Funil de vendas",
+              caption: "Visualize seu processo de vendas de forma clara"
+            }
           }
         ],
         summary: [
@@ -1120,11 +1224,13 @@ export const courseContent: ModuleData[] = [
     number: 6,
     title: "Produtividade com IA",
     description: "Organize sua vida e trabalho de forma mais inteligente.",
+    headerImage: "productivity-calendar",
     lessons: [
       {
         id: "m6-aula-1",
         title: "Organização pessoal",
         introduction: "A desorganização rouba tempo e energia. Vamos usar IA para criar sistemas de organização que funcionam para você.",
+        headerImage: "productivity-calendar",
         sections: [
           {
             title: "Diagnóstico: onde você perde tempo?",
@@ -1414,11 +1520,13 @@ export const courseContent: ModuleData[] = [
     number: 8,
     title: "O Jogo é Mental",
     description: "O mindset certo para se manter relevante no mundo da IA.",
+    headerImage: "future-work",
     lessons: [
       {
         id: "mf-aula-1",
         title: "O futuro do trabalho",
         introduction: "O mundo do trabalho está mudando rápido. Vamos entender o que está acontecendo e como se posicionar.",
+        headerImage: "future-work",
         sections: [
           {
             title: "O que a IA realmente muda",

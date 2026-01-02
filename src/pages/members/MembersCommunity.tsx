@@ -103,10 +103,7 @@ const MembersCommunity = () => {
     try {
       let query = supabase
         .from('community_posts')
-        .select(`
-          *,
-          profiles:user_id (full_name, avatar_url)
-        `);
+        .select('*');
 
       if (activeCategory !== 'all') {
         query = query.eq('category', activeCategory);
@@ -121,10 +118,25 @@ const MembersCommunity = () => {
       const { data, error } = await query;
       if (error) throw error;
 
+      // Get profiles for all users
+      const userIds = [...new Set((data || []).map(p => p.user_id))];
+      let profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
+      
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url')
+          .in('id', userIds);
+        
+        profiles?.forEach(p => {
+          profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };
+        });
+      }
+
       // Get counts and likes
       const { data: { user } } = await supabase.auth.getUser();
       
-      const postsWithCounts = await Promise.all((data || []).map(async (post) => {
+      const postsWithCounts: Post[] = await Promise.all((data || []).map(async (post) => {
         const { count: commentsCount } = await supabase
           .from('community_comments')
           .select('*', { count: 'exact', head: true })
@@ -148,6 +160,7 @@ const MembersCommunity = () => {
 
         return {
           ...post,
+          profiles: profilesMap[post.user_id] || { full_name: null, avatar_url: null },
           _count: {
             comments: commentsCount || 0,
             likes: likesCount || 0
