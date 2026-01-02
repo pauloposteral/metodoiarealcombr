@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import logoImage from '@/assets/logo-iareal.png';
 
 interface Certificate {
-  id: string;
   certificate_code: string;
   student_name: string;
   course_name: string;
@@ -33,16 +32,17 @@ const ValidateCertificate = () => {
     setCertificate(null);
 
     try {
+      // Use secure RPC function that only exposes necessary fields
       const { data, error } = await supabase
-        .from('certificates')
-        .select('*')
-        .eq('certificate_code', code.trim().toUpperCase())
-        .maybeSingle();
+        .rpc('validate_certificate', { cert_code: code.trim().toUpperCase() });
 
       if (error) throw error;
 
-      if (data) {
-        setCertificate(data);
+      // The RPC returns an array, get the first result
+      const result = Array.isArray(data) ? data[0] : data;
+
+      if (result) {
+        setCertificate(result);
       } else {
         setNotFound(true);
       }
