@@ -19,6 +19,7 @@ import MembersCertificate from "./pages/members/MembersCertificate";
 import MembersCommunity from "./pages/members/MembersCommunity";
 import CommunityPost from "./pages/members/CommunityPost";
 import ValidateCertificate from "./pages/ValidateCertificate";
+import CourseContentPage from "./pages/CourseContent";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/curso" element={<CourseContentPage />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/membros" element={<MembersDashboard />} />
             <Route path="/membros/modulos" element={<MembersModules />} />
