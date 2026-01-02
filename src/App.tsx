@@ -6,6 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
+import MembersDashboard from "./pages/members/MembersDashboard";
+import MembersModules from "./pages/members/MembersModules";
+import ModuleDetail from "./pages/members/ModuleDetail";
+import LessonPlayer from "./pages/members/LessonPlayer";
+import MembersMaterials from "./pages/members/MembersMaterials";
+import MembersBonus from "./pages/members/MembersBonus";
+import MembersSupport from "./pages/members/MembersSupport";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +26,15 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/membros" element={<MembersDashboard />} />
+            <Route path="/membros/modulos" element={<MembersModules />} />
+            <Route path="/membros/modulos/:moduleId" element={<ModuleDetail />} />
+            <Route path="/membros/aula/:lessonId" element={<LessonPlayer />} />
+            <Route path="/membros/materiais" element={<MembersMaterials />} />
+            <Route path="/membros/bonus" element={<MembersBonus />} />
+            <Route path="/membros/suporte" element={<MembersSupport />} />
+            <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
