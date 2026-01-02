@@ -5,18 +5,18 @@ export const SolutionSection = () => {
   const pillars = [
     {
       icon: Layers,
-      title: 'Estruturado',
-      description: 'Sequência lógica e progressiva de aprendizado.',
+      title: 'Passo a passo',
+      description: 'Cada aula te leva pra próxima. Sem pular etapa.',
     },
     {
       icon: Target,
-      title: 'Progressivo',
-      description: 'Do básico ao avançado, no seu ritmo.',
+      title: 'No seu ritmo',
+      description: 'Você assiste quando quiser. Volta quantas vezes precisar.',
     },
     {
       icon: Zap,
-      title: 'Aplicável',
-      description: 'Conhecimento que você usa imediatamente.',
+      title: 'Uso imediato',
+      description: 'Terminou a aula? Já pode aplicar. Sem esperar.',
     },
   ];
 
@@ -31,12 +31,12 @@ export const SolutionSection = () => {
                 A Solução
               </span>
               <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-                O Método{' '}
-                <span className="text-gradient-gold">IA Real</span>
+                O{' '}
+                <span className="text-gradient-gold">Método IA Real</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                Um método estruturado, pensado para pessoas reais, que precisam de resultados 
-                práticos. Aqui você não aprende apenas o que é IA — você aprende o que fazer com ela.
+                Nada de teoria infinita. Aqui você vê gente usando IA de verdade — e aprende 
+                fazendo. Simples, direto, e aplicável hoje.
               </p>
 
               <div className="space-y-4">
@@ -69,8 +69,8 @@ export const SolutionSection = () => {
               <div className="relative bg-navy rounded-3xl p-8 md:p-12">
                 <div className="absolute top-6 left-6 text-accent/20 text-8xl font-serif">"</div>
                 <p className="font-display text-xl md:text-2xl font-bold text-primary-foreground leading-relaxed relative z-10">
-                  Você não aprende o que é IA.{' '}
-                  <span className="text-gradient-gold">Você aprende o que fazer com ela.</span>
+                  Menos explicação.{' '}
+                  <span className="text-gradient-gold">Mais ação.</span>
                 </p>
                 <div className="mt-8 pt-6 border-t border-primary-foreground/10">
                   <div className="flex items-center gap-3">

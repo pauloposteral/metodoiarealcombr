@@ -6,42 +6,42 @@ const testimonials = [
     name: "Marina Costa",
     role: "Empreendedora Digital",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-    text: "Eu achava que IA era coisa de programador. Com o Método IA Real, aprendi a usar no meu dia a dia de forma simples. Economizo horas toda semana!",
+    text: "Eu achava que IA era coisa de programador. Hoje uso todo dia pra criar posts, responder clientes e até montar propostas. Economizo umas 10 horas por semana.",
     stars: 5
   },
   {
     name: "Ricardo Almeida",
     role: "Criador de Conteúdo",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    text: "O curso é direto ao ponto. Sem enrolação, sem tecnicismo. Em uma semana já estava aplicando tudo no meu trabalho.",
+    text: "O curso é direto ao ponto. Nada de enrolação. Na primeira semana já estava usando o ChatGPT do jeito certo. Mudou meu jogo.",
     stars: 5
   },
   {
     name: "Fernanda Lima",
     role: "Advogada",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    text: "Finalmente um curso que explica IA de forma humana. O módulo de prompts mudou completamente a forma como uso o ChatGPT.",
+    text: "Finalmente entendi como usar IA sem parecer robô. O módulo de prompts é ouro puro. Uso pra revisar contratos e criar petições.",
     stars: 5
   },
   {
     name: "Carlos Eduardo",
     role: "Professor Universitário",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    text: "Recomendo para todos os meus alunos. O método é estruturado e progressivo. Ideal para quem quer começar do zero.",
+    text: "Recomendo pra todo mundo. O método é claro, progressivo, e funciona. Meus alunos já estão usando também.",
     stars: 5
   },
   {
     name: "Ana Beatriz",
     role: "Designer Freelancer",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-    text: "Dobrei minha produtividade usando as técnicas do curso. A biblioteca de prompts é um tesouro!",
+    text: "Dobrei minha produtividade. Uso IA pra criar briefings, revisar textos e até ter ideias novas. A biblioteca de prompts é demais.",
     stars: 5
   },
   {
     name: "Pedro Henrique",
     role: "Consultor de Negócios",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-    text: "Investimento que se paga em uma semana. Estou usando IA para analisar dados e criar propostas 10x mais rápido.",
+    text: "Investimento que se paga na primeira semana. Uso IA pra analisar dados, criar apresentações e montar propostas muito mais rápido.",
     stars: 5
   }
 ];
@@ -57,13 +57,14 @@ export const TestimonialsSection = () => {
         <ScrollReveal>
           <div className="text-center mb-16">
             <span className="inline-block px-4 py-2 bg-gold/10 text-gold rounded-full text-sm font-medium mb-4">
-              Provas Sociais
+              Quem já está usando
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
-              O que dizem nossos alunos
+              Gente como você,{' '}
+              <span className="text-gradient-gold">usando IA de verdade</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Histórias reais de pessoas que transformaram sua relação com a tecnologia
+              Não são influencers. São profissionais comuns que aprenderam e aplicaram.
             </p>
           </div>
         </ScrollReveal>

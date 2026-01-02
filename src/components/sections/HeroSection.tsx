@@ -43,19 +43,19 @@ export const HeroSection = () => {
           {/* Title */}
           <ScrollReveal delay={100}>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6">
-              Método IA Real —{' '}
+              Aprenda a usar{' '}
               <span className="text-gradient-gold">
-                Inteligência Artificial
+                IA de verdade
               </span>{' '}
-              aplicada ao mundo real
+              no seu dia a dia
             </h1>
           </ScrollReveal>
 
           {/* Subtitle */}
           <ScrollReveal delay={200}>
             <p className="text-lg md:text-xl text-primary-foreground/80 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Aprenda a usar a IA de forma prática para trabalhar melhor, criar mais, 
-              vender mais e ganhar tempo — mesmo começando do zero.
+              Chega de tutorial solto. Aqui você vê como pessoas reais usam IA para 
+              criar, trabalhar e resolver problemas — e aprende a fazer igual.
             </p>
           </ScrollReveal>
 
