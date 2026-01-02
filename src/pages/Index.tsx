@@ -18,6 +18,7 @@ import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
 import { FAQSection } from '@/components/sections/FAQSection';
 import { FinalCTASection } from '@/components/sections/FinalCTASection';
 import { Footer } from '@/components/Footer';
+import { TopHeader } from '@/components/TopHeader';
 import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
@@ -36,6 +37,7 @@ const Index = () => {
         <link rel="canonical" href="https://metodoiareal.com.br" />
       </Helmet>
       
+      <TopHeader />
       <main className="overflow-hidden">
         {/* Hero & Problem */}
         <HeroSection />
