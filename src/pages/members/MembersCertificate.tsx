@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import MembersLayout from '@/components/members/MembersLayout';
+import { MembersLayout } from '@/components/members/MembersLayout';
 import { CertificateTemplate } from '@/components/members/CertificateTemplate';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
