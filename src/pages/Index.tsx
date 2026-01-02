@@ -1,12 +1,15 @@
 import { HeroSection } from '@/components/sections/HeroSection';
 import { ProblemSection } from '@/components/sections/ProblemSection';
 import { SolutionSection } from '@/components/sections/SolutionSection';
+import { HowAIWorksSection } from '@/components/sections/HowAIWorksSection';
+import { ComparisonSection } from '@/components/sections/ComparisonSection';
+import { StepByStepSection } from '@/components/sections/StepByStepSection';
+import { PromptExampleSection } from '@/components/sections/PromptExampleSection';
+import { LearningMapSection } from '@/components/sections/LearningMapSection';
+import { WhatYouLearnSection } from '@/components/sections/WhatYouLearnSection';
 import { RealProofSection } from '@/components/sections/RealProofSection';
-import { ProcessSection } from '@/components/sections/ProcessSection';
 import { HumanSection } from '@/components/sections/HumanSection';
 import { TargetAudienceSection } from '@/components/sections/TargetAudienceSection';
-import { LearningSection } from '@/components/sections/LearningSection';
-import { StorytellingSection } from '@/components/sections/StorytellingSection';
 import { ModulesSection } from '@/components/sections/ModulesSection';
 import { DifferentialsSection } from '@/components/sections/DifferentialsSection';
 import { BonusSection } from '@/components/sections/BonusSection';
@@ -34,19 +37,35 @@ const Index = () => {
       </Helmet>
       
       <main className="overflow-hidden">
+        {/* Hero & Problem */}
         <HeroSection />
         <ProblemSection />
+        
+        {/* Solution & How it works (didactic) */}
         <SolutionSection />
+        <HowAIWorksSection />
+        <ComparisonSection />
+        <StepByStepSection />
+        
+        {/* Real proof with example */}
+        <PromptExampleSection />
         <RealProofSection />
-        <ProcessSection />
+        
+        {/* Learning journey */}
+        <LearningMapSection />
+        <WhatYouLearnSection />
+        
+        {/* Social proof & human touch */}
         <HumanSection />
         <TargetAudienceSection />
-        <LearningSection />
-        <StorytellingSection />
+        
+        {/* Course details */}
         <ModulesSection />
         <DifferentialsSection />
         <BonusSection />
         <HowItWorksSection />
+        
+        {/* Final conversion */}
         <TestimonialsSection />
         <FAQSection />
         <FinalCTASection />
