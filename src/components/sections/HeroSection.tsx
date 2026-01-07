@@ -77,12 +77,16 @@ export const HeroSection = () => {
           {/* CTA Buttons */}
           <ScrollReveal delay={400}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button variant="hero" size="xl" className="group">
-                Quero aprender IA na prática
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              <Button asChild variant="hero" size="xl" className="group">
+                <a href="https://payfast.greenn.com.br/152833" target="_blank" rel="noopener noreferrer">
+                  Quero aprender IA na prática
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </a>
               </Button>
-              <Button variant="heroSecondary" size="lg">
-                Ver conteúdo completo
+              <Button asChild variant="heroSecondary" size="lg">
+                <a href="#modulos">
+                  Ver conteúdo completo
+                </a>
               </Button>
             </div>
           </ScrollReveal>
