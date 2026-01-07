@@ -48,7 +48,7 @@ const testimonials = [
 
 export const TestimonialsSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden">
+    <section id="depoimentos" className="py-20 md:py-28 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden scroll-mt-16">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-navy-light/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />

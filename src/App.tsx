@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Obrigado from "./pages/Obrigado";
+import Termos from "./pages/Termos";
+import Privacidade from "./pages/Privacidade";
 import MembersDashboard from "./pages/members/MembersDashboard";
 import MembersModules from "./pages/members/MembersModules";
 import ModuleDetail from "./pages/members/ModuleDetail";
@@ -35,6 +37,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/curso" element={<CourseContentPage />} />
             <Route path="/obrigado" element={<Obrigado />} />
+            <Route path="/termos" element={<Termos />} />
+            <Route path="/privacidade" element={<Privacidade />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/membros" element={<MembersDashboard />} />
             <Route path="/membros/modulos" element={<MembersModules />} />

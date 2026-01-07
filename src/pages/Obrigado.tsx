@@ -8,6 +8,26 @@ import { Helmet } from 'react-helmet-async';
 const Obrigado = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Facebook Pixel - Purchase Event
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Purchase', {
+        content_name: 'Método IA Real',
+        content_category: 'Curso Online',
+        currency: 'BRL',
+      });
+    }
+    
+    // Google Analytics - Conversion Event
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'purchase', {
+        transaction_id: Date.now().toString(),
+        items: [{
+          item_name: 'Método IA Real',
+          item_category: 'Curso Online',
+        }]
+      });
+    }
   }, []);
 
   const nextSteps = [
