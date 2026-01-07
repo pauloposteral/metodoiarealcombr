@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logo from '@/assets/logo-iareal.png';
 
 export const Footer = () => {
@@ -16,13 +17,13 @@ export const Footer = () => {
             Método IA Real — Aprenda a usar inteligência artificial de forma prática e aplicável.
           </p>
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-            <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+            <Link to="/termos" className="text-primary-foreground/60 hover:text-accent transition-colors">
               Termos de Uso
-            </a>
-            <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+            </Link>
+            <Link to="/privacidade" className="text-primary-foreground/60 hover:text-accent transition-colors">
               Política de Privacidade
-            </a>
-            <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+            </Link>
+            <a href="mailto:contato@metodoiareal.com.br" className="text-primary-foreground/60 hover:text-accent transition-colors">
               Suporte
             </a>
           </div>

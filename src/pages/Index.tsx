@@ -34,6 +34,11 @@ const Index = () => {
         <meta property="og:title" content="Método IA Real — Aprenda a usar IA de verdade" />
         <meta property="og:description" content="Chega de tutorial solto. Aqui você vê como pessoas reais usam IA — e aprende a fazer igual." />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="/og-image.jpg" />
         <link rel="canonical" href="https://metodoiareal.com.br" />
       </Helmet>
       
