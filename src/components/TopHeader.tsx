@@ -17,7 +17,7 @@ export const TopHeader = () => {
         <div className="flex items-center justify-between h-14">
           {/* Logo / Brand */}
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="Método IA Real" className="h-10 sm:h-12" />
+            <img src={logo} alt="Método IA Real" className="h-20 sm:h-24 w-auto" />
           </Link>
 
           {/* Navigation - Desktop */}
