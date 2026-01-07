@@ -48,9 +48,11 @@ export const FinalCTASection = () => {
 
           <ScrollReveal delay={300}>
             <div className="flex flex-col items-center gap-6 mb-10">
-              <Button variant="hero" size="xl" className="group text-lg">
-                Entrar no Método IA Real
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              <Button asChild variant="hero" size="xl" className="group text-lg">
+                <a href="https://payfast.greenn.com.br/152833" target="_blank" rel="noopener noreferrer">
+                  Entrar no Método IA Real
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </a>
               </Button>
               <p className="text-primary-foreground/50 text-sm">
                 Acesso imediato após a confirmação do pagamento
