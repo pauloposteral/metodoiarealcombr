@@ -42,7 +42,7 @@ export const HeroSection = () => {
 
           {/* Title */}
           <ScrollReveal delay={100}>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-primary-foreground leading-tight mb-6">
               Aprenda a usar{' '}
               <span className="text-gradient-gold">
                 IA de verdade
