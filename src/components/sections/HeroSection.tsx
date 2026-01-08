@@ -36,7 +36,7 @@ export const HeroSection = () => {
             <img 
               src={logo} 
               alt="Método IA Real - Curso de Inteligência Artificial" 
-              className="h-14 md:h-18 lg:h-20 mx-auto mb-10 drop-shadow-2xl"
+              className="h-[100px] sm:h-[120px] mx-auto mb-10 drop-shadow-2xl"
             />
           </ScrollReveal>
 
