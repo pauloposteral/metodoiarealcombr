@@ -12,6 +12,11 @@ import realisPresenting from "@/assets/character/realis-presenting.png";
 import realisConfident from "@/assets/character/realis-confident.png";
 import realisWelcoming from "@/assets/character/realis-welcoming.png";
 
+// REALIS Social Media versions
+import realisStoriesWelcome from "@/assets/character/realis-stories-welcome.png";
+import realisReelsTeaching from "@/assets/character/realis-reels-teaching.png";
+import realisStoriesThinking from "@/assets/character/realis-stories-thinking.png";
+
 const characterAssets = [
   {
     id: "guiding",
@@ -54,6 +59,33 @@ const characterAssets = [
     description: "Mãos abertas em boas-vindas, perfeito para FAQ e suporte",
     image: realisWelcoming,
     filename: "realis-welcoming.png",
+  },
+];
+
+const socialMediaAssets = [
+  {
+    id: "stories-welcome",
+    name: "REALIS Stories - Boas-vindas",
+    description: "Pose elegante para Stories, com espaço para texto acima e abaixo",
+    image: realisStoriesWelcome,
+    filename: "realis-stories-welcome.png",
+    dimensions: "1080 x 1920",
+  },
+  {
+    id: "reels-teaching",
+    name: "REALIS Reels - Ensinando",
+    description: "Gesto de ensino dinâmico, perfeito para Reels educativos",
+    image: realisReelsTeaching,
+    filename: "realis-reels-teaching.png",
+    dimensions: "1080 x 1920",
+  },
+  {
+    id: "stories-thinking",
+    name: "REALIS Stories - Pensando",
+    description: "Pose reflexiva contemplativa, ideal para dicas e insights",
+    image: realisStoriesThinking,
+    filename: "realis-stories-thinking.png",
+    dimensions: "1080 x 1920",
   },
 ];
 
@@ -109,7 +141,62 @@ const Downloads = () => {
                     alt={asset.name}
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
+          </div>
+
+          {/* Social Media Section */}
+          <div className="mt-20">
+            <div className="text-center mb-12">
+              <span className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">
+                📱 Instagram Stories & Reels
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Versões para Redes Sociais
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Imagens otimizadas no formato 9:16 (1080x1920) para Stories e Reels do Instagram
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {socialMediaAssets.map((asset) => (
+                <div
+                  key={asset.id}
+                  className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all duration-300"
+                >
+                  {/* Image */}
+                  <div className="aspect-[9/16] overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5">
+                    <img
+                      src={asset.image}
+                      alt={asset.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+
+                  {/* Dimensions Badge */}
+                  <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-xs font-medium text-foreground">{asset.dimensions}</span>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-6">
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                      {asset.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {asset.description}
+                    </p>
+                    <Button
+                      onClick={() => handleDownload(asset.image, asset.filename)}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Baixar para Instagram
+                    </Button>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
                 {/* Info */}
                 <div className="p-6">
