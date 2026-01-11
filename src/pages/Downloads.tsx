@@ -3,6 +3,7 @@ import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TopHeader } from "@/components/TopHeader";
 import { Footer } from "@/components/Footer";
+import StoryTemplateEditor from "@/components/StoryTemplateEditor";
 
 // REALIS character images
 import realisGuiding from "@/assets/character/realis-guiding.png";
@@ -16,6 +17,7 @@ import realisWelcoming from "@/assets/character/realis-welcoming.png";
 import realisStoriesWelcome from "@/assets/character/realis-stories-welcome.png";
 import realisReelsTeaching from "@/assets/character/realis-reels-teaching.png";
 import realisStoriesThinking from "@/assets/character/realis-stories-thinking.png";
+import realisFeedSquare from "@/assets/character/realis-feed-square.png";
 
 const characterAssets = [
   {
@@ -70,6 +72,7 @@ const socialMediaAssets = [
     image: realisStoriesWelcome,
     filename: "realis-stories-welcome.png",
     dimensions: "1080 x 1920",
+    aspectRatio: "aspect-[9/16]",
   },
   {
     id: "reels-teaching",
@@ -78,6 +81,7 @@ const socialMediaAssets = [
     image: realisReelsTeaching,
     filename: "realis-reels-teaching.png",
     dimensions: "1080 x 1920",
+    aspectRatio: "aspect-[9/16]",
   },
   {
     id: "stories-thinking",
@@ -86,6 +90,16 @@ const socialMediaAssets = [
     image: realisStoriesThinking,
     filename: "realis-stories-thinking.png",
     dimensions: "1080 x 1920",
+    aspectRatio: "aspect-[9/16]",
+  },
+  {
+    id: "feed-square",
+    name: "REALIS Feed - Quadrado",
+    description: "Formato quadrado perfeito para posts de feed do Instagram",
+    image: realisFeedSquare,
+    filename: "realis-feed-square.png",
+    dimensions: "1080 x 1080",
+    aspectRatio: "aspect-square",
   },
 ];
 
@@ -127,44 +141,94 @@ const Downloads = () => {
             </p>
           </div>
 
+          {/* Story Template Editor Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <span className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-medium mb-4">
+                ✨ Editor de Templates
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Crie seu Story Personalizado
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Edite textos e cores para criar Stories únicos com o REALIS. Exporte diretamente para o Instagram.
+              </p>
+            </div>
+            <StoryTemplateEditor />
+          </div>
+
           {/* Character Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {characterAssets.map((asset) => (
-              <div
-                key={asset.id}
-                className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-accent/50 transition-all duration-300"
-              >
-                {/* Image */}
-                <div className="aspect-[3/4] overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5">
-                  <img
-                    src={asset.image}
-                    alt={asset.name}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <span className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">
+                🎨 Poses para Site
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Variações do REALIS
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Diferentes poses para usar em materiais, site e apresentações
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {characterAssets.map((asset) => (
+                <div
+                  key={asset.id}
+                  className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-accent/50 transition-all duration-300"
+                >
+                  {/* Image */}
+                  <div className="aspect-[3/4] overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5">
+                    <img
+                      src={asset.image}
+                      alt={asset.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-6">
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                      {asset.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {asset.description}
+                    </p>
+                    <Button
+                      onClick={() => handleDownload(asset.image, asset.filename)}
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Baixar PNG
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Social Media Section */}
-          <div className="mt-20">
+          <div className="mb-20">
             <div className="text-center mb-12">
               <span className="inline-block px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">
-                📱 Instagram Stories & Reels
+                📱 Instagram Stories, Reels & Feed
               </span>
               <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
                 Versões para Redes Sociais
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Imagens otimizadas no formato 9:16 (1080x1920) para Stories e Reels do Instagram
+                Imagens otimizadas para Stories (9:16), Reels e Feed (1:1) do Instagram
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {socialMediaAssets.map((asset) => (
                 <div
                   key={asset.id}
                   className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all duration-300"
                 >
                   {/* Image */}
-                  <div className="aspect-[9/16] overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5">
+                  <div className={`${asset.aspectRatio} overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5`}>
                     <img
                       src={asset.image}
                       alt={asset.name}
@@ -178,8 +242,8 @@ const Downloads = () => {
                   </div>
 
                   {/* Info */}
-                  <div className="p-6">
-                    <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                  <div className="p-5">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-2">
                       {asset.name}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
@@ -188,9 +252,10 @@ const Downloads = () => {
                     <Button
                       onClick={() => handleDownload(asset.image, asset.filename)}
                       className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                      size="sm"
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      Baixar para Instagram
+                      Baixar
                     </Button>
                   </div>
                 </div>
@@ -198,28 +263,8 @@ const Downloads = () => {
             </div>
           </div>
 
-                {/* Info */}
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">
-                    {asset.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {asset.description}
-                  </p>
-                  <Button
-                    onClick={() => handleDownload(asset.image, asset.filename)}
-                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Baixar PNG
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* Usage Guidelines */}
-          <div className="mt-20 bg-card rounded-2xl border border-border p-8 md:p-12">
+          <div className="bg-card rounded-2xl border border-border p-8 md:p-12">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
               Diretrizes de Uso
             </h2>
