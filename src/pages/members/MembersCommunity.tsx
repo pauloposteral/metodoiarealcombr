@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Users, Trophy } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { WelcomeMessage } from '@/components/community/WelcomeMessage';
 import { CommunityRules } from '@/components/community/CommunityRules';
@@ -7,7 +8,10 @@ import { CategoryTabs, CategoryType } from '@/components/community/CategoryTabs'
 import { PostCard } from '@/components/community/PostCard';
 import { CreatePostDialog } from '@/components/community/CreatePostDialog';
 import { ActivityIndicator } from '@/components/community/ActivityIndicator';
+import { LeaderboardCard } from '@/components/gamification/LeaderboardCard';
+import { useGamification } from '@/hooks/useGamification';
 import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -38,17 +42,21 @@ interface Post {
 }
 
 const MembersCommunity = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
   const [sortBy, setSortBy] = useState<SortType>('recent');
   const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState<string | undefined>();
   const [stats, setStats] = useState({
     totalPosts: 0,
     todayPosts: 0,
     totalComments: 0,
     activeMembers: 0
   });
+
+  const { leaderboard, userRank } = useGamification(userId);
 
   useEffect(() => {
     fetchUserName();
@@ -59,6 +67,7 @@ const MembersCommunity = () => {
   const fetchUserName = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      setUserId(user.id);
       const { data: profile } = await supabase
         .from('profiles')
         .select('full_name')
@@ -282,6 +291,48 @@ const MembersCommunity = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             <ActivityIndicator stats={stats} />
+            
+            {/* Mini Leaderboard */}
+            <div className="bg-card rounded-2xl p-4 border border-border/50">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-4 h-4 text-gold" />
+                  <h3 className="font-display font-bold text-sm text-foreground">Top 5</h3>
+                </div>
+                <Button 
+                  variant="link" 
+                  size="sm" 
+                  onClick={() => navigate('/membros/ranking')}
+                  className="text-xs text-accent p-0 h-auto"
+                >
+                  Ver todos
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {leaderboard.slice(0, 5).map((user, index) => (
+                  <div 
+                    key={user.user_id}
+                    className={`flex items-center gap-2 p-2 rounded-lg ${
+                      user.user_id === userId ? 'bg-accent/10' : ''
+                    }`}
+                  >
+                    <span className={`w-5 h-5 flex items-center justify-center text-xs font-bold rounded-full ${
+                      index === 0 ? 'bg-yellow-500 text-white' :
+                      index === 1 ? 'bg-gray-400 text-white' :
+                      index === 2 ? 'bg-amber-600 text-white' :
+                      'bg-muted text-muted-foreground'
+                    }`}>
+                      {index + 1}
+                    </span>
+                    <span className="flex-1 text-sm truncate text-foreground">
+                      {user.full_name || 'Usuário'}
+                    </span>
+                    <span className="text-xs font-bold text-accent">{user.points}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <CommunityRules />
           </div>
         </div>
