@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -8,8 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS } from './types';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { 
-  Sparkles, Plus, Trash2, GripVertical, Palette, Type, RefreshCw,
+  Sparkles, Plus, Trash2, GripVertical, Palette, Type, RefreshCw, Upload,
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle,
@@ -54,11 +56,80 @@ export const CarouselSidebar = ({
 }: CarouselSidebarProps) => {
   const [inputTopic, setInputTopic] = useState(topic);
   const [slideCount, setSlideCount] = useState(7);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const selectedSlide = slides[selectedSlideIndex];
 
   const handleGenerate = () => {
     onGenerate(inputTopic, slideCount);
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Por favor, selecione uma imagem');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Imagem muito grande. Máximo 5MB');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Você precisa estar logado');
+        return;
+      }
+
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${session.user.id}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('carousel-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (error) {
+        console.error('Upload error:', error);
+        toast.error('Erro ao fazer upload da imagem');
+        return;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('carousel-images')
+        .getPublicUrl(data.path);
+
+      // Update slide with uploaded image
+      onUpdateSlide(selectedSlideIndex, { 
+        imageUrl: publicUrl,
+        isGeneratingImage: false,
+      });
+
+      toast.success('Imagem enviada com sucesso!');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Erro ao fazer upload');
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const getSlideTypeName = (type: string) => {
@@ -323,26 +394,61 @@ export const CarouselSidebar = ({
                         />
                       </div>
                       
-                      {onRegenerateImage && (
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 mt-3">
+                        {/* Upload Button */}
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
                         <Button
                           variant="outline"
-                          className="w-full mt-3"
-                          onClick={() => onRegenerateImage(selectedSlideIndex)}
-                          disabled={selectedSlide.isGeneratingImage}
+                          className="flex-1"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isUploading || selectedSlide.isGeneratingImage}
                         >
-                          {selectedSlide.isGeneratingImage ? (
+                          {isUploading ? (
                             <>
                               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              Gerando...
+                              Enviando...
                             </>
                           ) : (
                             <>
-                              <RefreshCw className="w-4 h-4 mr-2" />
-                              Regenerar Imagem
+                              <Upload className="w-4 h-4 mr-2" />
+                              Enviar
                             </>
                           )}
                         </Button>
-                      )}
+                        
+                        {/* Regenerate Button */}
+                        {onRegenerateImage && (
+                          <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => onRegenerateImage(selectedSlideIndex)}
+                            disabled={selectedSlide.isGeneratingImage || isUploading}
+                          >
+                            {selectedSlide.isGeneratingImage ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Gerando...
+                              </>
+                            ) : (
+                              <>
+                                <RefreshCw className="w-4 h-4 mr-2" />
+                                Gerar IA
+                              </>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                      
+                      <p className="text-xs text-muted-foreground text-center mt-2">
+                        Envie sua imagem ou gere com IA
+                      </p>
                     </div>
                   </div>
                 </ScrollArea>
