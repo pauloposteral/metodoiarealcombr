@@ -1,5 +1,6 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Star, Quote } from 'lucide-react';
+import realisConfident from '@/assets/character/realis-confident.png';
 
 const testimonials = [
   {
@@ -54,76 +55,101 @@ export const TestimonialsSection = () => {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-navy-light/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
       
       <div className="container mx-auto px-4 relative z-10">
-        <ScrollReveal>
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 bg-gold/10 text-gold rounded-full text-sm font-medium mb-4">
-              Quem já está usando
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
-              Gente como você,{' '}
-              <span className="text-gradient-gold">usando IA de verdade</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Não são influencers. São profissionais comuns que aprenderam e aplicaram.
-            </p>
-          </div>
-        </ScrollReveal>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {testimonials.map((testimonial, index) => (
-            <ScrollReveal key={index} delay={index * 0.1}>
-              <div className="group bg-card border border-border/50 rounded-2xl p-6 lg:p-8 hover:border-gold/30 hover:shadow-elegant transition-all duration-300 h-full flex flex-col">
-                {/* Quote icon */}
-                <Quote className="w-8 h-8 text-gold/30 mb-4" />
-                
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: testimonial.stars }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-gold text-gold" />
-                  ))}
-                </div>
-                
-                {/* Text */}
-                <p className="text-muted-foreground leading-relaxed mb-6 flex-grow">
-                  "{testimonial.text}"
+        <div className="grid lg:grid-cols-4 gap-8 items-start">
+          {/* Header and REALIS */}
+          <div className="lg:sticky lg:top-24">
+            <ScrollReveal>
+              <div className="text-center lg:text-left mb-8">
+                <span className="inline-block px-4 py-2 bg-gold/10 text-gold rounded-full text-sm font-medium mb-4">
+                  Quem já está usando
+                </span>
+                <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
+                  Gente como você,{' '}
+                  <span className="text-gradient-gold">usando IA de verdade</span>
+                </h2>
+                <p className="text-muted-foreground">
+                  Não são influencers. São profissionais comuns que aprenderam e aplicaram.
                 </p>
-                
-                {/* Author */}
-                <div className="flex items-center gap-4 pt-4 border-t border-border/50">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gold/20"
-                  />
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
+              </div>
+            </ScrollReveal>
+
+            {/* REALIS confident */}
+            <ScrollReveal delay={200} direction="left" className="hidden lg:block">
+              <div className="relative flex justify-center mt-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-gold/10 via-accent/5 to-transparent rounded-full blur-3xl scale-90" />
+                <img 
+                  src={realisConfident}
+                  alt="REALIS confiante com os resultados"
+                  className="relative z-10 w-full max-w-[280px] drop-shadow-2xl animate-character-entrance animate-character-glow"
+                />
+                {/* Badge */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-card/90 backdrop-blur-sm px-4 py-2 rounded-full border border-accent/30">
+                  <span className="text-accent font-display font-bold text-xs tracking-wider">REALIS</span>
+                  <span className="text-muted-foreground text-xs ml-2">orgulhoso</span>
                 </div>
               </div>
             </ScrollReveal>
-          ))}
-        </div>
-
-        {/* Trust indicators */}
-        <ScrollReveal delay={0.4}>
-          <div className="mt-16 flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold">+2.500</p>
-              <p className="text-sm text-muted-foreground">Alunos satisfeitos</p>
-            </div>
-            <div className="w-px h-12 bg-border hidden md:block" />
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold">4.9/5</p>
-              <p className="text-sm text-muted-foreground">Avaliação média</p>
-            </div>
-            <div className="w-px h-12 bg-border hidden md:block" />
-            <div className="text-center">
-              <p className="text-3xl md:text-4xl font-bold text-gold">98%</p>
-              <p className="text-sm text-muted-foreground">Taxa de aprovação</p>
-            </div>
           </div>
-        </ScrollReveal>
+
+          {/* Testimonials grid */}
+          <div className="lg:col-span-3">
+            <div className="grid md:grid-cols-2 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <ScrollReveal key={index} delay={index * 80}>
+                  <div className="group bg-card border border-border/50 rounded-2xl p-6 hover:border-gold/30 hover:shadow-elegant transition-all duration-300 h-full flex flex-col">
+                    {/* Quote icon */}
+                    <Quote className="w-8 h-8 text-gold/30 mb-4" />
+                    
+                    {/* Stars */}
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.stars }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                      ))}
+                    </div>
+                    
+                    {/* Text */}
+                    <p className="text-muted-foreground leading-relaxed mb-6 flex-grow">
+                      "{testimonial.text}"
+                    </p>
+                    
+                    {/* Author */}
+                    <div className="flex items-center gap-4 pt-4 border-t border-border/50">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-gold/20"
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+
+            {/* Trust indicators */}
+            <ScrollReveal delay={400}>
+              <div className="mt-12 flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-gold">+2.500</p>
+                  <p className="text-sm text-muted-foreground">Alunos satisfeitos</p>
+                </div>
+                <div className="w-px h-12 bg-border hidden md:block" />
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-gold">4.9/5</p>
+                  <p className="text-sm text-muted-foreground">Avaliação média</p>
+                </div>
+                <div className="w-px h-12 bg-border hidden md:block" />
+                <div className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-gold">98%</p>
+                  <p className="text-sm text-muted-foreground">Taxa de aprovação</p>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
       </div>
     </section>
   );

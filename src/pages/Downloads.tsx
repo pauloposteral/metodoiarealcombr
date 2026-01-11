@@ -8,6 +8,9 @@ import { Footer } from "@/components/Footer";
 import realisGuiding from "@/assets/character/realis-guiding.png";
 import realisThinking from "@/assets/character/realis-thinking.png";
 import realisTeaching from "@/assets/character/realis-teaching.png";
+import realisPresenting from "@/assets/character/realis-presenting.png";
+import realisConfident from "@/assets/character/realis-confident.png";
+import realisWelcoming from "@/assets/character/realis-welcoming.png";
 
 const characterAssets = [
   {
@@ -30,6 +33,27 @@ const characterAssets = [
     description: "Pose didática com tablet holográfico, ideal para conteúdo educacional",
     image: realisTeaching,
     filename: "realis-teaching.png",
+  },
+  {
+    id: "presenting",
+    name: "REALIS Apresentando",
+    description: "Apontando para cima, perfeito para destacar módulos e conteúdos",
+    image: realisPresenting,
+    filename: "realis-presenting.png",
+  },
+  {
+    id: "confident",
+    name: "REALIS Confiante",
+    description: "Braços cruzados, ideal para depoimentos e resultados",
+    image: realisConfident,
+    filename: "realis-confident.png",
+  },
+  {
+    id: "welcoming",
+    name: "REALIS Acolhendo",
+    description: "Mãos abertas em boas-vindas, perfeito para FAQ e suporte",
+    image: realisWelcoming,
+    filename: "realis-welcoming.png",
   },
 ];
 
