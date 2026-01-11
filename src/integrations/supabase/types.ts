@@ -422,6 +422,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          access_status: string | null
           avatar_url: string | null
           created_at: string | null
           full_name: string | null
@@ -429,6 +430,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          access_status?: string | null
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
@@ -436,11 +438,69 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          access_status?: string | null
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount: number
+          client_document: string | null
+          client_email: string
+          client_name: string
+          client_phone: string | null
+          created_at: string | null
+          greenn_client_id: number | null
+          greenn_sale_id: number
+          id: string
+          payment_method: string | null
+          product_id: number | null
+          product_name: string
+          raw_payload: Json | null
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          client_document?: string | null
+          client_email: string
+          client_name: string
+          client_phone?: string | null
+          created_at?: string | null
+          greenn_client_id?: number | null
+          greenn_sale_id: number
+          id?: string
+          payment_method?: string | null
+          product_id?: number | null
+          product_name: string
+          raw_payload?: Json | null
+          status: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          client_document?: string | null
+          client_email?: string
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string | null
+          greenn_client_id?: number | null
+          greenn_sale_id?: number
+          id?: string
+          payment_method?: string | null
+          product_id?: number | null
+          product_name?: string
+          raw_payload?: Json | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

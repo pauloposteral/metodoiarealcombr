@@ -32,11 +32,25 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
       
       if (!session) {
         navigate('/auth');
+        setLoading(false);
+        return;
       }
+
+      // Check access status
+      supabase
+        .from('profiles')
+        .select('access_status')
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data: profile }) => {
+          if (profile?.access_status === 'revoked') {
+            navigate('/acesso-bloqueado');
+          }
+          setLoading(false);
+        });
     });
 
     return () => subscription.unsubscribe();

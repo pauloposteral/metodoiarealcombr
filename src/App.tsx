@@ -27,6 +27,7 @@ import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
 import CarouselEditor from "./pages/CarouselEditor";
+import AcessoBloqueado from "./pages/AcessoBloqueado";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarouselEditor />} />
+            <Route path="/acesso-bloqueado" element={<AcessoBloqueado />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
