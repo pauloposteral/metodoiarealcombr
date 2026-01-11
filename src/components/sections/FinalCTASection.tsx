@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { ArrowRight, Shield, Clock, Award } from 'lucide-react';
+import { ArrowRight, Shield, Clock, Award, Users, Crown, Sparkles } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
 import realisGuiding from '@/assets/character/realis-guiding.png';
 
@@ -9,6 +9,12 @@ export const FinalCTASection = () => {
     { icon: Shield, text: 'Garantia de 7 dias' },
     { icon: Clock, text: 'Acesso vitalício' },
     { icon: Award, text: 'Certificado incluso' },
+  ];
+
+  const premiumFeatures = [
+    { icon: Users, text: 'Comunidade Exclusiva de Membros' },
+    { icon: Crown, text: 'Networking com outros alunos' },
+    { icon: Sparkles, text: 'Conteúdo e suporte premium' },
   ];
 
   return (
@@ -42,35 +48,58 @@ export const FinalCTASection = () => {
           {/* CTA Content */}
           <div className="text-center lg:text-left">
             <ScrollReveal>
-              <span className="inline-block px-4 py-2 bg-accent/20 text-accent font-semibold text-sm rounded-full mb-6">
-                Sua Oportunidade
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/30 to-accent/20 text-gold font-semibold text-sm rounded-full mb-6 border border-gold/30">
+                <Crown className="w-4 h-4" />
+                Acesso Premium Exclusivo
               </span>
             </ScrollReveal>
 
             <ScrollReveal delay={100}>
               <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-                Comece agora a usar a{' '}
-                <span className="text-gradient-gold">IA de forma real</span>
+                Entre para a{' '}
+                <span className="text-gradient-gold">Comunidade IA Real</span>
               </h2>
             </ScrollReveal>
 
             <ScrollReveal delay={200}>
-              <p className="text-xl text-primary-foreground/80 mb-10 max-w-2xl">
-                Enquanto muitos ainda observam, outros já estão aplicando. 
-                A diferença está na ação.
+              <p className="text-xl text-primary-foreground/80 mb-8 max-w-2xl">
+                Não é só um curso. É uma <strong className="text-gold">comunidade exclusiva</strong> onde você aprende, compartilha experiências e cresce junto com outros empreendedores que estão dominando a IA.
               </p>
+            </ScrollReveal>
+
+            {/* Premium Features Box */}
+            <ScrollReveal delay={250}>
+              <div className="bg-gradient-to-br from-gold/10 via-accent/5 to-transparent border border-gold/20 rounded-2xl p-6 mb-8 backdrop-blur-sm">
+                <h3 className="text-gold font-semibold mb-4 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5" />
+                  Benefícios Exclusivos para Membros
+                </h3>
+                <div className="grid gap-3">
+                  {premiumFeatures.map((feature, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center gap-3 text-primary-foreground/90"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
+                        <feature.icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <span className="font-medium">{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </ScrollReveal>
 
             <ScrollReveal delay={300}>
               <div className="flex flex-col items-center lg:items-start gap-6 mb-10">
                 <Button asChild variant="hero" size="xl" className="group text-lg">
                   <a href="https://payfast.greenn.com.br/152833" target="_blank" rel="noopener noreferrer">
-                    Entrar no Método IA Real
+                    Quero Acesso à Comunidade
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   </a>
                 </Button>
                 <p className="text-primary-foreground/50 text-sm">
-                  Acesso imediato após a confirmação do pagamento
+                  Acesso imediato à comunidade após a confirmação do pagamento
                 </p>
               </div>
             </ScrollReveal>
