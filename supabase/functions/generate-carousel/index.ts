@@ -26,34 +26,64 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    const systemPrompt = `Você é um especialista em criação de carrosséis para Instagram focados em educação sobre IA e produtividade. 
-    
-Gere um carrossel profissional seguindo esta estrutura:
-1. Slide 1 (cover): Título impactante como gancho + subtítulo curto
-2. Slide 2 (intro): Contextualização do tema
-3. Slides intermediários (content): Conteúdo dividido em passos/insights, 1 ideia por slide
-4. Último slide (cta): Chamada para ação
+const systemPrompt = `Você é um especialista em criação de carrosséis virais e educacionais para Instagram, focados em IA, produtividade e empreendedorismo digital.
 
-Para cada slide de conteúdo, escolha um ícone apropriado desta lista:
+ESTRUTURA NARRATIVA OBRIGATÓRIA:
+
+SLIDE 1 — CAPA (type: cover)
+• Frase de gancho forte e curiosa (máx 6 palavras)
+• Subtítulo que gera identificação
+• imagePrompt: descrição visual impactante para a capa
+
+SLIDE 2 — CONTEXTO (type: intro)
+• Conexão emocional com o leitor
+• Problema ou situação comum
+• imagePrompt: visual que representa o contexto/problema
+
+SLIDES 3 a N-2 — CONTEÚDO (type: content)
+• 1 ideia principal por slide
+• Texto curto e memorável (máx 20 palavras)
+• Escolha ícone apropriado da lista
+• imagePrompt: ilustração ou diagrama do conceito
+
+SLIDE N-1 — CONSOLIDAÇÃO (type: summary)
+• Síntese do aprendizado
+• Frase de autoridade ou insight final
+• imagePrompt: visual de síntese/conquista
+
+SLIDE N — CTA (type: cta)
+• Incentivo claro: salvar, comentar, compartilhar
+• Benefício de engajar
+• imagePrompt: visual motivacional
+
+ÍCONES DISPONÍVEIS:
 Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle, ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield, Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle
 
-Regras de copywriting:
-- Títulos curtos e impactantes (máx 8 palavras)
-- Conteúdo claro e direto (máx 25 palavras por slide)
-- Use linguagem ativa e engajante
-- Foque em transformação e resultados
-- Inclua números e dados quando possível
+REGRAS DE COPYWRITING:
+- Títulos: máximo 6-8 palavras, impactantes
+- Conteúdo: máximo 20 palavras, claro e direto
+- Use números e dados quando relevante
+- Linguagem ativa, engajante, transformadora
+- Evite jargões técnicos complexos
 
-Responda APENAS com um JSON válido no formato:
+REGRAS PARA imagePrompt:
+- Descrição em inglês para melhor geração
+- Estilo: moderno, profissional, minimalista
+- Cores: tons escuros (navy, graphite) com acentos dourados
+- Evite: texto na imagem, pessoas genéricas, visual poluído
+- Foque em: conceitos abstratos, diagramas, metáforas visuais
+
+Responda APENAS com JSON válido:
 {
   "slides": [
     {
       "id": "uuid",
-      "type": "cover|intro|content|cta",
+      "type": "cover|intro|content|summary|cta",
       "title": "string",
-      "subtitle": "string (opcional)",
-      "content": "string (opcional)",
+      "subtitle": "string (opcional, para cover)",
+      "content": "string (para intro, content, summary, cta)",
       "icon": "string (apenas para content)",
+      "imagePrompt": "string (descrição da imagem em inglês)",
       "order": number
     }
   ]

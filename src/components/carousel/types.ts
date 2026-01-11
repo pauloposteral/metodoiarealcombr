@@ -1,4 +1,4 @@
-export type SlideType = 'cover' | 'intro' | 'content' | 'cta';
+export type SlideType = 'cover' | 'intro' | 'content' | 'summary' | 'cta';
 
 export interface CarouselSlide {
   id: string;
@@ -8,6 +8,9 @@ export interface CarouselSlide {
   content?: string;
   icon?: string;
   order: number;
+  imageUrl?: string;
+  imagePrompt?: string;
+  isGeneratingImage?: boolean;
 }
 
 export interface CarouselTheme {
@@ -26,6 +29,15 @@ export interface CarouselData {
   slides: CarouselSlide[];
   theme: CarouselTheme;
   createdAt: Date;
+}
+
+export type GenerationStatus = 'idle' | 'generating-text' | 'generating-images' | 'complete';
+
+export interface GenerationProgress {
+  status: GenerationStatus;
+  currentSlide: number;
+  totalSlides: number;
+  message: string;
 }
 
 export const CAROUSEL_THEMES: CarouselTheme[] = [
@@ -64,6 +76,24 @@ export const CAROUSEL_THEMES: CarouselTheme[] = [
     accentColor: 'hsl(180, 60%, 50%)',
     textColor: 'hsl(0, 0%, 100%)',
     backgroundGradient: 'linear-gradient(135deg, hsl(210, 60%, 15%) 0%, hsl(200, 50%, 25%) 100%)',
+  },
+  {
+    id: 'midnight-purple',
+    name: 'Midnight Purple',
+    primaryColor: 'hsl(270, 50%, 12%)',
+    secondaryColor: 'hsl(260, 45%, 20%)',
+    accentColor: 'hsl(280, 70%, 60%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(135deg, hsl(270, 50%, 12%) 0%, hsl(260, 45%, 20%) 100%)',
+  },
+  {
+    id: 'warm-coral',
+    name: 'Warm Coral',
+    primaryColor: 'hsl(15, 40%, 12%)',
+    secondaryColor: 'hsl(20, 35%, 18%)',
+    accentColor: 'hsl(15, 80%, 60%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(135deg, hsl(15, 40%, 12%) 0%, hsl(20, 35%, 18%) 100%)',
   },
 ];
 
