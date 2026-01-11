@@ -9,11 +9,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS } from './types';
 import { 
-  Sparkles, Plus, Trash2, GripVertical, Palette, Type, 
+  Sparkles, Plus, Trash2, GripVertical, Palette, Type, RefreshCw,
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle,
-  Loader2, Wand2
+  Loader2, Wand2, Image as ImageIcon
 } from 'lucide-react';
 
 const iconComponents: Record<string, React.ComponentType<any>> = {
@@ -35,6 +35,7 @@ interface CarouselSidebarProps {
   onReorderSlides: (startIndex: number, endIndex: number) => void;
   onThemeChange: (theme: CarouselTheme) => void;
   onGenerate: (topic: string, slideCount: number) => void;
+  onRegenerateImage?: (slideIndex: number) => void;
 }
 
 export const CarouselSidebar = ({
@@ -49,6 +50,7 @@ export const CarouselSidebar = ({
   onDeleteSlide,
   onThemeChange,
   onGenerate,
+  onRegenerateImage,
 }: CarouselSidebarProps) => {
   const [inputTopic, setInputTopic] = useState(topic);
   const [slideCount, setSlideCount] = useState(7);
@@ -59,13 +61,24 @@ export const CarouselSidebar = ({
     onGenerate(inputTopic, slideCount);
   };
 
+  const getSlideTypeName = (type: string) => {
+    const types: Record<string, string> = {
+      cover: 'Capa',
+      intro: 'Contexto',
+      content: 'Conteúdo',
+      summary: 'Síntese',
+      cta: 'CTA',
+    };
+    return types[type] || type;
+  };
+
   return (
     <div className="w-full lg:w-96 flex flex-col gap-4">
       {/* Generate Section */}
       <Card className="p-4 bg-card border-border">
         <div className="flex items-center gap-2 mb-4">
           <Wand2 className="w-5 h-5 text-accent" />
-          <h2 className="font-semibold text-lg">Gerar Carrossel</h2>
+          <h2 className="font-semibold text-lg">Gerar Carrossel Completo</h2>
         </div>
         
         <div className="space-y-4">
@@ -73,7 +86,7 @@ export const CarouselSidebar = ({
             <Label htmlFor="topic">Tema do Carrossel</Label>
             <Textarea
               id="topic"
-              placeholder="Ex: 5 formas de usar IA para aumentar produtividade"
+              placeholder="Ex: 5 formas de usar IA para aumentar produtividade no trabalho"
               value={inputTopic}
               onChange={(e) => setInputTopic(e.target.value)}
               className="mt-1 resize-none"
@@ -91,7 +104,7 @@ export const CarouselSidebar = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {[5, 6, 7, 8, 9, 10].map(n => (
+                {[6, 7, 8, 9, 10].map(n => (
                   <SelectItem key={n} value={n.toString()}>{n} slides</SelectItem>
                 ))}
               </SelectContent>
@@ -115,6 +128,10 @@ export const CarouselSidebar = ({
               </>
             )}
           </Button>
+          
+          <p className="text-xs text-muted-foreground text-center">
+            Gera textos + imagens automaticamente
+          </p>
         </div>
       </Card>
 
@@ -141,19 +158,38 @@ export const CarouselSidebar = ({
                       }`}
                       onClick={() => onSelectSlide(index)}
                     >
-                      <GripVertical className="w-4 h-4 text-muted-foreground" />
+                      <GripVertical className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                      
+                      {/* Thumbnail */}
+                      <div className="w-10 h-12 rounded bg-muted overflow-hidden flex-shrink-0">
+                        {slide.imageUrl ? (
+                          <img 
+                            src={slide.imageUrl} 
+                            alt="" 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : slide.isGeneratingImage ? (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-muted-foreground uppercase">
-                          {slide.type === 'cover' ? 'Capa' : 
-                           slide.type === 'intro' ? 'Intro' :
-                           slide.type === 'cta' ? 'CTA' : `Slide ${index + 1}`}
+                          {getSlideTypeName(slide.type)}
                         </p>
                         <p className="text-sm font-medium truncate">{slide.title}</p>
                       </div>
+                      
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
                           onDeleteSlide(index);
@@ -190,8 +226,9 @@ export const CarouselSidebar = ({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="cover">Capa (Hook)</SelectItem>
-                          <SelectItem value="intro">Introdução</SelectItem>
+                          <SelectItem value="intro">Contexto</SelectItem>
                           <SelectItem value="content">Conteúdo</SelectItem>
+                          <SelectItem value="summary">Síntese</SelectItem>
                           <SelectItem value="cta">CTA</SelectItem>
                         </SelectContent>
                       </Select>
@@ -217,7 +254,7 @@ export const CarouselSidebar = ({
                       </div>
                     )}
 
-                    {(selectedSlide.type === 'content' || selectedSlide.type === 'intro' || selectedSlide.type === 'cta') && (
+                    {(selectedSlide.type === 'content' || selectedSlide.type === 'intro' || selectedSlide.type === 'cta' || selectedSlide.type === 'summary') && (
                       <div>
                         <Label>Conteúdo</Label>
                         <Textarea
@@ -257,6 +294,56 @@ export const CarouselSidebar = ({
                         </div>
                       </div>
                     )}
+
+                    {/* Image Section */}
+                    <div className="pt-4 border-t border-border">
+                      <Label className="flex items-center gap-2 mb-3">
+                        <ImageIcon className="w-4 h-4" />
+                        Imagem do Slide
+                      </Label>
+                      
+                      {selectedSlide.imageUrl && (
+                        <div className="relative rounded-lg overflow-hidden mb-3">
+                          <img 
+                            src={selectedSlide.imageUrl} 
+                            alt="Slide preview"
+                            className="w-full aspect-[4/5] object-cover"
+                          />
+                        </div>
+                      )}
+                      
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Prompt da imagem</Label>
+                        <Textarea
+                          value={selectedSlide.imagePrompt || ''}
+                          onChange={(e) => onUpdateSlide(selectedSlideIndex, { imagePrompt: e.target.value })}
+                          className="mt-1 resize-none text-sm"
+                          rows={3}
+                          placeholder="Descrição para gerar a imagem..."
+                        />
+                      </div>
+                      
+                      {onRegenerateImage && (
+                        <Button
+                          variant="outline"
+                          className="w-full mt-3"
+                          onClick={() => onRegenerateImage(selectedSlideIndex)}
+                          disabled={selectedSlide.isGeneratingImage}
+                        >
+                          {selectedSlide.isGeneratingImage ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Gerando...
+                            </>
+                          ) : (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Regenerar Imagem
+                            </>
+                          )}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </ScrollArea>
               )}
