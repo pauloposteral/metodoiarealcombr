@@ -4,48 +4,32 @@ import { Button } from "@/components/ui/button";
 import { TopHeader } from "@/components/TopHeader";
 import { Footer } from "@/components/Footer";
 
-// Character images
-import mentorGuiding from "@/assets/character/mentor-guiding.png";
-import mentorThinking from "@/assets/character/mentor-thinking.png";
-import mentorExplaining from "@/assets/character/mentor-explaining.png";
-import mentorInteracting from "@/assets/character/mentor-interacting.png";
-import mentorPortrait from "@/assets/character/mentor-portrait.png";
+// REALIS character images
+import realisGuiding from "@/assets/character/realis-guiding.png";
+import realisThinking from "@/assets/character/realis-thinking.png";
+import realisTeaching from "@/assets/character/realis-teaching.png";
 
 const characterAssets = [
   {
     id: "guiding",
-    name: "Mentor Guiando",
+    name: "REALIS Guiando",
     description: "Pose apontando e guiando, ideal para CTAs e direcionamentos",
-    image: mentorGuiding,
-    filename: "mentor-guiding.png",
+    image: realisGuiding,
+    filename: "realis-guiding.png",
   },
   {
     id: "thinking",
-    name: "Mentor Pensando",
+    name: "REALIS Pensando",
     description: "Pose reflexiva, perfeita para seções de análise e estratégia",
-    image: mentorThinking,
-    filename: "mentor-thinking.png",
+    image: realisThinking,
+    filename: "realis-thinking.png",
   },
   {
-    id: "explaining",
-    name: "Mentor Explicando",
-    description: "Pose didática com mãos abertas, ideal para conteúdo educacional",
-    image: mentorExplaining,
-    filename: "mentor-explaining.png",
-  },
-  {
-    id: "interacting",
-    name: "Mentor Interagindo",
-    description: "Interação com elementos visuais e diagramas holográficos",
-    image: mentorInteracting,
-    filename: "mentor-interacting.png",
-  },
-  {
-    id: "portrait",
-    name: "Mentor Retrato",
-    description: "Portrait elegante para perfis e thumbnails",
-    image: mentorPortrait,
-    filename: "mentor-portrait.png",
+    id: "teaching",
+    name: "REALIS Ensinando",
+    description: "Pose didática com tablet holográfico, ideal para conteúdo educacional",
+    image: realisTeaching,
+    filename: "realis-teaching.png",
   },
 ];
 
@@ -62,10 +46,10 @@ const Downloads = () => {
   return (
     <>
       <Helmet>
-        <title>Downloads - Personagem Método IA Real</title>
+        <title>Downloads - REALIS - Personagem Método IA Real</title>
         <meta
           name="description"
-          content="Baixe o personagem oficial do Método IA Real em diferentes poses para usar em suas campanhas e materiais."
+          content="Baixe o personagem REALIS, mentor oficial do Método IA Real em diferentes poses para usar em suas campanhas e materiais."
         />
       </Helmet>
 
@@ -79,11 +63,10 @@ const Downloads = () => {
               Assets Oficiais
             </span>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6">
-              Personagem{" "}
-              <span className="text-gradient-gold">Método IA Real</span>
+              <span className="text-gradient-gold">REALIS</span> - Seu Mentor de IA
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Conheça o mentor visual do Método IA Real. Um personagem futurístico,
+              Conheça REALIS, o mentor visual do Método IA Real. Um personagem futurístico,
               elegante e humano que representa inteligência prática, clareza e método.
             </p>
           </div>
@@ -96,11 +79,11 @@ const Downloads = () => {
                 className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:border-accent/50 transition-all duration-300"
               >
                 {/* Image */}
-                <div className="aspect-square overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+                <div className="aspect-[3/4] overflow-hidden bg-gradient-to-br from-navy-dark/20 to-navy-dark/5">
                   <img
                     src={asset.image}
                     alt={asset.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
 

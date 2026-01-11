@@ -9,6 +9,7 @@ import {
   Briefcase,
   Sparkles
 } from 'lucide-react';
+import realisTeaching from '@/assets/character/realis-teaching.png';
 
 const iconCategories = [
   { icon: MessageSquare, label: "Prompts", description: "A arte de pedir certo", color: "bg-accent/10 text-accent" },
@@ -25,50 +26,65 @@ export const WhatYouLearnSection = () => {
   return (
     <section className="py-20 md:py-28 bg-secondary relative overflow-hidden">
       <div className="container">
-        <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-block px-4 py-2 bg-gold/10 text-gold font-semibold text-sm rounded-full mb-6">
-              Conteúdo Prático
-            </span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              O que você vai{' '}
-              <span className="text-gradient-gold">saber fazer</span>
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Não é só teoria. É habilidade prática que você usa todo dia.
-            </p>
-          </div>
-        </ScrollReveal>
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left side - Content */}
+          <div>
+            <ScrollReveal>
+              <div className="text-center lg:text-left mb-12">
+                <span className="inline-block px-4 py-2 bg-gold/10 text-gold font-semibold text-sm rounded-full mb-6">
+                  Conteúdo Prático
+                </span>
+                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+                  O que você vai{' '}
+                  <span className="text-gradient-gold">saber fazer</span>
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Não é só teoria. É habilidade prática que você usa todo dia.
+                </p>
+              </div>
+            </ScrollReveal>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {iconCategories.map((category, index) => (
-              <ScrollReveal key={index} delay={index * 60}>
-                <div className={`group p-5 rounded-2xl ${category.color} border border-current/10 text-center transition-all hover:scale-105 cursor-default`}>
-                  <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                    <category.icon className="w-6 h-6" />
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+              {iconCategories.map((category, index) => (
+                <ScrollReveal key={index} delay={index * 60}>
+                  <div className={`group p-4 rounded-2xl ${category.color} border border-current/10 text-center transition-all hover:scale-105 cursor-default`}>
+                    <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                      <category.icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-display font-bold text-sm text-foreground mb-1">
+                      {category.label}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {category.description}
+                    </p>
                   </div>
-                  <h3 className="font-display font-bold text-sm text-foreground mb-1">
-                    {category.label}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {category.description}
-                  </p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
+                </ScrollReveal>
+              ))}
+            </div>
 
-        {/* Insight */}
-        <ScrollReveal delay={400}>
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-              Cada categoria tem <span className="text-foreground font-medium">aulas práticas</span> com{' '}
-              <span className="text-accent font-medium">exemplos reais</span> que você aplica imediatamente.
-            </p>
+            {/* Insight */}
+            <ScrollReveal delay={400}>
+              <div className="mt-8 text-center lg:text-left">
+                <p className="text-muted-foreground text-sm">
+                  Cada categoria tem <span className="text-foreground font-medium">aulas práticas</span> com{' '}
+                  <span className="text-accent font-medium">exemplos reais</span> que você aplica imediatamente.
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
-        </ScrollReveal>
+
+          {/* Right side - REALIS teaching */}
+          <ScrollReveal direction="right" className="hidden lg:block">
+            <div className="relative flex justify-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-gold/10 via-accent/5 to-transparent rounded-full blur-3xl scale-75" />
+              <img 
+                src={realisTeaching}
+                alt="REALIS ensinando o conteúdo prático"
+                className="relative z-10 w-full max-w-[400px] drop-shadow-2xl"
+              />
+            </div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
