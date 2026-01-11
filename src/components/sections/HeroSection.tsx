@@ -4,7 +4,6 @@ import { CheckCircle, ArrowRight } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
 import logo from '@/assets/logo-iareal.png';
 import realisGuiding from '@/assets/character/realis-guiding.png';
-import promoVideo from '@/assets/promo/realis-promo-video.mp4';
 
 export const HeroSection = () => {
   const bullets = [
@@ -16,19 +15,12 @@ export const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={heroBg}
-          className="absolute w-full h-full object-cover scale-105"
-        >
-          <source src={promoVideo} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-navy-dark/60" />
+      {/* Background with parallax */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-navy-dark/40" />
       </div>
 
       {/* Floating elements */}
