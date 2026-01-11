@@ -24,6 +24,7 @@ import CommunityPost from "./pages/members/CommunityPost";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
+import CarouselEditor from "./pages/CarouselEditor";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
+            <Route path="/carrossel" element={<CarouselEditor />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
