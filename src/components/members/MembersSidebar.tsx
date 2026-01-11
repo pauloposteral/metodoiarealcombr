@@ -22,7 +22,8 @@ import {
   LogOut,
   ChevronLeft,
   Award,
-  LayoutGrid
+  LayoutGrid,
+  Users
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,6 +32,7 @@ import { toast } from '@/hooks/use-toast';
 const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
+  { title: 'Comunidade', url: '/membros/comunidade', icon: Users },
   { title: 'Materiais', url: '/membros/materiais', icon: FileText },
   { title: 'Carrosséis', url: '/carrossel', icon: LayoutGrid },
   { title: 'Bônus', url: '/membros/bonus', icon: Gift },

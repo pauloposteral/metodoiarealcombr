@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { Menu, X, ArrowLeft, ArrowRight, Home } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Menu, X, ArrowLeft, ArrowRight, Home, Award, PartyPopper } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { courseContent } from "@/data/courseContent";
 import ModuleSidebar from "@/components/course/ModuleSidebar";
 import LessonContent from "@/components/course/LessonContent";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const CourseContentPage = () => {
   const [activeModuleId, setActiveModuleId] = useState(courseContent[0].id);
   const [activeLessonId, setActiveLessonId] = useState(courseContent[0].lessons[0].id);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [showCourseComplete, setShowCourseComplete] = useState(false);
+  const navigate = useNavigate();
 
   // Load completed lessons from localStorage
   useEffect(() => {
@@ -59,6 +62,9 @@ const CourseContentPage = () => {
     }
     if (nextLesson) {
       handleSelectLesson(nextLesson.moduleId, nextLesson.lessonId);
+    } else {
+      // Course completed!
+      setShowCourseComplete(true);
     }
   };
 
@@ -77,6 +83,43 @@ const CourseContentPage = () => {
           content={currentLesson.introduction.slice(0, 160)}
         />
       </Helmet>
+
+      {/* Course Complete Dialog */}
+      <Dialog open={showCourseComplete} onOpenChange={setShowCourseComplete}>
+        <DialogContent className="sm:max-w-md text-center">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="w-20 h-20 rounded-full bg-gold/20 flex items-center justify-center">
+                <PartyPopper className="w-10 h-10 text-gold" />
+              </div>
+            </div>
+            <DialogTitle className="text-2xl">🎉 Parabéns!</DialogTitle>
+            <DialogDescription className="text-base">
+              Você concluiu todas as aulas do curso Método IA Real! 
+              Agora você está pronto para aplicar o conhecimento e transformar sua forma de usar IA.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-4">
+            <Button 
+              className="w-full bg-gold hover:bg-gold/90 text-navy-dark"
+              onClick={() => navigate('/membros/certificado')}
+            >
+              <Award className="w-4 h-4 mr-2" />
+              Ver meu certificado
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => {
+                setShowCourseComplete(false);
+                navigate('/membros');
+              }}
+            >
+              Voltar ao início
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="min-h-screen bg-background">
         {/* Header */}

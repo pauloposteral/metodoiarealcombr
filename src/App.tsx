@@ -21,6 +21,7 @@ import MembersSupport from "./pages/members/MembersSupport";
 import MembersCertificate from "./pages/members/MembersCertificate";
 import MembersCommunity from "./pages/members/MembersCommunity";
 import CommunityPost from "./pages/members/CommunityPost";
+import MembersUpdates from "./pages/members/MembersUpdates";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
@@ -52,7 +53,7 @@ const App = () => (
             <Route path="/membros/certificado" element={<MembersCertificate />} />
             <Route path="/membros/comunidade" element={<MembersCommunity />} />
             <Route path="/membros/comunidade/post/:postId" element={<CommunityPost />} />
-            <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
+            <Route path="/membros/atualizacoes" element={<MembersUpdates />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarouselEditor />} />

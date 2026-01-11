@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MembersLayout } from '@/components/members/MembersLayout';
+import { LessonComments } from '@/components/community/LessonComments';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -11,7 +12,9 @@ import {
   Clock,
   BookOpen,
   FileText,
-  Sparkles
+  Sparkles,
+  Award,
+  MessageCircle
 } from 'lucide-react';
 
 interface Lesson {
@@ -255,8 +258,13 @@ const LessonPlayer = () => {
           </div>
         )}
 
+        {/* Lesson Comments */}
+        {lessonId && (
+          <LessonComments lessonId={lessonId} />
+        )}
+
         {/* Navigation */}
-        <div className="flex items-center justify-between gap-4 pt-6 border-t border-border/50">
+        <div className="flex items-center justify-between gap-4 pt-6 mt-8 border-t border-border/50">
           {prevLesson ? (
             <Button
               variant="outline"
@@ -279,11 +287,11 @@ const LessonPlayer = () => {
             </Button>
           ) : (
             <Button
-              onClick={() => navigate('/membros/modulos')}
+              onClick={() => navigate('/membros/certificado')}
               className="bg-green-500 hover:bg-green-600"
             >
-              <CheckCircle2 className="w-4 h-4 mr-2" />
-              Módulo concluído!
+              <Award className="w-4 h-4 mr-2" />
+              Ver certificado
             </Button>
           )}
         </div>

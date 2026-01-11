@@ -1,5 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { MembersLayout } from '@/components/members/MembersLayout';
-import { Gift, Play, Lock, CheckCircle2 } from 'lucide-react';
+import { Gift, Play, Lock, CheckCircle2, FileText, ArrowRight } from 'lucide-react';
 
 const bonusContent = [
   {
@@ -29,6 +30,14 @@ const bonusContent = [
 ];
 
 const MembersBonus = () => {
+  const navigate = useNavigate();
+
+  const handleBonusClick = (bonus: typeof bonusContent[0]) => {
+    if (bonus.title === "Biblioteca de Prompts Prontos") {
+      navigate('/membros/materiais');
+    }
+  };
+
   return (
     <MembersLayout>
       <div className="max-w-5xl mx-auto">
@@ -41,7 +50,7 @@ const MembersBonus = () => {
             Bônus
           </h1>
           <p className="text-muted-foreground">
-            Materiais e aulas extras incluídos no seu acesso
+            Materiais e recursos extras incluídos no seu acesso para acelerar seu aprendizado
           </p>
         </div>
 
@@ -49,6 +58,7 @@ const MembersBonus = () => {
           {bonusContent.map((bonus, index) => (
             <div
               key={index}
+              onClick={() => handleBonusClick(bonus)}
               className="bg-card rounded-2xl p-6 border border-border/50 hover:border-gold/30 hover:shadow-elegant transition-all group cursor-pointer relative overflow-hidden"
             >
               {/* Badge */}
@@ -77,12 +87,38 @@ const MembersBonus = () => {
                 </div>
               </div>
 
-              {bonus.available && bonus.type === "Aula Bônus" && (
+              {bonus.available && (
                 <div className="mt-4 pt-4 border-t border-border/50">
-                  <button className="flex items-center gap-2 text-accent text-sm font-medium hover:text-accent/80 transition-colors">
-                    <Play className="w-4 h-4" />
-                    Assistir aula
-                  </button>
+                  {bonus.type === "Material" ? (
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/membros/materiais');
+                      }}
+                      className="flex items-center gap-2 text-accent text-sm font-medium hover:text-accent/80 transition-colors"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Acessar materiais
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  ) : bonus.type === "Aula Bônus" ? (
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/membros/modulos');
+                      }}
+                      className="flex items-center gap-2 text-accent text-sm font-medium hover:text-accent/80 transition-colors"
+                    >
+                      <Play className="w-4 h-4" />
+                      Ver aulas do curso
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  ) : (
+                    <span className="flex items-center gap-2 text-green-500 text-sm font-medium">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Incluído no seu acesso
+                    </span>
+                  )}
                 </div>
               )}
             </div>
