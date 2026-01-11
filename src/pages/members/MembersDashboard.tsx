@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { supabase } from '@/integrations/supabase/client';
+import { useGamification } from '@/hooks/useGamification';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { 
@@ -11,7 +12,9 @@ import {
   Clock, 
   ArrowRight,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Zap,
+  Star
 } from 'lucide-react';
 
 interface Module {
@@ -33,6 +36,9 @@ const MembersDashboard = () => {
   const [completedLessons, setCompletedLessons] = useState(0);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState<string | undefined>();
+
+  const { userPoints, earnedBadges, userRank, getLevelTitle } = useGamification(userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +46,7 @@ const MembersDashboard = () => {
         // Get user info
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
+          setUserId(user.id);
           setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Aluno');
         }
 
@@ -104,8 +111,8 @@ const MembersDashboard = () => {
           </div>
         </div>
 
-        {/* Progress & Quick Actions */}
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Progress & Points */}
+        <div className="grid md:grid-cols-3 gap-6">
           {/* Progress Card */}
           <div className="bg-card rounded-2xl p-6 border border-border/50">
             <div className="flex items-center justify-between mb-4">
@@ -116,31 +123,55 @@ const MembersDashboard = () => {
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">
-                  {completedLessons} de {totalLessons} aulas concluídas
+                  {completedLessons} de {totalLessons} aulas
                 </span>
                 <span className="text-sm font-bold text-accent">{progressPercentage}%</span>
               </div>
               <Progress value={progressPercentage} className="h-3" />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/50">
+            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border/50">
               <div className="text-center">
-                <p className="text-2xl font-bold text-foreground">{modules.length}</p>
+                <p className="text-xl font-bold text-foreground">{modules.length}</p>
                 <p className="text-xs text-muted-foreground">Módulos</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-foreground">{totalLessons}</p>
+                <p className="text-xl font-bold text-foreground">{totalLessons}</p>
                 <p className="text-xs text-muted-foreground">Aulas</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent">{completedLessons}</p>
-                <p className="text-xs text-muted-foreground">Concluídas</p>
+                <p className="text-xl font-bold text-accent">{completedLessons}</p>
+                <p className="text-xs text-muted-foreground">Feitas</p>
               </div>
             </div>
           </div>
 
+          {/* Points Card */}
+          <div className="bg-gradient-to-br from-accent/20 to-accent/5 rounded-2xl p-6 border border-accent/20">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display font-bold text-lg text-foreground">Seus Pontos</h2>
+              <Zap className="w-5 h-5 text-accent" />
+            </div>
+            
+            <div className="text-center mb-4">
+              <p className="text-4xl font-bold text-accent">{userPoints?.points || 0}</p>
+              <p className="text-sm text-muted-foreground">
+                Nível {userPoints?.level || 1} - {getLevelTitle(userPoints?.level || 1)}
+              </p>
+            </div>
+
+            <Button 
+              onClick={() => navigate('/membros/ranking')}
+              className="w-full"
+              variant="outline"
+            >
+              <Star className="w-4 h-4 mr-2" />
+              Ver Ranking
+            </Button>
+          </div>
+
           {/* Quick Actions Card */}
-          <div className="bg-card rounded-2xl p-6 border border-border/50">
+          <div className="bg-card rounded-2xl p-6 border border-border/50 md:col-span-3 lg:col-span-1">
             <h2 className="font-display font-bold text-lg text-foreground mb-4">Ações Rápidas</h2>
             
             <div className="space-y-3">
