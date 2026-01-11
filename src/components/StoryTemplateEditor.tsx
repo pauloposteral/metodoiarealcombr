@@ -1,9 +1,12 @@
 import { useState, useRef } from "react";
-import { Download, Type, Palette, RotateCcw } from "lucide-react";
+import { Download, Type, Palette, RotateCcw, Sparkles, Loader2, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import html2canvas from "html2canvas";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import realisStoriesWelcome from "@/assets/character/realis-stories-welcome.png";
 
 const colorPresets = [
@@ -20,6 +23,12 @@ const StoryTemplateEditor = () => {
   const [ctaText, setCtaText] = useState("Saiba mais →");
   const [selectedColor, setSelectedColor] = useState(0);
   const [isExporting, setIsExporting] = useState(false);
+  
+  // AI Image Generation
+  const [imagePrompt, setImagePrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [useGeneratedImage, setUseGeneratedImage] = useState(false);
 
   const handleExport = async () => {
     if (!templateRef.current) return;
@@ -43,11 +52,40 @@ const StoryTemplateEditor = () => {
     setIsExporting(false);
   };
 
+  const handleGenerateImage = async () => {
+    if (!imagePrompt.trim()) {
+      toast.error("Digite uma descrição para gerar a imagem");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-image', {
+        body: { prompt: imagePrompt }
+      });
+
+      if (error) throw error;
+
+      if (data?.imageUrl) {
+        setGeneratedImage(data.imageUrl);
+        setUseGeneratedImage(true);
+        toast.success("Imagem gerada com sucesso!");
+      }
+    } catch (error) {
+      console.error("Error generating image:", error);
+      toast.error("Erro ao gerar imagem. Tente novamente.");
+    }
+    setIsGenerating(false);
+  };
+
   const resetToDefault = () => {
     setTopText("Dica de IA #1");
     setBottomText("Aprenda a usar ChatGPT como um profissional");
     setCtaText("Saiba mais →");
     setSelectedColor(0);
+    setGeneratedImage(null);
+    setUseGeneratedImage(false);
+    setImagePrompt("");
   };
 
   const currentColor = colorPresets[selectedColor];
@@ -61,6 +99,19 @@ const StoryTemplateEditor = () => {
             ref={templateRef}
             className={`relative w-[270px] h-[480px] md:w-[324px] md:h-[576px] rounded-2xl overflow-hidden bg-gradient-to-b ${currentColor.bg}`}
           >
+            {/* Background Image (if generated) */}
+            {useGeneratedImage && generatedImage && (
+              <div className="absolute inset-0">
+                <img
+                  src={generatedImage}
+                  alt="Generated background"
+                  className="w-full h-full object-cover opacity-40"
+                  crossOrigin="anonymous"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+              </div>
+            )}
+
             {/* Top Text */}
             <div className="absolute top-8 left-0 right-0 text-center px-4 z-10">
               <p 
@@ -111,6 +162,70 @@ const StoryTemplateEditor = () => {
 
         {/* Editor Controls */}
         <div className="flex-1 space-y-6">
+          {/* AI Image Generation */}
+          <div className="bg-gradient-to-br from-accent/10 to-gold/5 border border-accent/20 rounded-xl p-4">
+            <h3 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-gold" />
+              Gerar Imagem com IA
+            </h3>
+            
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="imagePrompt" className="text-sm text-muted-foreground">
+                  Descreva a imagem que deseja criar
+                </Label>
+                <Textarea
+                  id="imagePrompt"
+                  value={imagePrompt}
+                  onChange={(e) => setImagePrompt(e.target.value)}
+                  placeholder="Ex: paisagem futurista com tons de azul e dourado, tecnologia, inovação..."
+                  className="mt-1 min-h-[80px] resize-none"
+                />
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleGenerateImage}
+                  disabled={isGenerating || !imagePrompt.trim()}
+                  className="flex-1 bg-gradient-to-r from-accent to-gold hover:opacity-90 text-white"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Gerando...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Gerar Imagem
+                    </>
+                  )}
+                </Button>
+                
+                {generatedImage && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setUseGeneratedImage(!useGeneratedImage)}
+                    className={useGeneratedImage ? "border-accent text-accent" : ""}
+                  >
+                    <ImageIcon className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+
+              {generatedImage && (
+                <div className="mt-3 p-2 bg-background/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground mb-2">Imagem gerada:</p>
+                  <img 
+                    src={generatedImage} 
+                    alt="Generated" 
+                    className="w-full h-24 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           <div>
             <h3 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Type className="w-5 h-5 text-accent" />
