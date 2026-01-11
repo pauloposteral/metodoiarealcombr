@@ -21,7 +21,8 @@ import {
   HelpCircle,
   LogOut,
   ChevronLeft,
-  Award
+  Award,
+  LayoutGrid
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -31,6 +32,7 @@ const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
   { title: 'Materiais', url: '/membros/materiais', icon: FileText },
+  { title: 'Carrosséis', url: '/carrossel', icon: LayoutGrid },
   { title: 'Bônus', url: '/membros/bonus', icon: Gift },
   { title: 'Certificado', url: '/membros/certificado', icon: Award },
   { title: 'Atualizações', url: '/membros/atualizacoes', icon: Bell },
