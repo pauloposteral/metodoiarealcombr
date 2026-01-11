@@ -1,5 +1,6 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Check } from 'lucide-react';
+import realisThinking from '@/assets/character/realis-thinking.png';
 
 export const DifferentialsSection = () => {
   const differentials = [
@@ -28,9 +29,22 @@ export const DifferentialsSection = () => {
   return (
     <section className="py-20 md:py-28 bg-secondary">
       <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <ScrollReveal direction="left">
-            <div>
+        <div className="grid lg:grid-cols-3 gap-12 lg:gap-8 items-center">
+          {/* REALIS thinking */}
+          <ScrollReveal direction="left" className="hidden lg:block">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-accent/10 via-transparent to-transparent rounded-full blur-2xl" />
+              <img 
+                src={realisThinking}
+                alt="REALIS pensando sobre os diferenciais"
+                className="relative z-10 w-full max-w-[300px] mx-auto drop-shadow-xl"
+              />
+            </div>
+          </ScrollReveal>
+
+          {/* Text content */}
+          <ScrollReveal direction="up">
+            <div className="text-center lg:text-left">
               <span className="inline-block px-4 py-2 bg-accent/10 text-accent font-semibold text-sm rounded-full mb-6">
                 Diferenciais
               </span>
@@ -45,6 +59,7 @@ export const DifferentialsSection = () => {
             </div>
           </ScrollReveal>
 
+          {/* Differentials list */}
           <ScrollReveal direction="right">
             <div className="space-y-4">
               {differentials.map((item, index) => (
