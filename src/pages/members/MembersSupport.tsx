@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { HelpCircle, MessageCircle, Mail, FileQuestion, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,8 @@ const faqItems = [
 ];
 
 const MembersSupport = () => {
+  const navigate = useNavigate();
+
   return (
     <MembersLayout>
       <div className="max-w-4xl mx-auto">
@@ -63,9 +66,14 @@ const MembersSupport = () => {
               Comunidade
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Participe do grupo exclusivo de alunos
+              Participe do grupo exclusivo de alunos e tire suas dúvidas
             </p>
-            <Button variant="outline" size="sm" className="text-green-500 border-green-500/30 hover:bg-green-500/10">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-green-500 border-green-500/30 hover:bg-green-500/10"
+              onClick={() => navigate('/membros/comunidade')}
+            >
               <MessageCircle className="w-4 h-4 mr-2" />
               Acessar comunidade
             </Button>

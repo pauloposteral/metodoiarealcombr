@@ -157,6 +157,18 @@ const MembersDashboard = () => {
               </Button>
 
               <Button 
+                onClick={() => navigate('/membros/comunidade')}
+                className="w-full justify-between h-auto py-4"
+                variant="ghost"
+              >
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-gold" />
+                  <span className="font-medium text-foreground">Acessar comunidade</span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground" />
+              </Button>
+
+              <Button 
                 onClick={() => navigate('/membros/modulos')}
                 className="w-full justify-between h-auto py-4"
                 variant="ghost"
