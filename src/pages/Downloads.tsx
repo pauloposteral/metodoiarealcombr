@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Download } from "lucide-react";
+import { Download, Play, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TopHeader } from "@/components/TopHeader";
 import { Footer } from "@/components/Footer";
@@ -18,6 +18,9 @@ import realisStoriesWelcome from "@/assets/character/realis-stories-welcome.png"
 import realisReelsTeaching from "@/assets/character/realis-reels-teaching.png";
 import realisStoriesThinking from "@/assets/character/realis-stories-thinking.png";
 import realisFeedSquare from "@/assets/character/realis-feed-square.png";
+
+// Promo Video
+import realisPromoVideo from "@/assets/promo/realis-promo-video.mp4";
 
 const characterAssets = [
   {
@@ -103,10 +106,22 @@ const socialMediaAssets = [
   },
 ];
 
+const promoVideos = [
+  {
+    id: "promo-main",
+    name: "Vídeo Promocional - Método IA Real",
+    description: "Vídeo de 10 segundos para divulgação nas redes sociais. Perfeito para Stories, Reels e TikTok.",
+    video: realisPromoVideo,
+    filename: "realis-promo-metodo-ia-real.mp4",
+    dimensions: "1080 x 1920",
+    duration: "10s",
+  },
+];
+
 const Downloads = () => {
-  const handleDownload = (imageSrc: string, filename: string) => {
+  const handleDownload = (src: string, filename: string) => {
     const link = document.createElement("a");
-    link.href = imageSrc;
+    link.href = src;
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -139,6 +154,83 @@ const Downloads = () => {
               Conheça REALIS, o mentor visual do Método IA Real. Um personagem futurístico,
               elegante e humano que representa inteligência prática, clareza e método.
             </p>
+          </div>
+
+          {/* Promo Video Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-accent/20 text-gold rounded-full text-sm font-medium mb-4 border border-gold/30">
+                <Play className="w-4 h-4" />
+                Vídeo Promocional
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Divulgue o Método IA Real
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Vídeo pronto para compartilhar nas suas redes sociais e atrair novos alunos
+              </p>
+            </div>
+
+            <div className="max-w-md mx-auto">
+              {promoVideos.map((video) => (
+                <div
+                  key={video.id}
+                  className="group relative bg-gradient-to-br from-card via-card to-gold/5 rounded-2xl border border-gold/20 overflow-hidden hover:border-gold/50 transition-all duration-300"
+                >
+                  {/* Video Preview */}
+                  <div className="aspect-[9/16] overflow-hidden bg-gradient-to-br from-navy-dark/40 to-navy-dark/20 relative">
+                    <video
+                      src={video.video}
+                      className="w-full h-full object-cover"
+                      controls
+                      poster=""
+                      playsInline
+                    >
+                      Seu navegador não suporta vídeos.
+                    </video>
+                    
+                    {/* Duration Badge */}
+                    <div className="absolute top-4 left-4 bg-gold/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                      <span className="text-xs font-bold text-navy-dark">{video.duration}</span>
+                    </div>
+
+                    {/* Dimensions Badge */}
+                    <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full">
+                      <span className="text-xs font-medium text-foreground">{video.dimensions}</span>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-6">
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                      {video.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-5">
+                      {video.description}
+                    </p>
+                    
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => handleDownload(video.video, video.filename)}
+                        className="flex-1 bg-gradient-to-r from-gold to-accent hover:opacity-90 text-navy-dark font-semibold"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Baixar Vídeo
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-gold/30 text-gold hover:bg-gold/10"
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.origin + video.video);
+                        }}
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Story Template Editor Section */}
