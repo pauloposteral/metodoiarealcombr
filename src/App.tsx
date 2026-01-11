@@ -23,6 +23,7 @@ import MembersCommunity from "./pages/members/MembersCommunity";
 import CommunityPost from "./pages/members/CommunityPost";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
+import Downloads from "./pages/Downloads";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/membros/comunidade/post/:postId" element={<CommunityPost />} />
             <Route path="/membros/atualizacoes" element={<MembersDashboard />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
+            <Route path="/downloads" element={<Downloads />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
