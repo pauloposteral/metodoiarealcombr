@@ -76,14 +76,14 @@ const generalFaqs = [
 
 export const FAQSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-background relative overflow-hidden" id="faq">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-navy-light/5 rounded-full blur-3xl -translate-x-1/2" />
+    <section className="py-12 md:py-20 lg:py-28 bg-background relative overflow-hidden scroll-mt-12 md:scroll-mt-16" id="faq">
+      {/* Background decoration - Smaller on mobile */}
+      <div className="absolute top-0 right-0 w-48 md:w-96 h-48 md:h-96 bg-gold/5 rounded-full blur-3xl translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-36 md:w-72 h-36 md:h-72 bg-navy-light/5 rounded-full blur-3xl -translate-x-1/2" />
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-3 gap-12 items-start">
-          {/* REALIS welcoming - sticky on desktop */}
+      <div className="container px-4 md:px-8 relative z-10">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+          {/* REALIS welcoming - Hidden on mobile */}
           <ScrollReveal direction="left" className="hidden lg:block lg:sticky lg:top-24">
             <div className="relative flex justify-center">
               <div className="absolute inset-0 bg-gradient-to-t from-gold/10 via-accent/5 to-transparent rounded-full blur-3xl scale-90" />
@@ -91,6 +91,7 @@ export const FAQSection = () => {
                 src={realisWelcoming}
                 alt="REALIS respondendo dúvidas"
                 className="relative z-10 w-full max-w-[300px] drop-shadow-2xl animate-character-entrance animate-character-glow"
+                loading="lazy"
               />
               {/* Badge */}
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-card/90 backdrop-blur-sm px-4 py-2 rounded-full border border-accent/30">
@@ -103,15 +104,15 @@ export const FAQSection = () => {
           {/* FAQs */}
           <div className="lg:col-span-2">
             <ScrollReveal>
-              <div className="text-center lg:text-left mb-12">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-navy-light/10 text-navy-light rounded-full text-sm font-medium mb-4">
-                  <HelpCircle className="w-4 h-4" />
+              <div className="text-center lg:text-left mb-8 md:mb-12">
+                <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-navy-light/10 text-navy-light rounded-full text-xs md:text-sm font-medium mb-3 md:mb-4">
+                  <HelpCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   Dúvidas Frequentes
                 </span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mb-6">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground mb-4 md:mb-6 leading-tight">
                   Perguntas Frequentes
                 </h2>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-base md:text-lg text-muted-foreground">
                   Tire suas dúvidas antes de começar sua jornada
                 </p>
               </div>
@@ -119,33 +120,33 @@ export const FAQSection = () => {
 
             {/* Payment & Guarantee FAQs */}
             <ScrollReveal delay={100}>
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5 text-accent" />
+              <div className="mb-6 md:mb-8">
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-accent/20 rounded-full flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-accent" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground">
                     Pagamento & Garantia
                   </h3>
                 </div>
-                <Accordion type="single" collapsible className="space-y-3">
+                <Accordion type="single" collapsible className="space-y-2 md:space-y-3">
                   {paymentFaqs.map((faq, index) => (
                     <AccordionItem 
                       key={`payment-${index}`} 
                       value={`payment-${index}`}
-                      className="bg-accent/5 border border-accent/20 rounded-xl px-6 data-[state=open]:border-accent/40 data-[state=open]:shadow-gold transition-all duration-300"
+                      className="bg-accent/5 border border-accent/20 rounded-lg md:rounded-xl px-4 md:px-6 data-[state=open]:border-accent/40 data-[state=open]:shadow-gold transition-all duration-300"
                     >
-                      <AccordionTrigger className="text-left font-semibold text-foreground hover:text-accent hover:no-underline py-5">
-                        <span className="flex items-center gap-2">
+                      <AccordionTrigger className="text-left font-semibold text-foreground hover:text-accent hover:no-underline py-4 md:py-5 text-sm md:text-base">
+                        <span className="flex items-center gap-1.5 md:gap-2">
                           {index < 3 ? (
-                            <CreditCard className="w-4 h-4 text-accent flex-shrink-0" />
+                            <CreditCard className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent flex-shrink-0" />
                           ) : (
-                            <Shield className="w-4 h-4 text-accent flex-shrink-0" />
+                            <Shield className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent flex-shrink-0" />
                           )}
                           {faq.question}
                         </span>
                       </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground pb-5 leading-relaxed pl-6">
+                      <AccordionContent className="text-muted-foreground pb-4 md:pb-5 leading-relaxed pl-5 md:pl-6 text-sm">
                         {faq.answer}
                       </AccordionContent>
                     </AccordionItem>
@@ -157,25 +158,25 @@ export const FAQSection = () => {
             {/* General FAQs */}
             <ScrollReveal delay={200}>
               <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-navy-light/10 rounded-full flex items-center justify-center">
-                    <HelpCircle className="w-5 h-5 text-navy-light" />
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-navy-light/10 rounded-full flex items-center justify-center">
+                    <HelpCircle className="w-4 h-4 md:w-5 md:h-5 text-navy-light" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground">
                     Sobre o Curso
                   </h3>
                 </div>
-                <Accordion type="single" collapsible className="space-y-3">
+                <Accordion type="single" collapsible className="space-y-2 md:space-y-3">
                   {generalFaqs.map((faq, index) => (
                     <AccordionItem 
                       key={`general-${index}`} 
                       value={`general-${index}`}
-                      className="bg-card border border-border/50 rounded-xl px-6 data-[state=open]:border-gold/30 data-[state=open]:shadow-elegant transition-all duration-300"
+                      className="bg-card border border-border/50 rounded-lg md:rounded-xl px-4 md:px-6 data-[state=open]:border-gold/30 data-[state=open]:shadow-elegant transition-all duration-300"
                     >
-                      <AccordionTrigger className="text-left font-semibold text-foreground hover:text-gold hover:no-underline py-5">
+                      <AccordionTrigger className="text-left font-semibold text-foreground hover:text-gold hover:no-underline py-4 md:py-5 text-sm md:text-base">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                      <AccordionContent className="text-muted-foreground pb-4 md:pb-5 leading-relaxed text-sm">
                         {faq.answer}
                       </AccordionContent>
                     </AccordionItem>
@@ -186,19 +187,18 @@ export const FAQSection = () => {
 
             {/* Guarantee Badge */}
             <ScrollReveal delay={300}>
-              <div className="mt-12 p-6 bg-gradient-to-r from-accent/10 via-accent/5 to-accent/10 rounded-2xl border border-accent/20">
-                <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                  <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <ShieldCheck className="w-10 h-10 text-accent" />
+              <div className="mt-8 md:mt-12 p-4 md:p-6 bg-gradient-to-r from-accent/10 via-accent/5 to-accent/10 rounded-xl md:rounded-2xl border border-accent/20">
+                <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
+                  <div className="w-14 h-14 md:w-20 md:h-20 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <ShieldCheck className="w-7 h-7 md:w-10 md:h-10 text-accent" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-foreground mb-2">
+                    <h4 className="text-base md:text-lg font-bold text-foreground mb-1.5 md:mb-2">
                       Garantia Incondicional de 7 Dias
                     </h4>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground text-xs md:text-sm">
                       Se dentro de 7 dias você não estiver 100% satisfeito com o curso, 
-                      devolvemos todo o seu investimento. Sem perguntas, sem burocracia. 
-                      O risco é todo nosso.
+                      devolvemos todo o seu investimento. Sem perguntas, sem burocracia.
                     </p>
                   </div>
                 </div>
@@ -207,13 +207,13 @@ export const FAQSection = () => {
 
             {/* Additional CTA */}
             <ScrollReveal delay={400}>
-              <div className="text-center mt-8">
-                <p className="text-muted-foreground mb-4">
+              <div className="text-center mt-6 md:mt-8">
+                <p className="text-muted-foreground text-sm mb-3 md:mb-4">
                   Ainda tem dúvidas?
                 </p>
                 <a 
                   href="mailto:contato@metodoiareal.com.br" 
-                  className="inline-flex items-center gap-2 text-gold hover:text-gold-light font-medium transition-colors"
+                  className="inline-flex items-center gap-2 text-gold hover:text-gold-light font-medium transition-colors py-2 px-3 -mx-3"
                 >
                   Entre em contato conosco
                   <span className="text-xl">→</span>
