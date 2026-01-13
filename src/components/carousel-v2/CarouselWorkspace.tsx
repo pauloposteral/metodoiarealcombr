@@ -5,6 +5,7 @@ import { CarouselCanvas } from './CarouselCanvas';
 import { SlideEditor } from './SlideEditor';
 import { ExportPanel } from './ExportPanel';
 import { GenerationProgressBar } from './GenerationProgressBar';
+import { GenerationOverlay } from './GenerationOverlay';
 import {
   CarouselSlide,
   CarouselTheme,
@@ -379,7 +380,13 @@ export const CarouselWorkspace = () => {
   // ==========================================
   return (
     <div className="min-h-screen bg-background">
-      {/* Progress Bar */}
+      {/* Generation Overlay - Futuristic */}
+      <GenerationOverlay 
+        progress={progress} 
+        isVisible={progress.status !== 'idle' && progress.status !== 'complete'}
+      />
+
+      {/* Progress Bar (top) */}
       <AnimatePresence>
         {progress.status !== 'idle' && (
           <GenerationProgressBar progress={progress} />
@@ -407,14 +414,14 @@ export const CarouselWorkspace = () => {
           animate={{ opacity: 1 }}
           className="p-4 md:p-6"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+          {/* Header - Glass effect */}
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-4 p-4 rounded-xl glass-panel">
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleNewCarousel}
-                className="rounded-full"
+                className="rounded-full hover-scale-micro"
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
@@ -426,27 +433,31 @@ export const CarouselWorkspace = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {qualityScore && (
-                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${
-                  qualityScore.total >= 85
-                    ? 'bg-green-500/20 text-green-400'
-                    : qualityScore.total >= 70
-                      ? 'bg-yellow-500/20 text-yellow-400'
-                      : 'bg-red-500/20 text-red-400'
-                }`}>
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium neon-border ${
+                    qualityScore.total >= 85
+                      ? 'bg-green-500/20 text-green-400'
+                      : qualityScore.total >= 70
+                        ? 'bg-yellow-500/20 text-yellow-400'
+                        : 'bg-red-500/20 text-red-400'
+                  }`}
+                >
                   {qualityScore.total >= 85 ? (
                     <CheckCircle2 className="w-4 h-4" />
                   ) : (
                     <AlertTriangle className="w-4 h-4" />
                   )}
                   {qualityScore.total}%
-                </div>
+                </motion.div>
               )}
               <Button
                 variant="outline"
                 onClick={handleNewCarousel}
-                className="gap-2"
+                className="gap-2 hover-scale-micro"
               >
                 <RefreshCw className="w-4 h-4" />
                 Novo Carrossel

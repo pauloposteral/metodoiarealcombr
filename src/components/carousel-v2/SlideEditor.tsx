@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -131,14 +132,18 @@ export const SlideEditor = ({
 
   if (slides.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border">
-        <div className="text-center py-12">
+      <Card className="p-6 glass-panel border-border neon-border">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center py-12"
+        >
           <ImageIcon className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
           <h3 className="font-semibold mb-2">Nenhum slide ainda</h3>
           <p className="text-sm text-muted-foreground">
             Gere um carrossel para começar a editar
           </p>
-        </div>
+        </motion.div>
       </Card>
     );
   }
@@ -162,13 +167,13 @@ export const SlideEditor = ({
   };
 
   return (
-    <Card className="p-4 bg-card border-border">
+    <Card className="p-4 glass-panel border-border">
       <Tabs defaultValue="slides" className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-4 mb-4">
-          <TabsTrigger value="slides">Slides</TabsTrigger>
-          <TabsTrigger value="edit">Editar</TabsTrigger>
-          <TabsTrigger value="theme">Tema</TabsTrigger>
-          <TabsTrigger value="hooks" className="gap-1">
+        <TabsList className="grid w-full grid-cols-4 mb-4 glass-panel p-1">
+          <TabsTrigger value="slides" className="data-[state=active]:glow-accent transition-all">Slides</TabsTrigger>
+          <TabsTrigger value="edit" className="data-[state=active]:glow-accent transition-all">Editar</TabsTrigger>
+          <TabsTrigger value="theme" className="data-[state=active]:glow-accent transition-all">Tema</TabsTrigger>
+          <TabsTrigger value="hooks" className="gap-1 data-[state=active]:glow-accent transition-all">
             <Bookmark className="w-3 h-3" />
             Hooks
           </TabsTrigger>
