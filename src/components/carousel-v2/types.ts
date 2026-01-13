@@ -129,7 +129,7 @@ export interface GenerationProgress {
 }
 
 // ==========================================
-// THEMES LIBRARY - Premium Redesigned
+// THEMES LIBRARY - Premium Collection
 // ==========================================
 
 export const CAROUSEL_THEMES: CarouselTheme[] = [
@@ -157,6 +157,120 @@ export const CAROUSEL_THEMES: CarouselTheme[] = [
     textColor: 'hsl(225, 45%, 12%)',
     backgroundGradient: 'linear-gradient(180deg, hsl(42, 35%, 97%) 0%, hsl(42, 30%, 94%) 100%)',
     fontFamily: "'Playfair Display', serif",
+  },
+  
+  // === LUXURY (NEW) ===
+  {
+    id: 'luxury-gold',
+    name: 'luxury-gold',
+    displayName: 'Luxury Gold',
+    category: 'luxury',
+    primaryColor: 'hsl(35, 20%, 8%)',
+    secondaryColor: 'hsl(35, 18%, 14%)',
+    accentColor: 'hsl(43, 90%, 55%)',
+    textColor: 'hsl(45, 25%, 98%)',
+    backgroundGradient: 'linear-gradient(155deg, hsl(35, 22%, 6%) 0%, hsl(38, 20%, 11%) 50%, hsl(32, 25%, 9%) 100%)',
+    fontFamily: "'Playfair Display', serif",
+  },
+  {
+    id: 'luxury-champagne',
+    name: 'luxury-champagne',
+    displayName: 'Luxury Champagne',
+    category: 'luxury',
+    primaryColor: 'hsl(40, 8%, 92%)',
+    secondaryColor: 'hsl(40, 6%, 88%)',
+    accentColor: 'hsl(35, 70%, 35%)',
+    textColor: 'hsl(35, 30%, 12%)',
+    backgroundGradient: 'linear-gradient(175deg, hsl(40, 10%, 94%) 0%, hsl(42, 8%, 90%) 100%)',
+    fontFamily: "'Cormorant Garamond', serif",
+  },
+  {
+    id: 'luxury-platinum',
+    name: 'luxury-platinum',
+    displayName: 'Luxury Platinum',
+    category: 'luxury',
+    primaryColor: 'hsl(220, 8%, 12%)',
+    secondaryColor: 'hsl(220, 6%, 18%)',
+    accentColor: 'hsl(45, 15%, 75%)',
+    textColor: 'hsl(0, 0%, 98%)',
+    backgroundGradient: 'linear-gradient(165deg, hsl(220, 10%, 10%) 0%, hsl(215, 8%, 16%) 100%)',
+    fontFamily: "'DM Sans', sans-serif",
+  },
+  
+  // === CORPORATE (NEW) ===
+  {
+    id: 'corporate-blue',
+    name: 'corporate-blue',
+    displayName: 'Corporate Blue',
+    category: 'corporate',
+    primaryColor: 'hsl(215, 70%, 12%)',
+    secondaryColor: 'hsl(215, 65%, 18%)',
+    accentColor: 'hsl(200, 90%, 50%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(160deg, hsl(215, 72%, 10%) 0%, hsl(218, 68%, 16%) 50%, hsl(212, 75%, 12%) 100%)',
+    fontFamily: "'Inter', sans-serif",
+  },
+  {
+    id: 'corporate-navy',
+    name: 'corporate-navy',
+    displayName: 'Corporate Navy',
+    category: 'corporate',
+    primaryColor: 'hsl(222, 47%, 11%)',
+    secondaryColor: 'hsl(222, 45%, 17%)',
+    accentColor: 'hsl(38, 92%, 50%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(155deg, hsl(222, 50%, 9%) 0%, hsl(225, 48%, 14%) 100%)',
+    fontFamily: "'Space Grotesk', sans-serif",
+  },
+  {
+    id: 'corporate-slate',
+    name: 'corporate-slate',
+    displayName: 'Corporate Slate',
+    category: 'corporate',
+    primaryColor: 'hsl(215, 25%, 27%)',
+    secondaryColor: 'hsl(215, 22%, 35%)',
+    accentColor: 'hsl(170, 70%, 45%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(170deg, hsl(215, 28%, 24%) 0%, hsl(212, 25%, 32%) 100%)',
+    fontFamily: "'DM Sans', sans-serif",
+  },
+  
+  // === NATURE (NEW) ===
+  {
+    id: 'nature-forest',
+    name: 'nature-forest',
+    displayName: 'Nature Forest',
+    category: 'nature',
+    primaryColor: 'hsl(150, 35%, 12%)',
+    secondaryColor: 'hsl(150, 30%, 18%)',
+    accentColor: 'hsl(85, 70%, 55%)',
+    textColor: 'hsl(0, 0%, 98%)',
+    backgroundGradient: 'linear-gradient(165deg, hsl(150, 38%, 10%) 0%, hsl(155, 32%, 16%) 50%, hsl(148, 40%, 12%) 100%)',
+    fontFamily: "'Nunito', sans-serif",
+  },
+  {
+    id: 'nature-ocean',
+    name: 'nature-ocean',
+    displayName: 'Nature Ocean',
+    category: 'nature',
+    primaryColor: 'hsl(195, 50%, 12%)',
+    secondaryColor: 'hsl(195, 45%, 18%)',
+    accentColor: 'hsl(175, 80%, 50%)',
+    textColor: 'hsl(0, 0%, 100%)',
+    backgroundGradient: 'linear-gradient(170deg, hsl(195, 55%, 10%) 0%, hsl(198, 48%, 16%) 100%)',
+    fontFamily: "'Quicksand', sans-serif",
+  },
+  {
+    id: 'nature-earth',
+    name: 'nature-earth',
+    displayName: 'Nature Earth',
+    category: 'nature',
+    primaryColor: 'hsl(25, 35%, 15%)',
+    secondaryColor: 'hsl(25, 30%, 22%)',
+    accentColor: 'hsl(42, 85%, 55%)',
+    textColor: 'hsl(40, 20%, 96%)',
+    backgroundGradient: 'linear-gradient(165deg, hsl(25, 38%, 13%) 0%, hsl(28, 32%, 20%) 100%)',
+    fontFamily: "'DM Sans', sans-serif",
   },
   
   // === EDITORIAL ===
