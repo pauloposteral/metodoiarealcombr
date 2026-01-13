@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
-import realisGuiding from '@/assets/character/realis-guiding.png';
+
 
 export const HeroSection = () => {
   const bullets = [
@@ -27,9 +27,9 @@ export const HeroSection = () => {
 
       {/* Content */}
       <div className="container relative z-10 pt-16 pb-6 md:pt-24 md:pb-16">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-      {/* Text content - Centered on mobile, left on desktop */}
-          <div className="text-center lg:text-left">
+        <div className="max-w-3xl mx-auto">
+          {/* Text content - Centered */}
+          <div className="text-center">
             {/* Title - Prominent and immediate */}
             <ScrollReveal delay={0}>
               <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6">
@@ -50,7 +50,7 @@ export const HeroSection = () => {
 
             {/* Bullets - Inline on mobile */}
             <ScrollReveal delay={150}>
-              <div className="flex flex-wrap justify-center lg:justify-start gap-3 md:gap-4 mb-6 md:mb-8">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-6 md:mb-8">
                 {bullets.map((bullet, index) => (
                   <div 
                     key={index}
@@ -65,7 +65,7 @@ export const HeroSection = () => {
 
             {/* CTA Buttons - Prominent */}
             <ScrollReveal delay={200}>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start items-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto text-base md:text-lg py-5 md:py-5">
                   <a href="https://payfast.greenn.com.br/152833" target="_blank" rel="noopener noreferrer">
                     Quero aprender IA na prática
@@ -84,32 +84,6 @@ export const HeroSection = () => {
             <ScrollReveal delay={300}>
               <div className="mt-6 md:mt-8 pt-5 md:pt-6 border-t border-primary-foreground/10">
                 <p className="text-primary-foreground/50 text-xs md:text-sm">Acesso imediato • 100% online • Certificado incluso</p>
-              </div>
-            </ScrollReveal>
-          </div>
-
-          {/* REALIS character - Hidden on mobile, visible on desktop */}
-          <div className="hidden lg:flex justify-end">
-            <ScrollReveal delay={250} direction="right">
-              <div className="relative">
-                {/* Glow effect behind character */}
-                <div className="absolute inset-0 bg-gradient-to-t from-accent/20 via-gold/10 to-transparent rounded-3xl blur-2xl scale-75" />
-                
-                <div className="relative z-10">
-                  <img 
-                    src={realisGuiding}
-                    alt="REALIS - Mentor do Método IA Real"
-                    className="w-[320px] lg:w-[380px] xl:w-[420px] h-auto object-contain drop-shadow-2xl animate-float"
-                    style={{ animationDuration: '6s' }}
-                    loading="eager"
-                  />
-                </div>
-                
-                {/* Name badge */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-navy-dark/80 backdrop-blur-sm px-4 py-2 rounded-full border border-accent/30">
-                  <span className="text-accent font-display font-bold text-xs tracking-wider">REALIS</span>
-                  <span className="text-primary-foreground/60 text-xs ml-2">Seu mentor</span>
-                </div>
               </div>
             </ScrollReveal>
           </div>
