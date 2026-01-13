@@ -200,6 +200,136 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          admin_user_id: string | null
+          created_at: string | null
+          email: string
+          id: string
+          max_users: number
+          name: string
+          phone: string | null
+          plan: Database["public"]["Enums"]["company_plan"]
+          slug: string
+          status: Database["public"]["Enums"]["company_status"]
+          updated_at: string | null
+        }
+        Insert: {
+          admin_user_id?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          max_users?: number
+          name: string
+          phone?: string | null
+          plan?: Database["public"]["Enums"]["company_plan"]
+          slug: string
+          status?: Database["public"]["Enums"]["company_status"]
+          updated_at?: string | null
+        }
+        Update: {
+          admin_user_id?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          max_users?: number
+          name?: string
+          phone?: string | null
+          plan?: Database["public"]["Enums"]["company_plan"]
+          slug?: string
+          status?: Database["public"]["Enums"]["company_status"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      company_leads: {
+        Row: {
+          company_name: string
+          contact_name: string
+          converted_company_id: string | null
+          created_at: string | null
+          email: string
+          employees_count: string | null
+          id: string
+          industry: string | null
+          message: string | null
+          phone: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_name: string
+          contact_name: string
+          converted_company_id?: string | null
+          created_at?: string | null
+          email: string
+          employees_count?: string | null
+          id?: string
+          industry?: string | null
+          message?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_name?: string
+          contact_name?: string
+          converted_company_id?: string | null
+          created_at?: string | null
+          email?: string
+          employees_count?: string | null
+          id?: string
+          industry?: string | null
+          message?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_leads_converted_company_id_fkey"
+            columns: ["converted_company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_users: {
+        Row: {
+          company_id: string
+          id: string
+          invited_by: string | null
+          joined_at: string | null
+          role: Database["public"]["Enums"]["company_role"]
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          role?: Database["public"]["Enums"]["company_role"]
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          role?: Database["public"]["Enums"]["company_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_users_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lesson_comments: {
         Row: {
           content: string
@@ -447,6 +577,51 @@ export type Database = {
         }
         Relationships: []
       }
+      prompts: {
+        Row: {
+          category: Database["public"]["Enums"]["prompt_category"]
+          content: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_premium: boolean | null
+          order_index: number | null
+          subcategory: string | null
+          title: string
+          updated_at: string | null
+          usage_count: number | null
+          variables: Json | null
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["prompt_category"]
+          content: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          order_index?: number | null
+          subcategory?: string | null
+          title: string
+          updated_at?: string | null
+          usage_count?: number | null
+          variables?: Json | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["prompt_category"]
+          content?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          order_index?: number | null
+          subcategory?: string | null
+          title?: string
+          updated_at?: string | null
+          usage_count?: number | null
+          variables?: Json | null
+        }
+        Relationships: []
+      }
       purchases: {
         Row: {
           amount: number
@@ -593,11 +768,57 @@ export type Database = {
         }
         Relationships: []
       }
+      user_saved_prompts: {
+        Row: {
+          created_at: string | null
+          custom_content: string | null
+          custom_title: string | null
+          id: string
+          is_favorite: boolean | null
+          prompt_id: string | null
+          updated_at: string | null
+          user_id: string
+          variables_values: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_content?: string | null
+          custom_title?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          prompt_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          variables_values?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_content?: string | null
+          custom_title?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          prompt_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          variables_values?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_saved_prompts_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_user_company_id: { Args: { _user_id: string }; Returns: string }
+      has_active_company: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -605,6 +826,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_company_admin: { Args: { _user_id: string }; Returns: boolean }
       is_moderator: { Args: { _user_id: string }; Returns: boolean }
       validate_certificate: {
         Args: { cert_code: string }
@@ -625,6 +847,15 @@ export type Database = {
         | "resultados"
         | "sugestoes"
         | "avisos"
+      company_plan: "starter" | "pro" | "business"
+      company_role: "admin" | "user"
+      company_status: "pending" | "active" | "suspended"
+      prompt_category:
+        | "marketing"
+        | "conteudo"
+        | "atendimento"
+        | "gestao"
+        | "vendas"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -759,6 +990,16 @@ export const Constants = {
         "resultados",
         "sugestoes",
         "avisos",
+      ],
+      company_plan: ["starter", "pro", "business"],
+      company_role: ["admin", "user"],
+      company_status: ["pending", "active", "suspended"],
+      prompt_category: [
+        "marketing",
+        "conteudo",
+        "atendimento",
+        "gestao",
+        "vendas",
       ],
     },
   },
