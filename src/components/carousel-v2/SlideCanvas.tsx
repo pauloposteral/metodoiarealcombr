@@ -19,22 +19,52 @@ interface SlideCanvasProps {
   theme: CarouselTheme;
 }
 
+// Font family mapping for each theme
+const getFontStack = (fontFamily: string): string => {
+  const fontMap: Record<string, string> = {
+    "'Plus Jakarta Sans', sans-serif": "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Playfair Display', serif": "'Playfair Display', Georgia, 'Times New Roman', serif",
+    "'DM Sans', sans-serif": "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Cormorant Garamond', serif": "'Cormorant Garamond', Georgia, 'Times New Roman', serif",
+    "'Inter', sans-serif": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Space Grotesk', sans-serif": "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Nunito', sans-serif": "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Quicksand', sans-serif": "'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "'Bebas Neue', sans-serif": "'Bebas Neue', Impact, 'Arial Black', sans-serif",
+    "'Orbitron', sans-serif": "'Orbitron', 'Courier New', monospace",
+  };
+  return fontMap[fontFamily] || fontFamily;
+};
+
+// Display font for titles (more impactful)
+const getDisplayFont = (fontFamily: string): string => {
+  if (fontFamily.includes('Playfair')) return "'Playfair Display', serif";
+  if (fontFamily.includes('Cormorant')) return "'Cormorant Garamond', serif";
+  if (fontFamily.includes('Bebas')) return "'Bebas Neue', sans-serif";
+  if (fontFamily.includes('Orbitron')) return "'Orbitron', sans-serif";
+  if (fontFamily.includes('Space Grotesk')) return "'Space Grotesk', sans-serif";
+  return "'DM Sans', sans-serif";
+};
+
 export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
   const IconComponent = slide.icon ? iconComponents[slide.icon] : null;
+  const fontStack = getFontStack(theme.fontFamily);
+  const displayFont = getDisplayFont(theme.fontFamily);
 
   const containerStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
     background: theme.backgroundGradient,
     color: theme.textColor,
-    fontFamily: theme.fontFamily,
+    fontFamily: fontStack,
     position: 'relative',
     overflow: 'hidden',
   };
 
-  // Enhanced background with image
+  // Enhanced premium background with layered effects
   const renderBackground = () => (
     <>
+      {/* Base image layer with advanced treatment */}
       {slide.imageUrl && (
         <>
           <div 
@@ -44,54 +74,94 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
               backgroundImage: `url(${slide.imageUrl})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              opacity: 0.35,
-              filter: 'blur(0px)',
+              opacity: 0.45,
+              filter: 'saturate(1.1) contrast(1.05)',
             }}
           />
+          {/* Premium gradient overlay */}
           <div 
             style={{
               position: 'absolute',
               inset: 0,
-              background: `linear-gradient(180deg, 
-                ${theme.primaryColor}95 0%, 
-                ${theme.primaryColor}70 30%, 
-                ${theme.primaryColor}85 70%,
-                ${theme.primaryColor}98 100%)`,
+              background: `linear-gradient(175deg, 
+                ${theme.primaryColor}e8 0%, 
+                ${theme.primaryColor}c0 35%, 
+                ${theme.primaryColor}d5 65%,
+                ${theme.primaryColor}f5 100%)`,
+            }}
+          />
+          {/* Vignette effect */}
+          <div 
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: `radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, ${theme.primaryColor}90 100%)`,
             }}
           />
         </>
       )}
-      {/* Decorative elements */}
+      
+      {/* Premium ambient glow - top right */}
       <div 
         style={{
           position: 'absolute',
-          top: -100,
-          right: -100,
+          top: -200,
+          right: -150,
+          width: 600,
+          height: 600,
+          background: `radial-gradient(circle, ${theme.accentColor}18, ${theme.accentColor}08 40%, transparent 70%)`,
+          borderRadius: '50%',
+          filter: 'blur(40px)',
+        }}
+      />
+      
+      {/* Secondary glow - bottom left */}
+      <div 
+        style={{
+          position: 'absolute',
+          bottom: -200,
+          left: -200,
           width: 500,
           height: 500,
-          background: `radial-gradient(circle, ${theme.accentColor}12, transparent 70%)`,
+          background: `radial-gradient(circle, ${theme.secondaryColor}20, transparent 70%)`,
           borderRadius: '50%',
+          filter: 'blur(60px)',
         }}
       />
+      
+      {/* Accent line glow */}
       <div 
         style={{
           position: 'absolute',
-          bottom: -150,
-          left: -150,
-          width: 400,
-          height: 400,
-          background: `radial-gradient(circle, ${theme.accentColor}08, transparent 70%)`,
-          borderRadius: '50%',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: `linear-gradient(90deg, transparent, ${theme.accentColor}60, ${theme.accentColor}, ${theme.accentColor}60, transparent)`,
+          opacity: 0.7,
         }}
       />
-      {/* Subtle pattern */}
+      
+      {/* Premium noise texture overlay */}
       <div 
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `linear-gradient(${theme.accentColor}03 1px, transparent 1px), 
-                           linear-gradient(90deg, ${theme.accentColor}03 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          opacity: 0.03,
+          mixBlendMode: 'overlay',
+        }}
+      />
+      
+      {/* Subtle grid pattern */}
+      <div 
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `linear-gradient(${theme.accentColor}04 1px, transparent 1px), 
+                           linear-gradient(90deg, ${theme.accentColor}04 1px, transparent 1px)`,
+          backgroundSize: '80px 80px',
+          opacity: 0.5,
         }}
       />
     </>
@@ -102,48 +172,71 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
     return (
       <div style={{
         position: 'absolute',
-        top: 24,
-        right: 24,
+        top: 28,
+        right: 28,
         display: 'flex',
         alignItems: 'center',
-        gap: 10,
-        padding: '10px 18px',
-        background: 'rgba(0,0,0,0.6)',
-        borderRadius: 10,
-        fontSize: 15,
+        gap: 12,
+        padding: '12px 22px',
+        background: 'rgba(0,0,0,0.7)',
+        borderRadius: 14,
+        fontSize: 16,
+        fontWeight: 500,
         zIndex: 100,
-        backdropFilter: 'blur(8px)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.1)',
       }}>
-        <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} />
+        <Loader2 style={{ width: 20, height: 20, animation: 'spin 1s linear infinite' }} />
         <span>Gerando...</span>
       </div>
     );
   };
 
-  const renderLogo = (position: 'corner' | 'center' = 'corner', size: number = 70) => (
+  const renderLogo = (position: 'corner' | 'center' = 'corner', size: number = 75) => (
     <img 
       src={logo} 
       alt="IA Real" 
       style={{ 
         position: position === 'corner' ? 'absolute' : 'relative',
-        bottom: position === 'corner' ? 50 : undefined,
-        right: position === 'corner' ? 70 : undefined,
+        bottom: position === 'corner' ? 55 : undefined,
+        right: position === 'corner' ? 65 : undefined,
         width: size, 
-        opacity: 0.7,
-        filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))',
+        opacity: 0.85,
+        filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))',
       }}
     />
   );
 
-  const renderAccentLine = (width: number = 80, marginTop: number = 40) => (
+  const renderAccentLine = (width: number = 90, marginTop: number = 45) => (
     <div style={{
       width,
       height: 5,
-      background: `linear-gradient(90deg, ${theme.accentColor}, ${theme.accentColor}80)`,
+      background: `linear-gradient(90deg, ${theme.accentColor}, ${theme.accentColor}90)`,
       borderRadius: 3,
       marginTop,
-      boxShadow: `0 0 20px ${theme.accentColor}50`,
+      boxShadow: `0 0 30px ${theme.accentColor}50, 0 0 60px ${theme.accentColor}25`,
     }} />
+  );
+
+  // Premium accent badge
+  const renderAccentBadge = (text: string) => (
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 8,
+      padding: '10px 22px',
+      background: `linear-gradient(135deg, ${theme.accentColor}25, ${theme.accentColor}15)`,
+      border: `1.5px solid ${theme.accentColor}50`,
+      borderRadius: 50,
+      fontSize: 16,
+      fontWeight: 600,
+      letterSpacing: '0.08em',
+      textTransform: 'uppercase',
+      color: theme.accentColor,
+      backdropFilter: 'blur(8px)',
+    }}>
+      {text}
+    </div>
   );
 
   // ===== COVER SLIDE =====
@@ -160,51 +253,58 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '80px 70px',
+          padding: '85px 75px',
           textAlign: 'center',
         }}>
-          {renderLogo('center', 90)}
+          {renderLogo('center', 95)}
           
           <h1 style={{
-            fontSize: 78,
+            fontFamily: displayFont,
+            fontSize: 82,
             fontWeight: 800,
-            lineHeight: 1.08,
-            marginTop: 50,
-            marginBottom: 32,
+            lineHeight: 1.05,
+            marginTop: 55,
+            marginBottom: 35,
             maxWidth: 920,
-            textShadow: '0 6px 40px rgba(0,0,0,0.5)',
-            letterSpacing: '-0.02em',
+            textShadow: '0 8px 50px rgba(0,0,0,0.6), 0 2px 10px rgba(0,0,0,0.3)',
+            letterSpacing: '-0.025em',
           }}>
             {slide.title}
           </h1>
           
           {slide.subtitle && (
             <p style={{
-              fontSize: 32,
+              fontSize: 34,
               fontWeight: 500,
               opacity: 0.92,
-              maxWidth: 750,
-              lineHeight: 1.45,
-              textShadow: '0 3px 20px rgba(0,0,0,0.4)',
+              maxWidth: 760,
+              lineHeight: 1.5,
+              textShadow: '0 4px 25px rgba(0,0,0,0.45)',
+              letterSpacing: '0.01em',
             }}>
               {slide.subtitle}
             </p>
           )}
           
-          {renderAccentLine(100, 50)}
+          {renderAccentLine(110, 55)}
           
           <div style={{
             position: 'absolute',
-            bottom: 70,
+            bottom: 75,
             display: 'flex',
             alignItems: 'center',
-            gap: 14,
-            opacity: 0.75,
+            gap: 16,
+            opacity: 0.8,
           }}>
-            <span style={{ fontSize: 20, fontWeight: 500, letterSpacing: '0.05em' }}>
-              DESLIZE PARA VER
+            <span style={{ 
+              fontSize: 18, 
+              fontWeight: 600, 
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}>
+              Deslize para ver
             </span>
-            <ArrowRight style={{ width: 24, height: 24 }} />
+            <ArrowRight style={{ width: 22, height: 22 }} />
           </div>
         </div>
       </div>
@@ -224,35 +324,39 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding: '90px 80px',
+          padding: '95px 85px',
         }}>
+          {/* Premium accent bar */}
           <div style={{
-            width: 6,
-            height: 60,
-            background: theme.accentColor,
-            borderRadius: 3,
-            marginBottom: 40,
-            boxShadow: `0 0 15px ${theme.accentColor}60`,
+            width: 7,
+            height: 70,
+            background: `linear-gradient(180deg, ${theme.accentColor}, ${theme.accentColor}70)`,
+            borderRadius: 4,
+            marginBottom: 45,
+            boxShadow: `0 0 25px ${theme.accentColor}50`,
           }} />
           
           <h2 style={{
-            fontSize: 58,
+            fontFamily: displayFont,
+            fontSize: 62,
             fontWeight: 700,
-            lineHeight: 1.15,
-            marginBottom: 40,
+            lineHeight: 1.12,
+            marginBottom: 45,
             maxWidth: 880,
-            textShadow: '0 4px 30px rgba(0,0,0,0.5)',
+            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
+            letterSpacing: '-0.02em',
           }}>
             {slide.title}
           </h2>
           
           {slide.content && (
             <p style={{
-              fontSize: 32,
-              lineHeight: 1.6,
+              fontSize: 34,
+              lineHeight: 1.65,
               opacity: 0.95,
-              maxWidth: 850,
-              textShadow: '0 2px 20px rgba(0,0,0,0.4)',
+              maxWidth: 840,
+              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
+              fontWeight: 400,
             }}>
               {slide.content}
             </p>
@@ -278,52 +382,57 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '90px 80px',
+          padding: '95px 85px',
           textAlign: 'center',
         }}>
+          {/* Premium icon container */}
           <div style={{
-            width: 100,
-            height: 100,
-            borderRadius: 28,
-            background: `linear-gradient(135deg, ${theme.accentColor}25, ${theme.accentColor}10)`,
-            border: `3px solid ${theme.accentColor}40`,
+            width: 110,
+            height: 110,
+            borderRadius: 32,
+            background: `linear-gradient(145deg, ${theme.accentColor}28, ${theme.accentColor}12)`,
+            border: `3px solid ${theme.accentColor}45`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: 45,
-            boxShadow: `0 10px 40px ${theme.accentColor}25`,
+            marginBottom: 50,
+            boxShadow: `0 15px 50px ${theme.accentColor}30, inset 0 1px 0 ${theme.accentColor}40`,
           }}>
             <Award style={{ 
-              width: 50, 
-              height: 50, 
+              width: 55, 
+              height: 55, 
               color: theme.accentColor,
+              filter: `drop-shadow(0 2px 8px ${theme.accentColor}60)`,
             }} />
           </div>
           
           <h2 style={{
-            fontSize: 54,
+            fontFamily: displayFont,
+            fontSize: 58,
             fontWeight: 700,
-            lineHeight: 1.15,
-            marginBottom: 35,
-            maxWidth: 850,
-            textShadow: '0 4px 30px rgba(0,0,0,0.5)',
+            lineHeight: 1.12,
+            marginBottom: 40,
+            maxWidth: 860,
+            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
+            letterSpacing: '-0.02em',
           }}>
             {slide.title}
           </h2>
           
           {slide.content && (
             <p style={{
-              fontSize: 30,
-              lineHeight: 1.55,
-              opacity: 0.92,
+              fontSize: 32,
+              lineHeight: 1.6,
+              opacity: 0.93,
               maxWidth: 780,
-              textShadow: '0 2px 20px rgba(0,0,0,0.4)',
+              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
+              fontWeight: 400,
             }}>
               {slide.content}
             </p>
           )}
           
-          {renderAccentLine(80, 45)}
+          {renderAccentLine(90, 50)}
           {renderLogo()}
         </div>
       </div>
@@ -344,65 +453,72 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '80px 70px',
+          padding: '85px 75px',
           textAlign: 'center',
         }}>
           <Sparkles style={{ 
-            width: 85, 
-            height: 85, 
+            width: 90, 
+            height: 90, 
             color: theme.accentColor,
-            marginBottom: 45,
-            filter: `drop-shadow(0 0 30px ${theme.accentColor}60)`,
+            marginBottom: 50,
+            filter: `drop-shadow(0 0 40px ${theme.accentColor}60)`,
           }} />
           
           <h2 style={{
-            fontSize: 54,
+            fontFamily: displayFont,
+            fontSize: 58,
             fontWeight: 700,
-            lineHeight: 1.15,
-            marginBottom: 32,
-            maxWidth: 850,
-            textShadow: '0 4px 30px rgba(0,0,0,0.5)',
+            lineHeight: 1.12,
+            marginBottom: 36,
+            maxWidth: 860,
+            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
+            letterSpacing: '-0.02em',
           }}>
             {slide.title}
           </h2>
           
           {slide.content && (
             <p style={{
-              fontSize: 28,
-              lineHeight: 1.55,
+              fontSize: 30,
+              lineHeight: 1.6,
               opacity: 0.9,
               maxWidth: 720,
-              marginBottom: 45,
-              textShadow: '0 2px 20px rgba(0,0,0,0.4)',
+              marginBottom: 50,
+              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
+              fontWeight: 400,
             }}>
               {slide.content}
             </p>
           )}
           
+          {/* Premium CTA button */}
           <div style={{
-            background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.accentColor}dd)`,
+            background: `linear-gradient(140deg, ${theme.accentColor}, ${theme.accentColor}e0)`,
             color: theme.primaryColor,
-            padding: '24px 55px',
-            borderRadius: 16,
+            padding: '26px 60px',
+            borderRadius: 18,
             fontSize: 28,
             fontWeight: 700,
             display: 'flex',
             alignItems: 'center',
-            gap: 14,
-            boxShadow: `0 10px 40px ${theme.accentColor}45`,
+            gap: 16,
+            boxShadow: `0 12px 50px ${theme.accentColor}50, 0 4px 15px ${theme.accentColor}30`,
+            letterSpacing: '0.02em',
           }}>
             Método IA Real
             <ArrowRight style={{ width: 28, height: 28 }} />
           </div>
           
+          {/* Social actions */}
           <div style={{
             position: 'absolute',
-            bottom: 90,
+            bottom: 95,
             display: 'flex',
             alignItems: 'center',
-            gap: 28,
+            gap: 35,
             fontSize: 22,
-            opacity: 0.8,
+            opacity: 0.85,
+            fontWeight: 500,
           }}>
             <span>💾 Salve</span>
             <span>💬 Comente</span>
@@ -427,31 +543,32 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '90px 80px',
+        padding: '95px 85px',
       }}>
         {/* Step indicator with icon */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 20,
-          marginBottom: 40,
+          gap: 22,
+          marginBottom: 45,
         }}>
           {IconComponent && (
             <div style={{
-              width: 85,
-              height: 85,
-              borderRadius: 22,
-              background: `linear-gradient(135deg, ${theme.accentColor}28, ${theme.accentColor}12)`,
-              border: `2px solid ${theme.accentColor}45`,
+              width: 90,
+              height: 90,
+              borderRadius: 26,
+              background: `linear-gradient(145deg, ${theme.accentColor}30, ${theme.accentColor}12)`,
+              border: `2.5px solid ${theme.accentColor}50`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: `0 8px 30px ${theme.accentColor}25`,
+              boxShadow: `0 10px 40px ${theme.accentColor}30, inset 0 1px 0 ${theme.accentColor}30`,
             }}>
               <IconComponent style={{ 
-                width: 44, 
-                height: 44, 
-                color: theme.accentColor 
+                width: 48, 
+                height: 48, 
+                color: theme.accentColor,
+                filter: `drop-shadow(0 2px 6px ${theme.accentColor}50)`,
               }} />
             </div>
           )}
@@ -461,21 +578,22 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
               flexDirection: 'column',
             }}>
               <span style={{
-                fontSize: 16,
-                fontWeight: 600,
+                fontSize: 15,
+                fontWeight: 700,
                 color: theme.accentColor,
                 textTransform: 'uppercase',
-                letterSpacing: 4,
+                letterSpacing: '0.2em',
                 opacity: 0.9,
               }}>
                 Passo
               </span>
               <span style={{
-                fontSize: 48,
+                fontFamily: displayFont,
+                fontSize: 52,
                 fontWeight: 800,
                 color: theme.accentColor,
                 lineHeight: 1,
-                textShadow: `0 0 25px ${theme.accentColor}40`,
+                textShadow: `0 0 30px ${theme.accentColor}45`,
               }}>
                 {String(slide.order - 1).padStart(2, '0')}
               </span>
@@ -485,12 +603,14 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
         
         {/* Title */}
         <h2 style={{
-          fontSize: 52,
+          fontFamily: displayFont,
+          fontSize: 56,
           fontWeight: 700,
-          lineHeight: 1.15,
-          marginBottom: 35,
+          lineHeight: 1.12,
+          marginBottom: 40,
           maxWidth: 880,
-          textShadow: '0 4px 30px rgba(0,0,0,0.5)',
+          textShadow: '0 5px 35px rgba(0,0,0,0.55)',
+          letterSpacing: '-0.02em',
         }}>
           {slide.title}
         </h2>
@@ -498,11 +618,12 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
         {/* Content */}
         {slide.content && (
           <p style={{
-            fontSize: 30,
-            lineHeight: 1.6,
+            fontSize: 32,
+            lineHeight: 1.65,
             opacity: 0.93,
             maxWidth: 820,
-            textShadow: '0 2px 20px rgba(0,0,0,0.4)',
+            textShadow: '0 3px 22px rgba(0,0,0,0.45)',
+            fontWeight: 400,
           }}>
             {slide.content}
           </p>
@@ -510,27 +631,28 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
 
         {/* Bullets */}
         {slide.bullets && slide.bullets.length > 0 && (
-          <div style={{ marginTop: 30 }}>
+          <div style={{ marginTop: 35 }}>
             {slide.bullets.map((bullet, idx) => (
               <div key={idx} style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: 16,
-                marginBottom: 18,
+                gap: 18,
+                marginBottom: 20,
               }}>
                 <div style={{
-                  width: 10,
-                  height: 10,
+                  width: 12,
+                  height: 12,
                   borderRadius: '50%',
-                  background: theme.accentColor,
+                  background: `linear-gradient(135deg, ${theme.accentColor}, ${theme.accentColor}80)`,
                   marginTop: 12,
                   flexShrink: 0,
-                  boxShadow: `0 0 10px ${theme.accentColor}60`,
+                  boxShadow: `0 0 15px ${theme.accentColor}60`,
                 }} />
                 <span style={{
-                  fontSize: 26,
-                  lineHeight: 1.5,
+                  fontSize: 28,
+                  lineHeight: 1.55,
                   opacity: 0.9,
+                  fontWeight: 400,
                 }}>
                   {bullet}
                 </span>
