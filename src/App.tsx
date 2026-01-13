@@ -28,6 +28,7 @@ import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
 import CarouselEditor from "./pages/CarouselEditor";
 import CarrosselPage from "./pages/CarrosselPage";
+import StoriesPage from "./pages/StoriesPage";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
 
 // Método IA SaaS
@@ -84,6 +85,7 @@ const App = () => (
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarrosselPage />} />
             <Route path="/carrossel-old" element={<CarouselEditor />} />
+            <Route path="/stories" element={<StoriesPage />} />
             <Route path="/acesso-bloqueado" element={<AcessoBloqueado />} />
             
             {/* Método IA SaaS Routes */}
