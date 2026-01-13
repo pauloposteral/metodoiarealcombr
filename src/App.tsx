@@ -42,6 +42,14 @@ import MetodoEditor from "./pages/metodo/app/MetodoEditor";
 import MetodoTreinamento from "./pages/metodo/app/MetodoTreinamento";
 import MetodoEquipe from "./pages/metodo/app/MetodoEquipe";
 
+// Admin Panel
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminEmpresas from "./pages/admin/AdminEmpresas";
+import AdminLeads from "./pages/admin/AdminLeads";
+import AdminUsuarios from "./pages/admin/AdminUsuarios";
+import AdminPrompts from "./pages/admin/AdminPrompts";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -88,6 +96,14 @@ const App = () => (
               <Route path="treinamento" element={<MetodoTreinamento />} />
               <Route path="equipe" element={<MetodoEquipe />} />
             </Route>
+            
+            {/* Admin Panel Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/empresas" element={<AdminEmpresas />} />
+            <Route path="/admin/leads" element={<AdminLeads />} />
+            <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+            <Route path="/admin/prompts" element={<AdminPrompts />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
