@@ -29,6 +29,19 @@ import Downloads from "./pages/Downloads";
 import CarouselEditor from "./pages/CarouselEditor";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
 
+// Método IA SaaS
+import MetodoLanding from "./pages/metodo/MetodoLanding";
+import MetodoPricing from "./pages/metodo/MetodoPricing";
+import MetodoSolicitar from "./pages/metodo/MetodoSolicitar";
+import MetodoLogin from "./pages/metodo/MetodoLogin";
+import MetodoAcessoPendente from "./pages/metodo/MetodoAcessoPendente";
+import MetodoApp from "./pages/metodo/app/MetodoApp";
+import MetodoDashboard from "./pages/metodo/app/MetodoDashboard";
+import MetodoPrompts from "./pages/metodo/app/MetodoPrompts";
+import MetodoEditor from "./pages/metodo/app/MetodoEditor";
+import MetodoTreinamento from "./pages/metodo/app/MetodoTreinamento";
+import MetodoEquipe from "./pages/metodo/app/MetodoEquipe";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -61,6 +74,21 @@ const App = () => (
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarouselEditor />} />
             <Route path="/acesso-bloqueado" element={<AcessoBloqueado />} />
+            
+            {/* Método IA SaaS Routes */}
+            <Route path="/metodo" element={<MetodoLanding />} />
+            <Route path="/metodo/pricing" element={<MetodoPricing />} />
+            <Route path="/metodo/solicitar" element={<MetodoSolicitar />} />
+            <Route path="/metodo/login" element={<MetodoLogin />} />
+            <Route path="/metodo/acesso-pendente" element={<MetodoAcessoPendente />} />
+            <Route path="/metodo/app" element={<MetodoApp />}>
+              <Route index element={<MetodoDashboard />} />
+              <Route path="prompts" element={<MetodoPrompts />} />
+              <Route path="editor" element={<MetodoEditor />} />
+              <Route path="treinamento" element={<MetodoTreinamento />} />
+              <Route path="equipe" element={<MetodoEquipe />} />
+            </Route>
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
