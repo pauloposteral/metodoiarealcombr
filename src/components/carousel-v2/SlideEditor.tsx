@@ -7,17 +7,17 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Slider } from '@/components/ui/slider';
 import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType } from './types';
+import { SavedHooksPanel } from './SavedHooksPanel';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { 
-  Sparkles, Plus, Trash2, GripVertical, Palette, RefreshCw, Upload,
+  Sparkles, Plus, Trash2, GripVertical, RefreshCw, Upload,
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle,
-  Loader2, Wand2, Image as ImageIcon, Type, Eye, Lock, Unlock,
-  DollarSign, Percent, Calendar, Bell, Gift
+  Loader2, Image as ImageIcon, Type, Eye, Lock, Unlock,
+  DollarSign, Percent, Calendar, Bell, Gift, Bookmark, ImagePlus
 } from 'lucide-react';
 
 const iconComponents: Record<string, React.ComponentType<any>> = {
@@ -143,13 +143,35 @@ export const SlideEditor = ({
     );
   }
 
+  // Group themes by category
+  const themeCategories = CAROUSEL_THEMES.reduce((acc, t) => {
+    if (!acc[t.category]) acc[t.category] = [];
+    acc[t.category].push(t);
+    return acc;
+  }, {} as Record<string, CarouselTheme[]>);
+
+  const categoryLabels: Record<string, string> = {
+    'minimal-premium': '✨ Minimal Premium',
+    'luxury': '👑 Luxury',
+    'corporate': '💼 Corporate',
+    'nature': '🌿 Nature',
+    'editorial': '📰 Editorial',
+    'tech-clean': '🔮 Tech',
+    'cozy': '🏡 Cozy',
+    'alto-contraste': '⚡ Alto Contraste',
+  };
+
   return (
     <Card className="p-4 bg-card border-border">
       <Tabs defaultValue="slides" className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-3 mb-4">
+        <TabsList className="grid w-full grid-cols-4 mb-4">
           <TabsTrigger value="slides">Slides</TabsTrigger>
           <TabsTrigger value="edit">Editar</TabsTrigger>
           <TabsTrigger value="theme">Tema</TabsTrigger>
+          <TabsTrigger value="hooks" className="gap-1">
+            <Bookmark className="w-3 h-3" />
+            Hooks
+          </TabsTrigger>
         </TabsList>
 
         {/* SLIDES LIST */}
@@ -405,43 +427,67 @@ export const SlideEditor = ({
           )}
         </TabsContent>
 
-        {/* THEME SELECTION */}
+        {/* THEME SELECTION - Grouped by category */}
         <TabsContent value="theme" className="flex-1 mt-0">
           <ScrollArea className="h-[500px] pr-2">
-            <div className="space-y-3">
-              {CAROUSEL_THEMES.map((t) => (
-                <div
-                  key={t.id}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                    t.id === theme.id 
-                      ? 'border-accent ring-1 ring-accent' 
-                      : 'border-border hover:border-accent/50'
-                  }`}
-                  onClick={() => onThemeChange(t)}
-                >
-                  <div className="flex items-center gap-3">
-                    <div 
-                      className="w-14 h-14 rounded-lg"
-                      style={{ background: t.backgroundGradient }}
-                    >
-                      <div 
-                        className="w-full h-full flex items-center justify-center"
+            <div className="space-y-6">
+              {Object.entries(themeCategories).map(([category, themes]) => (
+                <div key={category}>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-3">
+                    {categoryLabels[category] || category}
+                  </h4>
+                  <div className="space-y-2">
+                    {themes.map((t) => (
+                      <div
+                        key={t.id}
+                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          t.id === theme.id 
+                            ? 'border-accent ring-1 ring-accent' 
+                            : 'border-border hover:border-accent/50'
+                        }`}
+                        onClick={() => onThemeChange(t)}
                       >
-                        <div 
-                          className="w-3 h-3 rounded-full"
-                          style={{ background: t.accentColor }}
-                        />
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-14 h-14 rounded-lg shadow-inner overflow-hidden"
+                            style={{ background: t.backgroundGradient }}
+                          >
+                            <div className="w-full h-full flex items-center justify-center">
+                              <div 
+                                className="w-4 h-4 rounded-full shadow-lg"
+                                style={{ background: t.accentColor }}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <p className="font-medium">{t.displayName}</p>
+                            <p className="text-xs text-muted-foreground" style={{ fontFamily: t.fontFamily }}>
+                              Aa Bb Cc
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <p className="font-medium">{t.displayName}</p>
-                      <p className="text-xs text-muted-foreground capitalize">{t.category}</p>
-                    </div>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
           </ScrollArea>
+        </TabsContent>
+
+        {/* SAVED HOOKS */}
+        <TabsContent value="hooks" className="flex-1 mt-0">
+          <SavedHooksPanel 
+            onSelectHook={(text) => {
+              if (selectedSlide && selectedSlide.type === 'cover') {
+                onUpdateSlide(selectedSlideIndex, { title: text });
+                toast.success('Hook aplicado como título da capa!');
+              } else {
+                toast.info('Selecione um slide de capa para aplicar o hook');
+              }
+            }}
+            currentHook={selectedSlide?.type === 'cover' ? selectedSlide.title : undefined}
+          />
         </TabsContent>
       </Tabs>
     </Card>

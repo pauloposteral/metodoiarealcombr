@@ -679,6 +679,45 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_hooks: {
+        Row: {
+          category: string | null
+          created_at: string
+          hook_type: string
+          id: string
+          is_favorite: boolean | null
+          score: number | null
+          text: string
+          updated_at: string
+          usage_count: number | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          hook_type?: string
+          id?: string
+          is_favorite?: boolean | null
+          score?: number | null
+          text: string
+          updated_at?: string
+          usage_count?: number | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          hook_type?: string
+          id?: string
+          is_favorite?: boolean | null
+          score?: number | null
+          text?: string
+          updated_at?: string
+          usage_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           badge_id: string
