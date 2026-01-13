@@ -27,6 +27,7 @@ import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
 import CarouselEditor from "./pages/CarouselEditor";
+import CarrosselPage from "./pages/CarrosselPage";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
 
 // Método IA SaaS
@@ -81,7 +82,8 @@ const App = () => (
             <Route path="/membros/ranking" element={<MembersRanking />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
-            <Route path="/carrossel" element={<CarouselEditor />} />
+            <Route path="/carrossel" element={<CarrosselPage />} />
+            <Route path="/carrossel-old" element={<CarouselEditor />} />
             <Route path="/acesso-bloqueado" element={<AcessoBloqueado />} />
             
             {/* Método IA SaaS Routes */}
