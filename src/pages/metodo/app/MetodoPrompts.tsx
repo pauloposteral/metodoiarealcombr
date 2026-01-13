@@ -119,18 +119,6 @@ export default function MetodoPrompts() {
       setLoading(false);
     }
   };
-        ...p,
-        variables: Array.isArray(p.variables) ? p.variables : []
-      }));
-
-      setPrompts(parsedPrompts);
-    } catch (error) {
-      console.error('Error fetching prompts:', error);
-      toast.error('Erro ao carregar prompts');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredPrompts = prompts.filter(prompt => {
     const matchesSearch = 
