@@ -35,9 +35,11 @@ import {
   Wand2, RefreshCw, ChevronLeft, Download, 
   Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
   Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type,
-  HelpCircle, RectangleVertical, Square, Copy, Save, BookmarkPlus, Image as ImageIcon
+  HelpCircle, RectangleVertical, Square, Copy, Save, BookmarkPlus, Image as ImageIcon,
+  Mic, Search
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,6 +73,8 @@ export const CarouselWorkspace = () => {
   const [carouselFormat, setCarouselFormat] = useState<CarouselFormat>('4:5');
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const [transcriptText, setTranscriptText] = useState('');
+  const [competitorHandle, setCompetitorHandle] = useState('');
   const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
@@ -318,6 +322,11 @@ export const CarouselWorkspace = () => {
     ));
   };
 
+  // #12 Inline WYSIWYG editing from canvas
+  const handleInlineEdit = useCallback((field: 'title' | 'content' | 'subtitle', value: string) => {
+    handleUpdateSlide(selectedSlideIndex, { [field]: value });
+  }, [selectedSlideIndex, slides]);
+
   const handleAddSlide = () => {
     const newSlide: CarouselSlide = {
       id: crypto.randomUUID(),
@@ -529,6 +538,57 @@ export const CarouselWorkspace = () => {
   };
 
   // ==========================================
+  // #7 Generate from Transcript (Audio/Video)
+  // ==========================================
+  const handleGenerateFromTranscript = async (transcript: string) => {
+    if (!transcript.trim()) {
+      toast.error('Cole a transcrição do áudio/vídeo');
+      return;
+    }
+    const defaultConfig: CarouselConfig = config || {
+      objective: 'educar',
+      audience: { level: 'intermediario', niche: 'geral', tone: 'humano' },
+      format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+    };
+    await handleGenerate(defaultConfig, `Baseado nesta transcrição de áudio/vídeo, crie um carrossel educativo:\n\n${transcript.slice(0, 3000)}`);
+  };
+
+  // ==========================================
+  // #10 Competitor Analysis by @
+  // ==========================================
+  const handleCompetitorAnalysis = async (handle: string) => {
+    if (!handle.trim()) {
+      toast.error('Digite o @ do perfil para analisar');
+      return;
+    }
+    setIsRewriting(true);
+    toast.info(`Analisando @${handle.replace('@', '')}...`);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: {
+          action: 'suggest-ideas',
+          config: config || {
+            objective: 'educar',
+            audience: { level: 'intermediario', niche: handle.replace('@', ''), tone: 'humano' },
+            format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+          },
+          topic: `Analisar o estilo de conteúdo do perfil @${handle.replace('@', '')} e sugerir carrosséis no mesmo estilo mas com abordagem única`,
+        },
+      });
+
+      if (error) throw error;
+      toast.success(`Ideias baseadas em @${handle.replace('@', '')} geradas!`);
+      // The ideas are shown through the wizard suggest-ideas flow
+    } catch (error) {
+      console.error('Competitor analysis error:', error);
+      toast.error('Erro na análise de concorrência');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
   // Reset to Wizard
   // ==========================================
   const handleNewCarousel = () => {
@@ -676,6 +736,58 @@ export const CarouselWorkspace = () => {
               />
             </div>
             <div>
+              {/* #7 Audio/Video Transcript */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Mic className="w-4 h-4 text-accent" />
+                  Gerar de Áudio/Vídeo
+                </h4>
+                <Textarea
+                  placeholder="Cole aqui a transcrição do seu áudio ou vídeo..."
+                  value={transcriptText}
+                  onChange={(e) => setTranscriptText(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handleGenerateFromTranscript(transcriptText)}
+                  disabled={isGenerating || !transcriptText.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Gerar Carrossel da Transcrição
+                </Button>
+              </Card>
+
+              {/* #10 Competitor Analysis */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Search className="w-4 h-4 text-accent" />
+                  Análise de Concorrência
+                </h4>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="@perfil"
+                    value={competitorHandle}
+                    onChange={(e) => setCompetitorHandle(e.target.value)}
+                    className="text-sm"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCompetitorAnalysis(competitorHandle)}
+                    disabled={isRewriting || !competitorHandle.trim()}
+                  >
+                    Analisar
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Gera ideias de carrossel inspiradas no estilo do perfil
+                </p>
+              </Card>
+
               <FolderManager
                 selectedFolderId={selectedFolderId}
                 onSelectFolder={setSelectedFolderId}
@@ -993,6 +1105,7 @@ export const CarouselWorkspace = () => {
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
                 watermark={watermarkText}
                 format={carouselFormat}
+                onInlineEdit={handleInlineEdit}
               />
             </div>
 

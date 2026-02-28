@@ -30,6 +30,7 @@ interface CarouselCanvasProps {
   onToggleFullscreen?: () => void;
   watermark?: string;
   format?: CarouselFormat;
+  onInlineEdit?: (field: 'title' | 'content' | 'subtitle', value: string) => void;
 }
 
 export const CarouselCanvas = ({
@@ -42,6 +43,7 @@ export const CarouselCanvas = ({
   onToggleFullscreen,
   watermark,
   format = '4:5',
+  onInlineEdit,
 }: CarouselCanvasProps) => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isExporting, setIsExporting] = useState(false);
@@ -429,7 +431,7 @@ export const CarouselCanvas = ({
                 className="shadow-2xl rounded-lg overflow-hidden ring-1 ring-border/20"
                 style={{ width: dims.width, height: dims.height }}
               >
-                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
+                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} onInlineEdit={onInlineEdit} />
               </div>
             </motion.div>
           </Slide3DContainer>
