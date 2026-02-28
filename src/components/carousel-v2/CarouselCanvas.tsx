@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CarouselSlide, CarouselTheme, QualityScore } from './types';
+import { CarouselSlide, CarouselTheme, QualityScore, CarouselFormat, FORMAT_DIMENSIONS } from './types';
 import { SlideCanvas } from './SlideCanvas';
 import { Slide3DContainer } from './Slide3DContainer';
 import { 
@@ -29,6 +29,7 @@ interface CarouselCanvasProps {
   isFullscreen?: boolean;
   onToggleFullscreen?: () => void;
   watermark?: string;
+  format?: CarouselFormat;
 }
 
 export const CarouselCanvas = ({
@@ -40,6 +41,7 @@ export const CarouselCanvas = ({
   isFullscreen,
   onToggleFullscreen,
   watermark,
+  format = '4:5',
 }: CarouselCanvasProps) => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isExporting, setIsExporting] = useState(false);
@@ -49,6 +51,7 @@ export const CarouselCanvas = ({
   const [isFlipping, setIsFlipping] = useState(false);
   const [isSwipeAnimating, setIsSwipeAnimating] = useState(false);
   const [exportQuality, setExportQuality] = useState<ExportQuality>('2x');
+  const dims = FORMAT_DIMENSIONS[format];
 
   const handlePrev = useCallback(() => {
     if (selectedSlideIndex > 0) {
@@ -73,8 +76,8 @@ export const CarouselCanvas = ({
 
     try {
       const canvas = await html2canvas(slideElement, {
-        width: 1080,
-        height: 1350,
+        width: dims.width,
+        height: dims.height,
         scale: getScale(),
         useCORS: true,
         backgroundColor: null,
@@ -107,8 +110,8 @@ export const CarouselCanvas = ({
         if (!slideElement) continue;
 
         const canvas = await html2canvas(slideElement, {
-          width: 1080,
-          height: 1350,
+          width: dims.width,
+          height: dims.height,
           scale,
           useCORS: true,
           backgroundColor: null,
@@ -148,25 +151,25 @@ export const CarouselCanvas = ({
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
-        format: [1080, 1350],
+        format: [dims.width, dims.height],
       });
 
       for (let i = 0; i < slides.length; i++) {
         const slideElement = slideRefs.current[i];
         if (!slideElement) continue;
 
-        if (i > 0) pdf.addPage([1080, 1350]);
+        if (i > 0) pdf.addPage([dims.width, dims.height]);
 
         const canvas = await html2canvas(slideElement, {
-          width: 1080,
-          height: 1350,
+          width: dims.width,
+          height: dims.height,
           scale: getScale(),
           useCORS: true,
           backgroundColor: null,
         });
 
         const imgData = canvas.toDataURL('image/png');
-        pdf.addImage(imgData, 'PNG', 0, 0, 1080, 1350);
+        pdf.addImage(imgData, 'PNG', 0, 0, dims.width, dims.height);
         setExportProgress(((i + 1) / slides.length) * 100);
       }
 
@@ -424,7 +427,7 @@ export const CarouselCanvas = ({
               <div 
                 ref={(el) => { slideRefs.current[selectedSlideIndex] = el; }}
                 className="shadow-2xl rounded-lg overflow-hidden ring-1 ring-border/20"
-                style={{ width: 1080, height: 1350 }}
+                style={{ width: dims.width, height: dims.height }}
               >
                 <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
               </div>
@@ -454,9 +457,9 @@ export const CarouselCanvas = ({
                 <div 
                   ref={(el) => { slideRefs.current[index] = el; }}
                   className="shadow-lg rounded-lg overflow-hidden ring-1 ring-border/20 group-hover:ring-accent/50 transition-all"
-                  style={{ width: '100%', aspectRatio: '1080/1350' }}
+                  style={{ width: '100%', aspectRatio: `${dims.width}/${dims.height}` }}
                 >
-                  <div style={{ transform: 'scale(0.2)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
+                  <div style={{ transform: 'scale(0.2)', transformOrigin: 'top left', width: dims.width, height: dims.height }}>
                     <SlideCanvas slide={slide} theme={theme} watermark={watermark} />
                   </div>
                 </div>
@@ -484,7 +487,7 @@ export const CarouselCanvas = ({
               <div 
                 ref={(el) => { slideRefs.current[selectedSlideIndex] = el; }}
                 className="shadow-2xl rounded-lg overflow-hidden ring-1 ring-border/20"
-                style={{ width: 1080, height: 1350 }}
+                style={{ width: dims.width, height: dims.height }}
               >
                 <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
               </div>
@@ -504,7 +507,7 @@ export const CarouselCanvas = ({
               <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-6 bg-foreground rounded-full" />
               
               {/* Screen */}
-              <div className="relative overflow-hidden rounded-[2.5rem]" style={{ aspectRatio: '1080/1350' }}>
+              <div className="relative overflow-hidden rounded-[2.5rem]" style={{ aspectRatio: `${dims.width}/${dims.height}` }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedSlideIndex}
@@ -595,7 +598,7 @@ export const CarouselCanvas = ({
           <div 
             key={slide.id}
             ref={(el) => { slideRefs.current[index] = el; }}
-            style={{ width: 1080, height: 1350 }}
+            style={{ width: dims.width, height: dims.height }}
           >
             <SlideCanvas slide={slide} theme={theme} watermark={watermark} />
           </div>

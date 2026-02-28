@@ -37,6 +37,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 20 | Stickers e elementos decorativos (setas, circles) | A fazer |
 | 21 | Crop e reposicionar imagem de fundo | A fazer |
 | 22 | Seletor de Google Fonts | ✅ Feito |
+| 28 | Layouts alternativos (alinhamento e posição do texto) | ✅ Feito |
 
 ## C. TEMPLATES E DESIGN (23-30)
 
@@ -45,11 +46,11 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 23 | Biblioteca de 50+ templates por nicho | A fazer |
 | 24 | Templates estilo @brandsdecoded (editorial bold) | A fazer |
 | 25 | Template com recorte de pessoa + texto sobreposto | A fazer |
-| 26 | Editor de cores completo para criar temas custom | A fazer |
+| 26 | Editor de cores completo para criar temas custom | ✅ Feito |
 | 27 | Salvar carrossel como template reutilizável | A fazer |
-| 28 | Layouts alternativos (grid, split-screen, full-image, quote) | A fazer |
+| 28 | Layouts alternativos (grid, split-screen, full-image, quote) | ✅ Feito |
 | 29 | Animação de preview (simular swipe real do Instagram) | ✅ Feito |
-| 30 | Formato Stories 9:16 além do 4:5 | A fazer |
+| 30 | Formato Stories 9:16 além do 4:5 | ✅ Feito |
 
 ## D. EXPORTAÇÃO E PUBLICAÇÃO (31-38)
 
@@ -97,13 +98,13 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ---
 
-## Progresso: 32/54 ✅ (59%)
+## Progresso: 37/54 ✅ (69%)
 
-## Itens Restantes (22)
+## Itens Restantes (17)
 
 **Motor de IA:** #3, #7, #10
 **Editor Visual:** #12, #13, #14, #19, #20, #21
-**Templates:** #23, #24, #25, #26, #27, #28, #30
+**Templates:** #23, #24, #25, #27
 **Exportação:** #32, #37, #38
 **Persistência:** #44
 **UX:** #48

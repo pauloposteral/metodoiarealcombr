@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS } from './types';
+import { AlignLeft, AlignCenter, AlignRight, ArrowUpFromLine, ChevronsUpDown, ArrowDownFromLine } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { SavedHooksPanel } from './SavedHooksPanel';
 import { supabase } from '@/integrations/supabase/client';
@@ -526,6 +527,49 @@ export const SlideEditor = ({
                       </div>
                     </div>
                   </div>
+
+                  {/* #28 Text Alignment & Position */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Alinhamento do Texto</Label>
+                    <div className="flex gap-1">
+                      {([
+                        { id: 'left', icon: AlignLeft },
+                        { id: 'center', icon: AlignCenter },
+                        { id: 'right', icon: AlignRight },
+                      ] as const).map(({ id, icon: Icon }) => (
+                        <Button
+                          key={id}
+                          variant={(selectedSlide.textAlignment || 'left') === id ? 'default' : 'outline'}
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { textAlignment: id })}
+                        >
+                          <Icon className="w-4 h-4" />
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs mb-1 block">Posição Vertical</Label>
+                    <div className="flex gap-1">
+                      {([
+                        { id: 'top', icon: ArrowUpFromLine, label: 'Topo' },
+                        { id: 'center', icon: ChevronsUpDown, label: 'Centro' },
+                        { id: 'bottom', icon: ArrowDownFromLine, label: 'Base' },
+                      ] as const).map(({ id, icon: Icon, label }) => (
+                        <Button
+                          key={id}
+                          variant={(selectedSlide.textPosition || 'center') === id ? 'default' : 'outline'}
+                          size="sm"
+                          className="h-8 text-xs gap-1 flex-1"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { textPosition: id })}
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Image Section */}
@@ -632,6 +676,75 @@ export const SlideEditor = ({
                       <p className="text-[10px] text-muted-foreground">{font.category}</p>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* #26 Custom Color Editor */}
+              <div className="pt-4 border-t border-border">
+                <h4 className="text-sm font-medium text-muted-foreground mb-3">🎨 Personalizar Cores</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs">Fundo Principal</Label>
+                    <input
+                      type="color"
+                      value={theme.primaryColor.startsWith('hsl') ? '#1a1a2e' : theme.primaryColor}
+                      onChange={(e) => onThemeChange({ 
+                        ...theme, 
+                        id: 'custom',
+                        name: 'custom',
+                        displayName: 'Personalizado',
+                        primaryColor: e.target.value,
+                        backgroundGradient: `linear-gradient(165deg, ${e.target.value} 0%, ${theme.secondaryColor.startsWith('hsl') ? e.target.value : theme.secondaryColor} 100%)`,
+                      })}
+                      className="w-full h-8 rounded border border-border cursor-pointer mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Cor de Destaque</Label>
+                    <input
+                      type="color"
+                      value={theme.accentColor.startsWith('hsl') ? '#d4a843' : theme.accentColor}
+                      onChange={(e) => onThemeChange({ 
+                        ...theme,
+                        id: 'custom',
+                        name: 'custom', 
+                        displayName: 'Personalizado',
+                        accentColor: e.target.value,
+                      })}
+                      className="w-full h-8 rounded border border-border cursor-pointer mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Cor do Texto</Label>
+                    <input
+                      type="color"
+                      value={theme.textColor.startsWith('hsl') ? '#ffffff' : theme.textColor}
+                      onChange={(e) => onThemeChange({
+                        ...theme,
+                        id: 'custom',
+                        name: 'custom',
+                        displayName: 'Personalizado',
+                        textColor: e.target.value,
+                      })}
+                      className="w-full h-8 rounded border border-border cursor-pointer mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Fundo Secundário</Label>
+                    <input
+                      type="color"
+                      value={theme.secondaryColor.startsWith('hsl') ? '#2a2a4e' : theme.secondaryColor}
+                      onChange={(e) => onThemeChange({
+                        ...theme,
+                        id: 'custom',
+                        name: 'custom',
+                        displayName: 'Personalizado',
+                        secondaryColor: e.target.value,
+                        backgroundGradient: `linear-gradient(165deg, ${theme.primaryColor.startsWith('hsl') ? e.target.value : theme.primaryColor} 0%, ${e.target.value} 100%)`,
+                      })}
+                      className="w-full h-8 rounded border border-border cursor-pointer mt-1"
+                    />
+                  </div>
                 </div>
               </div>
 
