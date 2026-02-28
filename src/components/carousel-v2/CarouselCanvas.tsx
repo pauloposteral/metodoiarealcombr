@@ -14,7 +14,7 @@ import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
 import { toast } from 'sonner';
 
-type ViewMode = 'single' | 'grid' | 'flip';
+type ViewMode = 'single' | 'grid' | 'flip' | 'phone';
 
 interface CarouselCanvasProps {
   slides: CarouselSlide[];
@@ -37,6 +37,7 @@ export const CarouselCanvas = ({
   const [zoom, setZoom] = useState(0.45);
   const [viewMode, setViewMode] = useState<ViewMode>('single');
   const [isFlipping, setIsFlipping] = useState(false);
+  const [isSwipeAnimating, setIsSwipeAnimating] = useState(false);
 
   const handlePrev = useCallback(() => {
     if (selectedSlideIndex > 0) {
@@ -136,6 +137,25 @@ export const CarouselCanvas = ({
     }, 800);
   }, [isFlipping, slides.length, onSelectSlide]);
 
+  // Swipe animation for #29
+  const startSwipeAnimation = useCallback(() => {
+    if (isSwipeAnimating) return;
+    setIsSwipeAnimating(true);
+    let current = 0;
+    onSelectSlide(0);
+    
+    const interval = setInterval(() => {
+      current++;
+      if (current >= slides.length) {
+        clearInterval(interval);
+        setIsSwipeAnimating(false);
+        onSelectSlide(0);
+      } else {
+        onSelectSlide(current);
+      }
+    }, 1500);
+  }, [isSwipeAnimating, slides.length, onSelectSlide]);
+
   if (slides.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[500px]">
@@ -192,6 +212,19 @@ export const CarouselCanvas = ({
           >
             <Play className="w-4 h-4" />
             <span className="hidden sm:inline">Flip</span>
+          </Button>
+          <Button
+            variant={viewMode === 'phone' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => {
+              setViewMode('phone');
+              startSwipeAnimation();
+            }}
+            disabled={isSwipeAnimating}
+            className={`gap-2 transition-all ${viewMode === 'phone' ? 'glow-accent' : ''}`}
+          >
+            <Smartphone className="w-4 h-4" />
+            <span className="hidden sm:inline">iPhone</span>
           </Button>
         </div>
 
@@ -377,6 +410,63 @@ export const CarouselCanvas = ({
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      )}
+
+      {/* iPhone Frame Preview (#35 + #29 swipe) */}
+      {viewMode === 'phone' && (
+        <div className="flex-1 overflow-auto bg-gradient-to-br from-muted/20 to-muted/40 rounded-xl p-8 flex items-center justify-center">
+          {/* iPhone Frame */}
+          <div className="relative" style={{ width: 320 }}>
+            {/* iPhone outer shell */}
+            <div className="relative rounded-[3rem] border-[6px] border-foreground/80 bg-foreground/90 shadow-2xl overflow-hidden">
+              {/* Dynamic Island */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-24 h-6 bg-foreground rounded-full" />
+              
+              {/* Screen */}
+              <div className="relative overflow-hidden rounded-[2.5rem]" style={{ aspectRatio: '1080/1350' }}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selectedSlideIndex}
+                    initial={{ x: '100%', opacity: 0.5 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: '-100%', opacity: 0.5 }}
+                    transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                    className="w-full h-full"
+                  >
+                    <div style={{ width: '100%', height: '100%' }}>
+                      <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Instagram-style dots */}
+                <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-1.5 z-20">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`rounded-full transition-all ${
+                        index === selectedSlideIndex 
+                          ? 'bg-white w-2 h-2' 
+                          : 'bg-white/50 w-1.5 h-1.5'
+                      }`}
+                      onClick={() => onSelectSlide(index)}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Home indicator */}
+              <div className="flex justify-center py-2">
+                <div className="w-28 h-1 bg-white/30 rounded-full" />
+              </div>
+            </div>
+            
+            {/* Swipe hint */}
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              {isSwipeAnimating ? '⏳ Simulando swipe...' : 'Clique nos dots ou use ← → para navegar'}
+            </p>
+          </div>
         </div>
       )}
 

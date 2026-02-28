@@ -11,7 +11,8 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType } from './types';
+import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter } from './types';
+import { Slider } from '@/components/ui/slider';
 import { SavedHooksPanel } from './SavedHooksPanel';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -412,6 +413,120 @@ export const SlideEditor = ({
                     </div>
                   </div>
                 )}
+
+                {/* Visual Controls #15-18 */}
+                <div className="pt-4 border-t border-border space-y-4">
+                  <Label className="text-sm text-muted-foreground">🎨 Controles Visuais</Label>
+                  
+                  {/* #15 Font Size */}
+                  <div>
+                    <Label className="text-xs">Tamanho do Título: {selectedSlide.titleFontSize || 56}px</Label>
+                    <Slider
+                      value={[selectedSlide.titleFontSize || 56]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { titleFontSize: v })}
+                      min={30}
+                      max={100}
+                      step={2}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Tamanho do Conteúdo: {selectedSlide.contentFontSize || 32}px</Label>
+                    <Slider
+                      value={[selectedSlide.contentFontSize || 32]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { contentFontSize: v })}
+                      min={18}
+                      max={50}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {/* #18 Image Opacity */}
+                  <div>
+                    <Label className="text-xs">Opacidade da Imagem: {selectedSlide.imageOpacity ?? 45}%</Label>
+                    <Slider
+                      value={[selectedSlide.imageOpacity ?? 45]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { imageOpacity: v })}
+                      min={0}
+                      max={100}
+                      step={5}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {/* #17 Image Filters */}
+                  <div>
+                    <Label className="text-xs">Filtro de Imagem</Label>
+                    <div className="grid grid-cols-4 gap-1.5 mt-1">
+                      {([
+                        { id: 'none', label: 'Normal' },
+                        { id: 'grayscale', label: 'P&B' },
+                        { id: 'sepia', label: 'Sépia' },
+                        { id: 'warm', label: 'Quente' },
+                        { id: 'cool', label: 'Frio' },
+                        { id: 'vintage', label: 'Vintage' },
+                        { id: 'dramatic', label: 'Drama' },
+                      ] as { id: ImageFilter; label: string }[]).map((f) => (
+                        <Button
+                          key={f.id}
+                          variant={(selectedSlide.imageFilter || 'none') === f.id ? 'default' : 'outline'}
+                          size="sm"
+                          className="text-xs h-7"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { imageFilter: f.id })}
+                        >
+                          {f.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #16 Custom Colors */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Cor do Texto</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={selectedSlide.customTextColor || theme.textColor}
+                          onChange={(e) => onUpdateSlide(selectedSlideIndex, { customTextColor: e.target.value })}
+                          className="w-8 h-8 rounded border border-border cursor-pointer"
+                        />
+                        {selectedSlide.customTextColor && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-xs h-7"
+                            onClick={() => onUpdateSlide(selectedSlideIndex, { customTextColor: undefined })}
+                          >
+                            Reset
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs">Cor de Destaque</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="color"
+                          value={selectedSlide.customAccentColor || theme.accentColor}
+                          onChange={(e) => onUpdateSlide(selectedSlideIndex, { customAccentColor: e.target.value })}
+                          className="w-8 h-8 rounded border border-border cursor-pointer"
+                        />
+                        {selectedSlide.customAccentColor && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-xs h-7"
+                            onClick={() => onUpdateSlide(selectedSlideIndex, { customAccentColor: undefined })}
+                          >
+                            Reset
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Image Section */}
                 <div className="pt-4 border-t border-border">
