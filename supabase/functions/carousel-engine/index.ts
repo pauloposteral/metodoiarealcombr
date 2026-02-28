@@ -31,7 +31,7 @@ serve(async (req) => {
   }
 
   try {
-    const { action, config, topic, slides, slideIndex, improvementAction } = await req.json();
+    const { action, config, topic, slides, slideIndex, improvementAction, targetLang } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -61,6 +61,15 @@ serve(async (req) => {
         break;
       case 'generate-hashtags':
         result = await generateHashtags(LOVABLE_API_KEY, topic, config);
+        break;
+      case 'rewrite-carousel':
+        result = await rewriteCarousel(LOVABLE_API_KEY, slides, config, topic);
+        break;
+      case 'translate-carousel':
+        result = await translateCarousel(LOVABLE_API_KEY, slides, targetLang || 'en');
+        break;
+      case 'ab-hooks':
+        result = await generateABHooks(LOVABLE_API_KEY, topic, config);
         break;
       default:
         throw new Error(`Unknown action: ${action}`);
@@ -563,6 +572,145 @@ Responda APENAS com JSON:
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   
   return { hashtags: content.hashtags };
+}
+
+// ==========================================
+// #4 Rewrite Carousel
+// ==========================================
+async function rewriteCarousel(apiKey: string, slides: any[], config: CarouselConfig, topic: string) {
+  const systemPrompt = `Você é um editor sênior de carrosséis virais. Reescreva TODOS os slides mantendo a estrutura mas melhorando:
+- Copywriting mais impactante
+- Textos mais curtos e diretos
+- Hooks mais fortes
+- CTA mais claro
+
+Objetivo: ${config?.objective || 'educar'}
+Tom: ${config?.audience?.tone || 'humano'}
+
+Responda APENAS com JSON:
+{
+  "slides": [
+    {
+      "title": "novo título",
+      "subtitle": "novo subtítulo",
+      "content": "novo conteúdo",
+      "imagePrompt": "novo prompt em inglês"
+    }
+  ]
+}`;
+
+  const slidesText = slides.map((s: any, i: number) => 
+    `Slide ${i + 1} (${s.type}): Título: "${s.title}" | Conteúdo: "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Tema: "${topic}"\n\n${slidesText}` },
+      ],
+    }),
+  });
+
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+  return { slides: content.slides };
+}
+
+// ==========================================
+// #5 Translate Carousel
+// ==========================================
+async function translateCarousel(apiKey: string, slides: any[], targetLang: string) {
+  const langNames: Record<string, string> = { en: 'English', es: 'Spanish', fr: 'French', de: 'German', it: 'Italian' };
+  const langName = langNames[targetLang] || 'English';
+
+  const systemPrompt = `You are a professional translator. Translate all carousel slide texts to ${langName}.
+Keep the same tone and impact. Adapt idioms and expressions naturally.
+
+Respond ONLY with JSON:
+{
+  "slides": [
+    {
+      "title": "translated title",
+      "subtitle": "translated subtitle",
+      "content": "translated content"
+    }
+  ]
+}`;
+
+  const slidesText = slides.map((s: any, i: number) => 
+    `Slide ${i + 1}: Título: "${s.title}" | Subtítulo: "${s.subtitle || ''}" | Conteúdo: "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+  return { slides: content.slides };
+}
+
+// ==========================================
+// #9 A/B Test Hooks
+// ==========================================
+async function generateABHooks(apiKey: string, topic: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um copywriter especialista em hooks virais.
+Gere 3 variações de CAPA para teste A/B.
+
+Cada variação deve ter abordagem diferente:
+1. Curiosidade (pergunta ou mistério)
+2. Contraste/Provocação (afirmação ousada)
+3. Promessa com número (resultado específico)
+
+Objetivo: ${config?.objective || 'educar'}
+Tom: ${config?.audience?.tone || 'humano'}
+
+Responda APENAS com JSON:
+{
+  "hooks": [
+    {
+      "id": "uuid",
+      "title": "texto do hook (máx 8 palavras)",
+      "subtitle": "subtítulo complementar",
+      "approach": "curiosidade|contraste|promessa",
+      "score": 85,
+      "reasoning": "por que funciona"
+    }
+  ]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Tema: "${topic}"` },
+      ],
+    }),
+  });
+
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+  return {
+    hooks: content.hooks.map((h: any) => ({ ...h, id: crypto.randomUUID() })),
+  };
 }
 
 // ==========================================

@@ -13,12 +13,12 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 1 | Modelo Pro para roteiros (`gemini-2.5-pro`) | ✅ Feito |
 | 2 | **Imagens com Gemini 3 Pro** | ✅ Feito |
 | 3 | Upload de imagem de referência visual | A fazer |
-| 4 | Rewrite inteligente de todo o carrossel | A fazer |
-| 5 | Tradução automática (EN/ES) | A fazer |
+| 4 | Rewrite inteligente de todo o carrossel | ✅ Feito |
+| 5 | Tradução automática (EN/ES/FR) | ✅ Feito |
 | 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
 | 7 | Geração a partir de áudio/vídeo | A fazer |
 | 8 | Sugestão de ideias por nicho | A fazer |
-| 9 | A/B Test de hooks (3 variações de capa) | A fazer |
+| 9 | A/B Test de hooks (3 variações de capa) | ✅ Feito |
 | 10 | Análise de concorrência por @ | A fazer |
 
 ## B. EDITOR VISUAL (11-22)
@@ -81,9 +81,9 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 |---|----------|--------|
 | 45 | Hotkeys (Ctrl+S salvar, ←→ navegar, F fullscreen) | ✅ Feito |
 | 46 | Fullscreen mode para edição focada | ✅ Feito |
-| 47 | Dark/Light toggle no editor | A fazer |
+| 47 | Dark/Light toggle no editor | ✅ Feito |
 | 48 | Onboarding tour interativo | A fazer |
-| 49 | Feedback de qualidade inline | A fazer |
+| 49 | Feedback de qualidade inline | ✅ Feito |
 | 50 | Loading states elegantes | ✅ Feito |
 
 ## G. ANALYTICS E INTELIGÊNCIA (51-54)
