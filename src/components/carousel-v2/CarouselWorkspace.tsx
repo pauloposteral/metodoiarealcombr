@@ -5,6 +5,7 @@ import { CarouselCanvas } from './CarouselCanvas';
 import { SlideEditor } from './SlideEditor';
 import { ExportPanel } from './ExportPanel';
 import { CarouselHistory } from './CarouselHistory';
+import { OnboardingTour } from './OnboardingTour';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
@@ -19,6 +20,7 @@ import {
   CAROUSEL_THEMES,
   CarouselFormat,
   FORMAT_DIMENSIONS,
+  TEMPLATE_PRESETS,
 } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -29,7 +31,7 @@ import {
   Wand2, RefreshCw, ChevronLeft, Download, 
   Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
   Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type,
-  HelpCircle, RectangleVertical, Square, Copy
+  HelpCircle, RectangleVertical, Square, Copy, Save, BookmarkPlus, Image as ImageIcon
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -639,6 +641,9 @@ export const CarouselWorkspace = () => {
   // ==========================================
   return (
     <div data-theme={isDarkEditor ? 'dark' : 'light'} className={`transition-colors duration-300 bg-background text-foreground ${isFullscreen ? 'fixed inset-0 z-50 overflow-auto' : 'min-h-screen'} ${!isDarkEditor ? '[&]:bg-slate-50 [&]:text-slate-900' : ''}`}>
+      {/* Onboarding Tour (#48) */}
+      <OnboardingTour forceShow={showOnboarding} onClose={() => setShowOnboarding(false)} />
+
       {/* Generation Overlay - Futuristic */}
       <GenerationOverlay 
         progress={progress} 
@@ -858,6 +863,15 @@ export const CarouselWorkspace = () => {
               >
                 <Download className="w-4 h-4" />
                 Salvar
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9"
+                onClick={() => setShowOnboarding(true)}
+                title="Tour de ajuda"
+              >
+                <HelpCircle className="w-4 h-4" />
               </Button>
               <Button
                 variant="outline"

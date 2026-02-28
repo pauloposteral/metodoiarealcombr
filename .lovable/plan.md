@@ -12,7 +12,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 |---|----------|--------|
 | 1 | Modelo Pro para roteiros (`gemini-2.5-pro`) | ✅ Feito |
 | 2 | **Imagens com Gemini 3 Pro** | ✅ Feito |
-| 3 | Upload de imagem de referência visual | A fazer |
+| 3 | Upload de imagem de referência visual | ✅ Feito |
 | 4 | Rewrite inteligente de todo o carrossel | ✅ Feito |
 | 5 | Tradução automática (EN/ES/FR) | ✅ Feito |
 | 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
@@ -43,8 +43,8 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 23 | Biblioteca de 50+ templates por nicho | A fazer |
-| 24 | Templates estilo @brandsdecoded (editorial bold) | A fazer |
+| 23 | Biblioteca de 50+ templates por nicho | ✅ Feito |
+| 24 | Templates estilo @brandsdecoded (editorial bold) | ✅ Feito |
 | 25 | Template com recorte de pessoa + texto sobreposto | A fazer |
 | 26 | Editor de cores completo para criar temas custom | ✅ Feito |
 | 27 | Salvar carrossel como template reutilizável | A fazer |
@@ -83,7 +83,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 45 | Hotkeys (Ctrl+S salvar, ←→ navegar, F fullscreen) | ✅ Feito |
 | 46 | Fullscreen mode para edição focada | ✅ Feito |
 | 47 | Dark/Light toggle no editor | ✅ Feito |
-| 48 | Onboarding tour interativo | A fazer |
+| 48 | Onboarding tour interativo | ✅ Feito |
 | 49 | Feedback de qualidade inline | ✅ Feito |
 | 50 | Loading states elegantes | ✅ Feito |
 
@@ -98,14 +98,13 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ---
 
-## Progresso: 37/54 ✅ (69%)
+## Progresso: 41/54 ✅ (76%)
 
-## Itens Restantes (17)
+## Itens Restantes (13)
 
-**Motor de IA:** #3, #7, #10
+**Motor de IA:** #7, #10
 **Editor Visual:** #12, #13, #14, #19, #20, #21
-**Templates:** #23, #24, #25, #27
+**Templates:** #25, #27
 **Exportação:** #32, #37, #38
 **Persistência:** #44
-**UX:** #48
 **Analytics:** #51, #52, #53, #54

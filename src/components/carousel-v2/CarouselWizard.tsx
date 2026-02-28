@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   BookOpen, Target, Award, Zap, Heart, MessageSquare,
   ChevronRight, ChevronLeft, Sparkles, Users, Wand2,
-  Link2, Loader2, Lightbulb, TrendingUp, Flame
+  Link2, Loader2, Lightbulb, TrendingUp, Flame, Image as ImageIcon, X
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -38,6 +38,8 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [suggestedIdeas, setSuggestedIdeas] = useState<any[]>([]);
   const [isLoadingIdeas, setIsLoadingIdeas] = useState(false);
+  const [referenceImage, setReferenceImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [config, setConfig] = useState<CarouselConfig>({
     objective: 'educar',
     audience: {
@@ -52,6 +54,18 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
       style: 'minimal-premium',
     },
   });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Imagem muito grande. Máximo 5MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setReferenceImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const objectives: { key: CarouselObjective; config: typeof OBJECTIVE_CONFIGS['educar'] }[] = 
     Object.entries(OBJECTIVE_CONFIGS).map(([key, value]) => ({
@@ -402,6 +416,40 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
                   {isLoadingUrl ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
                   Importar
                 </Button>
+              </div>
+
+              {/* #3 Image Reference Upload */}
+              <div className="flex items-center gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="gap-2 text-xs"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  Imagem de referência
+                </Button>
+                {referenceImage && (
+                  <div className="relative group">
+                    <img src={referenceImage} alt="Referência" className="w-10 h-10 rounded object-cover border border-border" />
+                    <button
+                      onClick={() => setReferenceImage(null)}
+                      className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full w-4 h-4 flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+                {referenceImage && (
+                  <span className="text-xs text-muted-foreground">Referência visual adicionada ✓</span>
+                )}
               </div>
 
               <div className="relative">
