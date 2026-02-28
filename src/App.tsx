@@ -30,6 +30,7 @@ import CarouselEditor from "./pages/CarouselEditor";
 import CarrosselPage from "./pages/CarrosselPage";
 import StoriesPage from "./pages/StoriesPage";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
+import CarouselPreviewPublic from "./pages/CarouselPreviewPublic";
 
 // Método IA SaaS
 import MetodoLanding from "./pages/metodo/MetodoLanding";
@@ -87,6 +88,7 @@ const App = () => (
             <Route path="/carrossel-old" element={<CarouselEditor />} />
             <Route path="/stories" element={<StoriesPage />} />
             <Route path="/acesso-bloqueado" element={<AcessoBloqueado />} />
+            <Route path="/preview/:shareId" element={<CarouselPreviewPublic />} />
             
             {/* Método IA SaaS Routes */}
             <Route path="/metodo" element={<MetodoLanding />} />

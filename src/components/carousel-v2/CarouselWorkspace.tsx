@@ -5,6 +5,9 @@ import { CarouselCanvas } from './CarouselCanvas';
 import { SlideEditor } from './SlideEditor';
 import { ExportPanel } from './ExportPanel';
 import { CarouselHistory } from './CarouselHistory';
+import { FolderManager } from './FolderManager';
+import { SaveAsTemplateDialog } from './SaveAsTemplateDialog';
+import { ShareLinkButton } from './ShareLinkButton';
 import { OnboardingTour } from './OnboardingTour';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -66,7 +69,7 @@ export const CarouselWorkspace = () => {
   const [slidesRedoStack, setSlidesRedoStack] = useState<CarouselSlide[][]>([]);
   const [carouselFormat, setCarouselFormat] = useState<CarouselFormat>('4:5');
   const [showOnboarding, setShowOnboarding] = useState(false);
-
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
@@ -672,9 +675,16 @@ export const CarouselWorkspace = () => {
               />
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-lg">📂 Seus Carrosséis</h3>
+              <FolderManager
+                selectedFolderId={selectedFolderId}
+                onSelectFolder={setSelectedFolderId}
+              />
+              <h3 className="font-semibold mt-4 mb-4 text-lg">📂 Seus Carrosséis</h3>
               <CarouselHistory
-                carousels={persistence.savedCarousels}
+                carousels={selectedFolderId
+                  ? persistence.savedCarousels.filter((c: any) => c.folder_id === selectedFolderId)
+                  : persistence.savedCarousels
+                }
                 isLoading={persistence.isLoading}
                 onLoad={handleLoadCarousel}
                 onDelete={persistence.deleteCarousel}
@@ -827,6 +837,17 @@ export const CarouselWorkspace = () => {
                 <TestTube2 className="w-3.5 h-3.5" />
                 A/B Hooks
               </Button>
+
+              {/* #27 Save as Template */}
+              <SaveAsTemplateDialog
+                slides={slides}
+                theme={theme}
+                config={config}
+                topic={topic}
+              />
+
+              {/* #38 Share Link */}
+              <ShareLinkButton carouselId={persistence.currentSavedId} />
             </div>
 
             <div className="flex items-center gap-3">
