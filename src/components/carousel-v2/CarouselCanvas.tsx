@@ -28,6 +28,7 @@ interface CarouselCanvasProps {
   onSelectSlide: (index: number) => void;
   isFullscreen?: boolean;
   onToggleFullscreen?: () => void;
+  watermark?: string;
 }
 
 export const CarouselCanvas = ({
@@ -38,6 +39,7 @@ export const CarouselCanvas = ({
   onSelectSlide,
   isFullscreen,
   onToggleFullscreen,
+  watermark,
 }: CarouselCanvasProps) => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isExporting, setIsExporting] = useState(false);
@@ -424,7 +426,7 @@ export const CarouselCanvas = ({
                 className="shadow-2xl rounded-lg overflow-hidden ring-1 ring-border/20"
                 style={{ width: 1080, height: 1350 }}
               >
-                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} />
+                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
               </div>
             </motion.div>
           </Slide3DContainer>
@@ -455,7 +457,7 @@ export const CarouselCanvas = ({
                   style={{ width: '100%', aspectRatio: '1080/1350' }}
                 >
                   <div style={{ transform: 'scale(0.2)', transformOrigin: 'top left', width: 1080, height: 1350 }}>
-                    <SlideCanvas slide={slide} theme={theme} />
+                    <SlideCanvas slide={slide} theme={theme} watermark={watermark} />
                   </div>
                 </div>
                 <p className="text-xs text-center mt-2 text-muted-foreground group-hover:text-foreground transition-colors">
@@ -484,7 +486,7 @@ export const CarouselCanvas = ({
                 className="shadow-2xl rounded-lg overflow-hidden ring-1 ring-border/20"
                 style={{ width: 1080, height: 1350 }}
               >
-                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} />
+                <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
               </div>
             </motion.div>
           </AnimatePresence>
@@ -513,7 +515,7 @@ export const CarouselCanvas = ({
                     className="w-full h-full"
                   >
                     <div style={{ width: '100%', height: '100%' }}>
-                      <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} />
+                      <SlideCanvas slide={slides[selectedSlideIndex]} theme={theme} watermark={watermark} />
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -595,7 +597,7 @@ export const CarouselCanvas = ({
             ref={(el) => { slideRefs.current[index] = el; }}
             style={{ width: 1080, height: 1350 }}
           >
-            <SlideCanvas slide={slide} theme={theme} />
+            <SlideCanvas slide={slide} theme={theme} watermark={watermark} />
           </div>
         ))}
       </div>

@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter } from './types';
+import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS } from './types';
 import { Slider } from '@/components/ui/slider';
 import { SavedHooksPanel } from './SavedHooksPanel';
 import { supabase } from '@/integrations/supabase/client';
@@ -614,6 +614,27 @@ export const SlideEditor = ({
         <TabsContent value="theme" className="flex-1 mt-0">
           <ScrollArea className="h-[500px] pr-2">
             <div className="space-y-6">
+              {/* #22 Google Fonts Selector */}
+              <div>
+                <h4 className="text-sm font-medium text-muted-foreground mb-3">Fonte</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {GOOGLE_FONTS.map((font) => (
+                    <div
+                      key={font.name}
+                      className={`p-2 rounded-lg border cursor-pointer transition-all text-center ${
+                        theme.fontFamily === font.family
+                          ? 'border-accent ring-1 ring-accent bg-accent/10'
+                          : 'border-border hover:border-accent/50'
+                      }`}
+                      onClick={() => onThemeChange({ ...theme, fontFamily: font.family })}
+                    >
+                      <p className="text-sm font-medium" style={{ fontFamily: font.family }}>{font.name}</p>
+                      <p className="text-[10px] text-muted-foreground">{font.category}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {Object.entries(themeCategories).map(([category, themes]) => (
                 <div key={category}>
                   <h4 className="text-sm font-medium text-muted-foreground mb-3">

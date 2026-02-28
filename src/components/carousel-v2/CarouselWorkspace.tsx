@@ -26,8 +26,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Wand2, RefreshCw, ChevronLeft, Download, 
   Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
-  Languages, RotateCcw, TestTube2, Moon, Sun
+  Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type
 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +57,8 @@ export const CarouselWorkspace = () => {
   const [abHooks, setAbHooks] = useState<any[]>([]);
   const [isRewriting, setIsRewriting] = useState(false);
   const [watermarkText, setWatermarkText] = useState('');
+  const [slidesHistory, setSlidesHistory] = useState<CarouselSlide[][]>([]);
+  const [slidesRedoStack, setSlidesRedoStack] = useState<CarouselSlide[][]>([]);
 
   const persistence = useCarouselPersistence();
 
@@ -297,6 +300,8 @@ export const CarouselWorkspace = () => {
   // Slide Management
   // ==========================================
   const handleUpdateSlide = (index: number, updates: Partial<CarouselSlide>) => {
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
     setSlides(prev => prev.map((slide, i) =>
       i === index ? { ...slide, ...updates } : slide
     ));
@@ -551,6 +556,30 @@ export const CarouselWorkspace = () => {
         handleSave();
       }
 
+      // Ctrl+Z - Undo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        if (slidesHistory.length > 0) {
+          const prev = slidesHistory[slidesHistory.length - 1];
+          setSlidesRedoStack(stack => [slides, ...stack]);
+          setSlidesHistory(h => h.slice(0, -1));
+          setSlides(prev);
+          toast.info('Desfazer');
+        }
+      }
+
+      // Ctrl+Shift+Z or Ctrl+Y - Redo
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        if (slidesRedoStack.length > 0) {
+          const next = slidesRedoStack[0];
+          setSlidesHistory(h => [...h, slides]);
+          setSlidesRedoStack(stack => stack.slice(1));
+          setSlides(next);
+          toast.info('Refazer');
+        }
+      }
+
       // Ctrl+N / Cmd+N - New carousel
       if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
         e.preventDefault();
@@ -671,6 +700,50 @@ export const CarouselWorkspace = () => {
                   {slides.length} slides • {config?.objective}
                 </p>
               </div>
+            </div>
+
+            {/* Undo/Redo + Watermark */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (slidesHistory.length > 0) {
+                    const prev = slidesHistory[slidesHistory.length - 1];
+                    setSlidesRedoStack(stack => [slides, ...stack]);
+                    setSlidesHistory(h => h.slice(0, -1));
+                    setSlides(prev);
+                  }
+                }}
+                disabled={slidesHistory.length === 0}
+                className="h-8 w-8"
+                title="Desfazer (Ctrl+Z)"
+              >
+                <Undo2 className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (slidesRedoStack.length > 0) {
+                    const next = slidesRedoStack[0];
+                    setSlidesHistory(h => [...h, slides]);
+                    setSlidesRedoStack(stack => stack.slice(1));
+                    setSlides(next);
+                  }
+                }}
+                disabled={slidesRedoStack.length === 0}
+                className="h-8 w-8"
+                title="Refazer (Ctrl+Y)"
+              >
+                <Redo2 className="w-4 h-4" />
+              </Button>
+              <Input
+                placeholder="@watermark"
+                value={watermarkText}
+                onChange={(e) => setWatermarkText(e.target.value)}
+                className="w-32 h-8 text-xs"
+              />
             </div>
 
             {/* AI Actions Bar */}
@@ -838,6 +911,7 @@ export const CarouselWorkspace = () => {
                 onSelectSlide={setSelectedSlideIndex}
                 isFullscreen={isFullscreen}
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+                watermark={watermarkText}
               />
             </div>
 

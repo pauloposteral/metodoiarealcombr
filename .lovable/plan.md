@@ -2,7 +2,7 @@
 
 # 54 Melhorias para o Editor de Carrosséis Mais Potente do Mundo
 
-Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo atualizado (com Gemini 3 Pro já implementado ✅):
+Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo atualizado:
 
 ---
 
@@ -17,7 +17,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 5 | Tradução automática (EN/ES/FR) | ✅ Feito |
 | 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
 | 7 | Geração a partir de áudio/vídeo | A fazer |
-| 8 | Sugestão de ideias por nicho | A fazer |
+| 8 | Sugestão de ideias por nicho | ✅ Feito |
 | 9 | A/B Test de hooks (3 variações de capa) | ✅ Feito |
 | 10 | Análise de concorrência por @ | A fazer |
 
@@ -35,21 +35,21 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 18 | Opacidade da imagem de fundo (slider 0-100%) | ✅ Feito |
 | 19 | Múltiplas imagens por slide (collage/grid) | A fazer |
 | 20 | Stickers e elementos decorativos (setas, circles) | A fazer |
-| 21 | Crop e reposicionar imagem de fundo |
-| 22 | Seletor de Google Fonts |
+| 21 | Crop e reposicionar imagem de fundo | A fazer |
+| 22 | Seletor de Google Fonts | ✅ Feito |
 
 ## C. TEMPLATES E DESIGN (23-30)
 
-| # | Melhoria |
-|---|----------|
-| 23 | Biblioteca de 50+ templates por nicho |
-| 24 | Templates estilo @brandsdecoded (editorial bold) |
-| 25 | Template com recorte de pessoa + texto sobreposto |
-| 26 | Editor de cores completo para criar temas custom |
-| 27 | Salvar carrossel como template reutilizável |
-| 28 | Layouts alternativos (grid, split-screen, full-image, quote) |
-| 29 | Animação de preview (simular swipe real do Instagram) |
-| 30 | Formato Stories 9:16 além do 4:5 |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 23 | Biblioteca de 50+ templates por nicho | A fazer |
+| 24 | Templates estilo @brandsdecoded (editorial bold) | A fazer |
+| 25 | Template com recorte de pessoa + texto sobreposto | A fazer |
+| 26 | Editor de cores completo para criar temas custom | A fazer |
+| 27 | Salvar carrossel como template reutilizável | A fazer |
+| 28 | Layouts alternativos (grid, split-screen, full-image, quote) | A fazer |
+| 29 | Animação de preview (simular swipe real do Instagram) | ✅ Feito |
+| 30 | Formato Stories 9:16 além do 4:5 | A fazer |
 
 ## D. EXPORTAÇÃO E PUBLICAÇÃO (31-38)
 
@@ -58,7 +58,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 31 | Exportar em PDF | ✅ Feito |
 | 32 | Exportar como vídeo MP4 (para Reels) | A fazer |
 | 33 | Qualidade de exportação (1x, 2x, 3x) | ✅ Feito |
-| 34 | Watermark customizável (logo/@) | A fazer |
+| 34 | Watermark customizável (logo/@) | ✅ Feito |
 | 35 | Preview mobile com frame de iPhone | ✅ Feito |
 | 36 | Botão "Copiar tudo para Instagram" | ✅ Feito |
 | 37 | Agendamento de publicação via API Instagram | A fazer |
@@ -71,9 +71,9 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 39 | Salvar carrosséis no banco de dados | ✅ Feito |
 | 40 | Histórico com lista e preview de todos os carrosséis | ✅ Feito |
 | 41 | Duplicar carrossel existente | ✅ Feito |
-| 42 | Versionamento (Ctrl+Z global) | A fazer |
+| 42 | Versionamento (Ctrl+Z global) | ✅ Feito |
 | 43 | Auto-save a cada alteração | ✅ Feito |
-| 44 | Pastas/projetos para organizar por cliente |
+| 44 | Pastas/projetos para organizar por cliente | A fazer |
 
 ## F. UX E PRODUTIVIDADE (45-50)
 
@@ -88,32 +88,23 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ## G. ANALYTICS E INTELIGÊNCIA (51-54)
 
-| # | Melhoria |
-|---|----------|
-| 51 | Dashboard de métricas (carrosséis criados, temas favoritos) |
-| 52 | Score de viralidade preditivo |
-| 53 | Benchmark por nicho |
-| 54 | Feed de sugestões diárias de temas trending |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 51 | Dashboard de métricas (carrosséis criados, temas favoritos) | A fazer |
+| 52 | Score de viralidade preditivo | A fazer |
+| 53 | Benchmark por nicho | A fazer |
+| 54 | Feed de sugestões diárias de temas trending | A fazer |
 
 ---
 
-## Plano de Implementação em 3 Fases
+## Progresso: 32/54 ✅ (59%)
 
-**Fase 1 — Alto Impacto, Rápido:**
-- #39-40-43 Persistência no banco + histórico + auto-save ✅
-- #11 Drag & drop ✅
-- #1 Modelo Pro para roteiros ✅
-- #45-36 Hotkeys + copiar tudo ✅
+## Itens Restantes (22)
 
-**Fase 2 — Diferenciadores:**
-- #6 URL → Carrossel
-- #24 Templates @brandsdecoded
-- #15-18 Controles visuais avançados
-- #29-35 Preview animado + frame iPhone
-
-**Fase 3 — Power Features:**
-- #32-37 Exportar vídeo + agendamento
-- #5-9 Tradução + A/B test
-- #23 Biblioteca 50+ templates
-- #51-54 Analytics completo
-
+**Motor de IA:** #3, #7, #10
+**Editor Visual:** #12, #13, #14, #19, #20, #21
+**Templates:** #23, #24, #25, #26, #27, #28, #30
+**Exportação:** #32, #37, #38
+**Persistência:** #44
+**UX:** #48
+**Analytics:** #51, #52, #53, #54

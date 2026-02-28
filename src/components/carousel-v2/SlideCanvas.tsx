@@ -17,6 +17,7 @@ const iconComponents: Record<string, React.ComponentType<any>> = {
 interface SlideCanvasProps {
   slide: CarouselSlide;
   theme: CarouselTheme;
+  watermark?: string;
 }
 
 // Font family mapping for each theme
@@ -60,7 +61,7 @@ const getImageFilterCSS = (filter: ImageFilter = 'none'): string => {
   return filters[filter] || filters.none;
 };
 
-export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
+export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
   const IconComponent = slide.icon ? iconComponents[slide.icon] : null;
   const fontStack = getFontStack(theme.fontFamily);
   const displayFont = getDisplayFont(theme.fontFamily);
@@ -262,6 +263,26 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
     </div>
   );
 
+  // #34 Watermark overlay
+  const renderWatermark = () => {
+    if (!watermark) return null;
+    return (
+      <div style={{
+        position: 'absolute',
+        bottom: 20,
+        left: 28,
+        fontSize: 14,
+        fontWeight: 500,
+        opacity: 0.45,
+        color: textColor,
+        letterSpacing: '0.03em',
+        zIndex: 50,
+      }}>
+        {watermark}
+      </div>
+    );
+  };
+
   // ===== COVER SLIDE =====
   if (slide.type === 'cover') {
     return (
@@ -385,7 +406,8 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
             </p>
           )}
           
-          {renderLogo()}
+           {renderLogo()}
+           {renderWatermark()}
         </div>
       </div>
     );
@@ -456,7 +478,8 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           )}
           
           {renderAccentLine(90, 50)}
-          {renderLogo()}
+           {renderLogo()}
+           {renderWatermark()}
         </div>
       </div>
     );
@@ -548,7 +571,8 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
             <span>📤 Compartilhe</span>
           </div>
           
-          {renderLogo()}
+           {renderLogo()}
+           {renderWatermark()}
         </div>
       </div>
     );
@@ -684,7 +708,8 @@ export const SlideCanvas = ({ slide, theme }: SlideCanvasProps) => {
           </div>
         )}
         
-        {renderLogo()}
+         {renderLogo()}
+         {renderWatermark()}
       </div>
     </div>
   );
