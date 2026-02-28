@@ -17,6 +17,8 @@ import {
   QualityScore,
   GenerationProgress,
   CAROUSEL_THEMES,
+  CarouselFormat,
+  FORMAT_DIMENSIONS,
 } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -26,7 +28,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Wand2, RefreshCw, ChevronLeft, Download, 
   Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
-  Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type
+  Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type,
+  HelpCircle, RectangleVertical, Square, Copy
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -59,6 +62,8 @@ export const CarouselWorkspace = () => {
   const [watermarkText, setWatermarkText] = useState('');
   const [slidesHistory, setSlidesHistory] = useState<CarouselSlide[][]>([]);
   const [slidesRedoStack, setSlidesRedoStack] = useState<CarouselSlide[][]>([]);
+  const [carouselFormat, setCarouselFormat] = useState<CarouselFormat>('4:5');
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const persistence = useCarouselPersistence();
 
@@ -633,7 +638,7 @@ export const CarouselWorkspace = () => {
   // RENDER
   // ==========================================
   return (
-    <div className={`bg-background ${isFullscreen ? 'fixed inset-0 z-50 overflow-auto' : 'min-h-screen'}`}>
+    <div data-theme={isDarkEditor ? 'dark' : 'light'} className={`transition-colors duration-300 bg-background text-foreground ${isFullscreen ? 'fixed inset-0 z-50 overflow-auto' : 'min-h-screen'} ${!isDarkEditor ? '[&]:bg-slate-50 [&]:text-slate-900' : ''}`}>
       {/* Generation Overlay - Futuristic */}
       <GenerationOverlay 
         progress={progress} 
@@ -702,7 +707,7 @@ export const CarouselWorkspace = () => {
               </div>
             </div>
 
-            {/* Undo/Redo + Watermark */}
+            {/* Undo/Redo + Format + Watermark + Dark/Light */}
             <div className="flex items-center gap-2 flex-wrap">
               <Button
                 variant="ghost"
@@ -738,12 +743,46 @@ export const CarouselWorkspace = () => {
               >
                 <Redo2 className="w-4 h-4" />
               </Button>
+
+              {/* #30 Format Toggle */}
+              <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-0.5">
+                <Button
+                  variant={carouselFormat === '4:5' ? 'default' : 'ghost'}
+                  size="sm"
+                  className="h-7 text-xs gap-1"
+                  onClick={() => setCarouselFormat('4:5')}
+                >
+                  <Square className="w-3 h-3" />
+                  4:5
+                </Button>
+                <Button
+                  variant={carouselFormat === '9:16' ? 'default' : 'ghost'}
+                  size="sm"
+                  className="h-7 text-xs gap-1"
+                  onClick={() => setCarouselFormat('9:16')}
+                >
+                  <RectangleVertical className="w-3 h-3" />
+                  9:16
+                </Button>
+              </div>
+
               <Input
                 placeholder="@watermark"
                 value={watermarkText}
                 onChange={(e) => setWatermarkText(e.target.value)}
                 className="w-32 h-8 text-xs"
               />
+
+              {/* #47 Dark/Light Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setIsDarkEditor(prev => !prev)}
+                title={isDarkEditor ? 'Modo claro' : 'Modo escuro'}
+              >
+                {isDarkEditor ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </Button>
             </div>
 
             {/* AI Actions Bar */}
@@ -912,6 +951,7 @@ export const CarouselWorkspace = () => {
                 isFullscreen={isFullscreen}
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
                 watermark={watermarkText}
+                format={carouselFormat}
               />
             </div>
 

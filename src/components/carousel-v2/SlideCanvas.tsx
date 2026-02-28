@@ -73,6 +73,10 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
   const imageFilter = getImageFilterCSS(slide.imageFilter);
   const titleSize = slide.titleFontSize || (slide.type === 'cover' ? 82 : 56);
   const contentSize = slide.contentFontSize || 32;
+  const textAlign = slide.textAlignment || 'left';
+  const textJustify = textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start';
+  const verticalPosition = slide.textPosition || 'center';
+  const verticalJustify = verticalPosition === 'top' ? 'flex-start' : verticalPosition === 'bottom' ? 'flex-end' : 'center';
 
   const containerStyle: React.CSSProperties = {
     width: '100%',
@@ -295,10 +299,10 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: verticalJustify,
+          alignItems: textJustify,
           padding: '85px 75px',
-          textAlign: 'center',
+          textAlign: textAlign as any,
         }}>
           {renderLogo('center', 95)}
           
@@ -425,10 +429,10 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: verticalJustify,
+          alignItems: textJustify,
           padding: '95px 85px',
-          textAlign: 'center',
+          textAlign: textAlign as any,
         }}>
           {/* Premium icon container */}
           <div style={{
@@ -589,8 +593,9 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: verticalJustify,
         padding: '95px 85px',
+        textAlign: textAlign as any,
       }}>
         {/* Step indicator with icon */}
         <div style={{

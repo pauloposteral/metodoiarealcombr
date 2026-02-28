@@ -69,7 +69,18 @@ export interface CarouselSlide {
   imageFilter?: ImageFilter;    // default 'none'
   customTextColor?: string;     // override theme text color
   customAccentColor?: string;   // override theme accent color
+  // #28 Layout alternatives
+  textAlignment?: 'left' | 'center' | 'right';
+  textPosition?: 'top' | 'center' | 'bottom';
 }
+
+// #30 Format dimensions
+export type CarouselFormat = '4:5' | '9:16';
+
+export const FORMAT_DIMENSIONS: Record<CarouselFormat, { width: number; height: number; label: string }> = {
+  '4:5': { width: 1080, height: 1350, label: 'Feed (4:5)' },
+  '9:16': { width: 1080, height: 1920, label: 'Stories (9:16)' },
+};
 
 export interface CarouselTheme {
   id: string;
