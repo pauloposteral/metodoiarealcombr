@@ -25,8 +25,15 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Wand2, RefreshCw, ChevronLeft, Download, 
-  Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2
+  Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
+  Languages, RotateCcw, TestTube2, Moon, Sun
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 // ==========================================
 // CAROUSEL WORKSPACE - Main Editor Component
@@ -45,6 +52,10 @@ export const CarouselWorkspace = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isDarkEditor, setIsDarkEditor] = useState(true);
+  const [abHooks, setAbHooks] = useState<any[]>([]);
+  const [isRewriting, setIsRewriting] = useState(false);
+  const [watermarkText, setWatermarkText] = useState('');
 
   const persistence = useCarouselPersistence();
 
@@ -417,6 +428,91 @@ export const CarouselWorkspace = () => {
   };
 
   // ==========================================
+  // #4 Rewrite Carousel
+  // ==========================================
+  const handleRewriteCarousel = async () => {
+    if (!config || slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Reescrevendo carrossel com IA...');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'rewrite-carousel', slides, config, topic },
+      });
+      if (error) throw error;
+
+      setSlides(prev => prev.map((s, i) => ({
+        ...s,
+        ...(data.slides[i] || {}),
+      })));
+      toast.success('Carrossel reescrito!');
+    } catch (error) {
+      console.error('Rewrite error:', error);
+      toast.error('Erro ao reescrever');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #5 Translate Carousel
+  // ==========================================
+  const handleTranslate = async (targetLang: string) => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info(`Traduzindo para ${targetLang === 'en' ? 'inglês' : targetLang === 'es' ? 'espanhol' : targetLang}...`);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'translate-carousel', slides, targetLang },
+      });
+      if (error) throw error;
+
+      setSlides(prev => prev.map((s, i) => ({
+        ...s,
+        ...(data.slides[i] || {}),
+      })));
+      toast.success('Carrossel traduzido!');
+    } catch (error) {
+      console.error('Translate error:', error);
+      toast.error('Erro ao traduzir');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #9 A/B Test Hooks
+  // ==========================================
+  const handleGenerateABHooks = async () => {
+    if (!config) return;
+    setIsRewriting(true);
+    toast.info('Gerando variações A/B de capa...');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'ab-hooks', topic, config },
+      });
+      if (error) throw error;
+
+      setAbHooks(data.hooks || []);
+      toast.success(`${data.hooks?.length || 0} variações geradas!`);
+    } catch (error) {
+      console.error('AB hooks error:', error);
+      toast.error('Erro ao gerar variações');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  const handleApplyABHook = (hook: any) => {
+    setSlides(prev => prev.map((s, i) => 
+      i === 0 ? { ...s, title: hook.title, subtitle: hook.subtitle || s.subtitle } : s
+    ));
+    toast.success('Hook aplicado!');
+  };
+
+  // ==========================================
   // Reset to Wizard
   // ==========================================
   const handleNewCarousel = () => {
@@ -577,6 +673,45 @@ export const CarouselWorkspace = () => {
               </div>
             </div>
 
+            {/* AI Actions Bar */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRewriteCarousel}
+                disabled={isRewriting}
+                className="gap-1.5 text-xs"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Reescrever
+              </Button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" disabled={isRewriting} className="gap-1.5 text-xs">
+                    <Languages className="w-3.5 h-3.5" />
+                    Traduzir
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => handleTranslate('en')}>🇺🇸 English</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleTranslate('es')}>🇪🇸 Español</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleTranslate('fr')}>🇫🇷 Français</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleGenerateABHooks}
+                disabled={isRewriting}
+                className="gap-1.5 text-xs"
+              >
+                <TestTube2 className="w-3.5 h-3.5" />
+                A/B Hooks
+              </Button>
+            </div>
+
             <div className="flex items-center gap-3">
               {qualityScore && (
                 <motion.div 
@@ -622,6 +757,56 @@ export const CarouselWorkspace = () => {
               </Button>
             </div>
           </div>
+
+          {/* A/B Hooks Panel */}
+          {abHooks.length > 0 && (
+            <div className="mb-4 p-4 rounded-xl glass-panel">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-semibold flex items-center gap-2">
+                  <TestTube2 className="w-4 h-4 text-accent" />
+                  Variações A/B de Capa
+                </h4>
+                <Button variant="ghost" size="sm" onClick={() => setAbHooks([])}>✕</Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {abHooks.map((hook: any) => (
+                  <Card
+                    key={hook.id}
+                    className="p-3 cursor-pointer hover:ring-2 hover:ring-accent/50 transition-all"
+                    onClick={() => handleApplyABHook(hook)}
+                  >
+                    <p className="font-bold text-sm">{hook.title}</p>
+                    {hook.subtitle && <p className="text-xs text-muted-foreground mt-1">{hook.subtitle}</p>}
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded-full">{hook.approach}</span>
+                      <span className="text-xs text-muted-foreground">Score: {hook.score}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">{hook.reasoning}</p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quality Issues Inline (#49) */}
+          {qualityScore?.issues && qualityScore.issues.length > 0 && (
+            <div className="mb-4 p-4 rounded-xl glass-panel">
+              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-500" />
+                Feedback de Qualidade
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {qualityScore.issues.map((issue: any) => (
+                  <div key={issue.id} className={`p-3 rounded-lg text-xs ${
+                    issue.type === 'error' ? 'bg-red-500/10 border border-red-500/20' : 'bg-yellow-500/10 border border-yellow-500/20'
+                  }`}>
+                    <p className="font-medium">{issue.type === 'error' ? '❌' : '⚠️'} Slide {(issue.slideIndex || 0) + 1}: {issue.message}</p>
+                    <p className="text-muted-foreground mt-1">💡 {issue.suggestion}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Main Content */}
           <div className={`grid gap-6 ${isFullscreen ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 lg:grid-cols-12'}`}>
