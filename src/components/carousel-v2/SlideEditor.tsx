@@ -1,5 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -37,10 +40,82 @@ interface SlideEditorProps {
   onUpdateSlide: (index: number, updates: Partial<CarouselSlide>) => void;
   onAddSlide: () => void;
   onDeleteSlide: (index: number) => void;
+  onReorderSlides?: (startIndex: number, endIndex: number) => void;
   onThemeChange: (theme: CarouselTheme) => void;
   onRegenerateImage?: (slideIndex: number) => void;
   onImproveSlide?: (slideIndex: number, action: string) => void;
 }
+
+// Sortable slide item component
+const SortableSlideItem = ({ 
+  slide, index, isSelected, onSelect, onDelete, getSlideTypeName 
+}: {
+  slide: CarouselSlide;
+  index: number;
+  isSelected: boolean;
+  onSelect: () => void;
+  onDelete: () => void;
+  getSlideTypeName: (type: string) => string;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slide.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 10 : 0,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center gap-2 ${
+        isSelected
+          ? 'border-accent bg-accent/10' 
+          : 'border-border hover:border-accent/50'
+      }`}
+      onClick={onSelect}
+    >
+      <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+        <GripVertical className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+      </div>
+      
+      <div className="w-10 h-12 rounded bg-muted overflow-hidden flex-shrink-0">
+        {slide.imageUrl ? (
+          <img src={slide.imageUrl} alt="" className="w-full h-full object-cover" />
+        ) : slide.isGeneratingImage ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <ImageIcon className="w-4 h-4 text-muted-foreground" />
+          </div>
+        )}
+      </div>
+      
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-muted-foreground uppercase">
+          {getSlideTypeName(slide.type)}
+        </p>
+        <p className="text-sm font-medium truncate">{slide.title}</p>
+      </div>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+      >
+        <Trash2 className="w-4 h-4" />
+      </Button>
+    </div>
+  );
+};
 
 export const SlideEditor = ({
   slides,
@@ -51,12 +126,31 @@ export const SlideEditor = ({
   onUpdateSlide,
   onAddSlide,
   onDeleteSlide,
+  onReorderSlides,
   onThemeChange,
   onRegenerateImage,
   onImproveSlide,
 }: SlideEditorProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const slideIds = useMemo(() => slides.map(s => s.id), [slides]);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !onReorderSlides) return;
+    
+    const oldIndex = slides.findIndex(s => s.id === active.id);
+    const newIndex = slides.findIndex(s => s.id === over.id);
+    if (oldIndex !== -1 && newIndex !== -1) {
+      onReorderSlides(oldIndex, newIndex);
+    }
+  };
 
   const selectedSlide = slides[selectedSlideIndex];
 
@@ -179,57 +273,26 @@ export const SlideEditor = ({
           </TabsTrigger>
         </TabsList>
 
-        {/* SLIDES LIST */}
+        {/* SLIDES LIST with Drag & Drop */}
         <TabsContent value="slides" className="flex-1 mt-0">
           <ScrollArea className="h-[450px] pr-2">
-            <div className="space-y-2">
-              {slides.map((slide, index) => (
-                <div
-                  key={slide.id}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center gap-2 ${
-                    index === selectedSlideIndex 
-                      ? 'border-accent bg-accent/10' 
-                      : 'border-border hover:border-accent/50'
-                  }`}
-                  onClick={() => onSelectSlide(index)}
-                >
-                  <GripVertical className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  
-                  <div className="w-10 h-12 rounded bg-muted overflow-hidden flex-shrink-0">
-                    {slide.imageUrl ? (
-                      <img src={slide.imageUrl} alt="" className="w-full h-full object-cover" />
-                    ) : slide.isGeneratingImage ? (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-                      </div>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase">
-                      {getSlideTypeName(slide.type)}
-                    </p>
-                    <p className="text-sm font-medium truncate">{slide.title}</p>
-                  </div>
-                  
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteSlide(index);
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <SortableContext items={slideIds} strategy={verticalListSortingStrategy}>
+                <div className="space-y-2">
+                  {slides.map((slide, index) => (
+                    <SortableSlideItem
+                      key={slide.id}
+                      slide={slide}
+                      index={index}
+                      isSelected={index === selectedSlideIndex}
+                      onSelect={() => onSelectSlide(index)}
+                      onDelete={() => onDeleteSlide(index)}
+                      getSlideTypeName={getSlideTypeName}
+                    />
+                  ))}
                 </div>
-              ))}
-            </div>
+              </SortableContext>
+            </DndContext>
           </ScrollArea>
           <Button variant="outline" className="w-full mt-4" onClick={onAddSlide}>
             <Plus className="w-4 h-4 mr-2" />

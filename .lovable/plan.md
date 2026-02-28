@@ -100,10 +100,10 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 ## Plano de Implementação em 3 Fases
 
 **Fase 1 — Alto Impacto, Rápido:**
-- #39-40-43 Persistência no banco + histórico + auto-save
-- #11-12 Drag & drop + editor inline
-- #1 Modelo Pro para roteiros
-- #45-36 Hotkeys + copiar tudo
+- #39-40-43 Persistência no banco + histórico + auto-save ✅
+- #11 Drag & drop ✅
+- #1 Modelo Pro para roteiros ✅
+- #45-36 Hotkeys + copiar tudo ✅
 
 **Fase 2 — Diferenciadores:**
 - #6 URL → Carrossel

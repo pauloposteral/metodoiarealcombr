@@ -18,6 +18,7 @@ interface ExportPanelProps {
   carousel: CarouselData | null;
   onGenerateCaption: () => Promise<void>;
   onGenerateHashtags: () => Promise<void>;
+  onCopyAllForInstagram?: () => void;
   isLoading: boolean;
 }
 
@@ -25,6 +26,7 @@ export const ExportPanel = ({
   carousel,
   onGenerateCaption,
   onGenerateHashtags,
+  onCopyAllForInstagram,
   isLoading,
 }: ExportPanelProps) => {
   const [caption, setCaption] = useState(carousel?.caption || '');
@@ -64,9 +66,22 @@ export const ExportPanel = ({
 
   return (
     <Card className="p-4 bg-card border-border">
-      <div className="flex items-center gap-2 mb-4">
-        <FileText className="w-5 h-5 text-accent" />
-        <h3 className="font-semibold">Pronto para Postar</h3>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <FileText className="w-5 h-5 text-accent" />
+          <h3 className="font-semibold">Pronto para Postar</h3>
+        </div>
+        {onCopyAllForInstagram && (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={onCopyAllForInstagram}
+            className="gap-1.5 text-xs"
+          >
+            <Copy className="w-3 h-3" />
+            Copiar Tudo
+          </Button>
+        )}
       </div>
 
       <Tabs defaultValue="caption" className="h-full">
