@@ -413,6 +413,7 @@ export interface TemplatePreset {
 }
 
 export const TEMPLATE_PRESETS: TemplatePreset[] = [
+  // === EDUCACIONAL ===
   {
     id: 'educacional-clean',
     name: 'Educacional Clean',
@@ -423,6 +424,35 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     features: ['Didático', 'Passo a passo', 'Claro'],
   },
   {
+    id: 'educacional-visual',
+    name: 'Aula Visual',
+    description: 'Conteúdo educativo com foco em imagens e diagramas',
+    category: 'Educacional',
+    themeId: 'tech-blue',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Visual', 'Diagrama', 'Imersivo'],
+  },
+  {
+    id: 'educacional-micro',
+    name: 'Micro-Aula',
+    description: 'Conteúdo curto e direto, ideal para dicas rápidas',
+    category: 'Educacional',
+    themeId: 'minimal-cream',
+    structure: ['cover', 'content', 'content', 'content', 'cta'],
+    features: ['Rápido', 'Direto', 'Dicas'],
+  },
+  {
+    id: 'educacional-glossario',
+    name: 'Glossário / Definições',
+    description: 'Explique termos e conceitos do seu nicho',
+    category: 'Educacional',
+    themeId: 'corporate-slate',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Termos', 'Definições', 'Referência'],
+  },
+
+  // === VIRAL ===
+  {
     id: 'lista-viral',
     name: 'Lista Viral',
     description: 'Formato de lista que maximiza saves e shares',
@@ -431,6 +461,35 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'cta'],
     features: ['Números', 'Rápido', 'Compartilhável'],
   },
+  {
+    id: '7-erros',
+    name: '7 Erros Comuns',
+    description: 'Lista de erros que gera identificação',
+    category: 'Viral',
+    themeId: 'contrast-bw',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Polêmico', 'Educativo', 'Viral'],
+  },
+  {
+    id: 'mitos-verdades',
+    name: 'Mitos vs Verdades',
+    description: 'Desmistifique crenças do seu nicho',
+    category: 'Viral',
+    themeId: 'editorial-bold',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Polêmico', 'Compartilhável', 'Debate'],
+  },
+  {
+    id: 'top-ferramentas',
+    name: 'Top Ferramentas',
+    description: 'Recomendações de ferramentas e recursos',
+    category: 'Viral',
+    themeId: 'tech-purple',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Útil', 'Salvável', 'Prático'],
+  },
+
+  // === AUTORIDADE ===
   {
     id: 'framework-5-passos',
     name: 'Framework 5 Passos',
@@ -441,6 +500,26 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     features: ['Framework', 'Método', 'Autoridade'],
   },
   {
+    id: 'case-study',
+    name: 'Estudo de Caso',
+    description: 'Mostre resultados reais de clientes ou projetos',
+    category: 'Autoridade',
+    themeId: 'luxury-gold',
+    structure: ['cover', 'intro', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Prova', 'Resultados', 'Credibilidade'],
+  },
+  {
+    id: 'opiniao-expert',
+    name: 'Opinião de Expert',
+    description: 'Posicionamento forte sobre tema do nicho',
+    category: 'Autoridade',
+    themeId: 'luxury-platinum',
+    structure: ['cover', 'intro', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Opinião', 'Polêmico', 'Posicionamento'],
+  },
+
+  // === CONVERSÃO ===
+  {
     id: 'antes-depois',
     name: 'Antes e Depois',
     description: 'Contraste de transformação',
@@ -449,6 +528,26 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     structure: ['cover', 'content', 'content', 'content', 'summary', 'cta'],
     features: ['Transformação', 'Prova', 'Conversão'],
   },
+  {
+    id: 'problema-solucao',
+    name: 'Problema → Solução',
+    description: 'Identifique a dor e apresente a solução',
+    category: 'Conversão',
+    themeId: 'corporate-blue',
+    structure: ['cover', 'content', 'content', 'content', 'cta'],
+    features: ['Dor', 'Solução', 'Oferta'],
+  },
+  {
+    id: 'depoimento-social',
+    name: 'Prova Social',
+    description: 'Depoimentos e resultados de clientes',
+    category: 'Conversão',
+    themeId: 'luxury-champagne',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Depoimento', 'Social Proof', 'Trust'],
+  },
+
+  // === STORYTELLING ===
   {
     id: 'storytelling-pessoal',
     name: 'Storytelling Pessoal',
@@ -459,13 +558,98 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     features: ['Emocional', 'Conexão', 'Autêntico'],
   },
   {
-    id: '7-erros',
-    name: '7 Erros Comuns',
-    description: 'Lista de erros que gera identificação',
-    category: 'Viral',
+    id: 'jornada-heroi',
+    name: 'Jornada do Herói',
+    description: 'Conta a trajetória de superação',
+    category: 'Storytelling',
+    themeId: 'nature-forest',
+    structure: ['cover', 'intro', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Inspirador', 'Jornada', 'Superação'],
+  },
+  {
+    id: 'bastidores',
+    name: 'Bastidores / Behind the Scenes',
+    description: 'Mostre os bastidores do seu trabalho',
+    category: 'Storytelling',
+    themeId: 'cozy-blush',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Autêntico', 'Humanizado', 'Conexão'],
+  },
+
+  // === EDITORIAL BOLD (#24) ===
+  {
+    id: 'editorial-manifesto',
+    name: 'Manifesto Bold',
+    description: 'Estilo @brandsdecoded com tipografia impactante',
+    category: 'Editorial',
+    themeId: 'editorial-bold',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Bold', 'Tipografia', 'Impactante'],
+  },
+  {
+    id: 'editorial-magazine',
+    name: 'Editorial Magazine',
+    description: 'Layout estilo revista com blocos de texto elegantes',
+    category: 'Editorial',
+    themeId: 'editorial-sage',
+    structure: ['cover', 'intro', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Elegante', 'Magazine', 'Sofisticado'],
+  },
+  {
+    id: 'editorial-contraste',
+    name: 'Contraste Extremo',
+    description: 'Preto e branco com acento de cor para máximo impacto',
+    category: 'Editorial',
     themeId: 'contrast-bw',
-    structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'content', 'content', 'summary', 'cta'],
-    features: ['Polêmico', 'Educativo', 'Viral'],
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['P&B', 'Contraste', 'Minimalista'],
+  },
+  {
+    id: 'editorial-neon',
+    name: 'Neon Futurista',
+    description: 'Estilo cyberpunk com cores vibrantes',
+    category: 'Editorial',
+    themeId: 'contrast-neon',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Neon', 'Futurista', 'Tech'],
+  },
+
+  // === NICHO ESPECÍFICO ===
+  {
+    id: 'receita-passo',
+    name: 'Receita / Tutorial',
+    description: 'Passo a passo visual para receitas ou tutoriais',
+    category: 'Nicho',
+    themeId: 'cozy-warm',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Passo a passo', 'Visual', 'Prático'],
+  },
+  {
+    id: 'checklist',
+    name: 'Checklist Salvável',
+    description: 'Lista de verificação que o público vai salvar',
+    category: 'Nicho',
+    themeId: 'nature-ocean',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Checklist', 'Salvável', 'Organizado'],
+  },
+  {
+    id: 'comparativo',
+    name: 'Comparativo A vs B',
+    description: 'Compare duas opções lado a lado',
+    category: 'Nicho',
+    themeId: 'corporate-navy',
+    structure: ['cover', 'content', 'content', 'content', 'summary', 'cta'],
+    features: ['Comparação', 'Análise', 'Decisão'],
+  },
+  {
+    id: 'dados-estatisticas',
+    name: 'Dados & Estatísticas',
+    description: 'Apresente dados e números de impacto',
+    category: 'Nicho',
+    themeId: 'luxury-platinum',
+    structure: ['cover', 'content', 'content', 'content', 'content', 'cta'],
+    features: ['Dados', 'Números', 'Impacto'],
   },
 ];
 
