@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   BookOpen, Target, Award, Zap, Heart, MessageSquare,
   ChevronRight, ChevronLeft, Sparkles, Users, Wand2,
-  Link2, Loader2
+  Link2, Loader2, Lightbulb, TrendingUp, Flame
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -36,6 +36,8 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
   const [topic, setTopic] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  const [suggestedIdeas, setSuggestedIdeas] = useState<any[]>([]);
+  const [isLoadingIdeas, setIsLoadingIdeas] = useState(false);
   const [config, setConfig] = useState<CarouselConfig>({
     objective: 'educar',
     audience: {
@@ -102,6 +104,23 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
       toast.error('Erro ao importar URL. Verifique o link.');
     } finally {
       setIsLoadingUrl(false);
+    }
+  };
+
+  const handleSuggestIdeas = async () => {
+    setIsLoadingIdeas(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'suggest-ideas', config },
+      });
+      if (error) throw error;
+      setSuggestedIdeas(data.ideas || []);
+      toast.success(`${data.ideas?.length || 0} ideias geradas!`);
+    } catch (err) {
+      console.error('Ideas error:', err);
+      toast.error('Erro ao sugerir ideias');
+    } finally {
+      setIsLoadingIdeas(false);
     }
   };
 
@@ -400,6 +419,40 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
               <p className="text-sm text-muted-foreground text-center">
                 Seja específico para melhores resultados
               </p>
+
+              {/* #8 Idea Suggestions */}
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  onClick={handleSuggestIdeas}
+                  disabled={isLoadingIdeas}
+                  className="gap-2"
+                >
+                  {isLoadingIdeas ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lightbulb className="w-4 h-4" />}
+                  Sugerir ideias por nicho
+                </Button>
+              </div>
+
+              {suggestedIdeas.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {suggestedIdeas.map((idea: any) => (
+                    <Card
+                      key={idea.id}
+                      className="p-3 cursor-pointer hover:ring-2 hover:ring-accent/50 transition-all"
+                      onClick={() => setTopic(idea.title)}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="font-medium text-sm">{idea.title}</p>
+                        <Badge variant="secondary" className="text-[10px] shrink-0">
+                          {idea.viralScore}%
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">{idea.description}</p>
+                      <Badge variant="outline" className="text-[10px] mt-2">{idea.category}</Badge>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Config Summary */}

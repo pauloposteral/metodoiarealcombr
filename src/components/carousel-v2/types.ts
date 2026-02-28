@@ -523,3 +523,28 @@ export const OBJECTIVE_CONFIGS: Record<CarouselObjective, {
     color: 'hsl(20, 90%, 55%)',
   },
 };
+
+// ==========================================
+// GOOGLE FONTS (#22)
+// ==========================================
+
+export const GOOGLE_FONTS = [
+  { name: 'Plus Jakarta Sans', family: "'Plus Jakarta Sans', sans-serif", category: 'Sans-serif' },
+  { name: 'DM Sans', family: "'DM Sans', sans-serif", category: 'Sans-serif' },
+  { name: 'Inter', family: "'Inter', sans-serif", category: 'Sans-serif' },
+  { name: 'Space Grotesk', family: "'Space Grotesk', sans-serif", category: 'Sans-serif' },
+  { name: 'Nunito', family: "'Nunito', sans-serif", category: 'Sans-serif' },
+  { name: 'Quicksand', family: "'Quicksand', sans-serif", category: 'Sans-serif' },
+  { name: 'Poppins', family: "'Poppins', sans-serif", category: 'Sans-serif' },
+  { name: 'Montserrat', family: "'Montserrat', sans-serif", category: 'Sans-serif' },
+  { name: 'Raleway', family: "'Raleway', sans-serif", category: 'Sans-serif' },
+  { name: 'Outfit', family: "'Outfit', sans-serif", category: 'Sans-serif' },
+  { name: 'Playfair Display', family: "'Playfair Display', serif", category: 'Serif' },
+  { name: 'Cormorant Garamond', family: "'Cormorant Garamond', serif", category: 'Serif' },
+  { name: 'Lora', family: "'Lora', serif", category: 'Serif' },
+  { name: 'Merriweather', family: "'Merriweather', serif", category: 'Serif' },
+  { name: 'Bebas Neue', family: "'Bebas Neue', sans-serif", category: 'Display' },
+  { name: 'Orbitron', family: "'Orbitron', sans-serif", category: 'Display' },
+  { name: 'Oswald', family: "'Oswald', sans-serif", category: 'Display' },
+  { name: 'Fjalla One', family: "'Fjalla One', sans-serif", category: 'Display' },
+];

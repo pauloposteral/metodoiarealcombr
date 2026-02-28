@@ -71,6 +71,9 @@ serve(async (req) => {
       case 'ab-hooks':
         result = await generateABHooks(LOVABLE_API_KEY, topic, config);
         break;
+      case 'suggest-ideas':
+        result = await suggestIdeasByNiche(LOVABLE_API_KEY, config);
+        break;
       default:
         throw new Error(`Unknown action: ${action}`);
     }
@@ -710,6 +713,51 @@ Responda APENAS com JSON:
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   return {
     hooks: content.hooks.map((h: any) => ({ ...h, id: crypto.randomUUID() })),
+  };
+}
+
+// ==========================================
+// #8 Suggest Ideas by Niche
+// ==========================================
+async function suggestIdeasByNiche(apiKey: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um estrategista de conteúdo para Instagram.
+Sugira 6 ideias de carrosséis para o nicho informado, com alto potencial de engajamento.
+
+Objetivo: ${config?.objective || 'educar'}
+Público: ${config?.audience?.level || 'intermediario'}
+Nicho: ${config?.audience?.niche || 'empreendedorismo digital'}
+Tom: ${config?.audience?.tone || 'humano'}
+
+Responda APENAS com JSON:
+{
+  "ideas": [
+    {
+      "id": "uuid",
+      "title": "título do carrossel (máx 10 palavras)",
+      "description": "breve descrição do conteúdo (máx 20 palavras)",
+      "category": "trending|evergreen|polêmico|educativo|inspiracional|prático",
+      "viralScore": 85
+    }
+  ]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Sugira ideias para o nicho: ${config?.audience?.niche || 'empreendedorismo digital'}` },
+      ],
+    }),
+  });
+
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+  return {
+    ideas: content.ideas.map((idea: any) => ({ ...idea, id: crypto.randomUUID() })),
   };
 }
 
