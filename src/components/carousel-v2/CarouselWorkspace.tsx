@@ -8,6 +8,7 @@ import { CarouselHistory } from './CarouselHistory';
 import { FolderManager } from './FolderManager';
 import { SaveAsTemplateDialog } from './SaveAsTemplateDialog';
 import { ShareLinkButton } from './ShareLinkButton';
+import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { OnboardingTour } from './OnboardingTour';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -667,7 +668,7 @@ export const CarouselWorkspace = () => {
           animate={{ opacity: 1, y: 0 }}
           className="p-6 md:p-8"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-2">
               <CarouselWizard
                 onComplete={handleGenerate}
@@ -691,6 +692,11 @@ export const CarouselWorkspace = () => {
                 onDuplicate={persistence.duplicateCarousel}
                 onNewCarousel={handleNewCarousel}
               />
+            </div>
+            {/* #51-54 Analytics */}
+            <div>
+              <h3 className="font-semibold mb-4 text-lg">📊 Métricas</h3>
+              <AnalyticsDashboard />
             </div>
           </div>
         </motion.div>
