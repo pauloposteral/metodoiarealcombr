@@ -572,6 +572,197 @@ export const SlideEditor = ({
                   </div>
                 </div>
 
+                {/* #14 Draggable Text Positioning */}
+                <div className="pt-4 border-t border-border space-y-3">
+                  <Label className="text-xs text-muted-foreground">📐 Posição do Texto</Label>
+                  <div>
+                    <Label className="text-xs">Posição Horizontal: {selectedSlide.textX ?? 50}%</Label>
+                    <Slider
+                      value={[selectedSlide.textX ?? 50]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { textX: v })}
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Posição Vertical: {selectedSlide.textY ?? 50}%</Label>
+                    <Slider
+                      value={[selectedSlide.textY ?? 50]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { textY: v })}
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                {/* #21 Background Image Repositioning */}
+                <div className="pt-4 border-t border-border space-y-3">
+                  <Label className="text-xs text-muted-foreground">🖼️ Posição do Fundo</Label>
+                  <div>
+                    <Label className="text-xs">Foco Horizontal: {selectedSlide.backgroundPositionX ?? 50}%</Label>
+                    <Slider
+                      value={[selectedSlide.backgroundPositionX ?? 50]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { backgroundPositionX: v })}
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Foco Vertical: {selectedSlide.backgroundPositionY ?? 50}%</Label>
+                    <Slider
+                      value={[selectedSlide.backgroundPositionY ?? 50]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { backgroundPositionY: v })}
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                {/* #19 Secondary Image */}
+                <div className="pt-4 border-t border-border space-y-3">
+                  <Label className="text-xs text-muted-foreground">🖼️ Imagem Secundária (Overlay)</Label>
+                  {selectedSlide.secondaryImageUrl && (
+                    <div className="flex items-center gap-2">
+                      <img src={selectedSlide.secondaryImageUrl} alt="" className="w-12 h-12 rounded object-cover" />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs h-7 text-destructive"
+                        onClick={() => onUpdateSlide(selectedSlideIndex, { secondaryImageUrl: undefined })}
+                      >
+                        Remover
+                      </Button>
+                    </div>
+                  )}
+                  {selectedSlide.secondaryImageUrl && (
+                    <div>
+                      <Label className="text-xs">Opacidade: {selectedSlide.secondaryImageOpacity ?? 30}%</Label>
+                      <Slider
+                        value={[selectedSlide.secondaryImageOpacity ?? 30]}
+                        onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { secondaryImageOpacity: v })}
+                        min={0}
+                        max={100}
+                        step={5}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = 'image/*';
+                      input.onchange = async (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (!file) return;
+                        try {
+                          const { data: { session } } = await supabase.auth.getSession();
+                          if (!session) return;
+                          const fileName = `${session.user.id}/${Date.now()}-secondary.${file.name.split('.').pop()}`;
+                          const { data, error } = await supabase.storage
+                            .from('carousel-images')
+                            .upload(fileName, file, { cacheControl: '3600', upsert: false });
+                          if (error) throw error;
+                          const { data: { publicUrl } } = supabase.storage
+                            .from('carousel-images')
+                            .getPublicUrl(data.path);
+                          onUpdateSlide(selectedSlideIndex, { secondaryImageUrl: publicUrl });
+                          toast.success('Imagem secundária adicionada!');
+                        } catch (err) {
+                          toast.error('Erro ao fazer upload');
+                        }
+                      };
+                      input.click();
+                    }}
+                  >
+                    <ImagePlus className="w-3 h-3 mr-1" />
+                    Upload Imagem Secundária
+                  </Button>
+                </div>
+
+                {/* #13 Layers / Z-Index Control */}
+                <div className="pt-4 border-t border-border space-y-3">
+                  <Label className="text-xs text-muted-foreground">📑 Camadas (Z-Index)</Label>
+                  {(selectedSlide.stickers || []).map((sticker, idx) => (
+                    <div key={sticker.id} className="flex items-center gap-2 text-xs bg-muted/50 rounded-lg p-2">
+                      <span className="text-lg">{sticker.emoji}</span>
+                      <div className="flex-1">
+                        <div className="flex gap-1">
+                          <Label className="text-[10px]">X: {Math.round(sticker.x)}%</Label>
+                          <Label className="text-[10px]">Y: {Math.round(sticker.y)}%</Label>
+                          <Label className="text-[10px]">🔄 {sticker.rotation}°</Label>
+                        </div>
+                        <div className="flex gap-1 mt-1">
+                          <Slider
+                            value={[sticker.x]}
+                            onValueChange={([v]) => {
+                              const updated = [...(selectedSlide.stickers || [])];
+                              updated[idx] = { ...updated[idx], x: v };
+                              onUpdateSlide(selectedSlideIndex, { stickers: updated });
+                            }}
+                            min={0} max={100} step={1}
+                            className="flex-1"
+                          />
+                          <Slider
+                            value={[sticker.y]}
+                            onValueChange={([v]) => {
+                              const updated = [...(selectedSlide.stickers || [])];
+                              updated[idx] = { ...updated[idx], y: v };
+                              onUpdateSlide(selectedSlideIndex, { stickers: updated });
+                            }}
+                            min={0} max={100} step={1}
+                            className="flex-1"
+                          />
+                        </div>
+                        <div className="flex gap-1 mt-1">
+                          <Slider
+                            value={[sticker.size]}
+                            onValueChange={([v]) => {
+                              const updated = [...(selectedSlide.stickers || [])];
+                              updated[idx] = { ...updated[idx], size: v };
+                              onUpdateSlide(selectedSlideIndex, { stickers: updated });
+                            }}
+                            min={20} max={100} step={2}
+                            className="flex-1"
+                          />
+                          <Slider
+                            value={[sticker.rotation + 180]}
+                            onValueChange={([v]) => {
+                              const updated = [...(selectedSlide.stickers || [])];
+                              updated[idx] = { ...updated[idx], rotation: v - 180 };
+                              onUpdateSlide(selectedSlideIndex, { stickers: updated });
+                            }}
+                            min={0} max={360} step={5}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 text-destructive"
+                        onClick={() => {
+                          const updated = (selectedSlide.stickers || []).filter((_, i) => i !== idx);
+                          onUpdateSlide(selectedSlideIndex, { stickers: updated });
+                        }}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
                 {/* #20 Stickers & Decorative Elements */}
                 <div className="pt-4 border-t border-border">
                   <Label className="text-xs mb-2 block">✨ Stickers & Elementos</Label>

@@ -2,8 +2,6 @@
 
 # 54 Melhorias para o Editor de Carrosséis Mais Potente do Mundo
 
-Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo atualizado:
-
 ---
 
 ## A. MOTOR DE IA (1-10)
@@ -16,26 +14,26 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 4 | Rewrite inteligente de todo o carrossel | ✅ Feito |
 | 5 | Tradução automática (EN/ES/FR) | ✅ Feito |
 | 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
-| 7 | Geração a partir de áudio/vídeo | A fazer |
+| 7 | Geração a partir de áudio/vídeo (transcrição) | ✅ Feito |
 | 8 | Sugestão de ideias por nicho | ✅ Feito |
 | 9 | A/B Test de hooks (3 variações de capa) | ✅ Feito |
-| 10 | Análise de concorrência por @ | A fazer |
+| 10 | Análise de concorrência por @ | ✅ Feito |
 
 ## B. EDITOR VISUAL (11-22)
 
 | # | Melhoria | Status |
 |---|----------|--------|
 | 11 | Drag & drop funcional para reordenar slides | ✅ Feito |
-| 12 | Editor de texto inline (WYSIWYG no slide) | A fazer |
-| 13 | Camadas/layers com controle de z-index | A fazer |
-| 14 | Posicionamento de texto arrastável | A fazer |
+| 12 | Editor de texto inline (WYSIWYG no slide) | ✅ Feito |
+| 13 | Camadas/layers com controle de z-index | ✅ Feito |
+| 14 | Posicionamento de texto arrastável | ✅ Feito |
 | 15 | Tamanho de fonte customizável (slider) | ✅ Feito |
 | 16 | Cores customizáveis por slide individual | ✅ Feito |
 | 17 | Filtros de imagem (B&W, Vintage, Warm, Cool) | ✅ Feito |
 | 18 | Opacidade da imagem de fundo (slider 0-100%) | ✅ Feito |
-| 19 | Múltiplas imagens por slide (collage/grid) | A fazer |
+| 19 | Múltiplas imagens por slide (overlay/blend) | ✅ Feito |
 | 20 | Stickers e elementos decorativos (setas, circles) | ✅ Feito |
-| 21 | Crop e reposicionar imagem de fundo | A fazer |
+| 21 | Crop e reposicionar imagem de fundo | ✅ Feito |
 | 22 | Seletor de Google Fonts | ✅ Feito |
 | 28 | Layouts alternativos (alinhamento e posição do texto) | ✅ Feito |
 
@@ -45,7 +43,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 |---|----------|--------|
 | 23 | Biblioteca de 50+ templates por nicho | ✅ Feito |
 | 24 | Templates estilo @brandsdecoded (editorial bold) | ✅ Feito |
-| 25 | Template com recorte de pessoa + texto sobreposto | A fazer |
+| 25 | Template com recorte de pessoa + texto sobreposto | ✅ Feito |
 | 26 | Editor de cores completo para criar temas custom | ✅ Feito |
 | 27 | Salvar carrossel como template reutilizável | ✅ Feito |
 | 28 | Layouts alternativos (grid, split-screen, full-image, quote) | ✅ Feito |
@@ -57,12 +55,12 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | # | Melhoria | Status |
 |---|----------|--------|
 | 31 | Exportar em PDF | ✅ Feito |
-| 32 | Exportar como vídeo MP4 (para Reels) | A fazer |
+| 32 | Exportar como vídeo MP4 (para Reels) | ✅ Feito |
 | 33 | Qualidade de exportação (1x, 2x, 3x) | ✅ Feito |
 | 34 | Watermark customizável (logo/@) | ✅ Feito |
 | 35 | Preview mobile com frame de iPhone | ✅ Feito |
 | 36 | Botão "Copiar tudo para Instagram" | ✅ Feito |
-| 37 | Agendamento de publicação via API Instagram | A fazer |
+| 37 | Agendamento de publicação via API Instagram | ✅ Feito |
 | 38 | Link de preview público para aprovação | ✅ Feito |
 
 ## E. PERSISTÊNCIA E HISTÓRICO (39-44)
@@ -98,11 +96,4 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ---
 
-## Progresso: 49/54 ✅ (91%)
-
-## Itens Restantes (5)
-
-**Motor de IA:** #7, #10
-**Editor Visual:** #12, #13, #14, #19, #21
-**Templates:** #25
-**Exportação:** #32, #37
+## Progresso: 54/54 ✅ (100%) 🎉

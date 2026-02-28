@@ -74,6 +74,17 @@ export interface CarouselSlide {
   textPosition?: 'top' | 'center' | 'bottom';
   // #20 Stickers / decorative elements
   stickers?: SlideSticker[];
+  // #14 Draggable text positioning (percentage 0-100)
+  textX?: number;
+  textY?: number;
+  // #21 Background image repositioning
+  backgroundPositionX?: number; // percentage 0-100, default 50
+  backgroundPositionY?: number; // percentage 0-100, default 50
+  // #19 Multiple images per slide
+  secondaryImageUrl?: string;
+  secondaryImageOpacity?: number;
+  // #13 Layer ordering
+  layerOrder?: ('background' | 'text' | 'stickers' | 'icon')[];
 }
 
 export interface SlideSticker {
@@ -623,6 +634,26 @@ export const TEMPLATE_PRESETS: TemplatePreset[] = [
     themeId: 'contrast-neon',
     structure: ['cover', 'content', 'content', 'content', 'content', 'summary', 'cta'],
     features: ['Neon', 'Futurista', 'Tech'],
+  },
+
+  // === #25 PERSON CUTOUT ===
+  {
+    id: 'person-cutout',
+    name: 'Pessoa + Texto',
+    description: 'Recorte de pessoa com texto sobreposto em destaque',
+    category: 'Editorial',
+    themeId: 'editorial-bold',
+    structure: ['cover', 'content', 'content', 'content', 'cta'],
+    features: ['Pessoa', 'Recorte', 'Impacto'],
+  },
+  {
+    id: 'speaker-quote',
+    name: 'Speaker Quote',
+    description: 'Foto de pessoa com citação sobreposta estilo palestra',
+    category: 'Editorial',
+    themeId: 'luxury-platinum',
+    structure: ['cover', 'content', 'content', 'content', 'cta'],
+    features: ['Quote', 'Speaker', 'Autoridade'],
   },
 
   // === NICHO ESPECÍFICO ===

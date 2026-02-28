@@ -18,6 +18,7 @@ interface SlideCanvasProps {
   slide: CarouselSlide;
   theme: CarouselTheme;
   watermark?: string;
+  onInlineEdit?: (field: 'title' | 'content' | 'subtitle', value: string) => void;
 }
 
 // Font family mapping for each theme
@@ -61,7 +62,7 @@ const getImageFilterCSS = (filter: ImageFilter = 'none'): string => {
   return filters[filter] || filters.none;
 };
 
-export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
+export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanvasProps) => {
   const IconComponent = slide.icon ? iconComponents[slide.icon] : null;
   const fontStack = getFontStack(theme.fontFamily);
   const displayFont = getDisplayFont(theme.fontFamily);
@@ -77,6 +78,8 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
   const textJustify = textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start';
   const verticalPosition = slide.textPosition || 'center';
   const verticalJustify = verticalPosition === 'top' ? 'flex-start' : verticalPosition === 'bottom' ? 'flex-end' : 'center';
+  const bgPosX = slide.backgroundPositionX ?? 50;
+  const bgPosY = slide.backgroundPositionY ?? 50;
 
   const containerStyle: React.CSSProperties = {
     width: '100%',
@@ -100,11 +103,25 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
               inset: 0,
               backgroundImage: `url(${slide.imageUrl})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundPosition: `${bgPosX}% ${bgPosY}%`,
               opacity: imageOpacity,
               filter: imageFilter,
             }}
           />
+          {/* #19 Secondary image layer */}
+          {slide.secondaryImageUrl && (
+            <div 
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `url(${slide.secondaryImageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: (slide.secondaryImageOpacity ?? 30) / 100,
+                mixBlendMode: 'overlay',
+              }}
+            />
+          )}
           {/* Premium gradient overlay */}
           <div 
             style={{
@@ -653,30 +670,42 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
           )}
         </div>
         
-        {/* Title */}
-        <h2 style={{
-          fontFamily: displayFont,
-          fontSize: titleSize,
-          fontWeight: 700,
-          lineHeight: 1.12,
-          marginBottom: 40,
-          maxWidth: 880,
-          textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-          letterSpacing: '-0.02em',
-        }}>
+        {/* Title - #12 Inline Editable */}
+        <h2 
+          contentEditable={!!onInlineEdit}
+          suppressContentEditableWarning
+          onBlur={(e) => onInlineEdit?.('title', e.currentTarget.textContent || '')}
+          style={{
+            fontFamily: displayFont,
+            fontSize: titleSize,
+            fontWeight: 700,
+            lineHeight: 1.12,
+            marginBottom: 40,
+            maxWidth: 880,
+            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
+            letterSpacing: '-0.02em',
+            outline: 'none',
+            cursor: onInlineEdit ? 'text' : 'default',
+          }}>
           {slide.title}
         </h2>
         
         {/* Content */}
         {slide.content && (
-          <p style={{
-            fontSize: contentSize,
-            lineHeight: 1.65,
-            opacity: 0.93,
-            maxWidth: 820,
-            textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-            fontWeight: 400,
-          }}>
+          <p 
+            contentEditable={!!onInlineEdit}
+            suppressContentEditableWarning
+            onBlur={(e) => onInlineEdit?.('content', e.currentTarget.textContent || '')}
+            style={{
+              fontSize: contentSize,
+              lineHeight: 1.65,
+              opacity: 0.93,
+              maxWidth: 820,
+              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
+              fontWeight: 400,
+              outline: 'none',
+              cursor: onInlineEdit ? 'text' : 'default',
+            }}>
             {slide.content}
           </p>
         )}
