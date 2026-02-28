@@ -47,6 +47,72 @@ export type Database = {
         }
         Relationships: []
       }
+      carousel_folders: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      carousel_templates: {
+        Row: {
+          category: string | null
+          config: Json | null
+          created_at: string
+          id: string
+          name: string
+          slides: Json
+          theme: Json | null
+          updated_at: string
+          usage_count: number | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name: string
+          slides?: Json
+          theme?: Json | null
+          updated_at?: string
+          usage_count?: number | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          config?: Json | null
+          created_at?: string
+          id?: string
+          name?: string
+          slides?: Json
+          theme?: Json | null
+          updated_at?: string
+          usage_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_code: string
@@ -686,8 +752,10 @@ export type Database = {
           config: Json | null
           created_at: string
           first_comment: string | null
+          folder_id: string | null
           hashtags: string[] | null
           id: string
+          public_share_id: string | null
           quality_score: Json | null
           slides: Json
           theme: Json | null
@@ -702,8 +770,10 @@ export type Database = {
           config?: Json | null
           created_at?: string
           first_comment?: string | null
+          folder_id?: string | null
           hashtags?: string[] | null
           id?: string
+          public_share_id?: string | null
           quality_score?: Json | null
           slides?: Json
           theme?: Json | null
@@ -718,8 +788,10 @@ export type Database = {
           config?: Json | null
           created_at?: string
           first_comment?: string | null
+          folder_id?: string | null
           hashtags?: string[] | null
           id?: string
+          public_share_id?: string | null
           quality_score?: Json | null
           slides?: Json
           theme?: Json | null
@@ -728,7 +800,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "saved_carousels_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "carousel_folders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_hooks: {
         Row: {

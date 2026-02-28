@@ -47,7 +47,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 24 | Templates estilo @brandsdecoded (editorial bold) | ✅ Feito |
 | 25 | Template com recorte de pessoa + texto sobreposto | A fazer |
 | 26 | Editor de cores completo para criar temas custom | ✅ Feito |
-| 27 | Salvar carrossel como template reutilizável | A fazer |
+| 27 | Salvar carrossel como template reutilizável | ✅ Feito |
 | 28 | Layouts alternativos (grid, split-screen, full-image, quote) | ✅ Feito |
 | 29 | Animação de preview (simular swipe real do Instagram) | ✅ Feito |
 | 30 | Formato Stories 9:16 além do 4:5 | ✅ Feito |
@@ -63,7 +63,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 35 | Preview mobile com frame de iPhone | ✅ Feito |
 | 36 | Botão "Copiar tudo para Instagram" | ✅ Feito |
 | 37 | Agendamento de publicação via API Instagram | A fazer |
-| 38 | Link de preview público para aprovação | A fazer |
+| 38 | Link de preview público para aprovação | ✅ Feito |
 
 ## E. PERSISTÊNCIA E HISTÓRICO (39-44)
 
@@ -74,7 +74,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 41 | Duplicar carrossel existente | ✅ Feito |
 | 42 | Versionamento (Ctrl+Z global) | ✅ Feito |
 | 43 | Auto-save a cada alteração | ✅ Feito |
-| 44 | Pastas/projetos para organizar por cliente | A fazer |
+| 44 | Pastas/projetos para organizar por cliente | ✅ Feito |
 
 ## F. UX E PRODUTIVIDADE (45-50)
 
@@ -98,13 +98,12 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ---
 
-## Progresso: 41/54 ✅ (76%)
+## Progresso: 44/54 ✅ (81%)
 
-## Itens Restantes (13)
+## Itens Restantes (10)
 
 **Motor de IA:** #7, #10
 **Editor Visual:** #12, #13, #14, #19, #20, #21
-**Templates:** #25, #27
-**Exportação:** #32, #37, #38
-**Persistência:** #44
+**Templates:** #25
+**Exportação:** #32, #37
 **Analytics:** #51, #52, #53, #54
