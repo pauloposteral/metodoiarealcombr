@@ -135,7 +135,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Tema base: "${topic}"` },
@@ -200,7 +200,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Tema: "${topic}"` },
@@ -300,7 +300,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Crie um carrossel viral sobre: "${topic}"` },
@@ -370,7 +370,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Slide atual:\nTítulo: ${slide.title}\nConteúdo: ${slide.content || ''}\nSubtítulo: ${slide.subtitle || ''}` },
@@ -445,7 +445,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Analise:\n${slidesText}\n\nObjetivo: ${config.objective}\nPúblico: ${config.audience.level}` },
@@ -504,7 +504,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Tema: "${topic}"\nSlides: ${slideTitles}` },
@@ -547,7 +547,7 @@ Responda APENAS com JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-3-flash-preview',
+      model: 'google/gemini-2.5-pro',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Tema: "${topic}"\nNicho: ${config.audience.niche || 'empreendedorismo digital'}` },

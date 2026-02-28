@@ -10,7 +10,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 1 | Modelo Pro para roteiros (`gemini-2.5-pro`) | A fazer |
+| 1 | Modelo Pro para roteiros (`gemini-2.5-pro`) | ✅ Feito |
 | 2 | **Imagens com Gemini 3 Pro** | ✅ Feito |
 | 3 | Upload de imagem de referência visual | A fazer |
 | 4 | Rewrite inteligente de todo o carrossel | A fazer |
