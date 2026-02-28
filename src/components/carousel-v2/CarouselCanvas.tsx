@@ -3,16 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CarouselSlide, CarouselTheme, QualityScore } from './types';
 import { SlideCanvas } from './SlideCanvas';
 import { Slide3DContainer } from './Slide3DContainer';
 import { 
   ChevronLeft, ChevronRight, Download, Loader2, ZoomIn, ZoomOut,
-  Smartphone, LayoutGrid, Play, Maximize2, FileImage
+  Smartphone, LayoutGrid, Play, Maximize2, FileImage, FileDown
 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
+import jsPDF from 'jspdf';
 import { toast } from 'sonner';
+
+export type ExportQuality = '1x' | '2x' | '3x';
 
 type ViewMode = 'single' | 'grid' | 'flip' | 'phone';
 
@@ -22,6 +26,8 @@ interface CarouselCanvasProps {
   theme: CarouselTheme;
   qualityScore?: QualityScore;
   onSelectSlide: (index: number) => void;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
 }
 
 export const CarouselCanvas = ({
@@ -30,6 +36,8 @@ export const CarouselCanvas = ({
   theme,
   qualityScore,
   onSelectSlide,
+  isFullscreen,
+  onToggleFullscreen,
 }: CarouselCanvasProps) => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isExporting, setIsExporting] = useState(false);
@@ -38,6 +46,7 @@ export const CarouselCanvas = ({
   const [viewMode, setViewMode] = useState<ViewMode>('single');
   const [isFlipping, setIsFlipping] = useState(false);
   const [isSwipeAnimating, setIsSwipeAnimating] = useState(false);
+  const [exportQuality, setExportQuality] = useState<ExportQuality>('2x');
 
   const handlePrev = useCallback(() => {
     if (selectedSlideIndex > 0) {
@@ -51,6 +60,11 @@ export const CarouselCanvas = ({
     }
   }, [selectedSlideIndex, slides.length, onSelectSlide]);
 
+  const getScale = () => {
+    const scales: Record<ExportQuality, number> = { '1x': 1, '2x': 2, '3x': 3 };
+    return scales[exportQuality];
+  };
+
   const handleExportSingle = async () => {
     const slideElement = slideRefs.current[selectedSlideIndex];
     if (!slideElement) return;
@@ -59,7 +73,7 @@ export const CarouselCanvas = ({
       const canvas = await html2canvas(slideElement, {
         width: 1080,
         height: 1350,
-        scale: 2,
+        scale: getScale(),
         useCORS: true,
         backgroundColor: null,
       });
@@ -69,7 +83,7 @@ export const CarouselCanvas = ({
       link.href = canvas.toDataURL('image/png');
       link.click();
       
-      toast.success('Slide exportado!');
+      toast.success(`Slide exportado em ${exportQuality}!`);
     } catch (error) {
       console.error('Export error:', error);
       toast.error('Erro ao exportar slide');
@@ -84,6 +98,7 @@ export const CarouselCanvas = ({
 
     try {
       const zip = new JSZip();
+      const scale = getScale();
       
       for (let i = 0; i < slides.length; i++) {
         const slideElement = slideRefs.current[i];
@@ -92,7 +107,7 @@ export const CarouselCanvas = ({
         const canvas = await html2canvas(slideElement, {
           width: 1080,
           height: 1350,
-          scale: 2,
+          scale,
           useCORS: true,
           backgroundColor: null,
         });
@@ -110,10 +125,54 @@ export const CarouselCanvas = ({
       link.href = URL.createObjectURL(content);
       link.click();
       
-      toast.success('Carrossel exportado com sucesso!');
+      toast.success(`Carrossel exportado em ${exportQuality}!`);
     } catch (error) {
       console.error('Export error:', error);
       toast.error('Erro ao exportar carrossel');
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
+    }
+  };
+
+  // PDF Export (#31)
+  const handleExportPDF = async () => {
+    if (slides.length === 0) return;
+    
+    setIsExporting(true);
+    setExportProgress(0);
+
+    try {
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [1080, 1350],
+      });
+
+      for (let i = 0; i < slides.length; i++) {
+        const slideElement = slideRefs.current[i];
+        if (!slideElement) continue;
+
+        if (i > 0) pdf.addPage([1080, 1350]);
+
+        const canvas = await html2canvas(slideElement, {
+          width: 1080,
+          height: 1350,
+          scale: getScale(),
+          useCORS: true,
+          backgroundColor: null,
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        pdf.addImage(imgData, 'PNG', 0, 0, 1080, 1350);
+        setExportProgress(((i + 1) / slides.length) * 100);
+      }
+
+      pdf.save('carrossel-instagram.pdf');
+      toast.success('PDF exportado!');
+    } catch (error) {
+      console.error('PDF export error:', error);
+      toast.error('Erro ao exportar PDF');
     } finally {
       setIsExporting(false);
       setExportProgress(0);
@@ -260,11 +319,25 @@ export const CarouselCanvas = ({
           </div>
         )}
 
-        {/* Export */}
+        {/* Quality + Export */}
         <div className="flex items-center gap-2">
+          <Select value={exportQuality} onValueChange={(v) => setExportQuality(v as ExportQuality)}>
+            <SelectTrigger className="w-[70px] h-9">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1x">1x</SelectItem>
+              <SelectItem value="2x">2x</SelectItem>
+              <SelectItem value="3x">3x</SelectItem>
+            </SelectContent>
+          </Select>
           <Button variant="outline" onClick={handleExportSingle} className="gap-2 hover-scale-micro">
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Exportar Slide</span>
+            <span className="hidden sm:inline">Slide</span>
+          </Button>
+          <Button variant="outline" onClick={handleExportPDF} className="gap-2 hover-scale-micro">
+            <FileDown className="w-4 h-4" />
+            <span className="hidden sm:inline">PDF</span>
           </Button>
           <Button 
             onClick={handleExportAll}
@@ -279,10 +352,15 @@ export const CarouselCanvas = ({
             ) : (
               <>
                 <Download className="w-4 h-4" />
-                <span className="hidden sm:inline">Exportar Todos</span>
+                <span className="hidden sm:inline">ZIP</span>
               </>
             )}
           </Button>
+          {onToggleFullscreen && (
+            <Button variant="outline" size="icon" onClick={onToggleFullscreen} className="hover-scale-micro">
+              <Maximize2 className="w-4 h-4" />
+            </Button>
+          )}
         </div>
       </div>
 
