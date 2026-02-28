@@ -7,8 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   BookOpen, Target, Award, Zap, Heart, MessageSquare,
-  ChevronRight, ChevronLeft, Sparkles, Users, Wand2
+  ChevronRight, ChevronLeft, Sparkles, Users, Wand2,
+  Link2, Loader2
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { 
   CarouselConfig, 
   CarouselObjective, 
@@ -31,6 +34,8 @@ interface CarouselWizardProps {
 export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps) => {
   const [step, setStep] = useState(1);
   const [topic, setTopic] = useState('');
+  const [urlInput, setUrlInput] = useState('');
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [config, setConfig] = useState<CarouselConfig>({
     objective: 'educar',
     audience: {
@@ -78,6 +83,26 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
   const handleComplete = () => {
     if (!topic.trim()) return;
     onComplete(config, topic);
+  };
+
+  const handleImportUrl = async () => {
+    if (!urlInput.trim()) return;
+    setIsLoadingUrl(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('scrape-url', {
+        body: { url: urlInput },
+      });
+      if (error) throw error;
+      if (data?.topic) {
+        setTopic(data.topic);
+        toast.success('Conteúdo importado! Revise o tema gerado.');
+      }
+    } catch (err) {
+      console.error('URL import error:', err);
+      toast.error('Erro ao importar URL. Verifique o link.');
+    } finally {
+      setIsLoadingUrl(false);
+    }
   };
 
   const canProceed = () => {
@@ -340,14 +365,39 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
               <p className="text-muted-foreground">Descreva o tema principal</p>
             </div>
 
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto space-y-4">
+              {/* URL Import (#6) */}
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Cole uma URL de artigo para importar..."
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  variant="outline"
+                  onClick={handleImportUrl}
+                  disabled={isLoadingUrl || !urlInput.trim()}
+                  className="gap-2"
+                >
+                  {isLoadingUrl ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
+                  Importar
+                </Button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-x-0 top-0 flex items-center justify-center -mt-2">
+                  <span className="bg-background px-3 text-xs text-muted-foreground">ou escreva o tema</span>
+                </div>
+              </div>
+
               <textarea
                 placeholder="Ex: 5 ferramentas de IA que todo empreendedor precisa conhecer em 2024"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 className="w-full min-h-[150px] p-6 text-xl bg-background border border-border rounded-xl resize-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
               />
-              <p className="text-sm text-muted-foreground mt-2 text-center">
+              <p className="text-sm text-muted-foreground text-center">
                 Seja específico para melhores resultados
               </p>
             </div>

@@ -46,6 +46,8 @@ export interface HookOption {
   legibilityScore: number;
 }
 
+export type ImageFilter = 'none' | 'grayscale' | 'sepia' | 'warm' | 'cool' | 'vintage' | 'dramatic';
+
 export interface CarouselSlide {
   id: string;
   type: SlideType;
@@ -60,6 +62,13 @@ export interface CarouselSlide {
   isGeneratingImage?: boolean;
   clarityScore?: number;
   characterCount?: number;
+  // Visual controls (#15-18)
+  titleFontSize?: number;       // 30-100, default varies by type
+  contentFontSize?: number;     // 20-50, default ~32
+  imageOpacity?: number;        // 0-100, default 45
+  imageFilter?: ImageFilter;    // default 'none'
+  customTextColor?: string;     // override theme text color
+  customAccentColor?: string;   // override theme accent color
 }
 
 export interface CarouselTheme {

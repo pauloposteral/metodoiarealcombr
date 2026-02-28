@@ -15,7 +15,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 3 | Upload de imagem de referência visual | A fazer |
 | 4 | Rewrite inteligente de todo o carrossel | A fazer |
 | 5 | Tradução automática (EN/ES) | A fazer |
-| 6 | Geração a partir de URL (artigo → carrossel) | A fazer |
+| 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
 | 7 | Geração a partir de áudio/vídeo | A fazer |
 | 8 | Sugestão de ideias por nicho | A fazer |
 | 9 | A/B Test de hooks (3 variações de capa) | A fazer |
@@ -23,18 +23,18 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ## B. EDITOR VISUAL (11-22)
 
-| # | Melhoria |
-|---|----------|
-| 11 | Drag & drop funcional para reordenar slides |
-| 12 | Editor de texto inline (WYSIWYG no slide) |
-| 13 | Camadas/layers com controle de z-index |
-| 14 | Posicionamento de texto arrastável |
-| 15 | Tamanho de fonte customizável (slider) |
-| 16 | Cores customizáveis por slide individual |
-| 17 | Filtros de imagem (B&W, Vintage, Warm, Cool) |
-| 18 | Opacidade da imagem de fundo (slider 0-100%) |
-| 19 | Múltiplas imagens por slide (collage/grid) |
-| 20 | Stickers e elementos decorativos (setas, circles) |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 11 | Drag & drop funcional para reordenar slides | ✅ Feito |
+| 12 | Editor de texto inline (WYSIWYG no slide) | A fazer |
+| 13 | Camadas/layers com controle de z-index | A fazer |
+| 14 | Posicionamento de texto arrastável | A fazer |
+| 15 | Tamanho de fonte customizável (slider) | ✅ Feito |
+| 16 | Cores customizáveis por slide individual | ✅ Feito |
+| 17 | Filtros de imagem (B&W, Vintage, Warm, Cool) | ✅ Feito |
+| 18 | Opacidade da imagem de fundo (slider 0-100%) | ✅ Feito |
+| 19 | Múltiplas imagens por slide (collage/grid) | A fazer |
+| 20 | Stickers e elementos decorativos (setas, circles) | A fazer |
 | 21 | Crop e reposicionar imagem de fundo |
 | 22 | Seletor de Google Fonts |
 
@@ -53,38 +53,38 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 ## D. EXPORTAÇÃO E PUBLICAÇÃO (31-38)
 
-| # | Melhoria |
-|---|----------|
-| 31 | Exportar em PDF |
-| 32 | Exportar como vídeo MP4 (para Reels) |
-| 33 | Qualidade de exportação (1x, 2x, 3x) |
-| 34 | Watermark customizável (logo/@) |
-| 35 | Preview mobile com frame de iPhone |
-| 36 | Botão "Copiar tudo para Instagram" (legenda + hashtags + 1º comentário) |
-| 37 | Agendamento de publicação via API Instagram |
-| 38 | Link de preview público para aprovação |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 31 | Exportar em PDF | A fazer |
+| 32 | Exportar como vídeo MP4 (para Reels) | A fazer |
+| 33 | Qualidade de exportação (1x, 2x, 3x) | A fazer |
+| 34 | Watermark customizável (logo/@) | A fazer |
+| 35 | Preview mobile com frame de iPhone | ✅ Feito |
+| 36 | Botão "Copiar tudo para Instagram" | ✅ Feito |
+| 37 | Agendamento de publicação via API Instagram | A fazer |
+| 38 | Link de preview público para aprovação | A fazer |
 
 ## E. PERSISTÊNCIA E HISTÓRICO (39-44)
 
-| # | Melhoria |
-|---|----------|
-| 39 | Salvar carrosséis no banco de dados |
-| 40 | Histórico com lista e preview de todos os carrosséis |
-| 41 | Duplicar carrossel existente |
-| 42 | Versionamento (Ctrl+Z global) |
-| 43 | Auto-save a cada alteração |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 39 | Salvar carrosséis no banco de dados | ✅ Feito |
+| 40 | Histórico com lista e preview de todos os carrosséis | ✅ Feito |
+| 41 | Duplicar carrossel existente | ✅ Feito |
+| 42 | Versionamento (Ctrl+Z global) | A fazer |
+| 43 | Auto-save a cada alteração | ✅ Feito |
 | 44 | Pastas/projetos para organizar por cliente |
 
 ## F. UX E PRODUTIVIDADE (45-50)
 
-| # | Melhoria |
-|---|----------|
-| 45 | Hotkeys (Ctrl+G gerar, Ctrl+S salvar, ←→ navegar) |
-| 46 | Fullscreen mode para edição focada |
-| 47 | Dark/Light toggle no editor |
-| 48 | Onboarding tour interativo |
-| 49 | Feedback de qualidade inline ("texto longo", "CTA fraco") |
-| 50 | Loading states elegantes (skeleton/spinner) |
+| # | Melhoria | Status |
+|---|----------|--------|
+| 45 | Hotkeys (Ctrl+S salvar, ←→ navegar) | ✅ Feito |
+| 46 | Fullscreen mode para edição focada | A fazer |
+| 47 | Dark/Light toggle no editor | A fazer |
+| 48 | Onboarding tour interativo | A fazer |
+| 49 | Feedback de qualidade inline | A fazer |
+| 50 | Loading states elegantes | A fazer |
 
 ## G. ANALYTICS E INTELIGÊNCIA (51-54)
 
