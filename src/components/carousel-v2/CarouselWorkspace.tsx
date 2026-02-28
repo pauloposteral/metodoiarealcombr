@@ -1,9 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CarouselWizard } from './CarouselWizard';
 import { CarouselCanvas } from './CarouselCanvas';
 import { SlideEditor } from './SlideEditor';
 import { ExportPanel } from './ExportPanel';
+import { CarouselHistory } from './CarouselHistory';
+import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
+import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
 import { GenerationOverlay } from './GenerationOverlay';
 import {
@@ -41,6 +44,8 @@ export const CarouselWorkspace = () => {
   const [qualityScore, setQualityScore] = useState<QualityScore | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
+
+  const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
     status: 'idle',
@@ -311,6 +316,52 @@ export const CarouselWorkspace = () => {
     }
   };
 
+  const handleReorderSlides = (startIndex: number, endIndex: number) => {
+    setSlides(prev => {
+      const reordered = arrayMove(prev, startIndex, endIndex);
+      return reordered.map((slide, i) => ({ ...slide, order: i }));
+    });
+    setSelectedSlideIndex(endIndex);
+  };
+
+  // Auto-save when slides change
+  useEffect(() => {
+    if (carousel && slides.length > 0 && step === 'editor' && !isGenerating) {
+      persistence.scheduleAutoSave(carousel, slides, theme, config, qualityScore);
+    }
+  }, [slides, carousel, theme, step, isGenerating]);
+
+  // Save carousel manually
+  const handleSave = useCallback(async () => {
+    if (!carousel || slides.length === 0) return;
+    await persistence.saveCarousel(carousel, slides, theme, config, qualityScore);
+    toast.success('Carrossel salvo!');
+  }, [carousel, slides, theme, config, qualityScore, persistence]);
+
+  // Load a saved carousel
+  const handleLoadCarousel = useCallback((saved: SavedCarousel) => {
+    setSlides(saved.slides as CarouselSlide[]);
+    setTopic(saved.topic);
+    setConfig(saved.config as CarouselConfig | null);
+    setTheme(saved.theme as CarouselTheme || CAROUSEL_THEMES[0]);
+    setQualityScore(saved.quality_score as QualityScore | null);
+    setCarousel({
+      id: saved.id,
+      topic: saved.topic,
+      config: saved.config as CarouselConfig,
+      slides: saved.slides as CarouselSlide[],
+      theme: saved.theme as CarouselTheme || CAROUSEL_THEMES[0],
+      createdAt: new Date(saved.created_at),
+      caption: saved.caption || undefined,
+      hashtags: saved.hashtags || undefined,
+      alternativeTitle: saved.alternative_title || undefined,
+      firstComment: saved.first_comment || undefined,
+    });
+    persistence.setCurrentSavedId(saved.id);
+    setSelectedSlideIndex(0);
+    setStep('editor');
+  }, [persistence]);
+
   // ==========================================
   // Caption & Hashtags Generation
   // ==========================================
@@ -376,6 +427,73 @@ export const CarouselWorkspace = () => {
   };
 
   // ==========================================
+  // Hotkeys
+  // ==========================================
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only in editor mode
+      if (step !== 'editor') return;
+
+      // Don't intercept if typing in inputs
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      // Arrow keys to navigate slides
+      if (e.key === 'ArrowLeft' && selectedSlideIndex > 0) {
+        e.preventDefault();
+        setSelectedSlideIndex(prev => prev - 1);
+      }
+      if (e.key === 'ArrowRight' && selectedSlideIndex < slides.length - 1) {
+        e.preventDefault();
+        setSelectedSlideIndex(prev => prev + 1);
+      }
+
+      // Ctrl+S / Cmd+S - Save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+
+      // Ctrl+N / Cmd+N - New carousel
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        handleNewCarousel();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [step, selectedSlideIndex, slides.length]);
+
+  // ==========================================
+  // Copy All for Instagram
+  // ==========================================
+  const handleCopyAllForInstagram = useCallback(() => {
+    if (!carousel) return;
+
+    const parts: string[] = [];
+
+    // Caption
+    if (carousel.caption) {
+      parts.push(carousel.caption);
+    }
+
+    // Hashtags
+    if (carousel.hashtags && carousel.hashtags.length > 0) {
+      parts.push('\n' + carousel.hashtags.join(' '));
+    }
+
+    // First comment
+    if (carousel.firstComment) {
+      parts.push('\n---\n📝 Primeiro comentário:\n' + carousel.firstComment);
+    }
+
+    const fullText = parts.join('\n');
+    navigator.clipboard.writeText(fullText);
+    toast.success('Legenda + hashtags + 1º comentário copiados!');
+  }, [carousel]);
+
+  // ==========================================
   // RENDER
   // ==========================================
   return (
@@ -400,10 +518,25 @@ export const CarouselWorkspace = () => {
           animate={{ opacity: 1, y: 0 }}
           className="p-6 md:p-8"
         >
-          <CarouselWizard
-            onComplete={handleGenerate}
-            isGenerating={isGenerating}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <CarouselWizard
+                onComplete={handleGenerate}
+                isGenerating={isGenerating}
+              />
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4 text-lg">📂 Seus Carrosséis</h3>
+              <CarouselHistory
+                carousels={persistence.savedCarousels}
+                isLoading={persistence.isLoading}
+                onLoad={handleLoadCarousel}
+                onDelete={persistence.deleteCarousel}
+                onDuplicate={persistence.duplicateCarousel}
+                onNewCarousel={handleNewCarousel}
+              />
+            </div>
+          </div>
         </motion.div>
       )}
 
@@ -454,13 +587,27 @@ export const CarouselWorkspace = () => {
                   {qualityScore.total}%
                 </motion.div>
               )}
+              {persistence.isSaving && (
+                <span className="text-xs text-muted-foreground animate-pulse">
+                  Salvando...
+                </span>
+              )}
+              <Button
+                variant="outline"
+                onClick={handleSave}
+                className="gap-2 hover-scale-micro"
+                disabled={persistence.isSaving}
+              >
+                <Download className="w-4 h-4" />
+                Salvar
+              </Button>
               <Button
                 variant="outline"
                 onClick={handleNewCarousel}
                 className="gap-2 hover-scale-micro"
               >
                 <RefreshCw className="w-4 h-4" />
-                Novo Carrossel
+                Novo
               </Button>
             </div>
           </div>
@@ -478,6 +625,7 @@ export const CarouselWorkspace = () => {
                 onUpdateSlide={handleUpdateSlide}
                 onAddSlide={handleAddSlide}
                 onDeleteSlide={handleDeleteSlide}
+                onReorderSlides={handleReorderSlides}
                 onThemeChange={setTheme}
                 onRegenerateImage={handleRegenerateImage}
                 onImproveSlide={handleImproveSlide}
@@ -501,6 +649,7 @@ export const CarouselWorkspace = () => {
                 carousel={carousel}
                 onGenerateCaption={handleGenerateCaption}
                 onGenerateHashtags={handleGenerateHashtags}
+                onCopyAllForInstagram={handleCopyAllForInstagram}
                 isLoading={isExportLoading}
               />
             </div>

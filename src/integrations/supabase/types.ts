@@ -679,6 +679,57 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_carousels: {
+        Row: {
+          alternative_title: string | null
+          caption: string | null
+          config: Json | null
+          created_at: string
+          first_comment: string | null
+          hashtags: string[] | null
+          id: string
+          quality_score: Json | null
+          slides: Json
+          theme: Json | null
+          thumbnail_url: string | null
+          topic: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alternative_title?: string | null
+          caption?: string | null
+          config?: Json | null
+          created_at?: string
+          first_comment?: string | null
+          hashtags?: string[] | null
+          id?: string
+          quality_score?: Json | null
+          slides?: Json
+          theme?: Json | null
+          thumbnail_url?: string | null
+          topic: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alternative_title?: string | null
+          caption?: string | null
+          config?: Json | null
+          created_at?: string
+          first_comment?: string | null
+          hashtags?: string[] | null
+          id?: string
+          quality_score?: Json | null
+          slides?: Json
+          theme?: Json | null
+          thumbnail_url?: string | null
+          topic?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_hooks: {
         Row: {
           category: string | null
