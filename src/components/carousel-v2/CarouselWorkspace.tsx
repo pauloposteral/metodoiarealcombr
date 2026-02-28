@@ -25,7 +25,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Wand2, RefreshCw, ChevronLeft, Download, 
-  Sparkles, AlertTriangle, CheckCircle2
+  Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2
 } from 'lucide-react';
 
 // ==========================================
@@ -44,6 +44,7 @@ export const CarouselWorkspace = () => {
   const [qualityScore, setQualityScore] = useState<QualityScore | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const persistence = useCarouselPersistence();
 
@@ -459,6 +460,16 @@ export const CarouselWorkspace = () => {
         e.preventDefault();
         handleNewCarousel();
       }
+
+      // Escape - Exit fullscreen
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+
+      // F - Toggle fullscreen
+      if (e.key === 'f' && !e.ctrlKey && !e.metaKey) {
+        setIsFullscreen(prev => !prev);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -497,7 +508,7 @@ export const CarouselWorkspace = () => {
   // RENDER
   // ==========================================
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`bg-background ${isFullscreen ? 'fixed inset-0 z-50 overflow-auto' : 'min-h-screen'}`}>
       {/* Generation Overlay - Futuristic */}
       <GenerationOverlay 
         progress={progress} 
@@ -613,9 +624,9 @@ export const CarouselWorkspace = () => {
           </div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className={`grid gap-6 ${isFullscreen ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 lg:grid-cols-12'}`}>
             {/* Left Panel - Editor */}
-            <div className="lg:col-span-3">
+            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'}`}>
               <SlideEditor
                 slides={slides}
                 selectedSlideIndex={selectedSlideIndex}
@@ -633,18 +644,20 @@ export const CarouselWorkspace = () => {
             </div>
 
             {/* Center Panel - Canvas */}
-            <div className="lg:col-span-6">
+            <div className={`${isFullscreen ? 'lg:col-span-12' : 'lg:col-span-6'}`}>
               <CarouselCanvas
                 slides={slides}
                 selectedSlideIndex={selectedSlideIndex}
                 theme={theme}
                 qualityScore={qualityScore || undefined}
                 onSelectSlide={setSelectedSlideIndex}
+                isFullscreen={isFullscreen}
+                onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
               />
             </div>
 
             {/* Right Panel - Export */}
-            <div className="lg:col-span-3">
+            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'}`}>
               <ExportPanel
                 carousel={carousel}
                 onGenerateCaption={handleGenerateCaption}

@@ -55,9 +55,9 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 31 | Exportar em PDF | A fazer |
+| 31 | Exportar em PDF | ✅ Feito |
 | 32 | Exportar como vídeo MP4 (para Reels) | A fazer |
-| 33 | Qualidade de exportação (1x, 2x, 3x) | A fazer |
+| 33 | Qualidade de exportação (1x, 2x, 3x) | ✅ Feito |
 | 34 | Watermark customizável (logo/@) | A fazer |
 | 35 | Preview mobile com frame de iPhone | ✅ Feito |
 | 36 | Botão "Copiar tudo para Instagram" | ✅ Feito |
@@ -79,12 +79,12 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 45 | Hotkeys (Ctrl+S salvar, ←→ navegar) | ✅ Feito |
-| 46 | Fullscreen mode para edição focada | A fazer |
+| 45 | Hotkeys (Ctrl+S salvar, ←→ navegar, F fullscreen) | ✅ Feito |
+| 46 | Fullscreen mode para edição focada | ✅ Feito |
 | 47 | Dark/Light toggle no editor | A fazer |
 | 48 | Onboarding tour interativo | A fazer |
 | 49 | Feedback de qualidade inline | A fazer |
-| 50 | Loading states elegantes | A fazer |
+| 50 | Loading states elegantes | ✅ Feito |
 
 ## G. ANALYTICS E INTELIGÊNCIA (51-54)
 
