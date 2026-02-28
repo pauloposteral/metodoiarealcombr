@@ -715,6 +715,26 @@ export const SlideCanvas = ({ slide, theme, watermark }: SlideCanvasProps) => {
         
          {renderLogo()}
          {renderWatermark()}
+         
+         {/* #20 Stickers */}
+         {slide.stickers && slide.stickers.map(sticker => (
+           <div
+             key={sticker.id}
+             style={{
+               position: 'absolute',
+               left: `${sticker.x}%`,
+               top: `${sticker.y}%`,
+               fontSize: sticker.size,
+               transform: `rotate(${sticker.rotation}deg)`,
+               pointerEvents: 'none',
+               zIndex: 50,
+               lineHeight: 1,
+               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+             }}
+           >
+             {sticker.emoji}
+           </div>
+         ))}
       </div>
     </div>
   );

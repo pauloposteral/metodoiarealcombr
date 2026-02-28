@@ -72,6 +72,17 @@ export interface CarouselSlide {
   // #28 Layout alternatives
   textAlignment?: 'left' | 'center' | 'right';
   textPosition?: 'top' | 'center' | 'bottom';
+  // #20 Stickers / decorative elements
+  stickers?: SlideSticker[];
+}
+
+export interface SlideSticker {
+  id: string;
+  emoji: string;
+  x: number; // percentage 0-100
+  y: number; // percentage 0-100
+  size: number; // px 24-80
+  rotation: number; // degrees
 }
 
 // #30 Format dimensions

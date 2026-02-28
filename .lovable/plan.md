@@ -34,7 +34,7 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 | 17 | Filtros de imagem (B&W, Vintage, Warm, Cool) | ✅ Feito |
 | 18 | Opacidade da imagem de fundo (slider 0-100%) | ✅ Feito |
 | 19 | Múltiplas imagens por slide (collage/grid) | A fazer |
-| 20 | Stickers e elementos decorativos (setas, circles) | A fazer |
+| 20 | Stickers e elementos decorativos (setas, circles) | ✅ Feito |
 | 21 | Crop e reposicionar imagem de fundo | A fazer |
 | 22 | Seletor de Google Fonts | ✅ Feito |
 | 28 | Layouts alternativos (alinhamento e posição do texto) | ✅ Feito |
@@ -91,19 +91,18 @@ Já mapeei todas as 54 melhorias anteriormente. Aqui está o roadmap completo at
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 51 | Dashboard de métricas (carrosséis criados, temas favoritos) | A fazer |
-| 52 | Score de viralidade preditivo | A fazer |
-| 53 | Benchmark por nicho | A fazer |
-| 54 | Feed de sugestões diárias de temas trending | A fazer |
+| 51 | Dashboard de métricas (carrosséis criados, temas favoritos) | ✅ Feito |
+| 52 | Score de viralidade preditivo | ✅ Feito |
+| 53 | Benchmark por nicho | ✅ Feito |
+| 54 | Feed de sugestões diárias de temas trending | ✅ Feito |
 
 ---
 
-## Progresso: 44/54 ✅ (81%)
+## Progresso: 49/54 ✅ (91%)
 
-## Itens Restantes (10)
+## Itens Restantes (5)
 
 **Motor de IA:** #7, #10
-**Editor Visual:** #12, #13, #14, #19, #20, #21
+**Editor Visual:** #12, #13, #14, #19, #21
 **Templates:** #25
 **Exportação:** #32, #37
-**Analytics:** #51, #52, #53, #54

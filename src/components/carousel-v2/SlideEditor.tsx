@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS } from './types';
+import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS, SlideSticker } from './types';
 import { AlignLeft, AlignCenter, AlignRight, ArrowUpFromLine, ChevronsUpDown, ArrowDownFromLine } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { SavedHooksPanel } from './SavedHooksPanel';
@@ -570,6 +570,50 @@ export const SlideEditor = ({
                       ))}
                     </div>
                   </div>
+                </div>
+
+                {/* #20 Stickers & Decorative Elements */}
+                <div className="pt-4 border-t border-border">
+                  <Label className="text-xs mb-2 block">✨ Stickers & Elementos</Label>
+                  <div className="grid grid-cols-8 gap-1">
+                    {['⭐', '🔥', '💡', '✅', '❌', '👉', '⬆️', '💰', 
+                      '🚀', '💎', '🎯', '⚡', '❤️', '📌', '🏆', '➡️',
+                      '⬇️', '📊', '🔑', '💪', '🎉', '⚠️', '🔴', '🟢'].map(emoji => (
+                      <Button
+                        key={emoji}
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 text-base"
+                        onClick={() => {
+                          const newSticker: SlideSticker = {
+                            id: crypto.randomUUID(),
+                            emoji,
+                            x: 10 + Math.random() * 60,
+                            y: 10 + Math.random() * 60,
+                            size: 40,
+                            rotation: Math.round(Math.random() * 30 - 15),
+                          };
+                          const current = selectedSlide.stickers || [];
+                          onUpdateSlide(selectedSlideIndex, { stickers: [...current, newSticker] });
+                        }}
+                      >
+                        {emoji}
+                      </Button>
+                    ))}
+                  </div>
+                  {(selectedSlide.stickers || []).length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      <p className="text-xs text-muted-foreground">{selectedSlide.stickers!.length} sticker(s)</p>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs h-7 text-destructive"
+                        onClick={() => onUpdateSlide(selectedSlideIndex, { stickers: [] })}
+                      >
+                        Remover todos
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Image Section */}
