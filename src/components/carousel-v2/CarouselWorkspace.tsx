@@ -1777,6 +1777,13 @@ export const CarouselWorkspace = () => {
                       <p className="text-xs text-muted-foreground">Texto acessível por slide</p>
                     </div>
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleDetectLanguage} className="gap-2">
+                    <Languages className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Detectar Idioma</p>
+                      <p className="text-xs text-muted-foreground">Auto-detecção + adaptação cultural</p>
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
