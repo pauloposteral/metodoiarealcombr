@@ -9,8 +9,17 @@ import { SlideCanvas } from './SlideCanvas';
 import { Slide3DContainer } from './Slide3DContainer';
 import { 
   ChevronLeft, ChevronRight, Download, Loader2, ZoomIn, ZoomOut,
-  Smartphone, LayoutGrid, Play, Maximize2, FileImage, FileDown
+  Smartphone, LayoutGrid, Play, Maximize2, FileImage, FileDown,
+  Globe, Film, Layers
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
 import jsPDF from 'jspdf';
