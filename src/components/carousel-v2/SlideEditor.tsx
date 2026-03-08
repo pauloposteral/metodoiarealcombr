@@ -133,8 +133,10 @@ export const SlideEditor = ({
   onThemeChange,
   onRegenerateImage,
   onImproveSlide,
+  onEditImagePrompt,
 }: SlideEditorProps) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [imageEditInstruction, setImageEditInstruction] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const sensors = useSensors(
