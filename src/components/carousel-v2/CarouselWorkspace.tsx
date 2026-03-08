@@ -87,6 +87,11 @@ export const CarouselWorkspace = () => {
   const [variationsResults, setVariationsResults] = useState<any[]>([]);
   const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
   const [psychologyResults, setPsychologyResults] = useState<any>(null);
+  const [pdfTextInput, setPdfTextInput] = useState('');
+  const [threadTextInput, setThreadTextInput] = useState('');
+  const [podcastTextInput, setPodcastTextInput] = useState('');
+  const [dataStoryInput, setDataStoryInput] = useState('');
+  const [languageResults, setLanguageResults] = useState<any>(null);
   const [multiSelectedIndices, setMultiSelectedIndices] = useState<Set<number>>(new Set());
   const [clipboardSlides, setClipboardSlides] = useState<CarouselSlide[]>([]);
   const [isDragPositionMode, setIsDragPositionMode] = useState(false);
