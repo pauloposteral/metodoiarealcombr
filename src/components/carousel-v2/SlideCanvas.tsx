@@ -90,6 +90,86 @@ const getPatternCSS = (pattern: BackgroundPattern = 'none', accentColor: string)
   }
 };
 
+// #89 Duotone filter CSS
+const getDuotoneCSS = (preset: DuotonePreset = 'none'): string => {
+  const presets: Record<DuotonePreset, string> = {
+    none: '',
+    'blue-orange': 'sepia(1) saturate(3) hue-rotate(180deg)',
+    'pink-cyan': 'sepia(1) saturate(4) hue-rotate(260deg)',
+    'green-purple': 'sepia(1) saturate(3) hue-rotate(90deg)',
+    'red-blue': 'sepia(1) saturate(3) hue-rotate(320deg)',
+    'gold-navy': 'sepia(1) saturate(2.5) hue-rotate(15deg)',
+  };
+  return presets[preset] || '';
+};
+
+// #90 Image mask clip-path
+const getImageMaskCSS = (mask: ImageMaskShape = 'none'): string => {
+  const masks: Record<ImageMaskShape, string> = {
+    none: 'none',
+    circle: 'circle(45% at 50% 50%)',
+    rounded: 'inset(5% round 30px)',
+    diamond: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+    hexagon: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+    blob: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
+  };
+  return masks[mask] || 'none';
+};
+
+// #98 Card shadow CSS
+const getCardShadowCSS = (style: CardShadowStyle = 'none', accentColor: string): string => {
+  const shadows: Record<CardShadowStyle, string> = {
+    none: 'none',
+    soft: '0 4px 20px rgba(0,0,0,0.15)',
+    medium: '0 8px 30px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)',
+    hard: '0 12px 40px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.2)',
+    colored: `0 8px 30px ${accentColor}40, 0 2px 8px ${accentColor}20`,
+    inset: 'inset 0 2px 10px rgba(0,0,0,0.3), inset 0 -2px 10px rgba(0,0,0,0.1)',
+  };
+  return shadows[style] || 'none';
+};
+
+// #106 Gradient text CSS
+const getGradientTextCSS = (preset: GradientTextPreset = 'none'): string => {
+  const gradients: Record<GradientTextPreset, string> = {
+    none: '',
+    gold: 'linear-gradient(135deg, #FFD700, #FFA500, #FFD700)',
+    ocean: 'linear-gradient(135deg, #00d2ff, #3a7bd5, #00d2ff)',
+    fire: 'linear-gradient(135deg, #f12711, #f5af19, #f12711)',
+    neon: 'linear-gradient(135deg, #b621fe, #1fd1f9, #b621fe)',
+    aurora: 'linear-gradient(135deg, #a8ff78, #78ffd6, #a8c0ff, #c084fc)',
+  };
+  return gradients[preset] || '';
+};
+
+// #79 Decorative shape renderer
+const renderDecorativeShape = (shape: DecorativeShape = 'none', accentColor: string): React.ReactNode => {
+  if (shape === 'none') return null;
+  const base: React.CSSProperties = { position: 'absolute', pointerEvents: 'none', zIndex: 5 };
+  switch (shape) {
+    case 'circle-top-right': return <div style={{ ...base, top: -80, right: -80, width: 250, height: 250, borderRadius: '50%', border: `3px solid ${accentColor}30`, opacity: 0.6 }} />;
+    case 'circle-bottom-left': return <div style={{ ...base, bottom: -100, left: -100, width: 300, height: 300, borderRadius: '50%', background: `radial-gradient(circle, ${accentColor}15, transparent 70%)` }} />;
+    case 'diagonal-cut': return <div style={{ ...base, top: 0, right: 0, width: '50%', height: '100%', background: `linear-gradient(135deg, transparent 48%, ${accentColor}10 48%, ${accentColor}10 52%, transparent 52%)` }} />;
+    case 'corner-accent': return <><div style={{ ...base, top: 0, left: 0, width: 120, height: 5, background: accentColor, opacity: 0.6 }} /><div style={{ ...base, top: 0, left: 0, width: 5, height: 120, background: accentColor, opacity: 0.6 }} /></>;
+    case 'double-line': return <><div style={{ ...base, bottom: 100, left: 75, right: 75, height: 2, background: `${accentColor}30` }} /><div style={{ ...base, bottom: 110, left: 75, right: 75, height: 2, background: `${accentColor}15` }} /></>;
+    default: return null;
+  }
+};
+
+// #85 Divider renderer
+const renderDivider = (style: DividerStyle = 'none', accentColor: string, width: number = 200): React.ReactNode => {
+  if (style === 'none') return null;
+  const base: React.CSSProperties = { width, margin: '20px 0' };
+  switch (style) {
+    case 'line': return <div style={{ ...base, height: 2, background: `${accentColor}60` }} />;
+    case 'dots': return <div style={{ ...base, height: 4, display: 'flex', gap: 8, justifyContent: 'center' }}>{[...Array(5)].map((_, i) => <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: `${accentColor}60` }} />)}</div>;
+    case 'gradient': return <div style={{ ...base, height: 3, background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }} />;
+    case 'zigzag': return <div style={{ ...base, height: 8, backgroundImage: `linear-gradient(135deg, ${accentColor}40 25%, transparent 25%), linear-gradient(225deg, ${accentColor}40 25%, transparent 25%)`, backgroundSize: '12px 8px', backgroundPosition: '0 0' }} />;
+    case 'wave': return <div style={{ ...base, height: 6, borderBottom: `2px solid ${accentColor}40`, borderRadius: '50%' }} />;
+    default: return null;
+  }
+};
+
 export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanvasProps) => {
   const IconComponent = slide.icon ? iconComponents[slide.icon] : null;
   const fontStack = getFontStack(theme.fontFamily);
@@ -98,6 +178,7 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
   // Per-slide visual overrides
   const textColor = slide.customTextColor || theme.textColor;
   const accentColor = slide.customAccentColor || theme.accentColor;
+  const iconColor = slide.iconColor || accentColor;
   const imageOpacity = (slide.imageOpacity ?? 45) / 100;
   const imageFilter = getImageFilterCSS(slide.imageFilter);
   const titleSize = slide.titleFontSize || (slide.type === 'cover' ? 82 : 56);
