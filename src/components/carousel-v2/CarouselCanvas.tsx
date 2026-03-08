@@ -411,7 +411,7 @@ export const CarouselCanvas = ({
     }
   };
 
-
+  const startFlipAnimation = useCallback(() => {
     if (isFlipping) return;
     setIsFlipping(true);
     let current = 0;
