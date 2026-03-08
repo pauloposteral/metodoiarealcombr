@@ -68,6 +68,7 @@ export const CarouselWorkspace = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [isDragPositionMode, setIsDragPositionMode] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<'editor' | 'canvas' | 'export'>('canvas');
 
   // Wizard input state
   const [transcriptText, setTranscriptText] = useState('');
