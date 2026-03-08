@@ -75,6 +75,13 @@ export const CarouselWorkspace = () => {
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [transcriptText, setTranscriptText] = useState('');
   const [competitorHandle, setCompetitorHandle] = useState('');
+  const [voicePersonInput, setVoicePersonInput] = useState('');
+  const [clicheResults, setClicheResults] = useState<any>(null);
+  const [readabilityResults, setReadabilityResults] = useState<any>(null);
+  const [ctaSuggestions, setCtaSuggestions] = useState<any[]>([]);
+  const [variationsResults, setVariationsResults] = useState<any[]>([]);
+  const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
+  const [psychologyResults, setPsychologyResults] = useState<any>(null);
   const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
