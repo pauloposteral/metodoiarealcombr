@@ -1095,9 +1095,16 @@ export const CarouselWorkspace = () => {
                 onNewCarousel={handleNewCarousel}
               />
             </div>
-            {/* #51-54 Analytics */}
+            {/* #51-54 Analytics + Workflow */}
             <div>
-              <h3 className="font-semibold mb-4 text-lg">📊 Métricas</h3>
+              <h3 className="font-semibold mb-4 text-lg">📋 Workflow</h3>
+              <WorkflowBoard
+                onOpenCarousel={(id) => {
+                  const carousel = persistence.savedCarousels.find((c: any) => c.id === id);
+                  if (carousel) handleLoadCarousel(carousel);
+                }}
+              />
+              <h3 className="font-semibold mt-6 mb-4 text-lg">📊 Métricas</h3>
               <AnalyticsDashboard />
             </div>
           </div>
