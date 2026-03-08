@@ -1311,6 +1311,61 @@ export const SlideEditor = ({
                       </Button>
                     )}
                   </div>
+
+                  {/* AI Image Edit */}
+                  {onEditImagePrompt && (
+                    <div className="mt-3 space-y-2">
+                      <Label className="text-xs font-medium flex items-center gap-1.5">
+                        <Sparkles className="w-3 h-3 text-accent" />
+                        Editar Imagem com IA
+                      </Label>
+                      <div className="flex gap-1.5">
+                        <Input
+                          placeholder="Ex: tornar mais escuro, adicionar pessoas..."
+                          value={imageEditInstruction}
+                          onChange={(e) => setImageEditInstruction(e.target.value)}
+                          className="text-xs h-8"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && imageEditInstruction.trim()) {
+                              onEditImagePrompt(selectedSlideIndex, imageEditInstruction);
+                              setImageEditInstruction('');
+                            }
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-3 text-xs gap-1"
+                          onClick={() => {
+                            if (imageEditInstruction.trim()) {
+                              onEditImagePrompt(selectedSlideIndex, imageEditInstruction);
+                              setImageEditInstruction('');
+                            }
+                          }}
+                          disabled={!imageEditInstruction.trim() || selectedSlide.isGeneratingImage}
+                        >
+                          <Sparkles className="w-3 h-3" />
+                          Editar
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {['Mais vibrante', 'Minimalista', 'Escuro e dramático', 'Adicionar pessoas', 'Estilo flat'].map(preset => (
+                          <Button
+                            key={preset}
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 text-[10px] px-2"
+                            onClick={() => {
+                              onEditImagePrompt(selectedSlideIndex, preset);
+                            }}
+                            disabled={selectedSlide.isGeneratingImage}
+                          >
+                            {preset}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </ScrollArea>
