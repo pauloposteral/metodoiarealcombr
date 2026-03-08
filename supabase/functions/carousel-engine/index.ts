@@ -74,6 +74,36 @@ serve(async (req) => {
       case 'suggest-ideas':
         result = await suggestIdeasByNiche(LOVABLE_API_KEY, config);
         break;
+      case 'detect-cliches':
+        result = await detectCliches(LOVABLE_API_KEY, slides);
+        break;
+      case 'suggest-cta':
+        result = await suggestCTA(LOVABLE_API_KEY, topic, config);
+        break;
+      case 'readability-score':
+        result = await readabilityScore(LOVABLE_API_KEY, slides);
+        break;
+      case 'suggest-emojis':
+        result = await suggestEmojis(LOVABLE_API_KEY, slides);
+        break;
+      case 'refine-prompt':
+        result = await refinePrompt(LOVABLE_API_KEY, userPrompt, config);
+        break;
+      case 'generate-variations':
+        result = await generateVariations(LOVABLE_API_KEY, topic, config);
+        break;
+      case 'rewrite-voice':
+        result = await rewriteVoice(LOVABLE_API_KEY, slides, voicePerson);
+        break;
+      case 'sequence-psychology':
+        result = await sequencePsychology(LOVABLE_API_KEY, slides, config);
+        break;
+      case 'suggest-posting-time':
+        result = await suggestPostingTime(LOVABLE_API_KEY, config);
+        break;
+      case 'generate-alt-text':
+        result = await generateAltText(LOVABLE_API_KEY, slides);
+        break;
       default:
         throw new Error(`Unknown action: ${action}`);
     }
