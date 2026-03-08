@@ -195,7 +195,223 @@ export const CarouselCanvas = ({
     }
   };
 
-  const startFlipAnimation = useCallback(() => {
+  // Platform-specific export
+  const handleExportForPlatform = async (platform: ExportPlatform) => {
+    if (slides.length === 0) return;
+    setIsExporting(true);
+    setExportProgress(0);
+
+    const platformConfig = PLATFORM_FORMATS[platform];
+    const platformDims = FORMAT_DIMENSIONS[platformConfig.format];
+
+    try {
+      const zip = new JSZip();
+      const scale = getScale();
+
+      for (let i = 0; i < slides.length; i++) {
+        const slideElement = slideRefs.current[i];
+        if (!slideElement) continue;
+
+        const canvas = await html2canvas(slideElement, {
+          width: dims.width,
+          height: dims.height,
+          scale,
+          useCORS: true,
+          backgroundColor: null,
+        });
+
+        // Resize to platform dimensions
+        const resizedCanvas = document.createElement('canvas');
+        resizedCanvas.width = platformDims.width * scale;
+        resizedCanvas.height = platformDims.height * scale;
+        const ctx = resizedCanvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, resizedCanvas.width, resizedCanvas.height);
+          // Calculate fit
+          const srcRatio = canvas.width / canvas.height;
+          const dstRatio = resizedCanvas.width / resizedCanvas.height;
+          let dw = resizedCanvas.width, dh = resizedCanvas.height, dx = 0, dy = 0;
+          if (srcRatio > dstRatio) {
+            dh = resizedCanvas.width / srcRatio;
+            dy = (resizedCanvas.height - dh) / 2;
+          } else {
+            dw = resizedCanvas.height * srcRatio;
+            dx = (resizedCanvas.width - dw) / 2;
+          }
+          ctx.drawImage(canvas, dx, dy, dw, dh);
+        }
+
+        const dataUrl = resizedCanvas.toDataURL('image/png');
+        const base64Data = dataUrl.split(',')[1];
+        zip.file(`${platform}-slide-${String(i + 1).padStart(2, '0')}.png`, base64Data, { base64: true });
+        setExportProgress(((i + 1) / slides.length) * 100);
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.download = `carrossel-${platform}.zip`;
+      link.href = URL.createObjectURL(content);
+      link.click();
+
+      toast.success(`Exportado para ${platformConfig.label}!`);
+    } catch (error) {
+      console.error('Platform export error:', error);
+      toast.error('Erro ao exportar');
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
+    }
+  };
+
+  // Batch export for all platforms
+  const handleBatchExport = async () => {
+    if (slides.length === 0) return;
+    setIsExporting(true);
+    setExportProgress(0);
+
+    try {
+      const zip = new JSZip();
+      const scale = getScale();
+      const platforms = Object.entries(PLATFORM_FORMATS) as [ExportPlatform, typeof PLATFORM_FORMATS['instagram']][];
+      const totalSteps = slides.length * platforms.length;
+      let currentStep = 0;
+
+      for (const [platform, platformConfig] of platforms) {
+        const platformDims = FORMAT_DIMENSIONS[platformConfig.format];
+        const folder = zip.folder(platform)!;
+
+        for (let i = 0; i < slides.length; i++) {
+          const slideElement = slideRefs.current[i];
+          if (!slideElement) continue;
+
+          const canvas = await html2canvas(slideElement, {
+            width: dims.width,
+            height: dims.height,
+            scale,
+            useCORS: true,
+            backgroundColor: null,
+          });
+
+          const resizedCanvas = document.createElement('canvas');
+          resizedCanvas.width = platformDims.width * scale;
+          resizedCanvas.height = platformDims.height * scale;
+          const ctx = resizedCanvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, resizedCanvas.width, resizedCanvas.height);
+            const srcRatio = canvas.width / canvas.height;
+            const dstRatio = resizedCanvas.width / resizedCanvas.height;
+            let dw = resizedCanvas.width, dh = resizedCanvas.height, dx = 0, dy = 0;
+            if (srcRatio > dstRatio) { dh = resizedCanvas.width / srcRatio; dy = (resizedCanvas.height - dh) / 2; }
+            else { dw = resizedCanvas.height * srcRatio; dx = (resizedCanvas.width - dw) / 2; }
+            ctx.drawImage(canvas, dx, dy, dw, dh);
+          }
+
+          const dataUrl = resizedCanvas.toDataURL('image/png');
+          folder.file(`slide-${String(i + 1).padStart(2, '0')}.png`, dataUrl.split(',')[1], { base64: true });
+          currentStep++;
+          setExportProgress((currentStep / totalSteps) * 100);
+        }
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.download = 'carrossel-todas-plataformas.zip';
+      link.href = URL.createObjectURL(content);
+      link.click();
+
+      toast.success('Exportado para todas as plataformas!');
+    } catch (error) {
+      console.error('Batch export error:', error);
+      toast.error('Erro ao exportar em lote');
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
+    }
+  };
+
+  // Animated GIF-style export (MP4 using canvas frames -> webm)
+  const handleExportAnimated = async () => {
+    if (slides.length === 0) return;
+    setIsExporting(true);
+    setExportProgress(0);
+
+    try {
+      const scale = getScale();
+      const canvasEl = document.createElement('canvas');
+      canvasEl.width = dims.width * scale;
+      canvasEl.height = dims.height * scale;
+      const ctx = canvasEl.getContext('2d')!;
+
+      // Capture all frames
+      const frames: string[] = [];
+      for (let i = 0; i < slides.length; i++) {
+        const slideElement = slideRefs.current[i];
+        if (!slideElement) continue;
+
+        const slideCanvas = await html2canvas(slideElement, {
+          width: dims.width,
+          height: dims.height,
+          scale,
+          useCORS: true,
+          backgroundColor: null,
+        });
+
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+        ctx.drawImage(slideCanvas, 0, 0);
+        frames.push(canvasEl.toDataURL('image/png'));
+        setExportProgress(((i + 1) / slides.length) * 80);
+      }
+
+      // Create animated WebM using MediaRecorder
+      const stream = canvasEl.captureStream(1);
+      const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+
+      const recordingDone = new Promise<void>((resolve) => {
+        recorder.onstop = () => resolve();
+      });
+
+      recorder.start();
+
+      // Draw each frame for 2 seconds
+      for (let i = 0; i < frames.length; i++) {
+        const img = new Image();
+        img.src = frames[i];
+        await new Promise<void>((resolve) => {
+          img.onload = () => {
+            ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+            ctx.drawImage(img, 0, 0);
+            resolve();
+          };
+        });
+        await new Promise(r => setTimeout(r, 2000));
+        setExportProgress(80 + ((i + 1) / frames.length) * 20);
+      }
+
+      recorder.stop();
+      await recordingDone;
+
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      const link = document.createElement('a');
+      link.download = 'carrossel-animado.webm';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+
+      toast.success('Vídeo animado exportado!');
+    } catch (error) {
+      console.error('Animated export error:', error);
+      toast.error('Erro ao exportar vídeo animado');
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
+    }
+  };
+
+
     if (isFlipping) return;
     setIsFlipping(true);
     let current = 0;
