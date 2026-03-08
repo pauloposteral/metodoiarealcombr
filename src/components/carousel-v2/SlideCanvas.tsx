@@ -272,17 +272,21 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
     ...extraStyles,
   });
 
-  // Glassmorphism wrapper
+  // Glassmorphism wrapper with card shadow
   const glassWrap = (children: React.ReactNode, extra: React.CSSProperties = {}) => {
-    if (!slide.glassmorphism) return children;
+    const shadow = cardShadow !== 'none' ? cardShadow : undefined;
+    if (!slide.glassmorphism && !shadow) return children;
     return (
       <div style={{
-        background: 'rgba(255,255,255,0.07)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255,255,255,0.12)',
-        borderRadius: 24,
-        padding: '40px 50px',
+        ...(slide.glassmorphism ? {
+          background: 'rgba(255,255,255,0.07)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          borderRadius: 24,
+          padding: '40px 50px',
+        } : { padding: '20px 0' }),
+        ...(shadow ? { boxShadow: shadow } : {}),
         ...extra,
       }}>
         {children}
