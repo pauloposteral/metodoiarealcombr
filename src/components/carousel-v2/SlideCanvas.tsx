@@ -197,6 +197,10 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
   const contentFontWeight = slide.contentFontWeight ?? 400;
   const textShadow = getTextShadowCSS(slide.textShadowStyle, accentColor);
   const patternStyle = getPatternCSS(slide.backgroundPattern, accentColor);
+  const cardShadow = getCardShadowCSS(slide.cardShadow, accentColor);
+  const gradientTextCSS = getGradientTextCSS(slide.gradientText);
+  const duotoneCSS = getDuotoneCSS(slide.duotoneFilter);
+  const imageMaskCSS = getImageMaskCSS(slide.imageMask);
 
   const containerStyle: React.CSSProperties = {
     width: '100%',
@@ -206,29 +210,53 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
     fontFamily: fontStack,
     position: 'relative',
     overflow: 'hidden',
+    // #76 Border customization
+    ...(slide.borderRadius ? { borderRadius: slide.borderRadius } : {}),
+    ...((slide.borderWidth ?? 0) > 0 ? {
+      border: `${slide.borderWidth}px ${slide.borderStyle || 'solid'} ${slide.borderColor || accentColor}`,
+    } : {}),
+    // #109 Neon border
+    ...(slide.neonBorder ? {
+      boxShadow: `0 0 15px ${accentColor}60, 0 0 30px ${accentColor}30, inset 0 0 15px ${accentColor}15`,
+      border: `2px solid ${accentColor}80`,
+    } : {}),
   };
 
   // Title style helper with all typography features
-  const getTitleStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
-    fontFamily: displayFont,
-    fontSize: titleSize,
-    fontWeight: titleFontWeight,
-    lineHeight: lineHeightTitle,
-    letterSpacing: `${letterSpacing}em`,
-    textTransform: textTransform as any,
-    textShadow: textShadow !== 'none' ? textShadow : '0 5px 35px rgba(0,0,0,0.55)',
-    ...(slide.textStroke ? {
-      WebkitTextStroke: `2px ${slide.textStrokeColor || accentColor}`,
-      paintOrder: 'stroke fill' as any,
-    } : {}),
-    ...(slide.highlightColor ? {
-      background: `linear-gradient(transparent 55%, ${slide.highlightColor}50 55%, ${slide.highlightColor}50 90%, transparent 90%)`,
-      display: 'inline',
-      padding: '0 6px',
-      boxDecorationBreak: 'clone' as any,
-    } : {}),
-    ...extraStyles,
-  });
+  const getTitleStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => {
+    const base: React.CSSProperties = {
+      fontFamily: displayFont,
+      fontSize: titleSize,
+      fontWeight: titleFontWeight,
+      lineHeight: lineHeightTitle,
+      letterSpacing: `${letterSpacing}em`,
+      textTransform: textTransform as any,
+      textShadow: textShadow !== 'none' ? textShadow : '0 5px 35px rgba(0,0,0,0.55)',
+      ...(slide.textStroke ? {
+        WebkitTextStroke: `2px ${slide.textStrokeColor || accentColor}`,
+        paintOrder: 'stroke fill' as any,
+      } : {}),
+      ...(slide.highlightColor ? {
+        background: `linear-gradient(transparent 55%, ${slide.highlightColor}50 55%, ${slide.highlightColor}50 90%, transparent 90%)`,
+        display: 'inline',
+        padding: '0 6px',
+        boxDecorationBreak: 'clone' as any,
+      } : {}),
+      // #106 Gradient text
+      ...(gradientTextCSS ? {
+        background: gradientTextCSS,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+      } : {}),
+      // #103 Text rotation
+      ...(slide.textRotation ? { transform: `rotate(${slide.textRotation}deg)` } : {}),
+      // #104 Vertical text
+      ...(slide.verticalText ? { writingMode: 'vertical-rl', textOrientation: 'mixed' } : {}),
+      ...extraStyles,
+    };
+    return base;
+  };
 
   const getContentStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
     fontSize: contentSize,
@@ -236,6 +264,11 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
     fontWeight: contentFontWeight,
     opacity: 0.93,
     textShadow: textShadow !== 'none' ? textShadow : '0 3px 22px rgba(0,0,0,0.45)',
+    // #107 Text fade
+    ...(slide.textFade ? {
+      maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+      WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+    } : {}),
     ...extraStyles,
   });
 
