@@ -12,6 +12,7 @@ import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { OnboardingTour } from './OnboardingTour';
 import { BrandKitManager } from './BrandKitManager';
 import { CommunityTemplates } from './CommunityTemplates';
+import { WorkflowBoard } from './WorkflowBoard';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
