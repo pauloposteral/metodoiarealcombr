@@ -694,37 +694,25 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           contentEditable={!!onInlineEdit}
           suppressContentEditableWarning
           onBlur={(e) => onInlineEdit?.('title', e.currentTarget.textContent || '')}
-          style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
+          style={getTitleStyle({
             marginBottom: 40,
             maxWidth: 880,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
             outline: 'none',
             cursor: onInlineEdit ? 'text' : 'default',
-          }}>
+          })}>
           {slide.title}
         </h2>
         
-        {/* Content */}
         {slide.content && (
           <p 
             contentEditable={!!onInlineEdit}
             suppressContentEditableWarning
             onBlur={(e) => onInlineEdit?.('content', e.currentTarget.textContent || '')}
-            style={{
-              fontSize: contentSize,
-              lineHeight: 1.65,
-              opacity: 0.93,
+            style={getContentStyle({
               maxWidth: 820,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
               outline: 'none',
               cursor: onInlineEdit ? 'text' : 'default',
-            }}>
+            })}>
             {slide.content}
           </p>
         )}
