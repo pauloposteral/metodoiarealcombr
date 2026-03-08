@@ -85,7 +85,25 @@ export interface CarouselSlide {
   secondaryImageOpacity?: number;
   // #13 Layer ordering
   layerOrder?: ('background' | 'text' | 'stickers' | 'icon')[];
+  // #75-99 Visual Pro
+  backgroundPattern?: BackgroundPattern;
+  glassmorphism?: boolean;
+  customGradient?: string; // CSS gradient string
+  textShadowStyle?: TextShadowStyle;
+  highlightColor?: string; // highlight/marker effect color
+  // #100-109 Typography Advanced
+  letterSpacing?: number; // em units, -0.1 to 0.3
+  lineHeight?: number; // 0.9 to 2.5
+  textTransform?: TextTransformOption;
+  textStroke?: boolean; // outline/stroke text
+  textStrokeColor?: string;
+  titleFontWeight?: number; // 100-900
+  contentFontWeight?: number; // 100-900
 }
+
+export type BackgroundPattern = 'none' | 'dots' | 'lines' | 'grid' | 'waves' | 'diagonal' | 'circles';
+export type TextShadowStyle = 'none' | 'subtle' | 'strong' | 'glow' | 'neon' | 'retro';
+export type TextTransformOption = 'none' | 'uppercase' | 'lowercase' | 'capitalize';
 
 export interface SlideSticker {
   id: string;
