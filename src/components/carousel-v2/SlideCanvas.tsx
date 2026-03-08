@@ -1,4 +1,4 @@
-import { CarouselSlide, CarouselTheme, ImageFilter } from './types';
+import { CarouselSlide, CarouselTheme, ImageFilter, BackgroundPattern, TextShadowStyle } from './types';
 import { 
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield,
@@ -62,6 +62,34 @@ const getImageFilterCSS = (filter: ImageFilter = 'none'): string => {
   return filters[filter] || filters.none;
 };
 
+// #77 Text Shadow Style CSS
+const getTextShadowCSS = (style: TextShadowStyle = 'none', accentColor: string): string => {
+  const shadows: Record<TextShadowStyle, string> = {
+    none: 'none',
+    subtle: '0 2px 10px rgba(0,0,0,0.3)',
+    strong: '0 8px 50px rgba(0,0,0,0.6), 0 2px 10px rgba(0,0,0,0.3)',
+    glow: `0 0 20px ${accentColor}60, 0 0 60px ${accentColor}30`,
+    neon: `0 0 10px ${accentColor}, 0 0 30px ${accentColor}80, 0 0 60px ${accentColor}40`,
+    retro: `3px 3px 0 ${accentColor}90, 6px 6px 0 rgba(0,0,0,0.2)`,
+  };
+  return shadows[style] || shadows.none;
+};
+
+// #87 Background Pattern SVG
+const getPatternCSS = (pattern: BackgroundPattern = 'none', accentColor: string): React.CSSProperties | null => {
+  if (pattern === 'none') return null;
+  const base: React.CSSProperties = { position: 'absolute', inset: 0, opacity: 0.15, pointerEvents: 'none' };
+  switch (pattern) {
+    case 'dots': return { ...base, backgroundImage: `radial-gradient(${accentColor}40 1.5px, transparent 1.5px)`, backgroundSize: '30px 30px' };
+    case 'lines': return { ...base, backgroundImage: `repeating-linear-gradient(0deg, ${accentColor}20 0px, ${accentColor}20 1px, transparent 1px, transparent 40px)` };
+    case 'grid': return { ...base, backgroundImage: `linear-gradient(${accentColor}15 1px, transparent 1px), linear-gradient(90deg, ${accentColor}15 1px, transparent 1px)`, backgroundSize: '40px 40px' };
+    case 'waves': return { ...base, backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='${encodeURIComponent(accentColor)}' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E")` };
+    case 'diagonal': return { ...base, backgroundImage: `repeating-linear-gradient(45deg, ${accentColor}10 0px, ${accentColor}10 1px, transparent 1px, transparent 20px)` };
+    case 'circles': return { ...base, backgroundImage: `radial-gradient(circle at 20% 80%, ${accentColor}15 0, transparent 50%), radial-gradient(circle at 80% 20%, ${accentColor}10 0, transparent 40%)` };
+    default: return null;
+  }
+};
+
 export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanvasProps) => {
   const IconComponent = slide.icon ? iconComponents[slide.icon] : null;
   const fontStack = getFontStack(theme.fontFamily);
@@ -81,6 +109,14 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
   const bgPosX = slide.backgroundPositionX ?? 50;
   const bgPosY = slide.backgroundPositionY ?? 50;
 
+  const letterSpacing = slide.letterSpacing ?? (slide.type === 'cover' ? -0.025 : -0.02);
+  const lineHeightTitle = slide.lineHeight ?? 1.12;
+  const textTransform = slide.textTransform || 'none';
+  const titleFontWeight = slide.titleFontWeight ?? (slide.type === 'cover' ? 800 : 700);
+  const contentFontWeight = slide.contentFontWeight ?? 400;
+  const textShadow = getTextShadowCSS(slide.textShadowStyle, accentColor);
+  const patternStyle = getPatternCSS(slide.backgroundPattern, accentColor);
+
   const containerStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -91,10 +127,58 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
     overflow: 'hidden',
   };
 
+  // Title style helper with all typography features
+  const getTitleStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
+    fontFamily: displayFont,
+    fontSize: titleSize,
+    fontWeight: titleFontWeight,
+    lineHeight: lineHeightTitle,
+    letterSpacing: `${letterSpacing}em`,
+    textTransform: textTransform as any,
+    textShadow: textShadow !== 'none' ? textShadow : '0 5px 35px rgba(0,0,0,0.55)',
+    ...(slide.textStroke ? {
+      WebkitTextStroke: `2px ${slide.textStrokeColor || accentColor}`,
+      paintOrder: 'stroke fill' as any,
+    } : {}),
+    ...(slide.highlightColor ? {
+      background: `linear-gradient(transparent 55%, ${slide.highlightColor}50 55%, ${slide.highlightColor}50 90%, transparent 90%)`,
+      display: 'inline',
+      padding: '0 6px',
+      boxDecorationBreak: 'clone' as any,
+    } : {}),
+    ...extraStyles,
+  });
+
+  const getContentStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
+    fontSize: contentSize,
+    lineHeight: 1.65,
+    fontWeight: contentFontWeight,
+    opacity: 0.93,
+    textShadow: textShadow !== 'none' ? textShadow : '0 3px 22px rgba(0,0,0,0.45)',
+    ...extraStyles,
+  });
+
+  // Glassmorphism wrapper
+  const glassWrap = (children: React.ReactNode, extra: React.CSSProperties = {}) => {
+    if (!slide.glassmorphism) return children;
+    return (
+      <div style={{
+        background: 'rgba(255,255,255,0.07)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 24,
+        padding: '40px 50px',
+        ...extra,
+      }}>
+        {children}
+      </div>
+    );
+  };
+
   // Enhanced premium background with layered effects
   const renderBackground = () => (
     <>
-      {/* Base image layer with advanced treatment */}
       {slide.imageUrl && (
         <>
           <div 
@@ -108,7 +192,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               filter: imageFilter,
             }}
           />
-          {/* #19 Secondary image layer */}
           {slide.secondaryImageUrl && (
             <div 
               style={{
@@ -122,7 +205,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               }}
             />
           )}
-          {/* Premium gradient overlay */}
           <div 
             style={{
               position: 'absolute',
@@ -135,7 +217,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               opacity: 1 - imageOpacity * 0.5,
             }}
           />
-          {/* Vignette effect */}
           <div 
             style={{
               position: 'absolute',
@@ -146,7 +227,14 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
         </>
       )}
       
-      {/* Premium ambient glow - top right */}
+      {/* #75 Custom gradient overlay */}
+      {slide.customGradient && (
+        <div style={{ position: 'absolute', inset: 0, background: slide.customGradient }} />
+      )}
+      
+      {/* #87 Background pattern */}
+      {patternStyle && <div style={patternStyle} />}
+      
       <div 
         style={{
           position: 'absolute',
@@ -159,8 +247,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           filter: 'blur(40px)',
         }}
       />
-      
-      {/* Secondary glow - bottom left */}
       <div 
         style={{
           position: 'absolute',
@@ -173,8 +259,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           filter: 'blur(60px)',
         }}
       />
-      
-      {/* Accent line glow */}
       <div 
         style={{
           position: 'absolute',
@@ -186,8 +270,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           opacity: 0.7,
         }}
       />
-      
-      {/* Premium noise texture overlay */}
       <div 
         style={{
           position: 'absolute',
@@ -195,18 +277,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           opacity: 0.03,
           mixBlendMode: 'overlay',
-        }}
-      />
-      
-      {/* Subtle grid pattern */}
-      <div 
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `linear-gradient(${accentColor}04 1px, transparent 1px), 
-                           linear-gradient(90deg, ${accentColor}04 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-          opacity: 0.5,
         }}
       />
     </>
@@ -323,19 +393,17 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
         }}>
           {renderLogo('center', 95)}
           
-          <h1 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 800,
-            lineHeight: 1.05,
-            marginTop: 55,
-            marginBottom: 35,
-            maxWidth: 920,
-            textShadow: '0 8px 50px rgba(0,0,0,0.6), 0 2px 10px rgba(0,0,0,0.3)',
-            letterSpacing: '-0.025em',
-          }}>
-            {slide.title}
-          </h1>
+          {glassWrap(
+            <>
+              <h1 style={getTitleStyle({
+                marginTop: 55,
+                marginBottom: 35,
+                maxWidth: 920,
+              })}>
+                {slide.title}
+              </h1>
+            </>
+          )}
           
           {slide.subtitle && (
             <p style={{
@@ -401,28 +469,12 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
             boxShadow: `0 0 25px ${accentColor}50`,
           }} />
           
-          <h2 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
-            marginBottom: 45,
-            maxWidth: 880,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
-          }}>
+          <h2 style={getTitleStyle({ marginBottom: 45, maxWidth: 880 })}>
             {slide.title}
           </h2>
           
           {slide.content && (
-            <p style={{
-              fontSize: contentSize,
-              lineHeight: 1.65,
-              opacity: 0.95,
-              maxWidth: 840,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
-            }}>
+            <p style={getContentStyle({ maxWidth: 840, opacity: 0.95 })}>
               {slide.content}
             </p>
           )}
@@ -472,28 +524,12 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
             }} />
           </div>
           
-          <h2 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
-            marginBottom: 40,
-            maxWidth: 860,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
-          }}>
+          <h2 style={getTitleStyle({ marginBottom: 40, maxWidth: 860 })}>
             {slide.title}
           </h2>
           
           {slide.content && (
-            <p style={{
-              fontSize: contentSize,
-              lineHeight: 1.6,
-              opacity: 0.93,
-              maxWidth: 780,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
-            }}>
+            <p style={getContentStyle({ maxWidth: 780 })}>
               {slide.content}
             </p>
           )}
@@ -531,29 +567,12 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
             filter: `drop-shadow(0 0 40px ${accentColor}60)`,
           }} />
           
-          <h2 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
-            marginBottom: 36,
-            maxWidth: 860,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
-          }}>
+          <h2 style={getTitleStyle({ marginBottom: 36, maxWidth: 860 })}>
             {slide.title}
           </h2>
           
           {slide.content && (
-            <p style={{
-              fontSize: contentSize,
-              lineHeight: 1.6,
-              opacity: 0.9,
-              maxWidth: 720,
-              marginBottom: 50,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
-            }}>
+            <p style={getContentStyle({ maxWidth: 720, opacity: 0.9, marginBottom: 50 })}>
               {slide.content}
             </p>
           )}
@@ -675,37 +694,25 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           contentEditable={!!onInlineEdit}
           suppressContentEditableWarning
           onBlur={(e) => onInlineEdit?.('title', e.currentTarget.textContent || '')}
-          style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
+          style={getTitleStyle({
             marginBottom: 40,
             maxWidth: 880,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
             outline: 'none',
             cursor: onInlineEdit ? 'text' : 'default',
-          }}>
+          })}>
           {slide.title}
         </h2>
         
-        {/* Content */}
         {slide.content && (
           <p 
             contentEditable={!!onInlineEdit}
             suppressContentEditableWarning
             onBlur={(e) => onInlineEdit?.('content', e.currentTarget.textContent || '')}
-            style={{
-              fontSize: contentSize,
-              lineHeight: 1.65,
-              opacity: 0.93,
+            style={getContentStyle({
               maxWidth: 820,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
               outline: 'none',
               cursor: onInlineEdit ? 'text' : 'default',
-            }}>
+            })}>
             {slide.content}
           </p>
         )}

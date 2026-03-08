@@ -130,6 +130,21 @@
 | 53 | Benchmark por nicho | ✅ Feito |
 | 54 | Feed de sugestões diárias de temas trending | ✅ Feito |
 
+## I. TIPOGRAFIA + VISUAL PRO (75-109)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 75 | Gradientes customizáveis (linear, radial, conic) | ✅ Feito |
+| 77 | Sombras em textos (6 estilos: sutil, forte, glow, neon, retro) | ✅ Feito |
+| 78 | Efeito glassmorphism em cards de texto | ✅ Feito |
+| 87 | Background patterns (dots, lines, grid, waves, diagonal, circles) | ✅ Feito |
+| 91 | Efeito de highlight/marca-texto no texto | ✅ Feito |
+| 100 | Espaçamento entre letras (letter-spacing) | ✅ Feito |
+| 101 | Altura de linha configurável (line-height) | ✅ Feito |
+| 102 | Texto em caixa alta/baixa/capitalizado | ✅ Feito |
+| 105 | Fontes variáveis com peso dinâmico (100-900) | ✅ Feito |
+| 108 | Texto com contorno (stroke) | ✅ Feito |
+
 ---
 
-## Progresso: 54/54 ✅ (100%) 🎉
+## Progresso: 84/254 ✅ (33%)

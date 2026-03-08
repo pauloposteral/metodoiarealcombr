@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS, SlideSticker } from './types';
+import { CarouselSlide, CarouselTheme, CAROUSEL_THEMES, CONTENT_ICONS, SlideType, ImageFilter, GOOGLE_FONTS, SlideSticker, BackgroundPattern, TextShadowStyle, TextTransformOption } from './types';
 import { AlignLeft, AlignCenter, AlignRight, ArrowUpFromLine, ChevronsUpDown, ArrowDownFromLine } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { SavedHooksPanel } from './SavedHooksPanel';
@@ -572,6 +572,216 @@ export const SlideEditor = ({
                   </div>
                 </div>
 
+                {/* #100-109 Typography Advanced */}
+                <div className="pt-4 border-t border-border space-y-4">
+                  <Label className="text-sm text-muted-foreground">🔤 Tipografia Avançada</Label>
+                  
+                  {/* #100 Letter Spacing */}
+                  <div>
+                    <Label className="text-xs">Espaçamento entre letras: {(selectedSlide.letterSpacing ?? 0).toFixed(2)}em</Label>
+                    <Slider
+                      value={[(selectedSlide.letterSpacing ?? 0) * 100]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { letterSpacing: v / 100 })}
+                      min={-10}
+                      max={30}
+                      step={1}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {/* #101 Line Height */}
+                  <div>
+                    <Label className="text-xs">Altura da linha: {(selectedSlide.lineHeight ?? 1.12).toFixed(2)}</Label>
+                    <Slider
+                      value={[(selectedSlide.lineHeight ?? 1.12) * 100]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { lineHeight: v / 100 })}
+                      min={90}
+                      max={250}
+                      step={5}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {/* #102 Text Transform */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Transformação do Texto</Label>
+                    <div className="flex gap-1">
+                      {([
+                        { id: 'none', label: 'Normal' },
+                        { id: 'uppercase', label: 'ABC' },
+                        { id: 'lowercase', label: 'abc' },
+                        { id: 'capitalize', label: 'Abc' },
+                      ] as { id: TextTransformOption; label: string }[]).map(({ id, label }) => (
+                        <Button
+                          key={id}
+                          variant={(selectedSlide.textTransform || 'none') === id ? 'default' : 'outline'}
+                          size="sm"
+                          className="h-8 text-xs flex-1"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { textTransform: id })}
+                        >
+                          {label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #105 Font Weight */}
+                  <div>
+                    <Label className="text-xs">Peso do Título: {selectedSlide.titleFontWeight ?? 700}</Label>
+                    <Slider
+                      value={[selectedSlide.titleFontWeight ?? 700]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { titleFontWeight: v })}
+                      min={100}
+                      max={900}
+                      step={100}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Peso do Conteúdo: {selectedSlide.contentFontWeight ?? 400}</Label>
+                    <Slider
+                      value={[selectedSlide.contentFontWeight ?? 400]}
+                      onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { contentFontWeight: v })}
+                      min={100}
+                      max={900}
+                      step={100}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  {/* #108 Text Stroke */}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedSlide.textStroke || false}
+                        onChange={(e) => onUpdateSlide(selectedSlideIndex, { textStroke: e.target.checked })}
+                        className="rounded"
+                      />
+                      <span className="text-xs">Contorno no Texto</span>
+                    </label>
+                    {selectedSlide.textStroke && (
+                      <input
+                        type="color"
+                        value={selectedSlide.textStrokeColor || theme.accentColor}
+                        onChange={(e) => onUpdateSlide(selectedSlideIndex, { textStrokeColor: e.target.value })}
+                        className="w-6 h-6 rounded border border-border cursor-pointer"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* #75-99 Visual Pro */}
+                <div className="pt-4 border-t border-border space-y-4">
+                  <Label className="text-sm text-muted-foreground">✨ Visual Pro</Label>
+
+                  {/* #91 Highlight / Marker effect */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Efeito Highlight (Marca-texto)</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={selectedSlide.highlightColor || theme.accentColor}
+                        onChange={(e) => onUpdateSlide(selectedSlideIndex, { highlightColor: e.target.value })}
+                        className="w-8 h-8 rounded border border-border cursor-pointer"
+                      />
+                      {selectedSlide.highlightColor && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs h-7"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { highlightColor: undefined })}
+                        >
+                          Remover
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* #77 Text Shadow Style */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Estilo de Sombra</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'subtle', label: 'Sutil' },
+                        { id: 'strong', label: 'Forte' },
+                        { id: 'glow', label: 'Brilho' },
+                        { id: 'neon', label: 'Neon' },
+                        { id: 'retro', label: 'Retro' },
+                      ] as { id: TextShadowStyle; label: string }[]).map(({ id, label }) => (
+                        <Button
+                          key={id}
+                          variant={(selectedSlide.textShadowStyle || 'none') === id ? 'default' : 'outline'}
+                          size="sm"
+                          className="text-xs h-7"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { textShadowStyle: id })}
+                        >
+                          {label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #78 Glassmorphism */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedSlide.glassmorphism || false}
+                      onChange={(e) => onUpdateSlide(selectedSlideIndex, { glassmorphism: e.target.checked })}
+                      className="rounded"
+                    />
+                    <span className="text-xs">Glassmorphism (Cards de vidro)</span>
+                  </label>
+
+                  {/* #87 Background Patterns */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Padrão de Fundo</Label>
+                    <div className="grid grid-cols-4 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'dots', label: 'Pontos' },
+                        { id: 'lines', label: 'Linhas' },
+                        { id: 'grid', label: 'Grade' },
+                        { id: 'waves', label: 'Ondas' },
+                        { id: 'diagonal', label: 'Diagonal' },
+                        { id: 'circles', label: 'Círculos' },
+                      ] as { id: BackgroundPattern; label: string }[]).map(({ id, label }) => (
+                        <Button
+                          key={id}
+                          variant={(selectedSlide.backgroundPattern || 'none') === id ? 'default' : 'outline'}
+                          size="sm"
+                          className="text-xs h-7"
+                          onClick={() => onUpdateSlide(selectedSlideIndex, { backgroundPattern: id })}
+                        >
+                          {label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #75 Custom Gradient */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Gradiente Customizado</Label>
+                    <Select
+                      value={selectedSlide.customGradient || 'none'}
+                      onValueChange={(v) => onUpdateSlide(selectedSlideIndex, { customGradient: v === 'none' ? undefined : v })}
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="Selecione..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sem gradiente extra</SelectItem>
+                        <SelectItem value="linear-gradient(135deg, rgba(255,0,150,0.15), rgba(0,200,255,0.15))">Rosa → Azul</SelectItem>
+                        <SelectItem value="linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,50,0,0.15))">Dourado → Vermelho</SelectItem>
+                        <SelectItem value="linear-gradient(135deg, rgba(0,255,150,0.15), rgba(0,100,255,0.15))">Verde → Azul</SelectItem>
+                        <SelectItem value="linear-gradient(135deg, rgba(130,0,255,0.15), rgba(255,0,100,0.15))">Roxo → Rosa</SelectItem>
+                        <SelectItem value="radial-gradient(circle at 30% 30%, rgba(255,200,0,0.2), transparent 70%)">Radial Dourado</SelectItem>
+                        <SelectItem value="conic-gradient(from 0deg, rgba(255,0,0,0.08), rgba(0,255,0,0.08), rgba(0,0,255,0.08), rgba(255,0,0,0.08))">Cônico Arco-Íris</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                 {/* #14 Draggable Text Positioning */}
                 <div className="pt-4 border-t border-border space-y-3">
                   <Label className="text-xs text-muted-foreground">📐 Posição do Texto</Label>
