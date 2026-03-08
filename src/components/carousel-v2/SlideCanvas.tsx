@@ -1,4 +1,4 @@
-import { CarouselSlide, CarouselTheme, ImageFilter, BackgroundPattern, TextShadowStyle } from './types';
+import { CarouselSlide, CarouselTheme, ImageFilter, BackgroundPattern, TextShadowStyle, DecorativeShape, BlendMode, DividerStyle, DuotonePreset, ImageMaskShape, CardShadowStyle, GradientTextPreset } from './types';
 import { 
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield,
