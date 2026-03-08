@@ -154,7 +154,7 @@ export const CarouselWorkspace = () => {
     step,
     selectedSlideIndex: slideManager.selectedSlideIndex,
     slidesLength: slideManager.slides.length,
-    setSelectedSlideIndex: (fn) => slideManager.setSelectedSlideIndex(fn(slideManager.selectedSlideIndex)),
+    setSelectedSlideIndex: slideManager.setSelectedSlideIndex as any,
     handleSave,
     undo: slideManager.undo,
     redo: slideManager.redo,
