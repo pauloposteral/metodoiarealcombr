@@ -813,18 +813,18 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               width: 90,
               height: 90,
               borderRadius: 26,
-              background: `linear-gradient(145deg, ${accentColor}30, ${accentColor}12)`,
-              border: `2.5px solid ${accentColor}50`,
+              background: `linear-gradient(145deg, ${iconColor}30, ${iconColor}12)`,
+              border: `2.5px solid ${iconColor}50`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: `0 10px 40px ${accentColor}30, inset 0 1px 0 ${accentColor}30`,
+              boxShadow: `0 10px 40px ${iconColor}30, inset 0 1px 0 ${iconColor}30`,
             }}>
               <IconComponent style={{ 
                 width: 48, 
                 height: 48, 
-                color: accentColor,
-                filter: `drop-shadow(0 2px 6px ${accentColor}50)`,
+                color: iconColor,
+                filter: `drop-shadow(0 2px 6px ${iconColor}50)`,
               }} />
             </div>
           )}
