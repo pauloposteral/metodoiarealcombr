@@ -567,29 +567,12 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
             filter: `drop-shadow(0 0 40px ${accentColor}60)`,
           }} />
           
-          <h2 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
-            marginBottom: 36,
-            maxWidth: 860,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
-          }}>
+          <h2 style={getTitleStyle({ marginBottom: 36, maxWidth: 860 })}>
             {slide.title}
           </h2>
           
           {slide.content && (
-            <p style={{
-              fontSize: contentSize,
-              lineHeight: 1.6,
-              opacity: 0.9,
-              maxWidth: 720,
-              marginBottom: 50,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
-            }}>
+            <p style={getContentStyle({ maxWidth: 720, opacity: 0.9, marginBottom: 50 })}>
               {slide.content}
             </p>
           )}
