@@ -2,7 +2,7 @@
 // CAROUSEL ENGINE vNext - TYPES
 // ==========================================
 
-export type CarouselObjective = 'educar' | 'converter' | 'autoridade' | 'viral' | 'storytelling' | 'polemica';
+export type CarouselObjective = 'educar' | 'converter' | 'autoridade' | 'viral' | 'storytelling' | 'polemica' | 'mito-realidade' | 'antes-depois' | 'thread-visual';
 export type AudienceLevel = 'iniciante' | 'intermediario' | 'avancado';
 export type VisualStyle = 'minimal-premium' | 'editorial' | 'tech-clean' | 'cozy' | 'alto-contraste';
 export type ToneStyle = 'humano' | 'tecnico' | 'provocativo' | 'elegante';
