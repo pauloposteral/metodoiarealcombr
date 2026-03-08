@@ -13,6 +13,7 @@ import { OnboardingTour } from './OnboardingTour';
 import { BrandKitManager } from './BrandKitManager';
 import { CommunityTemplates } from './CommunityTemplates';
 import { WorkflowBoard } from './WorkflowBoard';
+import { MultiSelectToolbar } from './MultiSelectToolbar';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
