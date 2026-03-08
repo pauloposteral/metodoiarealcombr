@@ -162,6 +162,19 @@
 | 135 | Brand Kit padrão (default) | ✅ Feito |
 | 136 | Preview visual do Brand Kit | ✅ Feito |
 
+## K. EXPORTAÇÃO PRO (140-154)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 140 | Exportar para LinkedIn (1:1) | ✅ Feito |
+| 141 | Exportar para Pinterest (2:3) | ✅ Feito |
+| 142 | Exportar para Twitter/X (16:9) | ✅ Feito |
+| 143 | Seletor de plataforma no export | ✅ Feito |
+| 144 | Batch export (todas plataformas de uma vez) | ✅ Feito |
+| 145 | Export vídeo animado (WebM) | ✅ Feito |
+| 146 | Formato quadrado (1:1) adicionado | ✅ Feito |
+| 147 | Resize inteligente por plataforma | ✅ Feito |
+
 ---
 
-## Progresso: 96/254 ✅ (38%)
+## Progresso: 104/254 ✅ (41%)

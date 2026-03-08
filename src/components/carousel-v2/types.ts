@@ -115,11 +115,23 @@ export interface SlideSticker {
 }
 
 // #30 Format dimensions
-export type CarouselFormat = '4:5' | '9:16';
+export type CarouselFormat = '4:5' | '9:16' | '1:1' | '2:3' | '16:9';
 
 export const FORMAT_DIMENSIONS: Record<CarouselFormat, { width: number; height: number; label: string }> = {
   '4:5': { width: 1080, height: 1350, label: 'Feed (4:5)' },
   '9:16': { width: 1080, height: 1920, label: 'Stories (9:16)' },
+  '1:1': { width: 1080, height: 1080, label: 'Quadrado (1:1)' },
+  '2:3': { width: 1000, height: 1500, label: 'Pinterest (2:3)' },
+  '16:9': { width: 1920, height: 1080, label: 'Twitter/LinkedIn (16:9)' },
+};
+
+export type ExportPlatform = 'instagram' | 'linkedin' | 'pinterest' | 'twitter';
+
+export const PLATFORM_FORMATS: Record<ExportPlatform, { format: CarouselFormat; label: string; icon: string }> = {
+  instagram: { format: '4:5', label: 'Instagram Feed', icon: '📸' },
+  linkedin: { format: '1:1', label: 'LinkedIn Post', icon: '💼' },
+  pinterest: { format: '2:3', label: 'Pinterest Pin', icon: '📌' },
+  twitter: { format: '16:9', label: 'Twitter/X Post', icon: '🐦' },
 };
 
 export interface CarouselTheme {
