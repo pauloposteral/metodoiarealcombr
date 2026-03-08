@@ -99,11 +99,59 @@ export interface CarouselSlide {
   textStrokeColor?: string;
   titleFontWeight?: number; // 100-900
   contentFontWeight?: number; // 100-900
+  // #76 Border customization
+  borderRadius?: number; // 0-50 px
+  borderColor?: string;
+  borderWidth?: number; // 0-10 px
+  // #79 Geometric shapes overlay
+  decorativeShape?: DecorativeShape;
+  // #81 Blend mode for images
+  imageBlendMode?: BlendMode;
+  // #84 Colored icons
+  iconColor?: string;
+  // #85 Decorative dividers
+  dividerStyle?: DividerStyle;
+  // #86 Background blur amount
+  backgroundBlur?: number; // 0-30 px
+  // #88 Noise/grain texture
+  noiseTexture?: boolean;
+  // #89 Duotone filter
+  duotoneFilter?: DuotonePreset;
+  // #90 Image mask/clip-path
+  imageMask?: ImageMaskShape;
+  // #94 Slide number display
+  showSlideNumber?: boolean;
+  // #95 Progress indicator
+  showProgressBar?: boolean;
+  // #97 Text reflection
+  textReflection?: boolean;
+  // #98 Card shadow style
+  cardShadow?: CardShadowStyle;
+  // #99 Custom border style
+  borderStyle?: BorderStyleOption;
+  // #103 Text rotation
+  textRotation?: number; // -45 to 45 degrees
+  // #104 Vertical text
+  verticalText?: boolean;
+  // #106 Gradient text
+  gradientText?: GradientTextPreset;
+  // #107 Text fade effect
+  textFade?: boolean;
+  // #109 Neon border
+  neonBorder?: boolean;
 }
 
 export type BackgroundPattern = 'none' | 'dots' | 'lines' | 'grid' | 'waves' | 'diagonal' | 'circles';
 export type TextShadowStyle = 'none' | 'subtle' | 'strong' | 'glow' | 'neon' | 'retro';
 export type TextTransformOption = 'none' | 'uppercase' | 'lowercase' | 'capitalize';
+export type DecorativeShape = 'none' | 'circle-top-right' | 'circle-bottom-left' | 'diagonal-cut' | 'corner-accent' | 'double-line';
+export type BlendMode = 'normal' | 'overlay' | 'multiply' | 'screen' | 'soft-light' | 'color-dodge';
+export type DividerStyle = 'none' | 'line' | 'dots' | 'gradient' | 'zigzag' | 'wave';
+export type DuotonePreset = 'none' | 'blue-orange' | 'pink-cyan' | 'green-purple' | 'red-blue' | 'gold-navy';
+export type ImageMaskShape = 'none' | 'circle' | 'rounded' | 'diamond' | 'hexagon' | 'blob';
+export type CardShadowStyle = 'none' | 'soft' | 'medium' | 'hard' | 'colored' | 'inset';
+export type BorderStyleOption = 'none' | 'solid' | 'dashed' | 'dotted' | 'double';
+export type GradientTextPreset = 'none' | 'gold' | 'ocean' | 'fire' | 'neon' | 'aurora';
 
 export interface SlideSticker {
   id: string;
