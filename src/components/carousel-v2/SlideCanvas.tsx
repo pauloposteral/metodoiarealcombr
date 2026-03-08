@@ -175,7 +175,23 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
       </div>
     );
   };
-          {/* #19 Secondary image layer */}
+
+  // Enhanced premium background with layered effects
+  const renderBackground = () => (
+    <>
+      {slide.imageUrl && (
+        <>
+          <div 
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${slide.imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: `${bgPosX}% ${bgPosY}%`,
+              opacity: imageOpacity,
+              filter: imageFilter,
+            }}
+          />
           {slide.secondaryImageUrl && (
             <div 
               style={{
@@ -189,7 +205,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               }}
             />
           )}
-          {/* Premium gradient overlay */}
           <div 
             style={{
               position: 'absolute',
@@ -202,7 +217,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               opacity: 1 - imageOpacity * 0.5,
             }}
           />
-          {/* Vignette effect */}
           <div 
             style={{
               position: 'absolute',
@@ -213,7 +227,14 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
         </>
       )}
       
-      {/* Premium ambient glow - top right */}
+      {/* #75 Custom gradient overlay */}
+      {slide.customGradient && (
+        <div style={{ position: 'absolute', inset: 0, background: slide.customGradient }} />
+      )}
+      
+      {/* #87 Background pattern */}
+      {patternStyle && <div style={patternStyle} />}
+      
       <div 
         style={{
           position: 'absolute',
@@ -226,8 +247,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           filter: 'blur(40px)',
         }}
       />
-      
-      {/* Secondary glow - bottom left */}
       <div 
         style={{
           position: 'absolute',
@@ -240,8 +259,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           filter: 'blur(60px)',
         }}
       />
-      
-      {/* Accent line glow */}
       <div 
         style={{
           position: 'absolute',
@@ -253,8 +270,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           opacity: 0.7,
         }}
       />
-      
-      {/* Premium noise texture overlay */}
       <div 
         style={{
           position: 'absolute',
@@ -262,18 +277,6 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           opacity: 0.03,
           mixBlendMode: 'overlay',
-        }}
-      />
-      
-      {/* Subtle grid pattern */}
-      <div 
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `linear-gradient(${accentColor}04 1px, transparent 1px), 
-                           linear-gradient(90deg, ${accentColor}04 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-          opacity: 0.5,
         }}
       />
     </>
