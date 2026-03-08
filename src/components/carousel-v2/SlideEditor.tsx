@@ -46,6 +46,7 @@ interface SlideEditorProps {
   onThemeChange: (theme: CarouselTheme) => void;
   onRegenerateImage?: (slideIndex: number) => void;
   onImproveSlide?: (slideIndex: number, action: string) => void;
+  onEditImagePrompt?: (slideIndex: number, instruction: string) => void;
 }
 
 // Sortable slide item component
