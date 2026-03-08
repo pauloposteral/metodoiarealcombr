@@ -1498,6 +1498,39 @@ Retorne JSON:
 }
 
 // ==========================================
+// Edit Image Prompt with AI
+// ==========================================
+async function editImagePrompt(apiKey: string, currentPrompt: string, instruction: string, slideContext?: any): Promise<any> {
+  const systemPrompt = `You are an expert at crafting image generation prompts. Given the current image prompt and user's edit instruction, create an improved prompt.
+
+Current image prompt: "${currentPrompt || 'No current prompt'}"
+Slide context: Title: "${slideContext?.title || ''}", Content: "${slideContext?.content || ''}"
+
+User wants to: "${instruction}"
+
+Return JSON:
+{
+  "newPrompt": "detailed improved image generation prompt incorporating the user's changes",
+  "description": "brief description of what changed"
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Edit the image: ${instruction}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
 // Helper: Parse JSON from AI response
 // ==========================================
 function parseJsonFromResponse(content: string): any {
