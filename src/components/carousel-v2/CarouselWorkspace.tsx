@@ -87,6 +87,11 @@ export const CarouselWorkspace = () => {
   const [variationsResults, setVariationsResults] = useState<any[]>([]);
   const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
   const [psychologyResults, setPsychologyResults] = useState<any>(null);
+  const [pdfTextInput, setPdfTextInput] = useState('');
+  const [threadTextInput, setThreadTextInput] = useState('');
+  const [podcastTextInput, setPodcastTextInput] = useState('');
+  const [dataStoryInput, setDataStoryInput] = useState('');
+  const [languageResults, setLanguageResults] = useState<any>(null);
   const [multiSelectedIndices, setMultiSelectedIndices] = useState<Set<number>>(new Set());
   const [clipboardSlides, setClipboardSlides] = useState<CarouselSlide[]>([]);
   const [isDragPositionMode, setIsDragPositionMode] = useState(false);
@@ -713,6 +718,176 @@ export const CarouselWorkspace = () => {
   };
 
   // ==========================================
+  // #55/#60 Summarize Text to Carousel (PDF/eBook/Article)
+  // ==========================================
+  const handleSummarizeToCarousel = async (textContent: string) => {
+    if (!textContent.trim()) {
+      toast.error('Cole o texto do documento');
+      return;
+    }
+    setIsRewriting(true);
+    toast.info('Transformando texto em carrossel...');
+    const defaultConfig = config || {
+      objective: 'educar',
+      audience: { level: 'intermediario', niche: 'geral', tone: 'humano' },
+      format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+    };
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'summarize-to-carousel', textContent, config: defaultConfig },
+      });
+      if (error) throw error;
+      if (data.slides) {
+        setSlides(data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true })));
+        setCarousel({ id: crypto.randomUUID(), topic: data.summary || 'Carrossel de texto', config: defaultConfig, slides: data.slides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
+        setTopic(data.summary || 'Carrossel de texto');
+        setStep('editor');
+        setSelectedSlideIndex(0);
+        await generateAllSlideImages(data.slides, theme);
+        toast.success('Carrossel gerado do texto!');
+      }
+    } catch (error) {
+      console.error('Summarize error:', error);
+      toast.error('Erro ao transformar texto');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #56 Twitter Thread to Carousel
+  // ==========================================
+  const handleThreadToCarousel = async (threadText: string) => {
+    if (!threadText.trim()) {
+      toast.error('Cole a thread do Twitter/X');
+      return;
+    }
+    setIsRewriting(true);
+    toast.info('Transformando thread em carrossel...');
+    const defaultConfig = config || {
+      objective: 'educar',
+      audience: { level: 'intermediario', niche: 'geral', tone: 'humano' },
+      format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+    };
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'thread-to-carousel', threadText, config: defaultConfig },
+      });
+      if (error) throw error;
+      if (data.slides) {
+        setSlides(data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true })));
+        setCarousel({ id: crypto.randomUUID(), topic: data.originalThreadSummary || 'Thread → Carrossel', config: defaultConfig, slides: data.slides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
+        setTopic(data.originalThreadSummary || 'Thread → Carrossel');
+        setStep('editor');
+        setSelectedSlideIndex(0);
+        await generateAllSlideImages(data.slides, theme);
+        toast.success('Thread transformada em carrossel!');
+      }
+    } catch (error) {
+      console.error('Thread error:', error);
+      toast.error('Erro ao transformar thread');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #57 Podcast to Carousel
+  // ==========================================
+  const handlePodcastToCarousel = async (transcript: string) => {
+    if (!transcript.trim()) {
+      toast.error('Cole a transcrição do podcast');
+      return;
+    }
+    setIsRewriting(true);
+    toast.info('Transformando podcast em carrossel...');
+    const defaultConfig = config || {
+      objective: 'educar',
+      audience: { level: 'intermediario', niche: 'geral', tone: 'humano' },
+      format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+    };
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'podcast-to-carousel', textContent: transcript, config: defaultConfig },
+      });
+      if (error) throw error;
+      if (data.slides) {
+        setSlides(data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true })));
+        setCarousel({ id: crypto.randomUUID(), topic: 'Podcast → Carrossel', config: defaultConfig, slides: data.slides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
+        setTopic('Podcast → Carrossel');
+        setStep('editor');
+        setSelectedSlideIndex(0);
+        await generateAllSlideImages(data.slides, theme);
+        toast.success('Podcast transformado em carrossel!');
+      }
+    } catch (error) {
+      console.error('Podcast error:', error);
+      toast.error('Erro ao transformar podcast');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #71 Data Storytelling
+  // ==========================================
+  const handleDataStorytelling = async () => {
+    if (!dataStoryInput.trim()) {
+      toast.error('Insira dados/números para criar a narrativa');
+      return;
+    }
+    setIsRewriting(true);
+    toast.info('Criando storytelling a partir dos dados...');
+    const defaultConfig = config || {
+      objective: 'educar',
+      audience: { level: 'intermediario', niche: 'geral', tone: 'humano' },
+      format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' },
+    };
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'data-storytelling', dataPoints: dataStoryInput, topic: topic || 'Dados', config: defaultConfig },
+      });
+      if (error) throw error;
+      if (data.slides) {
+        setSlides(data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true })));
+        setCarousel({ id: crypto.randomUUID(), topic: data.storyArc || 'Data Storytelling', config: defaultConfig, slides: data.slides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
+        setTopic(data.storyArc || 'Data Storytelling');
+        setStep('editor');
+        setSelectedSlideIndex(0);
+        await generateAllSlideImages(data.slides, theme);
+        toast.success('Storytelling de dados criado!');
+      }
+    } catch (error) {
+      console.error('Data storytelling error:', error);
+      toast.error('Erro no storytelling de dados');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #72 Auto Detect Language
+  // ==========================================
+  const handleDetectLanguage = async () => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Detectando idioma e adaptações culturais...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'detect-language', slides },
+      });
+      if (error) throw error;
+      setLanguageResults(data);
+      toast.success(`Idioma: ${data.languageName} (${data.confidence}% confiança) | Prontidão internacional: ${data.internationalReadiness}%`);
+    } catch (error) {
+      console.error('Language detection error:', error);
+      toast.error('Erro na detecção de idioma');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
   // #10 Competitor Analysis by @
   // ==========================================
   const handleCompetitorAnalysis = async (handle: string) => {
@@ -1206,7 +1381,105 @@ export const CarouselWorkspace = () => {
                 </Button>
               </Card>
 
-              {/* #10 Competitor Analysis */}
+              {/* #55/#60 PDF/eBook/Artigo → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-accent" />
+                  PDF / Artigo → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole o texto do PDF, eBook ou artigo longo aqui..."
+                  value={pdfTextInput}
+                  onChange={(e) => setPdfTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handleSummarizeToCarousel(pdfTextInput)}
+                  disabled={isRewriting || !pdfTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Transformar em Carrossel
+                </Button>
+              </Card>
+
+              {/* #56 Twitter Thread → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Type className="w-4 h-4 text-accent" />
+                  Thread Twitter/X → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole a thread do Twitter/X (todos os tweets)..."
+                  value={threadTextInput}
+                  onChange={(e) => setThreadTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handleThreadToCarousel(threadTextInput)}
+                  disabled={isRewriting || !threadTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Transformar Thread
+                </Button>
+              </Card>
+
+              {/* #57 Podcast → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Mic className="w-4 h-4 text-accent" />
+                  Podcast → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole a transcrição do episódio do podcast..."
+                  value={podcastTextInput}
+                  onChange={(e) => setPodcastTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handlePodcastToCarousel(podcastTextInput)}
+                  disabled={isRewriting || !podcastTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Gerar do Podcast
+                </Button>
+              </Card>
+
+              {/* #71 Data Storytelling */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Lightbulb className="w-4 h-4 text-accent" />
+                  Storytelling de Dados
+                </h4>
+                <Textarea
+                  placeholder="Cole dados, números e estatísticas (ex: 73% dos brasileiros usam IA...)..."
+                  value={dataStoryInput}
+                  onChange={(e) => setDataStoryInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={handleDataStorytelling}
+                  disabled={isRewriting || !dataStoryInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Criar Narrativa Visual
+                </Button>
+              </Card>
               <Card className="p-4 mb-4 glass-panel border-border">
                 <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
                   <Search className="w-4 h-4 text-accent" />
@@ -1502,6 +1775,13 @@ export const CarouselWorkspace = () => {
                     <div>
                       <p className="font-medium">Alt-Text Acessível</p>
                       <p className="text-xs text-muted-foreground">Texto acessível por slide</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleDetectLanguage} className="gap-2">
+                    <Languages className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Detectar Idioma</p>
+                      <p className="text-xs text-muted-foreground">Auto-detecção + adaptação cultural</p>
                     </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

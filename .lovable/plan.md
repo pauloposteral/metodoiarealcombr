@@ -23,12 +23,12 @@
 
 | # | Melhoria | Status |
 |---|----------|--------|
-| 55 | Gerar carrossel a partir de PDF/eBook upload | 🔜 Próximo |
-| 56 | Gerar carrossel a partir de thread do Twitter/X | 🔜 Próximo |
-| 57 | Gerar carrossel a partir de podcast (RSS feed) | 🔜 Próximo |
+| 55 | Gerar carrossel a partir de PDF/eBook upload | ✅ Feito |
+| 56 | Gerar carrossel a partir de thread do Twitter/X | ✅ Feito |
+| 57 | Gerar carrossel a partir de podcast (transcrição) | ✅ Feito |
 | 58 | IA que sugere melhor horário de postagem por nicho | ✅ Feito |
 | 59 | Auto-geração de alt-text acessível para cada slide | ✅ Feito |
-| 60 | Resumo automático de artigos longos em 7 slides | 🔜 Próximo |
+| 60 | Resumo automático de artigos longos em 7 slides | ✅ Feito |
 | 61 | Detector de clichês e frases fracas no copy | ✅ Feito |
 | 62 | Sugestão de CTA personalizado por objetivo | ✅ Feito |
 | 63 | IA que analisa e pontua legibilidade do texto | ✅ Feito |
@@ -39,8 +39,8 @@
 | 68 | IA para reescrever em tom de voz de pessoa específica | ✅ Feito |
 | 69 | Prompt refinement - IA melhora o prompt do usuário | ✅ Feito |
 | 70 | Gerar variações de um mesmo carrossel (3 versões) | ✅ Feito |
-| 71 | IA que cria storytelling a partir de dados/números | 🔜 Próximo |
-| 72 | Auto-detecção de idioma e adaptação cultural | 🔜 Próximo |
+| 71 | IA que cria storytelling a partir de dados/números | ✅ Feito |
+| 72 | Auto-detecção de idioma e adaptação cultural | ✅ Feito |
 | 73 | Geração de "thread visual" (carrossel estilo tweet) | ✅ Feito |
 | 74 | IA que sugere sequência ideal de slides por psicologia | ✅ Feito |
 |---|----------|--------|
@@ -204,4 +204,4 @@
 
 ---
 
-## Progresso: 120/254 ✅ (47%)
+## Progresso: 126/254 ✅ (50%)
