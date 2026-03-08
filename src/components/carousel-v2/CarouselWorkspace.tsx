@@ -868,7 +868,6 @@ export const CarouselWorkspace = () => {
   // ==========================================
   // #72 Auto Detect Language
   // ==========================================
-  const [languageResults, setLanguageResults] = useState<any>(null);
   const handleDetectLanguage = async () => {
     if (slides.length === 0) return;
     setIsRewriting(true);
