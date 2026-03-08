@@ -532,9 +532,28 @@ export const CarouselWorkspace = () => {
             </div>
           )}
 
+          {/* Mobile Panel Switcher */}
+          <div className="flex lg:hidden mb-4 bg-muted/50 rounded-lg p-1 gap-1">
+            {[
+              { key: 'editor' as const, label: '✏️ Editor' },
+              { key: 'canvas' as const, label: '🖼️ Preview' },
+              { key: 'export' as const, label: '📤 Export' },
+            ].map(tab => (
+              <Button
+                key={tab.key}
+                variant={mobilePanel === tab.key ? 'default' : 'ghost'}
+                size="sm"
+                className="flex-1 text-xs h-8"
+                onClick={() => setMobilePanel(tab.key)}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </div>
+
           {/* Main Content */}
-          <div className={`grid gap-6 ${isFullscreen ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 lg:grid-cols-12'}`}>
-            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'}`}>
+          <div className={`grid gap-6 ${isFullscreen ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-12'}`}>
+            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'} ${mobilePanel !== 'editor' ? 'hidden lg:block' : ''}`}>
               <SlideEditor
                 slides={slideManager.slides}
                 selectedSlideIndex={slideManager.selectedSlideIndex}
@@ -552,7 +571,7 @@ export const CarouselWorkspace = () => {
               />
             </div>
 
-            <div className={`${isFullscreen ? 'lg:col-span-12' : 'lg:col-span-6'}`}>
+            <div className={`${isFullscreen ? 'col-span-1' : 'lg:col-span-6'} ${mobilePanel !== 'canvas' ? 'hidden lg:block' : ''}`}>
               <CarouselCanvas
                 slides={slideManager.slides}
                 selectedSlideIndex={slideManager.selectedSlideIndex}
@@ -567,7 +586,7 @@ export const CarouselWorkspace = () => {
               />
             </div>
 
-            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'}`}>
+            <div className={`${isFullscreen ? 'hidden' : 'lg:col-span-3'} ${mobilePanel !== 'export' ? 'hidden lg:block' : ''}`}>
               <ExportPanel
                 carousel={carousel}
                 onGenerateCaption={ai.handleGenerateCaption}
