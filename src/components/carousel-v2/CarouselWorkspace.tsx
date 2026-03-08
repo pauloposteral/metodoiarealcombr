@@ -596,6 +596,254 @@ export const CarouselWorkspace = () => {
   };
 
   // ==========================================
+  // #61 Detect Clichés
+  // ==========================================
+  const handleDetectCliches = async () => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Analisando clichês e frases fracas...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'detect-cliches', slides },
+      });
+      if (error) throw error;
+      setClicheResults(data);
+      toast.success(`Análise concluída! Score: ${data.overallScore}/100`);
+    } catch (error) {
+      console.error('Cliche detection error:', error);
+      toast.error('Erro ao analisar clichês');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #62 Suggest CTA
+  // ==========================================
+  const handleSuggestCTA = async () => {
+    if (!config) return;
+    setIsRewriting(true);
+    toast.info('Gerando sugestões de CTA...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'suggest-cta', topic, config },
+      });
+      if (error) throw error;
+      setCtaSuggestions(data.ctas || []);
+      toast.success(`${data.ctas?.length || 0} CTAs sugeridos!`);
+    } catch (error) {
+      console.error('CTA suggestion error:', error);
+      toast.error('Erro ao sugerir CTAs');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #63 Readability Score
+  // ==========================================
+  const handleReadabilityScore = async () => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Analisando legibilidade...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'readability-score', slides },
+      });
+      if (error) throw error;
+      setReadabilityResults(data);
+      toast.success(`Legibilidade média: ${data.averageScore}/100`);
+    } catch (error) {
+      console.error('Readability error:', error);
+      toast.error('Erro ao analisar legibilidade');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #66 Suggest Emojis
+  // ==========================================
+  const handleSuggestEmojis = async () => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Sugerindo emojis estratégicos...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'suggest-emojis', slides },
+      });
+      if (error) throw error;
+      // Apply emojis to slides
+      if (data.slides) {
+        setSlides(prev => prev.map((s, i) => {
+          const emojiData = data.slides.find((e: any) => e.slideIndex === i);
+          if (!emojiData) return s;
+          const newTitle = emojiData.titleEmoji ? `${emojiData.titleEmoji} ${s.title}` : s.title;
+          return { ...s, title: newTitle };
+        }));
+      }
+      toast.success('Emojis aplicados aos slides!');
+    } catch (error) {
+      console.error('Emoji suggestion error:', error);
+      toast.error('Erro ao sugerir emojis');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #68 Rewrite in Specific Voice
+  // ==========================================
+  const handleRewriteVoice = async (voicePerson: string) => {
+    if (!voicePerson.trim() || slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info(`Reescrevendo no tom de ${voicePerson}...`);
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'rewrite-voice', slides, voicePerson },
+      });
+      if (error) throw error;
+      setSlides(prev => prev.map((s, i) => ({
+        ...s,
+        ...(data.slides?.[i] || {}),
+      })));
+      toast.success(`Reescrito no tom de ${voicePerson}!`);
+    } catch (error) {
+      console.error('Voice rewrite error:', error);
+      toast.error('Erro ao reescrever');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #69 Refine Prompt
+  // ==========================================
+  const handleRefinePrompt = async (userPrompt: string) => {
+    if (!userPrompt.trim()) return;
+    setIsRewriting(true);
+    toast.info('Refinando prompt...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'refine-prompt', userPrompt, config: config || { objective: 'educar', audience: { level: 'intermediario', niche: '', tone: 'humano' }, format: { width: 1080, height: 1350, slideCount: 7, style: 'minimal-premium' } } },
+      });
+      if (error) throw error;
+      if (data.refinements?.[0]) {
+        setTopic(data.refinements[0].prompt);
+      }
+      toast.success('Prompt refinado! Escolha a melhor versão.');
+    } catch (error) {
+      console.error('Prompt refinement error:', error);
+      toast.error('Erro ao refinar prompt');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #70 Generate Variations
+  // ==========================================
+  const handleGenerateVariations = async () => {
+    if (!config) return;
+    setIsRewriting(true);
+    toast.info('Gerando 3 variações do carrossel...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'generate-variations', topic, config },
+      });
+      if (error) throw error;
+      setVariationsResults(data.variations || []);
+      toast.success(`${data.variations?.length || 0} variações geradas!`);
+    } catch (error) {
+      console.error('Variations error:', error);
+      toast.error('Erro ao gerar variações');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #74 Sequence by Psychology
+  // ==========================================
+  const handleSequencePsychology = async () => {
+    if (slides.length === 0 || !config) return;
+    setIsRewriting(true);
+    toast.info('Analisando sequência por psicologia...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'sequence-psychology', slides, config },
+      });
+      if (error) throw error;
+      setPsychologyResults(data);
+      // Apply the suggested order
+      if (data.suggestedOrder && Array.isArray(data.suggestedOrder)) {
+        const reordered = data.suggestedOrder.map((idx: number) => slides[idx]).filter(Boolean);
+        if (reordered.length === slides.length) {
+          setSlides(reordered.map((s: any, i: number) => ({ ...s, order: i })));
+          toast.success('Slides reordenados por psicologia!');
+        }
+      }
+    } catch (error) {
+      console.error('Psychology sequence error:', error);
+      toast.error('Erro na análise psicológica');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #58 Suggest Posting Time
+  // ==========================================
+  const handleSuggestPostingTime = async () => {
+    if (!config) return;
+    setIsRewriting(true);
+    toast.info('Calculando melhor horário...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'suggest-posting-time', config },
+      });
+      if (error) throw error;
+      setPostingTimeResults(data);
+      const best = data.bestTimes?.[0];
+      if (best) {
+        toast.success(`Melhor horário: ${best.day} às ${best.time} (Score: ${best.score})`);
+      }
+    } catch (error) {
+      console.error('Posting time error:', error);
+      toast.error('Erro ao sugerir horário');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
+  // #59 Generate Alt Text
+  // ==========================================
+  const handleGenerateAltText = async () => {
+    if (slides.length === 0) return;
+    setIsRewriting(true);
+    toast.info('Gerando alt-text acessível...');
+    try {
+      const { data, error } = await supabase.functions.invoke('carousel-engine', {
+        body: { action: 'generate-alt-text', slides },
+      });
+      if (error) throw error;
+      if (data.altTexts) {
+        setSlides(prev => prev.map((s, i) => {
+          const alt = data.altTexts.find((a: any) => a.slideIndex === i);
+          return alt ? { ...s, altText: alt.altText } : s;
+        }));
+      }
+      toast.success('Alt-text gerado para todos os slides!');
+    } catch (error) {
+      console.error('Alt text error:', error);
+      toast.error('Erro ao gerar alt-text');
+    } finally {
+      setIsRewriting(false);
+    }
+  };
+
+  // ==========================================
   // Reset to Wizard
   // ==========================================
   const handleNewCarousel = () => {
