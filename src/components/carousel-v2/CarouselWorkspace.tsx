@@ -1064,6 +1064,30 @@ export const CarouselWorkspace = () => {
         handleNewCarousel();
       }
 
+      // Ctrl+C / Cmd+C - Copy slides
+      if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+        e.preventDefault();
+        handleCopySlides();
+      }
+
+      // Ctrl+V / Cmd+V - Paste slides
+      if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        e.preventDefault();
+        handlePasteSlides();
+      }
+
+      // Ctrl+D / Cmd+D - Duplicate current slide
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        handleDuplicateCurrentSlide();
+      }
+
+      // Delete - Delete selected slides
+      if (e.key === 'Delete' && multiSelectedIndices.size > 1) {
+        e.preventDefault();
+        handleDeleteMultiSelected();
+      }
+
       // Escape - Exit fullscreen
       if (e.key === 'Escape' && isFullscreen) {
         setIsFullscreen(false);
