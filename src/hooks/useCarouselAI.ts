@@ -428,6 +428,33 @@ export const useCarouselAI = ({
     } catch { toast.error('Erro ao gerar alt-text'); }
   };
 
+  const handleEditImagePrompt = async (slideIndex: number, instruction: string) => {
+    const slide = slides[slideIndex];
+    if (!slide || !instruction.trim()) return;
+    setSlides(prev => prev.map((s, i) => i === slideIndex ? { ...s, isGeneratingImage: true } : s));
+    toast.info('Editando imagem com IA...');
+    try {
+      const data = await invokeAI('edit-image-prompt', {
+        currentImagePrompt: slide.imagePrompt,
+        editInstruction: instruction,
+        slides, slideIndex,
+      });
+      // Generate new image with the improved prompt
+      const themeColors = `${theme.name} - Primary: ${theme.primaryColor}, Accent: ${theme.accentColor}`;
+      const { data: imgData, error: imgError } = await supabase.functions.invoke('generate-slide-image', {
+        body: { prompt: data.newPrompt, slideType: slide.type, themeColors },
+      });
+      if (imgError) throw imgError;
+      setSlides(prev => prev.map((s, i) =>
+        i === slideIndex ? { ...s, imageUrl: imgData.imageUrl, imagePrompt: data.newPrompt, isGeneratingImage: false } : s
+      ));
+      toast.success('Imagem editada com IA!');
+    } catch {
+      setSlides(prev => prev.map((s, i) => i === slideIndex ? { ...s, isGeneratingImage: false } : s));
+      toast.error('Erro ao editar imagem');
+    }
+  };
+
   return {
     // State
     isGenerating, isRewriting, isExportLoading, progress,
@@ -447,6 +474,6 @@ export const useCarouselAI = ({
     handleSuggestEmojis, handleRewriteVoice,
     handleRefinePrompt, handleGenerateVariations,
     handleSequencePsychology, handleSuggestPostingTime,
-    handleGenerateAltText,
+    handleGenerateAltText, handleEditImagePrompt,
   };
 };
