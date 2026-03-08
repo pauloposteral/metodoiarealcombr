@@ -135,15 +135,34 @@
 | # | Melhoria | Status |
 |---|----------|--------|
 | 75 | Gradientes customizáveis (linear, radial, conic) | ✅ Feito |
+| 76 | Bordas customizáveis (raio, cor, largura, estilo) | ✅ Feito |
 | 77 | Sombras em textos (6 estilos: sutil, forte, glow, neon, retro) | ✅ Feito |
 | 78 | Efeito glassmorphism em cards de texto | ✅ Feito |
+| 79 | Formas geométricas decorativas (5 tipos) | ✅ Feito |
+| 81 | Blend modes para imagens (overlay, multiply, screen, etc.) | ✅ Feito |
+| 84 | Cor customizável dos ícones | ✅ Feito |
+| 85 | Divisores decorativos (linha, pontos, gradiente, zigzag, onda) | ✅ Feito |
+| 86 | Desfoque do fundo ajustável (0-30px) | ✅ Feito |
 | 87 | Background patterns (dots, lines, grid, waves, diagonal, circles) | ✅ Feito |
+| 88 | Textura grain/noise controlável | ✅ Feito |
+| 89 | Filtro duotone para imagens (5 presets) | ✅ Feito |
+| 90 | Máscaras de imagem (círculo, rounded, losango, hexágono, blob) | ✅ Feito |
 | 91 | Efeito de highlight/marca-texto no texto | ✅ Feito |
+| 94 | Numeração automática de slides | ✅ Feito |
+| 95 | Indicador de progresso visual (barra) | ✅ Feito |
+| 97 | Reflexo do texto | ✅ Feito |
+| 98 | Sombra em cards (6 estilos) | ✅ Feito |
+| 99 | Estilo de borda (solid, dashed, dotted, double) | ✅ Feito |
 | 100 | Espaçamento entre letras (letter-spacing) | ✅ Feito |
 | 101 | Altura de linha configurável (line-height) | ✅ Feito |
 | 102 | Texto em caixa alta/baixa/capitalizado | ✅ Feito |
+| 103 | Rotação do texto (-45° a 45°) | ✅ Feito |
+| 104 | Texto vertical | ✅ Feito |
 | 105 | Fontes variáveis com peso dinâmico (100-900) | ✅ Feito |
+| 106 | Texto com gradiente (gold, ocean, fire, neon, aurora) | ✅ Feito |
+| 107 | Fade no texto (degrade de opacidade) | ✅ Feito |
 | 108 | Texto com contorno (stroke) | ✅ Feito |
+| 109 | Borda neon (glow effect) | ✅ Feito |
 
 ## J. TEMPLATES + BRANDING (125-139)
 
