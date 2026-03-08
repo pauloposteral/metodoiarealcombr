@@ -996,6 +996,7 @@ export const SlideEditor = ({
                     <input type="checkbox" checked={selectedSlide.textFade || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { textFade: e.target.checked })} className="rounded" />
                     <span className="text-xs">🌫️ Fade no Texto (degrade de opacidade)</span>
                   </label>
+                </div>
                 {/* #14 Draggable Text Positioning */}
                 <div className="pt-4 border-t border-border space-y-3">
                   <Label className="text-xs text-muted-foreground">📐 Posição do Texto</Label>
