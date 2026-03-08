@@ -1265,6 +1265,236 @@ Responda APENAS com JSON:
 }
 
 // ==========================================
+// #55/#60 Summarize Long Text to Carousel
+// ==========================================
+async function summarizeToCarousel(apiKey: string, textContent: string, config: CarouselConfig) {
+  const slideCount = config?.format?.slideCount || 7;
+  const systemPrompt = `Você é um especialista em transformar textos longos (artigos, PDFs, eBooks) em carrosséis virais para Instagram.
+
+Analise o texto fornecido e crie um carrossel de ${slideCount} slides que captura os pontos-chave.
+
+Retorne JSON:
+{
+  "slides": [
+    {
+      "id": "uuid",
+      "type": "cover|content|cta",
+      "title": "Título impactante",
+      "subtitle": "Subtítulo (opcional)",
+      "content": "Conteúdo resumido",
+      "icon": "Lightbulb|Target|Rocket|Brain|Star",
+      "order": 0,
+      "imagePrompt": "Prompt para imagem"
+    }
+  ],
+  "caption": "Legenda para o post",
+  "hashtags": ["#hashtag1", "#hashtag2"],
+  "summary": "Resumo do texto original em 2 frases"
+}
+
+Slide 1 = cover (hook atraente), slides 2-${slideCount - 1} = content (pontos-chave), último = CTA.`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-pro',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Texto para transformar em carrossel:\n\n${textContent.slice(0, 15000)}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #56 Twitter/X Thread to Carousel
+// ==========================================
+async function threadToCarousel(apiKey: string, threadText: string, config: CarouselConfig) {
+  const slideCount = config?.format?.slideCount || 7;
+  const systemPrompt = `Você transforma threads do Twitter/X em carrosséis profissionais para Instagram.
+
+Analise a thread e transforme em carrossel visual com ${slideCount} slides.
+Mantenha a essência mas adapte para formato visual Instagram (textos mais curtos e impactantes).
+
+Retorne JSON:
+{
+  "slides": [
+    {
+      "id": "uuid",
+      "type": "cover|content|cta",
+      "title": "Título",
+      "subtitle": "Subtítulo",
+      "content": "Conteúdo",
+      "icon": "Lightbulb|Target|Rocket|Brain|Star",
+      "order": 0,
+      "imagePrompt": "Prompt para imagem"
+    }
+  ],
+  "caption": "Legenda adaptada",
+  "hashtags": ["#hashtag1"],
+  "originalThreadSummary": "Resumo da thread em 1 frase"
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Thread do Twitter/X:\n\n${threadText.slice(0, 8000)}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #57 Podcast to Carousel (from transcript)
+// ==========================================
+async function podcastToCarousel(apiKey: string, textContent: string, config: CarouselConfig) {
+  const slideCount = config?.format?.slideCount || 7;
+  const systemPrompt = `Você transforma transcrições de podcasts em carrosséis Instagram educativos.
+
+Extraia os insights mais valiosos da transcrição e crie ${slideCount} slides impactantes.
+Foque nos momentos "aha!", dados surpreendentes e conselhos práticos.
+
+Retorne JSON:
+{
+  "slides": [
+    {
+      "id": "uuid",
+      "type": "cover|content|cta",
+      "title": "Título",
+      "subtitle": "Subtítulo",
+      "content": "Insight do podcast",
+      "icon": "Lightbulb|Target|Rocket|Brain|Mic",
+      "order": 0,
+      "imagePrompt": "Prompt para imagem"
+    }
+  ],
+  "caption": "Legenda referenciando o episódio",
+  "hashtags": ["#podcast", "#aprendizado"],
+  "keyInsights": ["Insight 1", "Insight 2", "Insight 3"]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-pro',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Transcrição do podcast:\n\n${textContent.slice(0, 15000)}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #71 Data Storytelling
+// ==========================================
+async function dataStorytelling(apiKey: string, dataPoints: string, topic: string, config: CarouselConfig) {
+  const slideCount = config?.format?.slideCount || 7;
+  const systemPrompt = `Você é um data storyteller que transforma dados e números em narrativas visuais envolventes para Instagram.
+
+Crie um carrossel de ${slideCount} slides que conta uma história convincente usando os dados fornecidos.
+Use comparações, metáforas visuais e progressão narrativa para engajar.
+
+Retorne JSON:
+{
+  "slides": [
+    {
+      "id": "uuid",
+      "type": "cover|content|stat|comparison|cta",
+      "title": "Título com dado impactante",
+      "subtitle": "Contexto",
+      "content": "Narrativa baseada nos dados",
+      "icon": "BarChart|TrendingUp|Target|DollarSign|Percent",
+      "order": 0,
+      "imagePrompt": "Prompt para visualização de dados"
+    }
+  ],
+  "caption": "Legenda com storytelling de dados",
+  "hashtags": ["#dados", "#insights"],
+  "storyArc": "Resumo do arco narrativo"
+}
+
+Use o padrão: Contexto surpreendente → Dados que chocam → Comparação → Tendência → Ação.`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Tema: ${topic}\n\nDados e números:\n${dataPoints}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #72 Auto Language Detection & Cultural Adaptation
+// ==========================================
+async function detectLanguageAndAdapt(apiKey: string, slides: any[]) {
+  const slidesText = slides.map((s: any, i: number) => `Slide ${i + 1}: ${s.title} - ${s.content}`).join('\n');
+  
+  const systemPrompt = `Analise o conteúdo dos slides e:
+1. Detecte o idioma principal
+2. Avalie se há termos culturalmente específicos
+3. Sugira adaptações culturais para mercados internacionais
+
+Retorne JSON:
+{
+  "detectedLanguage": "pt-BR",
+  "languageName": "Português (Brasil)",
+  "confidence": 98,
+  "culturalNotes": [
+    {
+      "slideIndex": 0,
+      "original": "texto original",
+      "issue": "Referência cultural específica",
+      "suggestion": "Alternativa mais universal"
+    }
+  ],
+  "internationalReadiness": 85,
+  "suggestedAdaptations": {
+    "en": "Notas para adaptar para inglês",
+    "es": "Notas para adaptar para espanhol"
+  }
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
 // Helper: Parse JSON from AI response
 // ==========================================
 function parseJsonFromResponse(content: string): any {
