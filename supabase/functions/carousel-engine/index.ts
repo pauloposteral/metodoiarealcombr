@@ -104,6 +104,21 @@ serve(async (req) => {
       case 'generate-alt-text':
         result = await generateAltText(LOVABLE_API_KEY, slides);
         break;
+      case 'summarize-to-carousel':
+        result = await summarizeToCarousel(LOVABLE_API_KEY, textContent, config);
+        break;
+      case 'thread-to-carousel':
+        result = await threadToCarousel(LOVABLE_API_KEY, threadText, config);
+        break;
+      case 'data-storytelling':
+        result = await dataStorytelling(LOVABLE_API_KEY, dataPoints, topic, config);
+        break;
+      case 'detect-language':
+        result = await detectLanguageAndAdapt(LOVABLE_API_KEY, slides);
+        break;
+      case 'podcast-to-carousel':
+        result = await podcastToCarousel(LOVABLE_API_KEY, textContent, config);
+        break;
       default:
         throw new Error(`Unknown action: ${action}`);
     }
