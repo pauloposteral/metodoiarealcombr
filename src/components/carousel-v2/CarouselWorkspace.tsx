@@ -10,6 +10,8 @@ import { SaveAsTemplateDialog } from './SaveAsTemplateDialog';
 import { ShareLinkButton } from './ShareLinkButton';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { OnboardingTour } from './OnboardingTour';
+import { BrandKitManager } from './BrandKitManager';
+import { CommunityTemplates } from './CommunityTemplates';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
@@ -25,6 +27,7 @@ import {
   CarouselFormat,
   FORMAT_DIMENSIONS,
   TEMPLATE_PRESETS,
+  GOOGLE_FONTS,
 } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -1043,6 +1046,37 @@ export const CarouselWorkspace = () => {
                 </p>
               </Card>
 
+              {/* Brand Kit Manager */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <BrandKitManager
+                  compact
+                  onApplyBrandKit={(kit) => {
+                    setTheme(prev => ({
+                      ...prev,
+                      primaryColor: kit.primary_color,
+                      secondaryColor: kit.secondary_color,
+                      accentColor: kit.accent_color,
+                      backgroundColor: kit.background_color,
+                      textColor: kit.text_color,
+                      fontFamily: GOOGLE_FONTS.find(f => f.name === kit.font_title)?.family || prev.fontFamily,
+                    }));
+                    toast.success(`Brand Kit "${kit.name}" aplicado ao tema!`);
+                  }}
+                />
+              </Card>
+
+              {/* Community Templates */}
+              <CommunityTemplates
+                onLoadTemplate={(newSlides, newTheme, newConfig) => {
+                  setSlides(newSlides);
+                  setTheme(newTheme);
+                  if (newConfig) setConfig(newConfig);
+                  setStep('editor');
+                  toast.success('Template carregado!');
+                }}
+              />
+
+              <div className="mt-4" />
               <FolderManager
                 selectedFolderId={selectedFolderId}
                 onSelectFolder={setSelectedFolderId}

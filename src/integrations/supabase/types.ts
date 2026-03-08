@@ -47,6 +47,57 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_kits: {
+        Row: {
+          accent_color: string | null
+          background_color: string | null
+          created_at: string
+          font_body: string | null
+          font_title: string | null
+          id: string
+          is_default: boolean | null
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          text_color: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accent_color?: string | null
+          background_color?: string | null
+          created_at?: string
+          font_body?: string | null
+          font_title?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          text_color?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accent_color?: string | null
+          background_color?: string | null
+          created_at?: string
+          font_body?: string | null
+          font_title?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          text_color?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       carousel_folders: {
         Row: {
           color: string | null
@@ -79,8 +130,11 @@ export type Database = {
           category: string | null
           config: Json | null
           created_at: string
+          description: string | null
           id: string
+          is_public: boolean | null
           name: string
+          preview_colors: Json | null
           slides: Json
           theme: Json | null
           updated_at: string
@@ -91,8 +145,11 @@ export type Database = {
           category?: string | null
           config?: Json | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           name: string
+          preview_colors?: Json | null
           slides?: Json
           theme?: Json | null
           updated_at?: string
@@ -103,8 +160,11 @@ export type Database = {
           category?: string | null
           config?: Json | null
           created_at?: string
+          description?: string | null
           id?: string
+          is_public?: boolean | null
           name?: string
+          preview_colors?: Json | null
           slides?: Json
           theme?: Json | null
           updated_at?: string
