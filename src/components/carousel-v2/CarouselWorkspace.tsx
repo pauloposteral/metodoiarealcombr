@@ -87,6 +87,9 @@ export const CarouselWorkspace = () => {
   const [variationsResults, setVariationsResults] = useState<any[]>([]);
   const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
   const [psychologyResults, setPsychologyResults] = useState<any>(null);
+  const [multiSelectedIndices, setMultiSelectedIndices] = useState<Set<number>>(new Set());
+  const [clipboardSlides, setClipboardSlides] = useState<CarouselSlide[]>([]);
+  const [isDragPositionMode, setIsDragPositionMode] = useState(false);
   const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
