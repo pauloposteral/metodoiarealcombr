@@ -552,7 +552,7 @@ export const CarouselCanvas = ({
         )}
 
         {/* Quality + Export */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Select value={exportQuality} onValueChange={(v) => setExportQuality(v as ExportQuality)}>
             <SelectTrigger className="w-[70px] h-9">
               <SelectValue />
@@ -571,6 +571,40 @@ export const CarouselCanvas = ({
             <FileDown className="w-4 h-4" />
             <span className="hidden sm:inline">PDF</span>
           </Button>
+          
+          {/* Platform Export Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2 hover-scale-micro">
+                <Globe className="w-4 h-4" />
+                <span className="hidden sm:inline">Plataformas</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Exportar para Plataforma</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {(Object.entries(PLATFORM_FORMATS) as [ExportPlatform, typeof PLATFORM_FORMATS['instagram']][]).map(([key, config]) => (
+                <DropdownMenuItem key={key} onClick={() => handleExportForPlatform(key)} disabled={isExporting}>
+                  <span className="mr-2">{config.icon}</span>
+                  {config.label}
+                  <span className="ml-auto text-xs text-muted-foreground">{config.format}</span>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleBatchExport} disabled={isExporting}>
+                <Layers className="w-4 h-4 mr-2" />
+                Todas as Plataformas
+                <span className="ml-auto text-xs text-muted-foreground">ZIP</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Animated Export */}
+          <Button variant="outline" onClick={handleExportAnimated} disabled={isExporting} className="gap-2 hover-scale-micro">
+            <Film className="w-4 h-4" />
+            <span className="hidden sm:inline">Vídeo</span>
+          </Button>
+
           <Button 
             onClick={handleExportAll}
             disabled={isExporting}
