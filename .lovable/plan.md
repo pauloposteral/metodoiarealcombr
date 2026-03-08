@@ -175,6 +175,19 @@
 | 146 | Formato quadrado (1:1) adicionado | ✅ Feito |
 | 147 | Resize inteligente por plataforma | ✅ Feito |
 
+## L. COLABORAÇÃO + WORKFLOW (155-184)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 155 | Kanban de status (rascunho → revisão → aprovado → publicado) | ✅ Feito |
+| 156 | Calendário editorial com agendamento | ✅ Feito |
+| 157 | Comentários por slide (com resolução) | ✅ Feito |
+| 158 | Sistema de aprovação com registro | ✅ Feito |
+| 159 | Prioridade por carrossel (baixa/normal/alta/urgente) | ✅ Feito |
+| 160 | Notas internas por carrossel | ✅ Feito |
+| 161 | Tags para organização | ✅ Feito |
+| 162 | Visualização Kanban e Calendário | ✅ Feito |
+
 ---
 
-## Progresso: 104/254 ✅ (41%)
+## Progresso: 112/254 ✅ (44%)
