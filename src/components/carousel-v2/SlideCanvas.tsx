@@ -109,6 +109,14 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
   const bgPosX = slide.backgroundPositionX ?? 50;
   const bgPosY = slide.backgroundPositionY ?? 50;
 
+  const letterSpacing = slide.letterSpacing ?? (slide.type === 'cover' ? -0.025 : -0.02);
+  const lineHeightTitle = slide.lineHeight ?? 1.12;
+  const textTransform = slide.textTransform || 'none';
+  const titleFontWeight = slide.titleFontWeight ?? (slide.type === 'cover' ? 800 : 700);
+  const contentFontWeight = slide.contentFontWeight ?? 400;
+  const textShadow = getTextShadowCSS(slide.textShadowStyle, accentColor);
+  const patternStyle = getPatternCSS(slide.backgroundPattern, accentColor);
+
   const containerStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -119,23 +127,54 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
     overflow: 'hidden',
   };
 
-  // Enhanced premium background with layered effects
-  const renderBackground = () => (
-    <>
-      {/* Base image layer with advanced treatment */}
-      {slide.imageUrl && (
-        <>
-          <div 
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: `url(${slide.imageUrl})`,
-              backgroundSize: 'cover',
-              backgroundPosition: `${bgPosX}% ${bgPosY}%`,
-              opacity: imageOpacity,
-              filter: imageFilter,
-            }}
-          />
+  // Title style helper with all typography features
+  const getTitleStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
+    fontFamily: displayFont,
+    fontSize: titleSize,
+    fontWeight: titleFontWeight,
+    lineHeight: lineHeightTitle,
+    letterSpacing: `${letterSpacing}em`,
+    textTransform: textTransform as any,
+    textShadow: textShadow !== 'none' ? textShadow : '0 5px 35px rgba(0,0,0,0.55)',
+    ...(slide.textStroke ? {
+      WebkitTextStroke: `2px ${slide.textStrokeColor || accentColor}`,
+      paintOrder: 'stroke fill' as any,
+    } : {}),
+    ...(slide.highlightColor ? {
+      background: `linear-gradient(transparent 55%, ${slide.highlightColor}50 55%, ${slide.highlightColor}50 90%, transparent 90%)`,
+      display: 'inline',
+      padding: '0 6px',
+      boxDecorationBreak: 'clone' as any,
+    } : {}),
+    ...extraStyles,
+  });
+
+  const getContentStyle = (extraStyles: React.CSSProperties = {}): React.CSSProperties => ({
+    fontSize: contentSize,
+    lineHeight: 1.65,
+    fontWeight: contentFontWeight,
+    opacity: 0.93,
+    textShadow: textShadow !== 'none' ? textShadow : '0 3px 22px rgba(0,0,0,0.45)',
+    ...extraStyles,
+  });
+
+  // Glassmorphism wrapper
+  const glassWrap = (children: React.ReactNode, extra: React.CSSProperties = {}) => {
+    if (!slide.glassmorphism) return children;
+    return (
+      <div style={{
+        background: 'rgba(255,255,255,0.07)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 24,
+        padding: '40px 50px',
+        ...extra,
+      }}>
+        {children}
+      </div>
+    );
+  };
           {/* #19 Secondary image layer */}
           {slide.secondaryImageUrl && (
             <div 
