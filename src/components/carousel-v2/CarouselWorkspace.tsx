@@ -1381,7 +1381,105 @@ export const CarouselWorkspace = () => {
                 </Button>
               </Card>
 
-              {/* #10 Competitor Analysis */}
+              {/* #55/#60 PDF/eBook/Artigo → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-accent" />
+                  PDF / Artigo → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole o texto do PDF, eBook ou artigo longo aqui..."
+                  value={pdfTextInput}
+                  onChange={(e) => setPdfTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handleSummarizeToCarousel(pdfTextInput)}
+                  disabled={isRewriting || !pdfTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Transformar em Carrossel
+                </Button>
+              </Card>
+
+              {/* #56 Twitter Thread → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Type className="w-4 h-4 text-accent" />
+                  Thread Twitter/X → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole a thread do Twitter/X (todos os tweets)..."
+                  value={threadTextInput}
+                  onChange={(e) => setThreadTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handleThreadToCarousel(threadTextInput)}
+                  disabled={isRewriting || !threadTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Transformar Thread
+                </Button>
+              </Card>
+
+              {/* #57 Podcast → Carrossel */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Mic className="w-4 h-4 text-accent" />
+                  Podcast → Carrossel
+                </h4>
+                <Textarea
+                  placeholder="Cole a transcrição do episódio do podcast..."
+                  value={podcastTextInput}
+                  onChange={(e) => setPodcastTextInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={() => handlePodcastToCarousel(podcastTextInput)}
+                  disabled={isRewriting || !podcastTextInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Gerar do Podcast
+                </Button>
+              </Card>
+
+              {/* #71 Data Storytelling */}
+              <Card className="p-4 mb-4 glass-panel border-border">
+                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                  <Lightbulb className="w-4 h-4 text-accent" />
+                  Storytelling de Dados
+                </h4>
+                <Textarea
+                  placeholder="Cole dados, números e estatísticas (ex: 73% dos brasileiros usam IA...)..."
+                  value={dataStoryInput}
+                  onChange={(e) => setDataStoryInput(e.target.value)}
+                  rows={3}
+                  className="text-sm mb-2"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-1.5"
+                  onClick={handleDataStorytelling}
+                  disabled={isRewriting || !dataStoryInput.trim()}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Criar Narrativa Visual
+                </Button>
+              </Card>
               <Card className="p-4 mb-4 glass-panel border-border">
                 <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
                   <Search className="w-4 h-4 text-accent" />
