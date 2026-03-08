@@ -781,7 +781,221 @@ export const SlideEditor = ({
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
+
+                  {/* #76 Border Customization */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Bordas</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-[10px]">Raio: {selectedSlide.borderRadius ?? 0}px</Label>
+                        <Slider value={[selectedSlide.borderRadius ?? 0]} onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { borderRadius: v })} min={0} max={50} step={2} className="mt-1" />
+                      </div>
+                      <div>
+                        <Label className="text-[10px]">Largura: {selectedSlide.borderWidth ?? 0}px</Label>
+                        <Slider value={[selectedSlide.borderWidth ?? 0]} onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { borderWidth: v })} min={0} max={10} step={1} className="mt-1" />
+                      </div>
+                    </div>
+                    {(selectedSlide.borderWidth ?? 0) > 0 && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <Label className="text-[10px]">Cor:</Label>
+                        <input type="color" value={selectedSlide.borderColor || theme.accentColor} onChange={(e) => onUpdateSlide(selectedSlideIndex, { borderColor: e.target.value })} className="w-6 h-6 rounded border border-border cursor-pointer" />
+                        <Select value={selectedSlide.borderStyle || 'solid'} onValueChange={(v: BorderStyleOption) => onUpdateSlide(selectedSlideIndex, { borderStyle: v })}>
+                          <SelectTrigger className="h-7 text-xs flex-1"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="solid">Sólido</SelectItem>
+                            <SelectItem value="dashed">Tracejado</SelectItem>
+                            <SelectItem value="dotted">Pontilhado</SelectItem>
+                            <SelectItem value="double">Duplo</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* #109 Neon Border */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.neonBorder || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { neonBorder: e.target.checked })} className="rounded" />
+                    <span className="text-xs">✨ Borda Neon (Glow)</span>
+                  </label>
+
+                  {/* #79 Decorative Shapes */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Formas Decorativas</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'circle-top-right', label: '⬤ Canto' },
+                        { id: 'circle-bottom-left', label: '⬤ Base' },
+                        { id: 'diagonal-cut', label: '╱ Corte' },
+                        { id: 'corner-accent', label: '◣ Acento' },
+                        { id: 'double-line', label: '═ Linhas' },
+                      ] as { id: DecorativeShape; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.decorativeShape || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { decorativeShape: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #81 Blend Mode */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Modo de Mesclagem</Label>
+                    <Select value={selectedSlide.imageBlendMode || 'normal'} onValueChange={(v: BlendMode) => onUpdateSlide(selectedSlideIndex, { imageBlendMode: v })}>
+                      <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="normal">Normal</SelectItem>
+                        <SelectItem value="overlay">Overlay</SelectItem>
+                        <SelectItem value="multiply">Multiply</SelectItem>
+                        <SelectItem value="screen">Screen</SelectItem>
+                        <SelectItem value="soft-light">Soft Light</SelectItem>
+                        <SelectItem value="color-dodge">Color Dodge</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* #84 Icon Color */}
+                  {selectedSlide.icon && (
+                    <div>
+                      <Label className="text-xs mb-1 block">Cor do Ícone</Label>
+                      <div className="flex items-center gap-2">
+                        <input type="color" value={selectedSlide.iconColor || theme.accentColor} onChange={(e) => onUpdateSlide(selectedSlideIndex, { iconColor: e.target.value })} className="w-8 h-8 rounded border border-border cursor-pointer" />
+                        {selectedSlide.iconColor && (
+                          <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { iconColor: undefined })}>Reset</Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* #85 Divider Style */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Estilo do Divisor</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'line', label: '── Linha' },
+                        { id: 'dots', label: '••• Pontos' },
+                        { id: 'gradient', label: '▬ Grad.' },
+                        { id: 'zigzag', label: '⩗ Zigzag' },
+                        { id: 'wave', label: '∿ Onda' },
+                      ] as { id: DividerStyle; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.dividerStyle || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { dividerStyle: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #86 Background Blur */}
+                  <div>
+                    <Label className="text-xs">Desfoque do Fundo: {selectedSlide.backgroundBlur ?? 0}px</Label>
+                    <Slider value={[selectedSlide.backgroundBlur ?? 0]} onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { backgroundBlur: v })} min={0} max={30} step={1} className="mt-1" />
+                  </div>
+
+                  {/* #88 Noise Texture */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.noiseTexture ?? true} onChange={(e) => onUpdateSlide(selectedSlideIndex, { noiseTexture: e.target.checked })} className="rounded" />
+                    <span className="text-xs">🎞️ Textura Grain (Noise)</span>
+                  </label>
+
+                  {/* #89 Duotone Filter */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Filtro Duotone</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'blue-orange', label: '🔵🟠' },
+                        { id: 'pink-cyan', label: '🩷🩵' },
+                        { id: 'green-purple', label: '🟢🟣' },
+                        { id: 'red-blue', label: '🔴🔵' },
+                        { id: 'gold-navy', label: '🟡🔵' },
+                      ] as { id: DuotonePreset; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.duotoneFilter || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { duotoneFilter: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #90 Image Mask */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Máscara de Imagem</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'circle', label: '⬤ Círculo' },
+                        { id: 'rounded', label: '▢ Rounded' },
+                        { id: 'diamond', label: '◆ Losango' },
+                        { id: 'hexagon', label: '⬡ Hexag.' },
+                        { id: 'blob', label: '☁ Blob' },
+                      ] as { id: ImageMaskShape; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.imageMask || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { imageMask: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #94 Slide Number */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.showSlideNumber || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { showSlideNumber: e.target.checked })} className="rounded" />
+                    <span className="text-xs">🔢 Número do Slide</span>
+                  </label>
+
+                  {/* #95 Progress Bar */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.showProgressBar || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { showProgressBar: e.target.checked })} className="rounded" />
+                    <span className="text-xs">📊 Barra de Progresso</span>
+                  </label>
+
+                  {/* #97 Text Reflection */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.textReflection || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { textReflection: e.target.checked })} className="rounded" />
+                    <span className="text-xs">🪞 Reflexo no Texto</span>
+                  </label>
+
+                  {/* #98 Card Shadow */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Sombra do Card</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'soft', label: 'Suave' },
+                        { id: 'medium', label: 'Média' },
+                        { id: 'hard', label: 'Forte' },
+                        { id: 'colored', label: 'Colorida' },
+                        { id: 'inset', label: 'Inset' },
+                      ] as { id: CardShadowStyle; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.cardShadow || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { cardShadow: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #103 Text Rotation */}
+                  <div>
+                    <Label className="text-xs">Rotação do Texto: {selectedSlide.textRotation ?? 0}°</Label>
+                    <Slider value={[selectedSlide.textRotation ?? 0]} onValueChange={([v]) => onUpdateSlide(selectedSlideIndex, { textRotation: v })} min={-45} max={45} step={1} className="mt-1" />
+                  </div>
+
+                  {/* #104 Vertical Text */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.verticalText || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { verticalText: e.target.checked })} className="rounded" />
+                    <span className="text-xs">📝 Texto Vertical</span>
+                  </label>
+
+                  {/* #106 Gradient Text */}
+                  <div>
+                    <Label className="text-xs mb-1 block">Texto com Gradiente</Label>
+                    <div className="grid grid-cols-3 gap-1">
+                      {([
+                        { id: 'none', label: 'Sem' },
+                        { id: 'gold', label: '🥇 Gold' },
+                        { id: 'ocean', label: '🌊 Ocean' },
+                        { id: 'fire', label: '🔥 Fire' },
+                        { id: 'neon', label: '💜 Neon' },
+                        { id: 'aurora', label: '🌈 Aurora' },
+                      ] as { id: GradientTextPreset; label: string }[]).map(({ id, label }) => (
+                        <Button key={id} variant={(selectedSlide.gradientText || 'none') === id ? 'default' : 'outline'} size="sm" className="text-xs h-7" onClick={() => onUpdateSlide(selectedSlideIndex, { gradientText: id })}>{label}</Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* #107 Text Fade */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={selectedSlide.textFade || false} onChange={(e) => onUpdateSlide(selectedSlideIndex, { textFade: e.target.checked })} className="rounded" />
+                    <span className="text-xs">🌫️ Fade no Texto (degrade de opacidade)</span>
+                  </label>
                 {/* #14 Draggable Text Positioning */}
                 <div className="pt-4 border-t border-border space-y-3">
                   <Label className="text-xs text-muted-foreground">📐 Posição do Texto</Label>
