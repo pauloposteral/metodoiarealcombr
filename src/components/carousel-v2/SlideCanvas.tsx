@@ -469,28 +469,12 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
             boxShadow: `0 0 25px ${accentColor}50`,
           }} />
           
-          <h2 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 700,
-            lineHeight: 1.12,
-            marginBottom: 45,
-            maxWidth: 880,
-            textShadow: '0 5px 35px rgba(0,0,0,0.55)',
-            letterSpacing: '-0.02em',
-          }}>
+          <h2 style={getTitleStyle({ marginBottom: 45, maxWidth: 880 })}>
             {slide.title}
           </h2>
           
           {slide.content && (
-            <p style={{
-              fontSize: contentSize,
-              lineHeight: 1.65,
-              opacity: 0.95,
-              maxWidth: 840,
-              textShadow: '0 3px 22px rgba(0,0,0,0.45)',
-              fontWeight: 400,
-            }}>
+            <p style={getContentStyle({ maxWidth: 840, opacity: 0.95 })}>
               {slide.content}
             </p>
           )}
