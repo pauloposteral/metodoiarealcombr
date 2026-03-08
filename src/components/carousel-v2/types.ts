@@ -2,7 +2,7 @@
 // CAROUSEL ENGINE vNext - TYPES
 // ==========================================
 
-export type CarouselObjective = 'educar' | 'converter' | 'autoridade' | 'viral' | 'storytelling' | 'polemica';
+export type CarouselObjective = 'educar' | 'converter' | 'autoridade' | 'viral' | 'storytelling' | 'polemica' | 'mito-realidade' | 'antes-depois' | 'thread-visual';
 export type AudienceLevel = 'iniciante' | 'intermediario' | 'avancado';
 export type VisualStyle = 'minimal-premium' | 'editorial' | 'tech-clean' | 'cozy' | 'alto-contraste';
 export type ToneStyle = 'humano' | 'tecnico' | 'provocativo' | 'elegante';
@@ -758,6 +758,27 @@ export const OBJECTIVE_CONFIGS: Record<CarouselObjective, {
     icon: 'MessageSquare',
     structure: 'Afirmação Forte → Contexto → Argumentos → Convite ao Debate',
     color: 'hsl(20, 90%, 55%)',
+  },
+  'mito-realidade': {
+    label: 'Mito vs Realidade',
+    description: 'Desmistifique crenças populares',
+    icon: 'Users',
+    structure: 'Cover → Mito 1 → Realidade 1 → Mito 2 → Realidade 2 → Conclusão → CTA',
+    color: 'hsl(260, 75%, 55%)',
+  },
+  'antes-depois': {
+    label: 'Antes e Depois',
+    description: 'Mostre transformações e resultados',
+    icon: 'Zap',
+    structure: 'Cover → Antes (Problema) → Depois (Resultado) → Como → Prova → CTA',
+    color: 'hsl(160, 70%, 45%)',
+  },
+  'thread-visual': {
+    label: 'Thread Visual',
+    description: 'Estilo tweet/thread com insights rápidos',
+    icon: 'MessageSquare',
+    structure: 'Cover → Insight 1 → Insight 2 → Insight 3 → Insight 4 → Resumo → CTA',
+    color: 'hsl(210, 85%, 55%)',
   },
 };
 
