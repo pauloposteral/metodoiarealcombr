@@ -19,6 +19,42 @@
 | 9 | A/B Test de hooks (3 variações de capa) | ✅ Feito |
 | 10 | Análise de concorrência por @ | ✅ Feito |
 
+## H. IA AVANÇADA (55-74)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 55 | Gerar carrossel a partir de PDF/eBook upload | 🔜 Próximo |
+| 56 | Gerar carrossel a partir de thread do Twitter/X | 🔜 Próximo |
+| 57 | Gerar carrossel a partir de podcast (RSS feed) | 🔜 Próximo |
+| 58 | IA que sugere melhor horário de postagem por nicho | ✅ Feito |
+| 59 | Auto-geração de alt-text acessível para cada slide | ✅ Feito |
+| 60 | Resumo automático de artigos longos em 7 slides | 🔜 Próximo |
+| 61 | Detector de clichês e frases fracas no copy | ✅ Feito |
+| 62 | Sugestão de CTA personalizado por objetivo | ✅ Feito |
+| 63 | IA que analisa e pontua legibilidade do texto | ✅ Feito |
+| 64 | Geração de carrossel em formato "mito vs realidade" | ✅ Feito |
+| 65 | Modo "polêmica controlada" - gera hooks provocativos | ✅ Feito (via objetivo existente) |
+| 66 | IA que sugere emojis estratégicos por slide | ✅ Feito |
+| 67 | Geração de carrossel tipo "antes e depois" | ✅ Feito |
+| 68 | IA para reescrever em tom de voz de pessoa específica | ✅ Feito |
+| 69 | Prompt refinement - IA melhora o prompt do usuário | ✅ Feito |
+| 70 | Gerar variações de um mesmo carrossel (3 versões) | ✅ Feito |
+| 71 | IA que cria storytelling a partir de dados/números | 🔜 Próximo |
+| 72 | Auto-detecção de idioma e adaptação cultural | 🔜 Próximo |
+| 73 | Geração de "thread visual" (carrossel estilo tweet) | ✅ Feito |
+| 74 | IA que sugere sequência ideal de slides por psicologia | ✅ Feito |
+|---|----------|--------|
+| 1 | Modelo Pro para roteiros (`gemini-2.5-pro`) | ✅ Feito |
+| 2 | **Imagens com Gemini 3 Pro** | ✅ Feito |
+| 3 | Upload de imagem de referência visual | ✅ Feito |
+| 4 | Rewrite inteligente de todo o carrossel | ✅ Feito |
+| 5 | Tradução automática (EN/ES/FR) | ✅ Feito |
+| 6 | Geração a partir de URL (artigo → carrossel) | ✅ Feito |
+| 7 | Geração a partir de áudio/vídeo (transcrição) | ✅ Feito |
+| 8 | Sugestão de ideias por nicho | ✅ Feito |
+| 9 | A/B Test de hooks (3 variações de capa) | ✅ Feito |
+| 10 | Análise de concorrência por @ | ✅ Feito |
+
 ## B. EDITOR VISUAL (11-22)
 
 | # | Melhoria | Status |
