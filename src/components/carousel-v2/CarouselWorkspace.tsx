@@ -13,6 +13,7 @@ import { OnboardingTour } from './OnboardingTour';
 import { BrandKitManager } from './BrandKitManager';
 import { CommunityTemplates } from './CommunityTemplates';
 import { WorkflowBoard } from './WorkflowBoard';
+import { MultiSelectToolbar } from './MultiSelectToolbar';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
@@ -86,6 +87,9 @@ export const CarouselWorkspace = () => {
   const [variationsResults, setVariationsResults] = useState<any[]>([]);
   const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
   const [psychologyResults, setPsychologyResults] = useState<any>(null);
+  const [multiSelectedIndices, setMultiSelectedIndices] = useState<Set<number>>(new Set());
+  const [clipboardSlides, setClipboardSlides] = useState<CarouselSlide[]>([]);
+  const [isDragPositionMode, setIsDragPositionMode] = useState(false);
   const persistence = useCarouselPersistence();
 
   const [progress, setProgress] = useState<GenerationProgress>({
@@ -371,6 +375,150 @@ export const CarouselWorkspace = () => {
     });
     setSelectedSlideIndex(endIndex);
   };
+
+  // ==========================================
+  // Multi-Select Operations (#110-124)
+  // ==========================================
+  const handleSlideClick = useCallback((index: number, e?: React.MouseEvent) => {
+    if (e?.shiftKey) {
+      // Shift+click: toggle selection
+      setMultiSelectedIndices(prev => {
+        const next = new Set(prev);
+        if (next.has(index)) {
+          next.delete(index);
+        } else {
+          next.add(index);
+        }
+        // Always include current selected
+        next.add(selectedSlideIndex);
+        return next;
+      });
+    } else if (e?.ctrlKey || e?.metaKey) {
+      // Ctrl+click: add to selection
+      setMultiSelectedIndices(prev => {
+        const next = new Set(prev);
+        next.add(index);
+        return next;
+      });
+      setSelectedSlideIndex(index);
+    } else {
+      // Normal click: single select
+      setMultiSelectedIndices(new Set());
+      setSelectedSlideIndex(index);
+    }
+  }, [selectedSlideIndex]);
+
+  const handleDeleteMultiSelected = useCallback(() => {
+    if (multiSelectedIndices.size === 0) return;
+    const remaining = slides.filter((_, i) => !multiSelectedIndices.has(i));
+    if (remaining.length < 2) {
+      toast.error('Mínimo de 2 slides necessários');
+      return;
+    }
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(remaining.map((s, i) => ({ ...s, order: i })));
+    setMultiSelectedIndices(new Set());
+    setSelectedSlideIndex(0);
+    toast.success(`${multiSelectedIndices.size} slides excluídos`);
+  }, [multiSelectedIndices, slides]);
+
+  const handleDuplicateMultiSelected = useCallback(() => {
+    const indices = Array.from(multiSelectedIndices).sort((a, b) => a - b);
+    if (indices.length === 0) return;
+    const dupes = indices.map(i => ({
+      ...slides[i],
+      id: crypto.randomUUID(),
+      order: slides.length,
+    }));
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides([...slides, ...dupes].map((s, i) => ({ ...s, order: i })));
+    setMultiSelectedIndices(new Set());
+    toast.success(`${dupes.length} slides duplicados`);
+  }, [multiSelectedIndices, slides]);
+
+  const handleMoveMultiSelected = useCallback((direction: 'up' | 'down') => {
+    const indices = Array.from(multiSelectedIndices).sort((a, b) => a - b);
+    if (indices.length === 0) return;
+    
+    const newSlides = [...slides];
+    if (direction === 'up' && indices[0] > 0) {
+      for (const idx of indices) {
+        [newSlides[idx - 1], newSlides[idx]] = [newSlides[idx], newSlides[idx - 1]];
+      }
+    } else if (direction === 'down' && indices[indices.length - 1] < slides.length - 1) {
+      for (const idx of [...indices].reverse()) {
+        [newSlides[idx + 1], newSlides[idx]] = [newSlides[idx], newSlides[idx + 1]];
+      }
+    }
+    
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlides(newSlides.map((s, i) => ({ ...s, order: i })));
+  }, [multiSelectedIndices, slides]);
+
+  const handleApplyStyleToMultiSelected = useCallback(() => {
+    if (multiSelectedIndices.size === 0) return;
+    // Apply current slide's style to all selected
+    const source = slides[selectedSlideIndex];
+    if (!source) return;
+    const styleProps: Partial<CarouselSlide> = {
+      customTextColor: source.customTextColor,
+      customAccentColor: source.customAccentColor,
+      imageFilter: source.imageFilter,
+      imageOpacity: source.imageOpacity,
+      textShadowStyle: source.textShadowStyle,
+      glassmorphism: source.glassmorphism,
+      backgroundPattern: source.backgroundPattern,
+      titleFontSize: source.titleFontSize,
+      contentFontSize: source.contentFontSize,
+      textAlignment: source.textAlignment,
+      textPosition: source.textPosition,
+    };
+    
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(prev => prev.map((s, i) => 
+      multiSelectedIndices.has(i) ? { ...s, ...styleProps } : s
+    ));
+    setMultiSelectedIndices(new Set());
+    toast.success('Estilo aplicado aos slides selecionados!');
+  }, [multiSelectedIndices, slides, selectedSlideIndex]);
+
+  // Copy/Paste slides
+  const handleCopySlides = useCallback(() => {
+    const indices = multiSelectedIndices.size > 0 
+      ? Array.from(multiSelectedIndices) 
+      : [selectedSlideIndex];
+    setClipboardSlides(indices.map(i => slides[i]).filter(Boolean));
+    toast.success(`${indices.length} slide(s) copiado(s)`);
+  }, [multiSelectedIndices, selectedSlideIndex, slides]);
+
+  const handlePasteSlides = useCallback(() => {
+    if (clipboardSlides.length === 0) return;
+    const pasted = clipboardSlides.map(s => ({
+      ...s,
+      id: crypto.randomUUID(),
+      order: slides.length,
+    }));
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides([...slides, ...pasted].map((s, i) => ({ ...s, order: i })));
+    toast.success(`${pasted.length} slide(s) colado(s)`);
+  }, [clipboardSlides, slides]);
+
+  const handleDuplicateCurrentSlide = useCallback(() => {
+    const slide = slides[selectedSlideIndex];
+    if (!slide) return;
+    const dupe = { ...slide, id: crypto.randomUUID(), order: selectedSlideIndex + 1 };
+    const newSlides = [...slides];
+    newSlides.splice(selectedSlideIndex + 1, 0, dupe);
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(newSlides.map((s, i) => ({ ...s, order: i })));
+    setSelectedSlideIndex(selectedSlideIndex + 1);
+    toast.success('Slide duplicado!');
+  }, [slides, selectedSlideIndex]);
 
   // Auto-save when slides change
   useEffect(() => {
@@ -916,6 +1064,30 @@ export const CarouselWorkspace = () => {
         handleNewCarousel();
       }
 
+      // Ctrl+C / Cmd+C - Copy slides
+      if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+        e.preventDefault();
+        handleCopySlides();
+      }
+
+      // Ctrl+V / Cmd+V - Paste slides
+      if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        e.preventDefault();
+        handlePasteSlides();
+      }
+
+      // Ctrl+D / Cmd+D - Duplicate current slide
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        handleDuplicateCurrentSlide();
+      }
+
+      // Delete - Delete selected slides
+      if (e.key === 'Delete' && multiSelectedIndices.size > 1) {
+        e.preventDefault();
+        handleDeleteMultiSelected();
+      }
+
       // Escape - Exit fullscreen
       if (e.key === 'Escape' && isFullscreen) {
         setIsFullscreen(false);
@@ -966,6 +1138,20 @@ export const CarouselWorkspace = () => {
     <div data-theme={isDarkEditor ? 'dark' : 'light'} className={`transition-colors duration-300 bg-background text-foreground ${isFullscreen ? 'fixed inset-0 z-50 overflow-auto' : 'min-h-screen'} ${!isDarkEditor ? '[&]:bg-slate-50 [&]:text-slate-900' : ''}`}>
       {/* Onboarding Tour (#48) */}
       <OnboardingTour forceShow={showOnboarding} onClose={() => setShowOnboarding(false)} />
+
+      {/* Multi-Select Toolbar (#110-124) */}
+      <AnimatePresence>
+        <MultiSelectToolbar
+          selectedIndices={multiSelectedIndices}
+          slides={slides}
+          onClearSelection={() => setMultiSelectedIndices(new Set())}
+          onDeleteSelected={handleDeleteMultiSelected}
+          onDuplicateSelected={handleDuplicateMultiSelected}
+          onMoveSelectedUp={() => handleMoveMultiSelected('up')}
+          onMoveSelectedDown={() => handleMoveMultiSelected('down')}
+          onApplyStyleToSelected={handleApplyStyleToMultiSelected}
+        />
+      </AnimatePresence>
 
       {/* Generation Overlay - Futuristic */}
       <GenerationOverlay 
