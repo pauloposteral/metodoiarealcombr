@@ -831,7 +831,6 @@ export const CarouselWorkspace = () => {
   // ==========================================
   // #71 Data Storytelling
   // ==========================================
-  const [dataStoryInput, setDataStoryInput] = useState('');
   const handleDataStorytelling = async () => {
     if (!dataStoryInput.trim()) {
       toast.error('Insira dados/números para criar a narrativa');
