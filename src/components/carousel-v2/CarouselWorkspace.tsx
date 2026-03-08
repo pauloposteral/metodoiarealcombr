@@ -376,6 +376,150 @@ export const CarouselWorkspace = () => {
     setSelectedSlideIndex(endIndex);
   };
 
+  // ==========================================
+  // Multi-Select Operations (#110-124)
+  // ==========================================
+  const handleSlideClick = useCallback((index: number, e?: React.MouseEvent) => {
+    if (e?.shiftKey) {
+      // Shift+click: toggle selection
+      setMultiSelectedIndices(prev => {
+        const next = new Set(prev);
+        if (next.has(index)) {
+          next.delete(index);
+        } else {
+          next.add(index);
+        }
+        // Always include current selected
+        next.add(selectedSlideIndex);
+        return next;
+      });
+    } else if (e?.ctrlKey || e?.metaKey) {
+      // Ctrl+click: add to selection
+      setMultiSelectedIndices(prev => {
+        const next = new Set(prev);
+        next.add(index);
+        return next;
+      });
+      setSelectedSlideIndex(index);
+    } else {
+      // Normal click: single select
+      setMultiSelectedIndices(new Set());
+      setSelectedSlideIndex(index);
+    }
+  }, [selectedSlideIndex]);
+
+  const handleDeleteMultiSelected = useCallback(() => {
+    if (multiSelectedIndices.size === 0) return;
+    const remaining = slides.filter((_, i) => !multiSelectedIndices.has(i));
+    if (remaining.length < 2) {
+      toast.error('Mínimo de 2 slides necessários');
+      return;
+    }
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(remaining.map((s, i) => ({ ...s, order: i })));
+    setMultiSelectedIndices(new Set());
+    setSelectedSlideIndex(0);
+    toast.success(`${multiSelectedIndices.size} slides excluídos`);
+  }, [multiSelectedIndices, slides]);
+
+  const handleDuplicateMultiSelected = useCallback(() => {
+    const indices = Array.from(multiSelectedIndices).sort((a, b) => a - b);
+    if (indices.length === 0) return;
+    const dupes = indices.map(i => ({
+      ...slides[i],
+      id: crypto.randomUUID(),
+      order: slides.length,
+    }));
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides([...slides, ...dupes].map((s, i) => ({ ...s, order: i })));
+    setMultiSelectedIndices(new Set());
+    toast.success(`${dupes.length} slides duplicados`);
+  }, [multiSelectedIndices, slides]);
+
+  const handleMoveMultiSelected = useCallback((direction: 'up' | 'down') => {
+    const indices = Array.from(multiSelectedIndices).sort((a, b) => a - b);
+    if (indices.length === 0) return;
+    
+    const newSlides = [...slides];
+    if (direction === 'up' && indices[0] > 0) {
+      for (const idx of indices) {
+        [newSlides[idx - 1], newSlides[idx]] = [newSlides[idx], newSlides[idx - 1]];
+      }
+    } else if (direction === 'down' && indices[indices.length - 1] < slides.length - 1) {
+      for (const idx of [...indices].reverse()) {
+        [newSlides[idx + 1], newSlides[idx]] = [newSlides[idx], newSlides[idx + 1]];
+      }
+    }
+    
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlides(newSlides.map((s, i) => ({ ...s, order: i })));
+  }, [multiSelectedIndices, slides]);
+
+  const handleApplyStyleToMultiSelected = useCallback(() => {
+    if (multiSelectedIndices.size === 0) return;
+    // Apply current slide's style to all selected
+    const source = slides[selectedSlideIndex];
+    if (!source) return;
+    const styleProps: Partial<CarouselSlide> = {
+      customTextColor: source.customTextColor,
+      customAccentColor: source.customAccentColor,
+      imageFilter: source.imageFilter,
+      imageOpacity: source.imageOpacity,
+      textShadowStyle: source.textShadowStyle,
+      glassmorphism: source.glassmorphism,
+      backgroundPattern: source.backgroundPattern,
+      titleFontSize: source.titleFontSize,
+      contentFontSize: source.contentFontSize,
+      textAlignment: source.textAlignment,
+      textPosition: source.textPosition,
+    };
+    
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(prev => prev.map((s, i) => 
+      multiSelectedIndices.has(i) ? { ...s, ...styleProps } : s
+    ));
+    setMultiSelectedIndices(new Set());
+    toast.success('Estilo aplicado aos slides selecionados!');
+  }, [multiSelectedIndices, slides, selectedSlideIndex]);
+
+  // Copy/Paste slides
+  const handleCopySlides = useCallback(() => {
+    const indices = multiSelectedIndices.size > 0 
+      ? Array.from(multiSelectedIndices) 
+      : [selectedSlideIndex];
+    setClipboardSlides(indices.map(i => slides[i]).filter(Boolean));
+    toast.success(`${indices.length} slide(s) copiado(s)`);
+  }, [multiSelectedIndices, selectedSlideIndex, slides]);
+
+  const handlePasteSlides = useCallback(() => {
+    if (clipboardSlides.length === 0) return;
+    const pasted = clipboardSlides.map(s => ({
+      ...s,
+      id: crypto.randomUUID(),
+      order: slides.length,
+    }));
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides([...slides, ...pasted].map((s, i) => ({ ...s, order: i })));
+    toast.success(`${pasted.length} slide(s) colado(s)`);
+  }, [clipboardSlides, slides]);
+
+  const handleDuplicateCurrentSlide = useCallback(() => {
+    const slide = slides[selectedSlideIndex];
+    if (!slide) return;
+    const dupe = { ...slide, id: crypto.randomUUID(), order: selectedSlideIndex + 1 };
+    const newSlides = [...slides];
+    newSlides.splice(selectedSlideIndex + 1, 0, dupe);
+    setSlidesHistory(h => [...h.slice(-29), slides]);
+    setSlidesRedoStack([]);
+    setSlides(newSlides.map((s, i) => ({ ...s, order: i })));
+    setSelectedSlideIndex(selectedSlideIndex + 1);
+    toast.success('Slide duplicado!');
+  }, [slides, selectedSlideIndex]);
+
   // Auto-save when slides change
   useEffect(() => {
     if (carousel && slides.length > 0 && step === 'editor' && !isGenerating) {
