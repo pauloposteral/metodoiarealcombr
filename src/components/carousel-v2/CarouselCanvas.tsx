@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CarouselSlide, CarouselTheme, QualityScore, CarouselFormat, FORMAT_DIMENSIONS } from './types';
+import { CarouselSlide, CarouselTheme, QualityScore, CarouselFormat, FORMAT_DIMENSIONS, ExportPlatform, PLATFORM_FORMATS } from './types';
 import { SlideCanvas } from './SlideCanvas';
 import { Slide3DContainer } from './Slide3DContainer';
 import { 
