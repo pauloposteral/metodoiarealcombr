@@ -393,19 +393,17 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
         }}>
           {renderLogo('center', 95)}
           
-          <h1 style={{
-            fontFamily: displayFont,
-            fontSize: titleSize,
-            fontWeight: 800,
-            lineHeight: 1.05,
-            marginTop: 55,
-            marginBottom: 35,
-            maxWidth: 920,
-            textShadow: '0 8px 50px rgba(0,0,0,0.6), 0 2px 10px rgba(0,0,0,0.3)',
-            letterSpacing: '-0.025em',
-          }}>
-            {slide.title}
-          </h1>
+          {glassWrap(
+            <>
+              <h1 style={getTitleStyle({
+                marginTop: 55,
+                marginBottom: 35,
+                maxWidth: 920,
+              })}>
+                {slide.title}
+              </h1>
+            </>
+          )}
           
           {slide.subtitle && (
             <p style={{
