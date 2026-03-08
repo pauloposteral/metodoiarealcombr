@@ -145,6 +145,23 @@
 | 105 | Fontes variáveis com peso dinâmico (100-900) | ✅ Feito |
 | 108 | Texto com contorno (stroke) | ✅ Feito |
 
+## J. TEMPLATES + BRANDING (125-139)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 125 | Brand Kit (cores, fontes, logo salvos) | ✅ Feito |
+| 126 | Aplicar Brand Kit ao tema do carrossel | ✅ Feito |
+| 127 | Templates sazonais (Black Friday, Natal, Lançamento, Dia das Mães) | ✅ Feito |
+| 128 | Templates por profissão (Coach, Nutricionista, Advogado, E-commerce, Imobiliária, Personal) | ✅ Feito |
+| 129 | Marketplace de templates da comunidade | ✅ Feito |
+| 130 | Publicar/despublicar templates na comunidade | ✅ Feito |
+| 131 | Busca e filtro de templates por categoria | ✅ Feito |
+| 132 | Preview de cores nos templates | ✅ Feito |
+| 133 | Contador de uso nos templates | ✅ Feito |
+| 134 | Múltiplos Brand Kits por usuário | ✅ Feito |
+| 135 | Brand Kit padrão (default) | ✅ Feito |
+| 136 | Preview visual do Brand Kit | ✅ Feito |
+
 ---
 
-## Progresso: 84/254 ✅ (33%)
+## Progresso: 96/254 ✅ (38%)
