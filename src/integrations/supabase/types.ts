@@ -808,6 +808,8 @@ export type Database = {
       saved_carousels: {
         Row: {
           alternative_title: string | null
+          approved_at: string | null
+          approved_by: string | null
           caption: string | null
           config: Json | null
           created_at: string
@@ -815,17 +817,24 @@ export type Database = {
           folder_id: string | null
           hashtags: string[] | null
           id: string
+          notes: string | null
+          priority: string | null
           public_share_id: string | null
           quality_score: Json | null
+          scheduled_at: string | null
           slides: Json
+          tags: string[] | null
           theme: Json | null
           thumbnail_url: string | null
           topic: string
           updated_at: string
           user_id: string
+          workflow_status: string | null
         }
         Insert: {
           alternative_title?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           caption?: string | null
           config?: Json | null
           created_at?: string
@@ -833,17 +842,24 @@ export type Database = {
           folder_id?: string | null
           hashtags?: string[] | null
           id?: string
+          notes?: string | null
+          priority?: string | null
           public_share_id?: string | null
           quality_score?: Json | null
+          scheduled_at?: string | null
           slides?: Json
+          tags?: string[] | null
           theme?: Json | null
           thumbnail_url?: string | null
           topic: string
           updated_at?: string
           user_id: string
+          workflow_status?: string | null
         }
         Update: {
           alternative_title?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           caption?: string | null
           config?: Json | null
           created_at?: string
@@ -851,14 +867,19 @@ export type Database = {
           folder_id?: string | null
           hashtags?: string[] | null
           id?: string
+          notes?: string | null
+          priority?: string | null
           public_share_id?: string | null
           quality_score?: Json | null
+          scheduled_at?: string | null
           slides?: Json
+          tags?: string[] | null
           theme?: Json | null
           thumbnail_url?: string | null
           topic?: string
           updated_at?: string
           user_id?: string
+          workflow_status?: string | null
         }
         Relationships: [
           {
@@ -908,6 +929,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      slide_comments: {
+        Row: {
+          carousel_id: string
+          content: string
+          created_at: string
+          id: string
+          is_resolved: boolean | null
+          slide_index: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          carousel_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_resolved?: boolean | null
+          slide_index: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          carousel_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_resolved?: boolean | null
+          slide_index?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "slide_comments_carousel_id_fkey"
+            columns: ["carousel_id"]
+            isOneToOne: false
+            referencedRelation: "saved_carousels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_badges: {
         Row: {
