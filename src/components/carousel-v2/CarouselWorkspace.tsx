@@ -1211,6 +1211,110 @@ export const CarouselWorkspace = () => {
                 A/B Hooks
               </Button>
 
+              {/* New AI Advanced Features */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" disabled={isRewriting} className="gap-1.5 text-xs">
+                    <Brain className="w-3.5 h-3.5" />
+                    IA Avançada
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuItem onClick={handleDetectCliches} className="gap-2">
+                    <FileText className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Detector de Clichês</p>
+                      <p className="text-xs text-muted-foreground">Encontra frases fracas</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSuggestCTA} className="gap-2">
+                    <Lightbulb className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Sugerir CTAs</p>
+                      <p className="text-xs text-muted-foreground">5 CTAs personalizados</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleReadabilityScore} className="gap-2">
+                    <FileText className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Score de Legibilidade</p>
+                      <p className="text-xs text-muted-foreground">Análise por slide</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSuggestEmojis} className="gap-2">
+                    <Smile className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Emojis Estratégicos</p>
+                      <p className="text-xs text-muted-foreground">Aplica emojis inteligentes</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleGenerateVariations} className="gap-2">
+                    <Shuffle className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">3 Variações</p>
+                      <p className="text-xs text-muted-foreground">Abordagens diferentes</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSequencePsychology} className="gap-2">
+                    <Brain className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Sequência Psicológica</p>
+                      <p className="text-xs text-muted-foreground">Ordem ideal por atenção</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSuggestPostingTime} className="gap-2">
+                    <Clock className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Melhor Horário</p>
+                      <p className="text-xs text-muted-foreground">Horário ideal por nicho</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleGenerateAltText} className="gap-2">
+                    <Accessibility className="w-4 h-4" />
+                    <div>
+                      <p className="font-medium">Alt-Text Acessível</p>
+                      <p className="text-xs text-muted-foreground">Texto acessível por slide</p>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* #68 Voice Rewrite */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" disabled={isRewriting} className="gap-1.5 text-xs">
+                    <UserCircle className="w-3.5 h-3.5" />
+                    Tom de Voz
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="p-3 w-56">
+                  <p className="text-xs font-medium mb-2">Reescrever no tom de:</p>
+                  <div className="flex gap-1">
+                    <Input
+                      placeholder="Ex: Ícaro de Carvalho"
+                      value={voicePersonInput}
+                      onChange={(e) => setVoicePersonInput(e.target.value)}
+                      className="text-xs h-8"
+                    />
+                    <Button 
+                      size="sm" 
+                      className="h-8 text-xs" 
+                      onClick={() => handleRewriteVoice(voicePersonInput)}
+                      disabled={!voicePersonInput.trim()}
+                    >
+                      Ir
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {['Gary Vee', 'Seth Godin', 'Ícaro de Carvalho', 'Thiago Nigro'].map(name => (
+                      <Button key={name} variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={() => handleRewriteVoice(name)}>
+                        {name}
+                      </Button>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {/* #27 Save as Template */}
               <SaveAsTemplateDialog
                 slides={slides}
