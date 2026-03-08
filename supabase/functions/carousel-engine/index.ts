@@ -795,6 +795,461 @@ Responda APENAS com JSON:
 }
 
 // ==========================================
+// #61 Detect Clichés and Weak Phrases
+// ==========================================
+async function detectCliches(apiKey: string, slides: any[]) {
+  const systemPrompt = `Você é um editor de copy exigente. Analise os slides e detecte:
+- Clichês e frases batidas
+- Frases fracas ou vagas
+- Palavras desnecessárias (muito, realmente, basicamente)
+- Promessas genéricas
+
+Para cada problema, sugira uma alternativa mais forte.
+
+Responda APENAS com JSON:
+{
+  "issues": [
+    {
+      "slideIndex": number,
+      "original": "frase original",
+      "problem": "cliche|fraco|vago|generico",
+      "suggestion": "versão melhorada",
+      "severity": "low|medium|high"
+    }
+  ],
+  "overallScore": number 0-100,
+  "summary": "resumo geral da qualidade do copy"
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #62 Suggest CTA by Objective
+// ==========================================
+async function suggestCTA(apiKey: string, topic: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um especialista em CTAs para Instagram.
+Sugira 5 CTAs personalizados para este carrossel.
+
+Objetivo: ${config?.objective || 'educar'}
+Tom: ${config?.audience?.tone || 'humano'}
+
+Tipos de CTA:
+- salvar: incentiva salvar o post
+- compartilhar: incentiva compartilhar
+- comentar: incentiva comentários
+- seguir: incentiva seguir o perfil
+- link: direciona para link na bio
+
+Responda APENAS com JSON:
+{
+  "ctas": [
+    {
+      "text": "texto do CTA (máx 15 palavras)",
+      "type": "salvar|compartilhar|comentar|seguir|link",
+      "emoji": "emoji sugerido",
+      "score": number 0-100
+    }
+  ]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Tema: "${topic}"` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #63 Readability Score
+// ==========================================
+async function readabilityScore(apiKey: string, slides: any[]) {
+  const systemPrompt = `Você é um especialista em legibilidade para mobile.
+Analise cada slide e pontue a legibilidade de 0-100.
+
+CRITÉRIOS:
+- Tamanho da fonte visual (texto curto = melhor)
+- Contraste presumido
+- Hierarquia de informação
+- Escaneabilidade (lê rápido?)
+- Adequação para tela de celular
+
+Responda APENAS com JSON:
+{
+  "slides": [
+    {
+      "slideIndex": number,
+      "score": number,
+      "wordCount": number,
+      "issues": ["issue1", "issue2"],
+      "suggestion": "como melhorar"
+    }
+  ],
+  "averageScore": number,
+  "worstSlide": number
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): Título(${(s.title || '').length}chars): "${s.title}" | Conteúdo(${(s.content || '').length}chars): "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #66 Suggest Strategic Emojis
+// ==========================================
+async function suggestEmojis(apiKey: string, slides: any[]) {
+  const systemPrompt = `Você é um estrategista de emojis para Instagram.
+Para cada slide, sugira 1-2 emojis estratégicos que:
+- Reforçam a mensagem visualmente
+- Quebram o texto para escaneabilidade
+- São relevantes ao conteúdo (não aleatórios)
+
+Responda APENAS com JSON:
+{
+  "slides": [
+    {
+      "slideIndex": number,
+      "titleEmoji": "emoji para início do título",
+      "contentEmojis": ["emoji1", "emoji2"],
+      "reasoning": "por que esses emojis"
+    }
+  ]
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #69 Prompt Refinement
+// ==========================================
+async function refinePrompt(apiKey: string, userPrompt: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um especialista em prompts para carrosséis.
+O usuário quer criar um carrossel sobre um tema mas o prompt pode ser vago.
+Melhore o prompt para gerar um carrossel mais impactante.
+
+Objetivo: ${config?.objective || 'educar'}
+Público: ${config?.audience?.level || 'intermediario'}
+Nicho: ${config?.audience?.niche || 'geral'}
+
+Gere 3 versões refinadas do prompt:
+1. Mais específico e direto
+2. Com ângulo polêmico/provocativo
+3. Com dados/números
+
+Responda APENAS com JSON:
+{
+  "refinements": [
+    {
+      "prompt": "prompt refinado",
+      "approach": "especifico|polemico|dados",
+      "improvement": "o que melhorou"
+    }
+  ]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Prompt original: "${userPrompt}"` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #70 Generate 3 Variations
+// ==========================================
+async function generateVariations(apiKey: string, topic: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um estrategista de conteúdo. Gere 3 abordagens COMPLETAMENTE DIFERENTES para o mesmo tema.
+
+Cada variação deve ter:
+- Ângulo diferente (educativo vs provocativo vs inspiracional)
+- Hook diferente
+- Estrutura narrativa diferente
+
+Objetivo: ${config?.objective || 'educar'}
+Público: ${config?.audience?.level || 'intermediario'}
+
+Responda APENAS com JSON:
+{
+  "variations": [
+    {
+      "id": "uuid",
+      "name": "Nome da abordagem",
+      "angle": "educativo|provocativo|inspiracional",
+      "hook": "hook de capa (máx 8 palavras)",
+      "outline": ["slide1 resumo", "slide2 resumo", "slide3 resumo"],
+      "viralScore": number 0-100,
+      "reasoning": "por que essa abordagem funciona"
+    }
+  ]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-pro',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Tema: "${topic}"` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+  return { variations: content.variations.map((v: any) => ({ ...v, id: crypto.randomUUID() })) };
+}
+
+// ==========================================
+// #68 Rewrite in Specific Person's Voice
+// ==========================================
+async function rewriteVoice(apiKey: string, slides: any[], voicePerson: string) {
+  const systemPrompt = `Você é um ghostwriter especialista em adaptar textos ao tom de voz de pessoas específicas.
+Reescreva todos os slides no estilo/tom de voz de "${voicePerson}".
+
+Capture:
+- Vocabulário típico
+- Estrutura de frases
+- Expressões características
+- Nível de formalidade
+- Ritmo do texto
+
+Mantenha o conteúdo/mensagem mas adapte completamente o estilo.
+
+Responda APENAS com JSON:
+{
+  "slides": [
+    {
+      "title": "novo título",
+      "subtitle": "novo subtítulo",
+      "content": "novo conteúdo"
+    }
+  ],
+  "voiceNotes": "observações sobre o tom aplicado"
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): "${s.title}" | "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-pro',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #74 Ideal Slide Sequence by Psychology
+// ==========================================
+async function sequencePsychology(apiKey: string, slides: any[], config: CarouselConfig) {
+  const systemPrompt = `Você é um psicólogo comportamental especialista em sequenciamento de conteúdo.
+Analise a ordem dos slides e sugira a MELHOR sequência baseada em:
+
+PRINCÍPIOS:
+- Efeito de primazia (o que vem primeiro é mais lembrado)
+- Efeito de recência (o que vem por último tem mais impacto)
+- Curva de atenção (pico no slide 2-3, queda no meio)
+- Tensão narrativa (conflito → resolução)
+- Cognitive load (não sobrecarregar no início)
+
+Objetivo: ${config?.objective || 'educar'}
+
+Responda APENAS com JSON:
+{
+  "suggestedOrder": [0, 2, 1, 3, 4, 5, 6],
+  "reasoning": "explicação da lógica psicológica",
+  "attentionCurve": [
+    { "slideIndex": number, "attentionLevel": number 0-100, "note": "por que neste nível" }
+  ],
+  "tips": ["dica 1", "dica 2"]
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #58 Suggest Best Posting Time
+// ==========================================
+async function suggestPostingTime(apiKey: string, config: CarouselConfig) {
+  const systemPrompt = `Você é um analista de redes sociais. Baseado no nicho e público, sugira os melhores horários de postagem no Instagram.
+
+Nicho: ${config?.audience?.niche || 'geral'}
+Público: ${config?.audience?.level || 'intermediario'}
+
+CONSIDERE:
+- Horários de pico do Instagram Brasil
+- Comportamento do público-alvo
+- Dia da semana
+- Competição por atenção
+
+Responda APENAS com JSON:
+{
+  "bestTimes": [
+    {
+      "day": "segunda|terca|quarta|quinta|sexta|sabado|domingo",
+      "time": "HH:MM",
+      "score": number 0-100,
+      "reasoning": "por que este horário"
+    }
+  ],
+  "tips": ["dica 1", "dica 2"],
+  "worstTimes": ["horário a evitar 1", "horário a evitar 2"]
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Nicho: ${config?.audience?.niche || 'empreendedorismo digital'}` },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// #59 Auto-generate Alt Text
+// ==========================================
+async function generateAltText(apiKey: string, slides: any[]) {
+  const systemPrompt = `Você é um especialista em acessibilidade web.
+Gere textos alternativos (alt-text) descritivos para cada slide de carrossel.
+
+REGRAS:
+- Descreva o conteúdo visual de forma concisa
+- Inclua o texto principal do slide
+- Máximo 125 caracteres por alt-text
+- Seja útil para leitores de tela
+
+Responda APENAS com JSON:
+{
+  "altTexts": [
+    {
+      "slideIndex": number,
+      "altText": "descrição acessível do slide"
+    }
+  ]
+}`;
+
+  const slidesText = slides.map((s: any, i: number) =>
+    `Slide ${i + 1} (${s.type}): Título: "${s.title}" | Conteúdo: "${s.content || ''}" | ImagePrompt: "${s.imagePrompt || ''}"`
+  ).join('\n');
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
 // Helper: Parse JSON from AI response
 // ==========================================
 function parseJsonFromResponse(content: string): any {
