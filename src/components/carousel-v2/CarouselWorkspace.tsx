@@ -27,6 +27,7 @@ import {
   CarouselFormat,
   FORMAT_DIMENSIONS,
   TEMPLATE_PRESETS,
+  GOOGLE_FONTS,
 } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
