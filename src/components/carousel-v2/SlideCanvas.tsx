@@ -307,7 +307,13 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               backgroundSize: 'cover',
               backgroundPosition: `${bgPosX}% ${bgPosY}%`,
               opacity: imageOpacity,
-              filter: imageFilter,
+              filter: [imageFilter, duotoneCSS].filter(Boolean).join(' ') || undefined,
+              // #81 Blend mode
+              mixBlendMode: (slide.imageBlendMode || 'normal') as any,
+              // #86 Background blur
+              ...(slide.backgroundBlur ? { filter: [imageFilter, duotoneCSS, `blur(${slide.backgroundBlur}px)`].filter(Boolean).join(' ') } : {}),
+              // #90 Image mask
+              ...(imageMaskCSS !== 'none' ? { clipPath: imageMaskCSS } : {}),
             }}
           />
           {slide.secondaryImageUrl && (
@@ -353,6 +359,9 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
       {/* #87 Background pattern */}
       {patternStyle && <div style={patternStyle} />}
       
+      {/* #79 Decorative shapes */}
+      {renderDecorativeShape(slide.decorativeShape, accentColor)}
+      
       <div 
         style={{
           position: 'absolute',
@@ -388,15 +397,56 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           opacity: 0.7,
         }}
       />
-      <div 
-        style={{
+      {/* #88 Noise texture (controllable) */}
+      {(slide.noiseTexture !== false) && (
+        <div 
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            opacity: 0.03,
+            mixBlendMode: 'overlay',
+          }}
+        />
+      )}
+      
+      {/* #94 Slide number */}
+      {slide.showSlideNumber && slide.order !== undefined && (
+        <div style={{
           position: 'absolute',
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          opacity: 0.03,
-          mixBlendMode: 'overlay',
-        }}
-      />
+          top: 30,
+          left: 35,
+          fontSize: 16,
+          fontWeight: 700,
+          color: accentColor,
+          opacity: 0.7,
+          zIndex: 50,
+          letterSpacing: '0.1em',
+        }}>
+          {String(slide.order + 1).padStart(2, '0')}
+        </div>
+      )}
+      
+      {/* #95 Progress bar */}
+      {slide.showProgressBar && slide.order !== undefined && (
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 5,
+          background: `${accentColor}20`,
+          zIndex: 50,
+        }}>
+          <div style={{
+            height: '100%',
+            width: `${((slide.order + 1) / 10) * 100}%`,
+            background: `linear-gradient(90deg, ${accentColor}, ${accentColor}cc)`,
+            borderRadius: '0 3px 3px 0',
+            transition: 'width 0.3s ease',
+          }} />
+        </div>
+      )}
     </>
   );
 
