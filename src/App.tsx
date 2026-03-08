@@ -31,6 +31,7 @@ import CarrosselPage from "./pages/CarrosselPage";
 import StoriesPage from "./pages/StoriesPage";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
 import CarouselPreviewPublic from "./pages/CarouselPreviewPublic";
+import Pricing from "./pages/Pricing";
 
 // Método IA SaaS
 import MetodoLanding from "./pages/metodo/MetodoLanding";
