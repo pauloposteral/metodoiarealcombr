@@ -871,6 +871,25 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           {slide.title}
         </h2>
         
+        {/* #85 Divider */}
+        {renderDivider(slide.dividerStyle, accentColor, 200)}
+        
+        {/* #97 Text reflection */}
+        {slide.textReflection && (
+          <h2 aria-hidden style={{
+            ...getTitleStyle({ maxWidth: 880 }),
+            transform: 'scaleY(-1)',
+            opacity: 0.08,
+            height: 50,
+            overflow: 'hidden',
+            maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)',
+            WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)',
+            pointerEvents: 'none',
+          }}>
+            {slide.title}
+          </h2>
+        )}
+        
         {slide.content && (
           <p 
             contentEditable={!!onInlineEdit}
