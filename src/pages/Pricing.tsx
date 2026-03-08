@@ -152,7 +152,7 @@ export default function Pricing() {
               Anual
             </span>
             {yearly && (
-              <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+              <Badge className="bg-accent/10 text-accent border-accent/20">
                 Economia de ~33%
               </Badge>
             )}
