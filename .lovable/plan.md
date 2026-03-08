@@ -188,6 +188,20 @@
 | 161 | Tags para organização | ✅ Feito |
 | 162 | Visualização Kanban e Calendário | ✅ Feito |
 
+## M. EDITOR AVANÇADO (110-124)
+
+| # | Melhoria | Status |
+|---|----------|--------|
+| 110 | Multi-select slides (Shift+click, Ctrl+click) | ✅ Feito |
+| 111 | Batch operations (delete, duplicate, move selected) | ✅ Feito |
+| 112 | Copy/Paste slides (Ctrl+C/V) | ✅ Feito |
+| 113 | Duplicate slide (Ctrl+D) | ✅ Feito |
+| 114 | Apply style to multiple slides | ✅ Feito |
+| 115 | Snap guides (center, quarter alignment) | ✅ Feito |
+| 116 | Draggable text position overlay | ✅ Feito |
+| 117 | Enhanced zoom controls (presets, fit-to-view) | ✅ Feito |
+| 118 | Canvas alignment guides | ✅ Feito |
+
 ---
 
-## Progresso: 112/254 ✅ (44%)
+## Progresso: 120/254 ✅ (47%)

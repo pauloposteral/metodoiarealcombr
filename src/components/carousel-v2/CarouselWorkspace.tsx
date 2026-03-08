@@ -1139,6 +1139,20 @@ export const CarouselWorkspace = () => {
       {/* Onboarding Tour (#48) */}
       <OnboardingTour forceShow={showOnboarding} onClose={() => setShowOnboarding(false)} />
 
+      {/* Multi-Select Toolbar (#110-124) */}
+      <AnimatePresence>
+        <MultiSelectToolbar
+          selectedIndices={multiSelectedIndices}
+          slides={slides}
+          onClearSelection={() => setMultiSelectedIndices(new Set())}
+          onDeleteSelected={handleDeleteMultiSelected}
+          onDuplicateSelected={handleDuplicateMultiSelected}
+          onMoveSelectedUp={() => handleMoveMultiSelected('up')}
+          onMoveSelectedDown={() => handleMoveMultiSelected('down')}
+          onApplyStyleToSelected={handleApplyStyleToMultiSelected}
+        />
+      </AnimatePresence>
+
       {/* Generation Overlay - Futuristic */}
       <GenerationOverlay 
         progress={progress} 
