@@ -36,7 +36,7 @@ import {
   Sparkles, AlertTriangle, CheckCircle2, Maximize2, Minimize2,
   Languages, RotateCcw, TestTube2, Moon, Sun, Undo2, Redo2, Type,
   HelpCircle, RectangleVertical, Square, Copy, Save, BookmarkPlus, Image as ImageIcon,
-  Mic, Search
+  Mic, Search, Smile, FileText, Brain, Clock, Accessibility, UserCircle, Shuffle, Lightbulb
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
