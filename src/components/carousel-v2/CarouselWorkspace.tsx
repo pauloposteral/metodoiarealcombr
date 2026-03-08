@@ -547,6 +547,7 @@ export const CarouselWorkspace = () => {
                 onThemeChange={setTheme}
                 onRegenerateImage={ai.handleRegenerateImage}
                 onImproveSlide={ai.handleImproveSlide}
+                onEditImagePrompt={ai.handleEditImagePrompt}
               />
             </div>
 
