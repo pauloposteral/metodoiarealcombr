@@ -276,6 +276,9 @@ async function generateFullCarousel(apiKey: string, topic: string, config: Carou
     viral: 'Cover hook forte → Microvitórias → Lista objetiva → Twist → CTA share/save',
     storytelling: 'Cover situação → Conflito → Jornada → Resolução → Lição → CTA',
     polemica: 'Cover afirmação forte → Contexto → Argumentos → Nuance → CTA debate',
+    'mito-realidade': 'Cover (Mito Popular) → Mito 1 + Realidade 1 → Mito 2 + Realidade 2 → Mito 3 + Realidade 3 → Conclusão surpreendente → CTA',
+    'antes-depois': 'Cover (Transformação) → Antes (estado atual/problema) → O Ponto de Virada → Depois (resultado) → Como Chegou Lá → Prova/Dados → CTA',
+    'thread-visual': 'Cover (Tweet Principal) → Insight/Tweet 1 → Insight/Tweet 2 → Insight/Tweet 3 → Insight/Tweet 4 → Resumo do Thread → CTA retweet/salvar',
   };
 
   const structure = objectiveStructures[config.objective] || objectiveStructures.educar;
