@@ -119,6 +119,9 @@ serve(async (req) => {
       case 'podcast-to-carousel':
         result = await podcastToCarousel(LOVABLE_API_KEY, textContent, config);
         break;
+      case 'edit-image-prompt':
+        result = await editImagePrompt(LOVABLE_API_KEY, currentImagePrompt, editInstruction, slides?.[slideIndex]);
+        break;
       default:
         throw new Error(`Unknown action: ${action}`);
     }
