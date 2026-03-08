@@ -31,7 +31,7 @@ serve(async (req) => {
   }
 
   try {
-    const { action, config, topic, slides, slideIndex, improvementAction, targetLang, voicePerson, userPrompt, textContent, dataPoints, rssUrl, threadText } = await req.json();
+    const { action, config, topic, slides, slideIndex, improvementAction, targetLang, voicePerson, userPrompt, textContent, dataPoints, rssUrl, threadText, editInstruction, currentImagePrompt } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -118,6 +118,9 @@ serve(async (req) => {
         break;
       case 'podcast-to-carousel':
         result = await podcastToCarousel(LOVABLE_API_KEY, textContent, config);
+        break;
+      case 'edit-image-prompt':
+        result = await editImagePrompt(LOVABLE_API_KEY, currentImagePrompt, editInstruction, slides?.[slideIndex]);
         break;
       default:
         throw new Error(`Unknown action: ${action}`);
@@ -1486,6 +1489,39 @@ Retorne JSON:
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: slidesText },
+      ],
+    }),
+  });
+  if (!response.ok) throw new Error(`AI API error: ${response.status}`);
+  const aiResponse = await response.json();
+  return parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
+}
+
+// ==========================================
+// Edit Image Prompt with AI
+// ==========================================
+async function editImagePrompt(apiKey: string, currentPrompt: string, instruction: string, slideContext?: any): Promise<any> {
+  const systemPrompt = `You are an expert at crafting image generation prompts. Given the current image prompt and user's edit instruction, create an improved prompt.
+
+Current image prompt: "${currentPrompt || 'No current prompt'}"
+Slide context: Title: "${slideContext?.title || ''}", Content: "${slideContext?.content || ''}"
+
+User wants to: "${instruction}"
+
+Return JSON:
+{
+  "newPrompt": "detailed improved image generation prompt incorporating the user's changes",
+  "description": "brief description of what changed"
+}`;
+
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Edit the image: ${instruction}` },
       ],
     }),
   });
