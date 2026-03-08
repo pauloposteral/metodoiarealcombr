@@ -31,7 +31,7 @@ serve(async (req) => {
   }
 
   try {
-    const { action, config, topic, slides, slideIndex, improvementAction, targetLang } = await req.json();
+    const { action, config, topic, slides, slideIndex, improvementAction, targetLang, voicePerson, userPrompt } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
