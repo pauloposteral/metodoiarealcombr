@@ -10,6 +10,8 @@ import { SaveAsTemplateDialog } from './SaveAsTemplateDialog';
 import { ShareLinkButton } from './ShareLinkButton';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { OnboardingTour } from './OnboardingTour';
+import { BrandKitManager } from './BrandKitManager';
+import { CommunityTemplates } from './CommunityTemplates';
 import { useCarouselPersistence, SavedCarousel } from '@/hooks/useCarouselPersistence';
 import { arrayMove } from '@dnd-kit/sortable';
 import { GenerationProgressBar } from './GenerationProgressBar';
