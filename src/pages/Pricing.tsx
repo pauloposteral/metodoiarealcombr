@@ -81,7 +81,7 @@ function formatPrice(cents: number) {
 
 export default function Pricing() {
   const navigate = useNavigate();
-  const { isActive, planSlug, openCheckout, openCustomerPortal } = useSubscription();
+  const { subscribed, plan: planSlug, openCheckout, openCustomerPortal } = useSubscription();
   const [yearly, setYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
