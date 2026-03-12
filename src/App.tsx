@@ -12,6 +12,8 @@ import Obrigado from "./pages/Obrigado";
 import Termos from "./pages/Termos";
 import Privacidade from "./pages/Privacidade";
 import MembersDashboard from "./pages/members/MembersDashboard";
+import MembersCourses from "./pages/members/MembersCourses";
+import CourseOverview from "./pages/members/CourseOverview";
 import MembersModules from "./pages/members/MembersModules";
 import ModuleDetail from "./pages/members/ModuleDetail";
 import LessonPlayer from "./pages/members/LessonPlayer";
