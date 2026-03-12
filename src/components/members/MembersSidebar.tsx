@@ -32,6 +32,7 @@ import { toast } from '@/hooks/use-toast';
 
 const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
+  { title: 'Cursos', url: '/membros/cursos', icon: BookOpen },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
   { title: 'Comunidade', url: '/membros/comunidade', icon: Users },
   { title: 'Ranking', url: '/membros/ranking', icon: Trophy },
