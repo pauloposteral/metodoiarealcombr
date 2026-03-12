@@ -100,7 +100,7 @@ export default function Pricing() {
     }
 
     // If already subscribed, open portal
-    if (isActive && planSlug !== 'free') {
+    if (subscribed && planSlug !== 'free') {
       try {
         setLoadingPlan(slug);
         await openCustomerPortal();
