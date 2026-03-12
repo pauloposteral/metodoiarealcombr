@@ -24,7 +24,8 @@ import {
   Award,
   LayoutGrid,
   Users,
-  Trophy
+  Trophy,
+  GraduationCap
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
