@@ -24,7 +24,8 @@ import {
   Award,
   LayoutGrid,
   Users,
-  Trophy
+  Trophy,
+  GraduationCap
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -32,6 +33,7 @@ import { toast } from '@/hooks/use-toast';
 
 const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
+  { title: 'Cursos', url: '/membros/cursos', icon: GraduationCap },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
   { title: 'Comunidade', url: '/membros/comunidade', icon: Users },
   { title: 'Ranking', url: '/membros/ranking', icon: Trophy },

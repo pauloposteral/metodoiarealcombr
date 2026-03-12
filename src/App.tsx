@@ -12,6 +12,8 @@ import Obrigado from "./pages/Obrigado";
 import Termos from "./pages/Termos";
 import Privacidade from "./pages/Privacidade";
 import MembersDashboard from "./pages/members/MembersDashboard";
+import MembersCourses from "./pages/members/MembersCourses";
+import CourseOverview from "./pages/members/CourseOverview";
 import MembersModules from "./pages/members/MembersModules";
 import ModuleDetail from "./pages/members/ModuleDetail";
 import LessonPlayer from "./pages/members/LessonPlayer";
@@ -73,6 +75,8 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/membros" element={<MembersDashboard />} />
+            <Route path="/membros/cursos" element={<MembersCourses />} />
+            <Route path="/membros/cursos/:slug" element={<CourseOverview />} />
             <Route path="/membros/modulos" element={<MembersModules />} />
             <Route path="/membros/modulos/:moduleId" element={<ModuleDetail />} />
             <Route path="/membros/aula/:lessonId" element={<LessonPlayer />} />
