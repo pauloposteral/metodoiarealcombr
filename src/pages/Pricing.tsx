@@ -163,7 +163,7 @@ export default function Pricing() {
         <div className="max-w-6xl mx-auto px-4 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const price = yearly ? plan.priceYearly : plan.priceMonthly;
-            const isCurrent = isActive && planSlug === plan.slug;
+            const isCurrent = subscribed && planSlug === plan.slug;
             const Icon = plan.icon;
 
             return (
