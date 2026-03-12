@@ -114,7 +114,7 @@ export default function Pricing() {
 
     try {
       setLoadingPlan(slug);
-      await openCheckout(slug, yearly ? 'yearly' : 'monthly');
+      await openCheckout(slug as 'pro' | 'premium', yearly ? 'yearly' : 'monthly');
     } catch {
       toast.error('Erro ao iniciar checkout');
     } finally {
