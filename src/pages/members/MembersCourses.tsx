@@ -191,7 +191,7 @@ export default function MembersCourses() {
                       </div>
                     )}
                     {course.is_free && (
-                      <Badge className="absolute top-3 left-3 bg-green-500 text-white">Grátis</Badge>
+                      <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground">Grátis</Badge>
                     )}
                   </div>
 

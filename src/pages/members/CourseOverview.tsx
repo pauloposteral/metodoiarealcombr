@@ -267,7 +267,7 @@ export default function CourseOverview() {
                       className="w-full flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {lesson.completed ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0" />
                       ) : lessonAccessible ? (
                         <Play className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                       ) : (
