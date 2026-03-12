@@ -81,7 +81,7 @@ function formatPrice(cents: number) {
 
 export default function Pricing() {
   const navigate = useNavigate();
-  const { isActive, planSlug, openCheckout, openCustomerPortal } = useSubscription();
+  const { subscribed, plan: planSlug, openCheckout, openCustomerPortal } = useSubscription();
   const [yearly, setYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
@@ -100,7 +100,7 @@ export default function Pricing() {
     }
 
     // If already subscribed, open portal
-    if (isActive && planSlug !== 'free') {
+    if (subscribed && planSlug !== 'free') {
       try {
         setLoadingPlan(slug);
         await openCustomerPortal();
@@ -114,7 +114,7 @@ export default function Pricing() {
 
     try {
       setLoadingPlan(slug);
-      await openCheckout(slug, yearly ? 'yearly' : 'monthly');
+      await openCheckout(slug as 'pro' | 'premium', yearly ? 'yearly' : 'monthly');
     } catch {
       toast.error('Erro ao iniciar checkout');
     } finally {
@@ -163,7 +163,7 @@ export default function Pricing() {
         <div className="max-w-6xl mx-auto px-4 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const price = yearly ? plan.priceYearly : plan.priceMonthly;
-            const isCurrent = isActive && planSlug === plan.slug;
+            const isCurrent = subscribed && planSlug === plan.slug;
             const Icon = plan.icon;
 
             return (
