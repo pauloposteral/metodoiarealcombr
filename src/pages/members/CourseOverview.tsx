@@ -175,7 +175,7 @@ export default function CourseOverview() {
           )}
           <div className="p-6 md:p-8 space-y-4">
             <div className="flex items-center gap-2 flex-wrap">
-              {course.is_free && <Badge className="bg-green-500 text-white">Grátis</Badge>}
+              {course.is_free && <Badge className="bg-accent text-accent-foreground">Grátis</Badge>}
               {course.difficulty && (
                 <Badge variant="secondary">
                   {course.difficulty === 'beginner' ? 'Iniciante' : course.difficulty === 'intermediate' ? 'Intermediário' : 'Avançado'}
