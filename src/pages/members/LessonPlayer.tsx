@@ -5,6 +5,7 @@ import { LessonComments } from '@/components/community/LessonComments';
 import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
 import { QuizPlayer } from '@/components/course/QuizPlayer';
 import { AISandbox } from '@/components/course/AISandbox';
+import { LessonNotes } from '@/components/course/LessonNotes';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
