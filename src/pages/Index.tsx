@@ -20,7 +20,7 @@ import { UrgencyBar } from '@/components/landing/UrgencyBar';
 import { StickyMobileCTA } from '@/components/landing/StickyMobileCTA';
 import { WhatsAppBubble } from '@/components/landing/WhatsAppBubble';
 import { ReadingProgress } from '@/components/landing/ReadingProgress';
-import { ExitIntentPopup } from '@/components/landing/ExitIntentPopup';
+
 import { PricingAnchor } from '@/components/landing/PricingAnchor';
 import { ObjectionHandler } from '@/components/landing/ObjectionHandler';
 
