@@ -54,7 +54,7 @@ const Index = () => {
       <ReadingProgress />
       <StickyMobileCTA />
       <WhatsAppBubble />
-      <ExitIntentPopup />
+      
       
       <TopHeader />
       <main className="overflow-hidden">
