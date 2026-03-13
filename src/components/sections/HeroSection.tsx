@@ -25,7 +25,7 @@ export const HeroSection = () => {
 
       <div className="hidden md:block absolute top-20 right-10 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-float" />
 
-      <div className="container relative z-10 pt-20 pb-6 md:pt-24 md:pb-12">
+      <div className="container relative z-10 pt-10 pb-6 md:pt-24 md:pb-12">
         <div className="max-w-3xl mx-auto text-center">
           <ScrollReveal delay={0}>
             <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6">

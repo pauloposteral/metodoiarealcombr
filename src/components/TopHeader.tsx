@@ -16,7 +16,7 @@ export const TopHeader = () => {
   };
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-[100] bg-navy-dark/90 backdrop-blur-md border-b border-gold/20 shadow-sm will-change-transform">
+    <header className="sticky top-0 left-0 right-0 z-[100] bg-navy-dark/95 backdrop-blur-md shadow-lg will-change-transform">
       <div className="container px-4 md:px-8">
         <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo / Brand */}
