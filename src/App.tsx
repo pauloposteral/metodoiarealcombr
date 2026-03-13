@@ -56,6 +56,7 @@ import AdminLeads from "./pages/admin/AdminLeads";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminPrompts from "./pages/admin/AdminPrompts";
 import AdminSetup from "./pages/admin/AdminSetup";
+import AdminCursos from "./pages/admin/AdminCursos";
 
 const queryClient = new QueryClient();
 
@@ -113,6 +114,7 @@ const App = () => (
             {/* Admin Panel Routes */}
             <Route path="/admin/setup" element={<AdminSetup />} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/cursos" element={<AdminCursos />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/empresas" element={<AdminEmpresas />} />
             <Route path="/admin/leads" element={<AdminLeads />} />
