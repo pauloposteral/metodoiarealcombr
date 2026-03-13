@@ -88,7 +88,6 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </section>
   );
 };
