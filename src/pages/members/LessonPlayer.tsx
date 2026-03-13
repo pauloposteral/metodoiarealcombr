@@ -61,6 +61,7 @@ const LessonPlayer = () => {
       setLoading(true);
       try {
         const { data: { user } } = await supabase.auth.getUser();
+        if (user) setCurrentUserId(user.id);
 
         const { data: lessonData } = await supabase
           .from('lessons')
