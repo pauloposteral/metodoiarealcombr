@@ -51,14 +51,14 @@ const Index = () => {
       </Helmet>
       
       {/* Conversion overlays */}
-      <UrgencyBar />
       <ReadingProgress />
       <StickyMobileCTA />
       <WhatsAppBubble />
       <ExitIntentPopup />
       
+      <UrgencyBar />
       <TopHeader />
-      <main className="overflow-hidden pt-14 md:pt-16">
+      <main className="overflow-hidden">
         <HeroSection />
         <ProblemSection />
         

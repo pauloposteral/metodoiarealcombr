@@ -44,7 +44,7 @@ export const UrgencyBar = () => {
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-accent via-gold to-accent text-accent-foreground">
+    <div className="relative z-[60] bg-gradient-to-r from-accent via-gold to-accent text-accent-foreground">
       <div className="container px-4 flex items-center justify-center gap-2 sm:gap-3 h-9 sm:h-10 text-xs sm:text-sm font-semibold relative">
         <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-pulse" />
         <span className="hidden sm:inline">🔥 50% OFF — Oferta expira em</span>
