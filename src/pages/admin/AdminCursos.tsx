@@ -426,6 +426,9 @@ export default function AdminCursos() {
                                             </span>
                                           </div>
                                           <div className="flex items-center gap-1">
+                                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setQuizLesson({ id: lesson.id, title: lesson.title })} title="Quiz">
+                                              <Brain className="w-3.5 h-3.5" />
+                                            </Button>
                                             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openDialog('lesson', lesson, mod.id)}>
                                               <Pencil className="w-3.5 h-3.5" />
                                             </Button>
