@@ -37,6 +37,7 @@ import StoriesPage from "./pages/StoriesPage";
 import AcessoBloqueado from "./pages/AcessoBloqueado";
 import CarouselPreviewPublic from "./pages/CarouselPreviewPublic";
 import Pricing from "./pages/Pricing";
+import Checkout from "./pages/Checkout";
 
 // Método IA SaaS
 import MetodoLanding from "./pages/metodo/MetodoLanding";
@@ -78,6 +79,7 @@ const App = () => (
             <Route path="/privacidade" element={<Privacidade />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/membros" element={<MembersDashboard />} />
             <Route path="/membros/cursos" element={<MembersCourses />} />
             <Route path="/membros/cursos/:slug" element={<CourseOverview />} />

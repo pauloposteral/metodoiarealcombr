@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { CheckCircle, ArrowRight, Loader2, Shield, Lock } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
 import { useCheckout } from '@/hooks/useCheckout';
+import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const HeroSection = () => {
-  const { handleCheckout, isLoading } = useCheckout();
+  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
   const bullets = [
     'Sem tecnicismos',
@@ -77,13 +78,25 @@ export const HeroSection = () => {
 
           <ScrollReveal delay={300}>
             <div className="mt-5 md:mt-6 pt-4 border-t border-primary-foreground/10">
+              <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-2">
+                <div className="flex items-center gap-1.5 text-primary-foreground/60">
+                  <Shield className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-xs font-medium">Garantia 7 dias</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-primary-foreground/60">
+                  <Lock className="w-3.5 h-3.5 text-green-500" />
+                  <span className="text-xs font-medium">Pagamento seguro</span>
+                </div>
+              </div>
               <p className="text-primary-foreground/50 text-xs md:text-sm">
-                Acesso imediato • 12x de R$41 • Cartão ou PIX • Garantia de 7 dias
+                Acesso imediato • 12x de R$41 • Cartão ou PIX
               </p>
             </div>
           </ScrollReveal>
         </div>
       </div>
+
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </section>
   );
 };

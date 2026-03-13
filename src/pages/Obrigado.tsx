@@ -61,7 +61,7 @@ const Obrigado = () => {
           <img 
             src={logo} 
             alt="Método IA Real" 
-            className="h-12 md:h-16 mx-auto mb-8"
+            className="h-10 md:h-12 mx-auto mb-8 object-contain"
           />
 
           {/* Success Icon */}

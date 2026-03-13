@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,8 @@ type AuthMode = 'login' | 'signup' | 'reset';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect');
   const [mode, setMode] = useState<AuthMode>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,7 +52,7 @@ const Auth = () => {
           title: "Bem-vindo de volta!",
           description: "Login realizado com sucesso.",
         });
-        navigate('/membros');
+        navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
       } else {
         const redirectUrl = `${window.location.origin}/membros`;
         
@@ -71,7 +73,7 @@ const Auth = () => {
           title: "Conta criada com sucesso!",
           description: "Você já pode acessar a área de membros.",
         });
-        navigate('/membros');
+        navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
       }
     } catch (error: any) {
       let message = error.message;
@@ -121,7 +123,7 @@ const Auth = () => {
           <img 
             src={logo} 
             alt="Método IA Real" 
-            className="h-12 mx-auto mb-6 drop-shadow-lg"
+            className="h-10 md:h-12 mx-auto mb-6 drop-shadow-lg object-contain"
           />
           <h1 className="font-display text-2xl font-bold text-primary-foreground mb-2">
             {getTitle()}

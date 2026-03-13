@@ -3,10 +3,11 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useCheckout } from '@/hooks/useCheckout';
+import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const StickyMobileCTA = () => {
   const isMobile = useIsMobile();
-  const { handleCheckout, isLoading } = useCheckout();
+  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export const StickyMobileCTA = () => {
       <p className="text-center text-[10px] text-muted-foreground mt-1.5">
         Cartão ou PIX • Garantia de 7 dias • Acesso imediato
       </p>
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
 };
