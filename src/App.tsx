@@ -27,6 +27,7 @@ import MembersUpdates from "./pages/members/MembersUpdates";
 import MembersRanking from "./pages/members/MembersRanking";
 import MembersProfile from "./pages/members/MembersProfile";
 import MembersBookmarks from "./pages/members/MembersBookmarks";
+import MembersAnalytics from "./pages/members/MembersAnalytics";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
