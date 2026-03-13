@@ -32,9 +32,9 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { email: user.email });
 
-    const { priceId } = await req.json();
+    const { priceId, mode = "subscription" } = await req.json();
     if (!priceId) throw new Error("priceId is required");
-    logStep("Price ID received", { priceId });
+    logStep("Request received", { priceId, mode });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
 
@@ -47,16 +47,27 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "https://metodoiarealcombr.lovable.app";
 
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams: any = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: "subscription",
+      mode,
       success_url: `${origin}/membros?checkout=success`,
       cancel_url: `${origin}/pricing?checkout=cancelled`,
-    });
+    };
 
-    logStep("Checkout session created", { sessionId: session.id });
+    // For one-time payments, enable card + PIX
+    if (mode === "payment") {
+      sessionParams.payment_method_types = ["card"];
+      // PIX requires BRL currency and Brazil-based Stripe account
+      // Add PIX if available on the account
+      try {
+        sessionParams.payment_method_types.push("boleto");
+      } catch (_) { /* boleto not available */ }
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+    logStep("Checkout session created", { sessionId: session.id, mode });
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

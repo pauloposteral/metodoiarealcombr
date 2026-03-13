@@ -1,9 +1,11 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Clock, Award, CheckCircle, Sparkles, Banknote } from 'lucide-react';
-import { PAYMENT_URL } from '@/lib/constants';
+import { ArrowRight, Shield, Clock, Award, CheckCircle, Sparkles, Banknote, Loader2 } from 'lucide-react';
+import { useCheckout } from '@/hooks/useCheckout';
 
 export const PricingAnchor = () => {
+  const { handleCheckout, isLoading } = useCheckout();
+
   const included = [
     'Acesso vitalício ao curso completo',
     'Biblioteca com 100+ prompts prontos',
@@ -69,11 +71,21 @@ export const PricingAnchor = () => {
                 ))}
               </div>
 
-              <Button asChild variant="hero" size="lg" className="w-full group text-base md:text-lg py-5">
-                <a href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">
-                  Quero começar agora
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </a>
+              <Button
+                variant="hero"
+                size="lg"
+                className="w-full group text-base md:text-lg py-5"
+                onClick={handleCheckout}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Quero começar agora
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
               </Button>
 
               <div className="flex flex-wrap justify-center gap-4 mt-4 pt-4 border-t border-border/50">
