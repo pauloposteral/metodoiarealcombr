@@ -1,156 +1,93 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { ArrowRight, Lightbulb, Pencil, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { User, MessageSquare, Cpu, FileText, RefreshCw, ArrowRight, Brain, PenTool, Target, Repeat } from 'lucide-react';
 
-const steps = [
-  {
-    icon: Lightbulb,
-    phase: "01",
-    title: "Ideia",
-    description: "Você tem uma ideia ou necessidade",
-    example: "\"Preciso criar um texto de vendas\"",
-    color: "text-yellow-400"
-  },
-  {
-    icon: Pencil,
-    phase: "02",
-    title: "Execução",
-    description: "Você usa a IA com o método certo",
-    example: "Prompt estruturado → resultado inicial",
-    color: "text-accent"
-  },
-  {
-    icon: RefreshCw,
-    phase: "03",
-    title: "Ajuste",
-    description: "Você refina até ficar perfeito",
-    example: "\"Melhore o tom, seja mais direto\"",
-    color: "text-gold"
-  },
-  {
-    icon: CheckCircle2,
-    phase: "04",
-    title: "Resultado",
-    description: "Você tem o resultado final",
-    example: "Texto pronto para usar",
-    color: "text-green-400"
-  }
+const flowSteps = [
+  { icon: User, label: "Você", sublabel: "com uma ideia", color: "bg-gold/20 text-gold" },
+  { icon: MessageSquare, label: "Prompt", sublabel: "a pergunta certa", color: "bg-accent/20 text-accent" },
+  { icon: Cpu, label: "IA", sublabel: "processa", color: "bg-navy-light/20 text-navy-light" },
+  { icon: FileText, label: "Resultado", sublabel: "primeira versão", color: "bg-green-500/20 text-green-500" },
+  { icon: RefreshCw, label: "Ajuste", sublabel: "você refina", color: "bg-gold/20 text-gold" },
 ];
 
-const beforeAfter = {
-  before: {
-    label: "Antes",
-    text: "A inteligência artificial é uma tecnologia que permite que máquinas executem tarefas que normalmente requerem inteligência humana, como reconhecimento de padrões e tomada de decisões."
-  },
-  after: {
-    label: "Depois",
-    text: "IA é como ter um assistente que nunca dorme. Você pede, ele entrega. Simples assim."
-  }
-};
+const steps = [
+  { number: "01", icon: Brain, title: "Pensar melhor", tip: "Clareza na entrada = qualidade na saída", color: "bg-gold/10 text-gold border-gold/20" },
+  { number: "02", icon: PenTool, title: "Pedir certo", tip: "A IA não lê pensamentos — lê instruções", color: "bg-accent/10 text-accent border-accent/20" },
+  { number: "03", icon: Repeat, title: "Ajustar respostas", tip: "Iteração é a chave: pedir → ver → melhorar", color: "bg-navy-light/10 text-navy-light border-navy-light/20" },
+  { number: "04", icon: Target, title: "Aplicar no mundo real", tip: "IA que não aplica é só entretenimento", color: "bg-green-500/10 text-green-500 border-green-500/20" },
+];
 
 export const ProcessSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      
-      <div className="container relative z-10">
+    <section className="py-10 md:py-16 bg-background relative overflow-hidden">
+      <div className="container">
         <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 text-accent font-semibold text-sm rounded-full mb-6">
-              <RefreshCw className="w-4 h-4" />
-              O Processo Real
+          <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 text-accent font-semibold text-sm rounded-full mb-4">
+              <Cpu className="w-4 h-4" />
+              Como Funciona na Prática
             </span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              IA em uso no{' '}
-              <span className="text-gradient-gold">mundo real</span>
+            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              O processo é{' '}
+              <span className="text-gradient-gold">simples</span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Você vê o processo. Não só o resultado final.
+            <p className="text-base text-muted-foreground">
+              Não é mágica. É um ciclo que você aprende a dominar.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Process steps */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {steps.map((step, index) => (
-            <ScrollReveal key={index} delay={index * 100}>
-              <div className="relative group">
-                {/* Arrow connector (hide on last) */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-3 z-10">
-                    <ArrowRight className="w-6 h-6 text-border" />
-                  </div>
-                )}
-                
-                <div className="bg-card rounded-2xl p-6 h-full border border-border/50 hover:border-accent/30 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-xl bg-secondary flex items-center justify-center ${step.color}`}>
-                      <step.icon className="w-5 h-5" />
+        {/* Flow Diagram - Compact */}
+        <ScrollReveal delay={100}>
+          <div className="max-w-4xl mx-auto mb-8 md:mb-10">
+            <div className="bg-card rounded-2xl p-5 md:p-8 border border-border/50">
+              <div className="hidden md:flex items-center justify-between gap-2">
+                {flowSteps.map((step, index) => (
+                  <div key={index} className="flex items-center flex-1">
+                    <div className="flex flex-col items-center text-center flex-1">
+                      <div className={`w-12 h-12 rounded-xl ${step.color} flex items-center justify-center mb-2`}>
+                        <step.icon className="w-5 h-5" />
+                      </div>
+                      <p className="font-display font-bold text-foreground text-xs">{step.label}</p>
+                      <p className="text-[10px] text-muted-foreground">{step.sublabel}</p>
                     </div>
-                    <span className="text-xs font-bold text-muted-foreground">{step.phase}</span>
+                    {index < flowSteps.length - 1 && (
+                      <ArrowRight className="w-4 h-4 text-accent mx-1 flex-shrink-0" />
+                    )}
                   </div>
-                  
-                  <h3 className="font-display font-bold text-lg text-foreground mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {step.description}
-                  </p>
-                  <p className="text-xs text-accent italic">
-                    {step.example}
-                  </p>
-                </div>
+                ))}
               </div>
-            </ScrollReveal>
-          ))}
-        </div>
-
-        {/* Before/After comparison */}
-        <ScrollReveal delay={200}>
-          <div className="max-w-4xl mx-auto">
-            <h3 className="font-display font-bold text-xl text-center text-foreground mb-8">
-              Veja a diferença na prática
-            </h3>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Before */}
-              <div className="relative">
-                <div className="absolute -top-3 left-4">
-                  <span className="px-3 py-1 bg-destructive/20 text-destructive text-xs font-bold rounded-full">
-                    {beforeAfter.before.label}
-                  </span>
-                </div>
-                <div className="bg-card border border-destructive/20 rounded-2xl p-6 pt-8 h-full">
-                  <p className="text-muted-foreground text-sm leading-relaxed italic">
-                    "{beforeAfter.before.text}"
-                  </p>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-destructive">
-                    <span className="w-1.5 h-1.5 bg-destructive rounded-full" />
-                    Genérico e confuso
+              <div className="md:hidden flex flex-wrap justify-center gap-3">
+                {flowSteps.map((step, index) => (
+                  <div key={index} className="flex items-center gap-1.5">
+                    <div className={`w-8 h-8 rounded-lg ${step.color} flex items-center justify-center`}>
+                      <step.icon className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-medium text-foreground">{step.label}</span>
+                    {index < flowSteps.length - 1 && <ArrowRight className="w-3 h-3 text-accent/50" />}
                   </div>
-                </div>
-              </div>
-              
-              {/* After */}
-              <div className="relative">
-                <div className="absolute -top-3 left-4">
-                  <span className="px-3 py-1 bg-green-500/20 text-green-500 text-xs font-bold rounded-full">
-                    {beforeAfter.after.label}
-                  </span>
-                </div>
-                <div className="bg-card border border-green-500/20 rounded-2xl p-6 pt-8 h-full">
-                  <p className="text-foreground text-sm leading-relaxed font-medium">
-                    "{beforeAfter.after.text}"
-                  </p>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-green-500">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    Claro, direto e humano
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </ScrollReveal>
+
+        {/* 4 Steps Grid */}
+        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          {steps.map((step, index) => (
+            <ScrollReveal key={index} delay={index * 80}>
+              <div className={`relative rounded-xl p-4 border-2 ${step.color} h-full`}>
+                <div className="absolute -top-2 -left-2 w-7 h-7 bg-card rounded-lg flex items-center justify-center border-2 border-current shadow-sm">
+                  <span className="font-display font-bold text-[10px]">{step.number}</span>
+                </div>
+                <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center mb-2 mt-1">
+                  <step.icon className="w-5 h-5" />
+                </div>
+                <h3 className="font-display font-bold text-sm text-foreground mb-1">{step.title}</h3>
+                <p className="text-[10px] italic opacity-80">💡 {step.tip}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
       </div>
     </section>
   );
