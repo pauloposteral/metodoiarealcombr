@@ -1,12 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { CheckCircle, ArrowRight, Loader2, Shield, Lock } from 'lucide-react';
+import { CheckCircle, ArrowRight, Shield, Lock } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
-import { useCheckout } from '@/hooks/useCheckout';
-import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const HeroSection = () => {
-  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
   const bullets = [
     'Sem tecnicismos',
