@@ -11,7 +11,7 @@ import {
 
 interface SearchResult {
   id: string;
-  type: 'lesson' | 'module' | 'course';
+  type: 'lesson' | 'module' | 'course' | 'community';
   title: string;
   description: string | null;
   path: string;
