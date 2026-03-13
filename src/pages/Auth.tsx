@@ -123,7 +123,7 @@ const Auth = () => {
           <img 
             src={logo} 
             alt="Método IA Real" 
-            className="h-10 md:h-12 mx-auto mb-6 drop-shadow-lg object-contain"
+            className="h-12 md:h-16 lg:h-20 mx-auto mb-6 drop-shadow-lg w-auto min-w-[160px] md:min-w-[200px] object-contain"
           />
           <h1 className="font-display text-2xl font-bold text-primary-foreground mb-2">
             {getTitle()}
