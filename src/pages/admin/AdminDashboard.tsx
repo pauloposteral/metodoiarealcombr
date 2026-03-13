@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell
+  BarChart, Bar
 } from 'recharts';
 
 interface DashboardStats {
@@ -32,12 +32,9 @@ interface DashboardStats {
   lessonsByModule: { name: string; completed: number }[];
 }
 
-const CHART_COLORS = ['hsl(var(--accent))', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
     totalCompanies: 0, activeCompanies: 0, totalUsers: 0,
@@ -49,13 +46,11 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
       setUser(session?.user ?? null);
       if (!session) navigate('/admin/login');
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
       setUser(session?.user ?? null);
       if (!session) { navigate('/admin/login'); setLoading(false); return; }
       setTimeout(() => verifyAdminAndLoadStats(session.user.id), 0);
@@ -78,7 +73,7 @@ export default function AdminDashboard() {
       const [
         companiesRes, activeRes, usersRes, leadsRes, pendingRes,
         purchasesRes, studentsRes, certsRes, lessonsCompRes, postsRes,
-        recentLeadsRes, modulesRes, progressRes
+        recentLeadsRes, modulesRes, progressRes, recentProfilesRes
       ] = await Promise.all([
         supabase.from('companies').select('*', { count: 'exact', head: true }),
         supabase.from('companies').select('*', { count: 'exact', head: true }).eq('status', 'active'),
@@ -93,6 +88,7 @@ export default function AdminDashboard() {
         supabase.from('company_leads').select('*').order('created_at', { ascending: false }).limit(5),
         supabase.from('modules').select('id, title').order('order_index'),
         supabase.from('lesson_progress').select('lessons(module_id)').eq('completed', true),
+        supabase.from('profiles').select('created_at').order('created_at', { ascending: false }).limit(200),
       ]);
 
       // Lessons completed by module
@@ -111,14 +107,24 @@ export default function AdminDashboard() {
         .sort((a, b) => b.completed - a.completed)
         .slice(0, 6);
 
-      // Signups last 14 days (from purchases created_at as proxy)
-      const signupsByDay: { date: string; count: number }[] = [];
+      // Signups last 14 days from profiles created_at
+      const signupsByDayMap = new Map<string, number>();
       for (let i = 13; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        signupsByDay.push({ date: `${d.getDate()}/${d.getMonth() + 1}`, count: Math.floor(Math.random() * 3) }); // placeholder
+        const key = d.toISOString().split('T')[0];
+        signupsByDayMap.set(key, 0);
       }
+      (recentProfilesRes.data || []).forEach((p: any) => {
+        const key = new Date(p.created_at).toISOString().split('T')[0];
+        if (signupsByDayMap.has(key)) {
+          signupsByDayMap.set(key, (signupsByDayMap.get(key) || 0) + 1);
+        }
+      });
+      const signupsByDay = Array.from(signupsByDayMap.entries()).map(([key, count]) => {
+        const d = new Date(key);
+        return { date: `${d.getDate()}/${d.getMonth() + 1}`, count };
+      });
 
       setStats({
         totalCompanies: companiesRes.count || 0,
@@ -196,6 +202,27 @@ export default function AdminDashboard() {
 
               {/* Charts Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Signups chart */}
+                <Card className="border-border/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-accent" />
+                      Novos alunos (14 dias)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <AreaChart data={stats.signupsByDay}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+                        <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} />
+                        <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} />
+                        <Area type="monotone" dataKey="count" name="Cadastros" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.15} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
                 {/* Lessons by module */}
                 {stats.lessonsByModule.length > 0 && (
                   <Card className="border-border/50">
@@ -218,50 +245,50 @@ export default function AdminDashboard() {
                     </CardContent>
                   </Card>
                 )}
-
-                {/* Recent Leads */}
-                <Card className="border-border/50">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-primary" />
-                      Leads Recentes
-                    </CardTitle>
-                    <CardDescription>Últimas solicitações de acesso</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {stats.recentActivity.length > 0 ? (
-                      <div className="space-y-3">
-                        {stats.recentActivity.map((lead: any) => (
-                          <div key={lead.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                            <div>
-                              <p className="font-medium text-foreground text-sm">{lead.company_name}</p>
-                              <p className="text-xs text-muted-foreground">{lead.contact_name} • {lead.email}</p>
-                            </div>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              lead.status === 'novo' ? 'bg-yellow-500/10 text-yellow-500'
-                                : lead.status === 'aprovado' ? 'bg-emerald-500/10 text-emerald-500'
-                                : 'bg-muted text-muted-foreground'
-                            }`}>
-                              {lead.status}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8 text-muted-foreground">
-                        <Clock className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                        <p className="text-sm">Nenhum lead recente</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
               </div>
+
+              {/* Recent Leads */}
+              <Card className="border-border/50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-accent" />
+                    Leads Recentes
+                  </CardTitle>
+                  <CardDescription>Últimas solicitações de acesso</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {stats.recentActivity.length > 0 ? (
+                    <div className="space-y-3">
+                      {stats.recentActivity.map((lead: any) => (
+                        <div key={lead.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                          <div>
+                            <p className="font-medium text-foreground text-sm">{lead.company_name}</p>
+                            <p className="text-xs text-muted-foreground">{lead.contact_name} • {lead.email}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            lead.status === 'novo' ? 'bg-yellow-500/10 text-yellow-500'
+                              : lead.status === 'aprovado' ? 'bg-emerald-500/10 text-emerald-500'
+                              : 'bg-muted text-muted-foreground'
+                          }`}>
+                            {lead.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Clock className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Nenhum lead recente</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Quick Actions */}
               <Card className="border-border/50">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-primary" />
+                    <TrendingUp className="w-4 h-4 text-accent" />
                     Ações Rápidas
                   </CardTitle>
                 </CardHeader>
