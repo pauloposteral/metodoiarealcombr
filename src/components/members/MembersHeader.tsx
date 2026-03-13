@@ -5,6 +5,7 @@ import { Search, Sun, Moon } from 'lucide-react';
 import { GlobalSearch } from './GlobalSearch';
 import { NotificationBell } from './NotificationBell';
 import { useTheme } from '@/hooks/useTheme';
+import { StreakBadge } from '@/components/gamification/StreakBadge';
 
 interface MembersHeaderProps {
   user: User;
