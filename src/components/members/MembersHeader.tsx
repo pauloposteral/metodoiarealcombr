@@ -13,6 +13,7 @@ interface MembersHeaderProps {
 export const MembersHeader = ({ user }: MembersHeaderProps) => {
   const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Aluno';
   const [searchOpen, setSearchOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   // Keyboard shortcut: Ctrl+K or Cmd+K
   useEffect(() => {
