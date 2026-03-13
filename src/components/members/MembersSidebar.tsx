@@ -13,19 +13,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { 
-  Home, 
-  BookOpen, 
-  FileText, 
-  Gift, 
-  Bell, 
-  HelpCircle,
-  LogOut,
-  ChevronLeft,
-  Award,
-  LayoutGrid,
-  Users,
-  Trophy,
-  GraduationCap
+  Home, BookOpen, FileText, Gift, Bell, HelpCircle,
+  LogOut, ChevronLeft, Award, LayoutGrid, Users, Trophy,
+  GraduationCap, Bookmark, UserCircle
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
