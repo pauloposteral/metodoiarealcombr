@@ -5,6 +5,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { MembersSidebar } from '@/components/members/MembersSidebar';
 import { MembersHeader } from '@/components/members/MembersHeader';
 import { OnboardingDialog } from '@/components/members/OnboardingDialog';
+import { useAchievementChecker } from '@/hooks/useAchievementChecker';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Loader2 } from 'lucide-react';
 
