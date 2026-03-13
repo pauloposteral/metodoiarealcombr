@@ -283,6 +283,9 @@ export default function AdminDashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Exports */}
+              <AdminExports />
             </div>
           </main>
         </div>
