@@ -103,6 +103,22 @@ export const PricingAnchor = () => {
                   <span className="text-xs font-medium">Certificado</span>
                 </div>
               </div>
+
+              {/* Security badges */}
+              <div className="flex items-center justify-center gap-3 mt-3 pt-3 border-t border-border/30">
+                <div className="flex items-center gap-1 text-muted-foreground/60">
+                  <Lock className="w-3 h-3 text-green-500" />
+                  <span className="text-[10px]">SSL</span>
+                </div>
+                <div className="flex items-center gap-1 text-muted-foreground/60">
+                  <CreditCard className="w-3 h-3" />
+                  <span className="text-[10px]">Visa / Master / PIX</span>
+                </div>
+                <div className="flex items-center gap-1 text-muted-foreground/60">
+                  <Shield className="w-3 h-3" />
+                  <span className="text-[10px]">Stripe</span>
+                </div>
+              </div>
             </div>
 
             <div className="mt-4 text-center">
