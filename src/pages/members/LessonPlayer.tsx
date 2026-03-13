@@ -17,7 +17,9 @@ import {
   BookOpen,
   Sparkles,
   Award,
-  Play
+  Play,
+  Bookmark,
+  BookmarkCheck
 } from 'lucide-react';
 
 interface Lesson {
