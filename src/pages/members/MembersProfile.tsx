@@ -208,6 +208,9 @@ const MembersProfile = () => {
           </div>
         </div>
 
+        {/* Notifications */}
+        <NotificationSettings userId={userId} />
+
         {/* Account */}
         <div className="bg-card rounded-2xl p-6 border border-border/50">
           <h2 className="font-display font-bold text-foreground mb-4">Conta</h2>
