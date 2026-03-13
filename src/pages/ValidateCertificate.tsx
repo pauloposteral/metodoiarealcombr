@@ -60,7 +60,7 @@ const ValidateCertificate = () => {
       <header className="border-b border-border/30 bg-navy-dark/50 backdrop-blur-sm">
         <div className="container py-4">
           <Link to="/" className="flex items-center gap-2 w-fit">
-            <img src={logoImage} alt="Método IA Real" className="h-8" />
+            <img src={logoImage} alt="Método IA Real" className="w-[250px] h-auto object-contain" />
           </Link>
         </div>
       </header>
