@@ -6,6 +6,7 @@ import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
 import { QuizPlayer } from '@/components/course/QuizPlayer';
 import { AISandbox } from '@/components/course/AISandbox';
 import { LessonNotes } from '@/components/course/LessonNotes';
+import { useLessonTimeTracker } from '@/hooks/useLessonTimeTracker';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -51,12 +52,16 @@ const LessonPlayer = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string>('');
 
+  // Track time spent on lesson
+  useLessonTimeTracker({ lessonId: lessonId || '', userId: currentUserId });
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const { data: { user } } = await supabase.auth.getUser();
+        if (user) setCurrentUserId(user.id);
 
         const { data: lessonData } = await supabase
           .from('lessons')
