@@ -69,6 +69,7 @@ export const ExitIntentPopup = () => {
           </div>
         </div>
       </div>
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
 };

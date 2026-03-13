@@ -41,6 +41,7 @@ export const StickyMobileCTA = () => {
       <p className="text-center text-[10px] text-muted-foreground mt-1.5">
         Cartão ou PIX • Garantia de 7 dias • Acesso imediato
       </p>
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
 };

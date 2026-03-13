@@ -72,6 +72,7 @@ export const FinalCTASection = () => {
           </ScrollReveal>
         </div>
       </div>
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </section>
   );
 };

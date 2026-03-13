@@ -132,6 +132,7 @@ export const PricingAnchor = () => {
           </div>
         </ScrollReveal>
       </div>
+      <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </section>
   );
 };
