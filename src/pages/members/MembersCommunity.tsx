@@ -12,6 +12,7 @@ import { LeaderboardCard } from '@/components/gamification/LeaderboardCard';
 import { useGamification } from '@/hooks/useGamification';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
