@@ -1,75 +1,100 @@
-import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { CheckCircle, ArrowRight } from 'lucide-react';
+import heroBg from '@/assets/hero-bg.jpg';
+
 
 export const HeroSection = () => {
-  const stats = [
-    { value: '2.500+', label: 'Alunos' },
-    { value: '4.9 ★', label: 'Avaliação' },
-    { value: '43+', label: 'Aulas práticas' },
-    { value: '8h', label: 'De conteúdo' },
+  const bullets = [
+    'Sem tecnicismos',
+    '100% prático',
+    'Método claro',
   ];
 
   return (
-    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[#08080C]">
-      {/* Grain overlay */}
-      <div className="absolute inset-0 opacity-[0.35] pointer-events-none" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
-        backgroundSize: '128px 128px',
-      }} />
+    <section className="relative min-h-[100svh] md:min-h-screen flex items-center overflow-hidden">
+      {/* Background with parallax */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-navy-dark/50 md:bg-navy-dark/40" />
+      </div>
 
-      {/* Radial gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(110,231,183,0.08),rgba(59,130,246,0.04),transparent_70%)]" />
+      {/* Floating elements - hidden on mobile for performance */}
+      <div className="hidden md:block absolute top-20 right-10 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-float" />
+      <div className="hidden md:block absolute bottom-20 left-10 w-48 h-48 bg-gold-light/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }} />
 
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 text-center pt-20 pb-12">
-        {/* Pulsing badge */}
-        <ScrollReveal>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#6EE7B7] animate-pulse" />
-            <span className="text-white/55 text-sm">+2.500 alunos já estão aprendendo</span>
-          </div>
-        </ScrollReveal>
+      {/* Content */}
+      <div className="container relative z-10 pt-16 pb-6 md:pt-24 md:pb-16">
+        <div className="max-w-3xl mx-auto">
+          {/* Text content - Centered */}
+          <div className="text-center">
+            {/* Title - Prominent and immediate */}
+            <ScrollReveal delay={0}>
+              <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6">
+                Aprenda a usar{' '}
+                <span className="text-gradient-gold">
+                  IA de verdade
+                </span>{' '}
+                no seu dia a dia
+              </h1>
+            </ScrollReveal>
 
-        {/* Headline */}
-        <ScrollReveal delay={60}>
-          <h1 className="font-landing font-bold text-white leading-[1.08] tracking-[-0.03em] mb-6" style={{ fontSize: 'clamp(36px, 6vw, 64px)' }}>
-            Aprenda IA de verdade.{' '}
-            <span className="bg-gradient-to-r from-[#6EE7B7] to-[#3B82F6] bg-clip-text text-transparent">
-              Aplique hoje.
-            </span>
-          </h1>
-        </ScrollReveal>
+            {/* Subtitle - Compact */}
+            <ScrollReveal delay={100}>
+              <p className="text-sm md:text-base lg:text-lg text-primary-foreground/80 max-w-xl mx-auto lg:mx-0 mb-5 md:mb-6 leading-relaxed">
+                Chega de tutorial solto. Veja como pessoas reais usam IA — e aprenda a fazer igual.
+              </p>
+            </ScrollReveal>
 
-        {/* Sub-headline */}
-        <ScrollReveal delay={120}>
-          <p className="text-white/55 max-w-xl mx-auto mb-10 leading-relaxed" style={{ fontSize: 'clamp(16px, 2vw, 20px)' }}>
-            Método prático e direto para usar inteligência artificial no seu dia a dia — sem tecnicismos.
-          </p>
-        </ScrollReveal>
-
-        {/* CTA */}
-        <ScrollReveal delay={180}>
-          <div className="flex flex-col items-center gap-4 mb-12">
-            <Link
-              to="/auth"
-              className="inline-flex items-center px-8 py-4 rounded-xl text-lg font-semibold text-[#08080C] bg-gradient-to-r from-[#6EE7B7] to-[#3B82F6] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-4px_rgba(110,231,183,0.4)] transition-all duration-200 min-h-[44px]"
-            >
-              Começar agora
-            </Link>
-            <p className="text-white/35 text-sm">Garantia de 7 dias · Acesso imediato</p>
-          </div>
-        </ScrollReveal>
-
-        {/* Stats */}
-        <ScrollReveal delay={240}>
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-10 pt-8 border-t border-white/[0.06]">
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="font-landing font-bold text-white text-lg sm:text-xl">{stat.value}</div>
-                <div className="text-white/35 text-xs mt-0.5">{stat.label}</div>
+            {/* Bullets - Inline on mobile */}
+            <ScrollReveal delay={150}>
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-6 md:mb-8">
+                {bullets.map((bullet, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center gap-1.5 text-primary-foreground/90"
+                  >
+                    <CheckCircle className="w-4 h-4 text-accent" />
+                    <span className="text-sm font-medium">{bullet}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </ScrollReveal>
+
+            {/* CTA Buttons - Prominent */}
+            <ScrollReveal delay={200}>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto text-base md:text-lg py-5 md:py-5">
+                  <a href="https://payfast.greenn.com.br/152833" target="_blank" rel="noopener noreferrer">
+                    Quero aprender IA na prática
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
+                  </a>
+                </Button>
+                <Button asChild variant="heroSecondary" size="default" className="w-full sm:w-auto">
+                  <a href="#modulos">
+                    Ver módulos
+                  </a>
+                </Button>
+              </div>
+            </ScrollReveal>
+
+            {/* Trust indicators - Compact */}
+            <ScrollReveal delay={300}>
+              <div className="mt-6 md:mt-8 pt-5 md:pt-6 border-t border-primary-foreground/10">
+                <p className="text-primary-foreground/50 text-xs md:text-sm">Acesso imediato • 100% online • Certificado incluso</p>
+              </div>
+            </ScrollReveal>
           </div>
-        </ScrollReveal>
+        </div>
+      </div>
+
+      {/* Scroll indicator - Hidden on mobile */}
+      <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-primary-foreground/30 rounded-full flex justify-center pt-2">
+          <div className="w-1.5 h-3 bg-accent rounded-full" />
+        </div>
       </div>
     </section>
   );
