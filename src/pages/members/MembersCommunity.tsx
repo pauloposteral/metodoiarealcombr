@@ -48,6 +48,7 @@ const MembersCommunity = () => {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
   const [sortBy, setSortBy] = useState<SortType>('recent');
+  const [searchQuery, setSearchQuery] = useState('');
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState<string | undefined>();
   const [stats, setStats] = useState({
