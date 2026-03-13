@@ -15,8 +15,9 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
   Plus, Pencil, Trash2, BookOpen, ChevronRight, ChevronDown,
-  GraduationCap, Loader2, Eye, EyeOff, GripVertical
+  GraduationCap, Loader2, Eye, EyeOff, GripVertical, Brain
 } from 'lucide-react';
+import { QuizManager } from '@/components/admin/QuizManager';
 
 interface Course {
   id: string;
