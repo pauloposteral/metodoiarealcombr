@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { LessonComments } from '@/components/community/LessonComments';
 import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
+import { QuizPlayer } from '@/components/course/QuizPlayer';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -255,6 +256,9 @@ const LessonPlayer = () => {
             </div>
           </div>
         )}
+
+        {/* Quiz */}
+        {lessonId && <QuizPlayer lessonId={lessonId} />}
 
         {/* Complete button */}
         {!isCompleted && (

@@ -15,8 +15,9 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
   Plus, Pencil, Trash2, BookOpen, ChevronRight, ChevronDown,
-  GraduationCap, Loader2, Eye, EyeOff, GripVertical
+  GraduationCap, Loader2, Eye, EyeOff, GripVertical, Brain
 } from 'lucide-react';
+import { QuizManager } from '@/components/admin/QuizManager';
 
 interface Course {
   id: string;
@@ -70,6 +71,7 @@ export default function AdminCursos() {
   const [editItem, setEditItem] = useState<any>(null);
   const [parentId, setParentId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [quizLesson, setQuizLesson] = useState<{ id: string; title: string } | null>(null);
 
   // Form state
   const [formTitle, setFormTitle] = useState('');
@@ -424,6 +426,9 @@ export default function AdminCursos() {
                                             </span>
                                           </div>
                                           <div className="flex items-center gap-1">
+                                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setQuizLesson({ id: lesson.id, title: lesson.title })} title="Quiz">
+                                              <Brain className="w-3.5 h-3.5" />
+                                            </Button>
                                             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openDialog('lesson', lesson, mod.id)}>
                                               <Pencil className="w-3.5 h-3.5" />
                                             </Button>
@@ -608,6 +613,14 @@ export default function AdminCursos() {
           </div>
         </DialogContent>
       </Dialog>
+      {quizLesson && (
+        <QuizManager
+          lessonId={quizLesson.id}
+          lessonTitle={quizLesson.title}
+          open={!!quizLesson}
+          onClose={() => setQuizLesson(null)}
+        />
+      )}
     </SidebarProvider>
   );
 }
