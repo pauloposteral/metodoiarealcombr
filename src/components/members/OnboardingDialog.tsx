@@ -4,18 +4,26 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, ArrowRight, User, Target, Loader2 } from 'lucide-react';
+import { Sparkles, ArrowRight, User, Target, Loader2, Briefcase, Lightbulb, Rocket, PenTool } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface OnboardingDialogProps {
   userId: string;
 }
 
+const goals = [
+  { id: 'productivity', label: 'Produtividade', desc: 'Automatizar tarefas do dia a dia', icon: Rocket },
+  { id: 'content', label: 'Criar conteúdo', desc: 'Posts, carrosséis e textos com IA', icon: PenTool },
+  { id: 'business', label: 'Negócios', desc: 'Usar IA para crescer meu negócio', icon: Briefcase },
+  { id: 'learning', label: 'Aprender IA', desc: 'Entender como funciona a fundo', icon: Lightbulb },
+];
+
 export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [fullName, setFullName] = useState('');
   const [bio, setBio] = useState('');
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -33,6 +41,12 @@ export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
     if (userId) checkOnboarding();
   }, [userId]);
 
+  const toggleGoal = (id: string) => {
+    setSelectedGoals(prev =>
+      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
+    );
+  };
+
   const handleFinish = async () => {
     setSaving(true);
     try {
@@ -46,7 +60,7 @@ export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
         })
         .eq('id', userId);
 
-      toast({ title: 'Bem-vindo! 🎉', description: 'Sua conta está pronta.' });
+      toast({ title: 'Bem-vindo! 🎉', description: 'Sua conta está pronta. Bons estudos!' });
       setOpen(false);
     } catch {
       toast({ title: 'Erro', variant: 'destructive' });
@@ -99,15 +113,53 @@ export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
         </Button>
       </div>
     </div>,
-    // Step 2: Bio + finish
-    <div key="bio" className="space-y-4">
+    // Step 2: Goals
+    <div key="goals" className="space-y-4">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
           <Target className="w-5 h-5 text-accent" />
         </div>
         <div>
-          <h2 className="font-bold font-display text-foreground">Conte um pouco sobre você</h2>
-          <p className="text-xs text-muted-foreground">Opcional — pode preencher depois</p>
+          <h2 className="font-bold font-display text-foreground">Qual seu objetivo?</h2>
+          <p className="text-xs text-muted-foreground">Selecione um ou mais (opcional)</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        {goals.map(goal => {
+          const selected = selectedGoals.includes(goal.id);
+          return (
+            <button
+              key={goal.id}
+              onClick={() => toggleGoal(goal.id)}
+              className={`p-3 rounded-xl border text-left transition-all ${
+                selected
+                  ? 'border-accent bg-accent/10'
+                  : 'border-border/50 hover:border-accent/30'
+              }`}
+            >
+              <goal.icon className={`w-5 h-5 mb-1.5 ${selected ? 'text-accent' : 'text-muted-foreground'}`} />
+              <p className="text-sm font-medium text-foreground">{goal.label}</p>
+              <p className="text-[10px] text-muted-foreground">{goal.desc}</p>
+            </button>
+          );
+        })}
+      </div>
+      <div className="flex gap-2">
+        <Button variant="outline" onClick={() => setStep(1)} className="flex-1">Voltar</Button>
+        <Button onClick={() => setStep(3)} className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground">
+          Continuar <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
+    </div>,
+    // Step 3: Bio + finish
+    <div key="bio" className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
+          <Sparkles className="w-5 h-5 text-accent" />
+        </div>
+        <div>
+          <h2 className="font-bold font-display text-foreground">Quase lá!</h2>
+          <p className="text-xs text-muted-foreground">Conte um pouco sobre você (opcional)</p>
         </div>
       </div>
       <div>
@@ -116,7 +168,7 @@ export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
       </div>
       <Button onClick={handleFinish} disabled={saving} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
         {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
-        Finalizar
+        Começar a aprender!
       </Button>
     </div>,
   ];
@@ -127,8 +179,8 @@ export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
         <div className="p-2">
           {/* Progress dots */}
           <div className="flex items-center justify-center gap-2 mb-6">
-            {[0, 1, 2].map(i => (
-              <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-accent' : 'w-2 bg-border'}`} />
+            {[0, 1, 2, 3].map(i => (
+              <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-accent' : i < step ? 'w-2 bg-accent/50' : 'w-2 bg-border'}`} />
             ))}
           </div>
           {steps[step]}
