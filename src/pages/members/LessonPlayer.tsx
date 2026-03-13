@@ -259,6 +259,9 @@ const LessonPlayer = () => {
           </div>
         )}
 
+        {/* Notes */}
+        {lessonId && <LessonNotes lessonId={lessonId} />}
+
         {/* Quiz */}
         {lessonId && <QuizPlayer lessonId={lessonId} />}
 
