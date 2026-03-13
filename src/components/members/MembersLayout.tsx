@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { MembersSidebar } from '@/components/members/MembersSidebar';
 import { MembersHeader } from '@/components/members/MembersHeader';
+import { OnboardingDialog } from '@/components/members/OnboardingDialog';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Loader2 } from 'lucide-react';
 
@@ -80,6 +81,7 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
           </main>
         </div>
       </div>
+      <OnboardingDialog userId={user.id} />
     </SidebarProvider>
   );
 };
