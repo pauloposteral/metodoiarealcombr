@@ -55,17 +55,12 @@ export const HeroSection = () => {
                 variant="hero"
                 size="lg"
                 className="group w-full sm:w-auto text-base md:text-lg py-5 md:py-5 animate-pulse hover:animate-none"
-                onClick={handleCheckout}
-                disabled={isLoading}
+                asChild
               >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    Quero aprender IA na prática
-                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
-                  </>
-                )}
+                <a href="#modulos">
+                  Quero aprender IA na prática
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
+                </a>
               </Button>
               <Button asChild variant="heroSecondary" size="default" className="w-full sm:w-auto">
                 <a href="#modulos">Ver módulos</a>
