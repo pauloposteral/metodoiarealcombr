@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Trophy } from 'lucide-react';
+import { Users, Trophy, Search } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { WelcomeMessage } from '@/components/community/WelcomeMessage';
 import { CommunityRules } from '@/components/community/CommunityRules';
