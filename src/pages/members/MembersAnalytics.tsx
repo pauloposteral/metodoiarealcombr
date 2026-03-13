@@ -8,12 +8,21 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import {
   BarChart3, Flame, Trophy, BookOpen, Clock, TrendingUp,
-  Calendar, CheckCircle2, Target
+  Calendar, CheckCircle2, Target, Award
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar
+  BarChart, Bar, PieChart, Pie, Cell
 } from 'recharts';
+
+interface ModuleProgress {
+  name: string;
+  completed: number;
+  total: number;
+  pct: number;
+}
+
+const COLORS = ['hsl(var(--accent))', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#14b8a6', '#8b5cf6', '#f97316'];
 
 const MembersAnalytics = () => {
   const navigate = useNavigate();
@@ -24,6 +33,8 @@ const MembersAnalytics = () => {
   const [completedLessons, setCompletedLessons] = useState(0);
   const [totalLessons, setTotalLessons] = useState(0);
   const [recentActivity, setRecentActivity] = useState<{ date: string; count: number }[]>([]);
+  const [moduleProgress, setModuleProgress] = useState<ModuleProgress[]>([]);
+  const [achievements, setAchievements] = useState(0);
 
   const { userPoints, getLevelTitle } = useGamification(userId || undefined);
   const { streak } = useStreak(userId || undefined);
@@ -34,22 +45,39 @@ const MembersAnalytics = () => {
       if (!user) { navigate('/auth'); return; }
       setUserId(user.id);
 
-      // Fetch stats in parallel
-      const [progressRes, totalRes, timeRes] = await Promise.all([
-        supabase.from('lesson_progress').select('completed_at, time_spent_seconds, completed').eq('user_id', user.id),
+      const [progressRes, totalRes, timeRes, modulesRes, achievementsRes] = await Promise.all([
+        supabase.from('lesson_progress').select('completed_at, time_spent_seconds, completed, lesson_id').eq('user_id', user.id),
         supabase.from('lessons').select('*', { count: 'exact', head: true }),
         supabase.from('lesson_progress').select('time_spent_seconds').eq('user_id', user.id),
+        supabase.from('modules').select('id, title, lessons(id)').order('order_index'),
+        supabase.from('user_achievements').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
       ]);
 
       const progress = progressRes.data || [];
+      const completedIds = new Set(progress.filter(p => p.completed).map(p => p.lesson_id));
       setTotalLessons(totalRes.count || 0);
-      setCompletedLessons(progress.filter(p => p.completed).length);
+      setCompletedLessons(completedIds.size);
+      setAchievements(achievementsRes.count || 0);
 
       // Total time
       const total = (timeRes.data || []).reduce((acc, p) => acc + (p.time_spent_seconds || 0), 0);
       setTotalTime(total);
 
-      // Weekly activity (last 7 days)
+      // Module progress
+      const modules = (modulesRes.data || []) as any[];
+      const modProg: ModuleProgress[] = modules.map(m => {
+        const lessonIds = (m.lessons || []).map((l: any) => l.id);
+        const done = lessonIds.filter((id: string) => completedIds.has(id)).length;
+        return {
+          name: m.title.length > 18 ? m.title.substring(0, 18) + '…' : m.title,
+          completed: done,
+          total: lessonIds.length,
+          pct: lessonIds.length > 0 ? Math.round((done / lessonIds.length) * 100) : 0,
+        };
+      });
+      setModuleProgress(modProg);
+
+      // Weekly activity
       const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
       const weekly = Array.from({ length: 7 }, (_, i) => {
         const d = new Date();
@@ -60,7 +88,7 @@ const MembersAnalytics = () => {
       });
       setWeeklyData(weekly);
 
-      // Monthly activity (last 30 days)
+      // Monthly activity
       const monthly = Array.from({ length: 30 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() - (29 - i));
@@ -104,12 +132,13 @@ const MembersAnalytics = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { icon: CheckCircle2, label: 'Aulas concluídas', value: `${completedLessons}/${totalLessons}`, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
             { icon: Flame, label: 'Streak atual', value: `${streak.current_streak} dias`, color: 'text-orange-500', bg: 'bg-orange-500/10' },
             { icon: Trophy, label: 'Nível', value: `${level} — ${getLevelTitle(level)}`, color: 'text-accent', bg: 'bg-accent/10' },
             { icon: Clock, label: 'Tempo total', value: `${hours}h ${minutes}min`, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+            { icon: Award, label: 'Conquistas', value: `${achievements}`, color: 'text-purple-500', bg: 'bg-purple-500/10' },
           ].map((stat, i) => (
             <Card key={i} className="p-4 border-border/50">
               <div className={`w-9 h-9 rounded-lg ${stat.bg} flex items-center justify-center mb-2`}>
@@ -134,9 +163,29 @@ const MembersAnalytics = () => {
           <p className="text-xs text-muted-foreground">{completedLessons} de {totalLessons} aulas concluídas</p>
         </Card>
 
+        {/* Module Progress */}
+        {moduleProgress.length > 0 && (
+          <Card className="p-6 border-border/50">
+            <div className="flex items-center gap-2 mb-4">
+              <BookOpen className="w-5 h-5 text-accent" />
+              <h2 className="font-display font-bold text-foreground">Progresso por Módulo</h2>
+            </div>
+            <div className="space-y-3">
+              {moduleProgress.map((mod, i) => (
+                <div key={i}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm text-foreground truncate max-w-[70%]">{mod.name}</span>
+                    <span className="text-xs text-muted-foreground">{mod.completed}/{mod.total} · {mod.pct}%</span>
+                  </div>
+                  <Progress value={mod.pct} className="h-2" />
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
+
         {/* Charts */}
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Weekly bar chart */}
           <Card className="p-6 border-border/50">
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="w-5 h-5 text-accent" />
@@ -156,7 +205,6 @@ const MembersAnalytics = () => {
             </ResponsiveContainer>
           </Card>
 
-          {/* Monthly area chart */}
           <Card className="p-6 border-border/50">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-5 h-5 text-accent" />
