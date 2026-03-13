@@ -257,6 +257,9 @@ const LessonPlayer = () => {
           </div>
         )}
 
+        {/* Quiz */}
+        {lessonId && <QuizPlayer lessonId={lessonId} />}
+
         {/* Complete button */}
         {!isCompleted && (
           <div className="flex justify-center mb-8">
