@@ -144,8 +144,22 @@ const LessonPlayer = () => {
       toast({ title: "Erro", description: "Não foi possível salvar seu progresso.", variant: "destructive" });
     }
   };
+  const toggleBookmark = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !lessonId) return;
 
-  const currentIndex = allLessons.findIndex(l => l.id === lessonId);
+    if (isBookmarked) {
+      await supabase.from('lesson_bookmarks').delete().eq('user_id', user.id).eq('lesson_id', lessonId);
+      setIsBookmarked(false);
+      toast({ title: 'Removido dos salvos' });
+    } else {
+      await supabase.from('lesson_bookmarks').insert({ user_id: user.id, lesson_id: lessonId });
+      setIsBookmarked(true);
+      toast({ title: 'Aula salva!', description: 'Acesse suas aulas salvas no menu lateral.' });
+    }
+  };
+
+
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
