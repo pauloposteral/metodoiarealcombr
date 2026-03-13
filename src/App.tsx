@@ -56,6 +56,7 @@ import AdminLeads from "./pages/admin/AdminLeads";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminPrompts from "./pages/admin/AdminPrompts";
 import AdminSetup from "./pages/admin/AdminSetup";
+import AdminCursos from "./pages/admin/AdminCursos";
 
 const queryClient = new QueryClient();
 
