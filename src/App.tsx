@@ -94,6 +94,7 @@ const App = () => (
             <Route path="/membros/ranking" element={<MembersRanking />} />
             <Route path="/membros/perfil" element={<MembersProfile />} />
             <Route path="/membros/salvos" element={<MembersBookmarks />} />
+            <Route path="/membros/analytics" element={<MembersAnalytics />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarrosselPage />} />
