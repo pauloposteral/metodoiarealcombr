@@ -108,6 +108,30 @@ const MembersDashboard = () => {
           }
         }
 
+          // Recent completed lessons
+          const { data: recentDone } = await supabase
+            .from('lesson_progress')
+            .select('lesson_id, completed_at, lessons(title)')
+            .eq('user_id', user.id)
+            .eq('completed', true)
+            .order('completed_at', { ascending: false })
+            .limit(5);
+
+          if (recentDone) {
+            setRecentLessons(recentDone.map((r: any) => ({
+              id: r.lesson_id,
+              title: r.lessons?.title || 'Aula',
+              completed_at: r.completed_at,
+            })));
+          }
+
+          // Achievements count
+          const { count: achCount } = await supabase
+            .from('user_achievements')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', user.id);
+          setTotalAchievements(achCount || 0);
+
         // Fetch courses with progress
         const { data: coursesData } = await supabase
           .from('courses')
