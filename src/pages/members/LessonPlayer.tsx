@@ -230,9 +230,21 @@ const LessonPlayer = () => {
               </>
             )}
           </div>
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-            {lesson.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+              {lesson.title}
+            </h1>
+            <button
+              onClick={toggleBookmark}
+              className="p-2 hover:bg-secondary rounded-lg transition-colors flex-shrink-0 mt-1"
+              title={isBookmarked ? 'Remover dos salvos' : 'Salvar aula'}
+            >
+              {isBookmarked 
+                ? <BookmarkCheck className="w-5 h-5 text-accent" />
+                : <Bookmark className="w-5 h-5 text-muted-foreground" />
+              }
+            </button>
+          </div>
           {lesson.description && (
             <p className="text-muted-foreground mt-2">{lesson.description}</p>
           )}
