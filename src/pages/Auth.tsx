@@ -73,7 +73,7 @@ const Auth = () => {
           title: "Conta criada com sucesso!",
           description: "Você já pode acessar a área de membros.",
         });
-        navigate('/membros');
+        navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
       }
     } catch (error: any) {
       let message = error.message;
