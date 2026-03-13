@@ -35,6 +35,27 @@ function parseMarkdown(text: string): React.ReactNode[] {
       continue;
     }
 
+    // Custom blocks: :::tip, :::warning, :::success, :::exercise
+    const blockMatch = line.trim().match(/^:::(tip|warning|success|exercise)(?:\s+(.+))?$/);
+    if (blockMatch) {
+      const blockType = blockMatch[1];
+      const blockTitle = blockMatch[2];
+      const blockLines: string[] = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== ':::') {
+        blockLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing :::
+      const blockContent = <span>{blockLines.map((bl, bi) => <React.Fragment key={bi}>{renderInline(bl)}{bi < blockLines.length - 1 && <br />}</React.Fragment>)}</span>;
+      
+      if (blockType === 'tip') elements.push(<TipBox key={key++}>{blockContent}</TipBox>);
+      else if (blockType === 'warning') elements.push(<WarningBox key={key++}>{blockContent}</WarningBox>);
+      else if (blockType === 'success') elements.push(<SuccessBox key={key++}>{blockContent}</SuccessBox>);
+      else if (blockType === 'exercise') elements.push(<ExerciseBox key={key++} title={blockTitle}>{blockContent}</ExerciseBox>);
+      continue;
+    }
+
     // Headings
     const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
