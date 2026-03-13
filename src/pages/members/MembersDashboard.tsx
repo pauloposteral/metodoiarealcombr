@@ -45,6 +45,8 @@ const MembersDashboard = () => {
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState<string | undefined>();
   const [streak, setStreak] = useState(0);
+  const [recentLessons, setRecentLessons] = useState<RecentLesson[]>([]);
+  const [totalAchievements, setTotalAchievements] = useState(0);
 
   const { userPoints, earnedBadges, userRank, getLevelTitle } = useGamification(userId);
 
