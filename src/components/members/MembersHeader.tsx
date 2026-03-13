@@ -51,6 +51,14 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2 hover:bg-secondary rounded-lg transition-colors"
+            title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5 text-accent" /> : <Moon className="w-5 h-5 text-muted-foreground" />}
+          </button>
+
           <NotificationBell />
 
           <div className="flex items-center gap-3">
