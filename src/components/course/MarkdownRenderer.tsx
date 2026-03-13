@@ -1,4 +1,5 @@
 import React from 'react';
+import { TipBox, WarningBox, SuccessBox, ExerciseBox } from './ContentBlocks';
 
 interface MarkdownRendererProps {
   content: string;
