@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
-import { PAYMENT_URL } from '@/lib/constants';
+import { useCheckout } from '@/hooks/useCheckout';
 
 export const HeroSection = () => {
+  const { handleCheckout, isLoading } = useCheckout();
+
   const bullets = [
     'Sem tecnicismos',
     '100% prático',
@@ -51,11 +53,21 @@ export const HeroSection = () => {
 
           <ScrollReveal delay={200}>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <Button asChild variant="hero" size="lg" className="group w-full sm:w-auto text-base md:text-lg py-5 md:py-5 animate-pulse hover:animate-none">
-                <a href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">
-                  Quero aprender IA na prática
-                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
-                </a>
+              <Button
+                variant="hero"
+                size="lg"
+                className="group w-full sm:w-auto text-base md:text-lg py-5 md:py-5 animate-pulse hover:animate-none"
+                onClick={handleCheckout}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Quero aprender IA na prática
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
               </Button>
               <Button asChild variant="heroSecondary" size="default" className="w-full sm:w-auto">
                 <a href="#modulos">Ver módulos</a>
@@ -66,7 +78,7 @@ export const HeroSection = () => {
           <ScrollReveal delay={300}>
             <div className="mt-5 md:mt-6 pt-4 border-t border-primary-foreground/10">
               <p className="text-primary-foreground/50 text-xs md:text-sm">
-                Acesso imediato • 12x de R$41 • Garantia de 7 dias
+                Acesso imediato • 12x de R$41 • Cartão ou PIX • Garantia de 7 dias
               </p>
             </div>
           </ScrollReveal>

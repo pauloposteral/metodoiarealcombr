@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { ArrowRight, Shield, Clock, Award } from 'lucide-react';
+import { ArrowRight, Shield, Clock, Award, Loader2 } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
-import { PAYMENT_URL } from '@/lib/constants';
+import { useCheckout } from '@/hooks/useCheckout';
 
 export const FinalCTASection = () => {
+  const { handleCheckout, isLoading } = useCheckout();
+
   const guarantees = [
     { icon: Shield, text: 'Garantia de 7 dias' },
     { icon: Clock, text: 'Acesso vitalício' },
@@ -36,14 +38,24 @@ export const FinalCTASection = () => {
           </ScrollReveal>
 
           <ScrollReveal delay={200}>
-            <Button asChild variant="hero" size="lg" className="group text-base md:text-lg w-full sm:w-auto py-4 md:py-5">
-              <a href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">
-                Quero começar agora
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
-              </a>
+            <Button
+              variant="hero"
+              size="lg"
+              className="group text-base md:text-lg w-full sm:w-auto py-4 md:py-5"
+              onClick={handleCheckout}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  Quero começar agora
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
+                </>
+              )}
             </Button>
             <p className="text-primary-foreground/50 text-xs md:text-sm mt-3">
-              12x de R$41 • Acesso imediato
+              12x de R$41 • Cartão ou PIX • Acesso imediato
             </p>
           </ScrollReveal>
 

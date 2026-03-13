@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { X, ArrowRight, Shield, Gift } from 'lucide-react';
+import { X, ArrowRight, Shield, Gift, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PAYMENT_URL } from '@/lib/constants';
+import { useCheckout } from '@/hooks/useCheckout';
 
 export const ExitIntentPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { handleCheckout, isLoading } = useCheckout();
 
   useEffect(() => {
     const hasShown = sessionStorage.getItem('exit_popup_shown');
@@ -45,15 +46,25 @@ export const ExitIntentPopup = () => {
             <p className="text-sm text-muted-foreground">Use o cupom:</p>
             <p className="text-2xl font-display font-bold text-accent tracking-wider mt-1">IAREAL10</p>
           </div>
-          <Button asChild variant="hero" size="lg" className="w-full group text-base">
-            <a href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">
-              Aproveitar desconto
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </a>
+          <Button
+            variant="hero"
+            size="lg"
+            className="w-full group text-base"
+            onClick={handleCheckout}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                Aproveitar desconto
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </>
+            )}
           </Button>
           <div className="flex items-center justify-center gap-2 mt-4 text-muted-foreground">
             <Shield className="w-3.5 h-3.5 text-accent" />
-            <span className="text-xs">Garantia de 7 dias • Risco zero</span>
+            <span className="text-xs">Garantia de 7 dias • Cartão ou PIX</span>
           </div>
         </div>
       </div>
