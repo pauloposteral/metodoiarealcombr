@@ -261,6 +261,15 @@ const LessonPlayer = () => {
         {/* Quiz */}
         {lessonId && <QuizPlayer lessonId={lessonId} />}
 
+        {/* AI Sandbox */}
+        {lessonId && lesson && (
+          <AISandbox
+            lessonId={lessonId}
+            lessonTitle={lesson.title}
+            prompts={lesson.prompts || undefined}
+          />
+        )}
+
         {/* Complete button */}
         {!isCompleted && (
           <div className="flex justify-center mb-8">
