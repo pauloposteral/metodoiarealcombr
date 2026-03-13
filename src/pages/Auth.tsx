@@ -52,7 +52,7 @@ const Auth = () => {
           title: "Bem-vindo de volta!",
           description: "Login realizado com sucesso.",
         });
-        navigate('/membros');
+        navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
       } else {
         const redirectUrl = `${window.location.origin}/membros`;
         
