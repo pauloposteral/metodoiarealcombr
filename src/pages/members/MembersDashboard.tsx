@@ -29,6 +29,12 @@ interface Module {
   order_index: number;
 }
 
+interface RecentLesson {
+  id: string;
+  title: string;
+  completed_at: string;
+}
+
 const MembersDashboard = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<CourseProgress[]>([]);
