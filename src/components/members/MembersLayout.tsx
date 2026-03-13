@@ -81,6 +81,7 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
           </main>
         </div>
       </div>
+      <OnboardingDialog userId={user.id} />
     </SidebarProvider>
   );
 };
