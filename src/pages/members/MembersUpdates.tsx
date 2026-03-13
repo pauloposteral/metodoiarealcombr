@@ -16,46 +16,76 @@ interface Update {
 
 const updates: Update[] = [
   {
-    id: '1',
-    date: '2025-01-10',
+    id: '10',
+    date: '2026-03-13',
+    title: 'Painel de Analytics Completo',
+    description: 'Novo dashboard de progresso com gráficos de atividade semanal/mensal, progresso por módulo e tracking de tempo de estudo.',
+    type: 'new',
+    link: '/membros/analytics'
+  },
+  {
+    id: '9',
+    date: '2026-03-12',
+    title: 'Sistema de Conquistas Automáticas',
+    description: '11 conquistas desbloqueáveis automaticamente conforme você progride no curso. Receba notificações ao alcançar marcos!',
+    type: 'new',
+    link: '/membros/ranking'
+  },
+  {
+    id: '8',
+    date: '2026-03-11',
+    title: 'Busca Global (⌘K)',
+    description: 'Busque aulas, módulos, cursos e posts da comunidade usando o atalho ⌘K ou a barra de busca no topo.',
+    type: 'new',
+  },
+  {
+    id: '7',
+    date: '2026-03-10',
+    title: 'Preferências de Notificação',
+    description: 'Controle quais notificações você recebe na página do seu perfil: lembretes de aula, comunidade, conquistas e resumo semanal.',
+    type: 'new',
+    link: '/membros/perfil'
+  },
+  {
+    id: '6',
+    date: '2026-03-08',
+    title: 'Exportação de Dados (Admin)',
+    description: 'Administradores podem exportar dados de leads, empresas, vendas, progresso e certificados em CSV.',
+    type: 'update',
+  },
+  {
+    id: '5',
+    date: '2026-03-05',
     title: 'Editor de Carrosséis com IA',
     description: 'Nova ferramenta para criar carrosséis do Instagram usando inteligência artificial. Gere slides profissionais em segundos.',
     type: 'new',
     link: '/carrossel'
   },
   {
-    id: '2',
-    date: '2025-01-08',
+    id: '4',
+    date: '2026-03-03',
     title: 'Comunidade de Alunos',
-    description: 'A comunidade está no ar! Troque experiências, tire dúvidas e compartilhe seus resultados com outros alunos.',
+    description: 'Troque experiências, tire dúvidas e compartilhe resultados com outros alunos. Agora com busca integrada!',
     type: 'new',
     link: '/membros/comunidade'
   },
   {
     id: '3',
-    date: '2025-01-05',
-    title: 'Módulo 8: Futuro e Tendências',
-    description: 'Novo módulo adicionado ao curso com aulas sobre o mercado de trabalho e como se manter relevante com IA.',
-    type: 'new',
-    link: '/membros/modulos'
-  },
-  {
-    id: '4',
-    date: '2025-01-03',
+    date: '2026-03-01',
     title: 'Sistema de Certificado',
-    description: 'Complete 100% do curso e gere seu certificado de conclusão automático.',
+    description: 'Complete 100% do curso e gere seu certificado de conclusão automático com código de validação.',
     type: 'new',
     link: '/membros/certificado'
   },
   {
-    id: '5',
+    id: '2',
     date: 'Em breve',
-    title: 'Biblioteca de Prompts Expandida',
-    description: 'Estamos preparando mais de 200 novos prompts organizados por categoria e nicho de mercado.',
+    title: 'Notificações por Email',
+    description: 'Receba lembretes de estudo e novidades diretamente no seu email conforme suas preferências.',
     type: 'coming'
   },
   {
-    id: '6',
+    id: '1',
     date: 'Em breve',
     title: 'Aulas em Vídeo',
     description: 'Em breve todas as aulas terão vídeos complementares para enriquecer seu aprendizado.',
