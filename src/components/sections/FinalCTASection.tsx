@@ -3,9 +3,10 @@ import { ScrollReveal } from '@/components/ScrollReveal';
 import { ArrowRight, Shield, Clock, Award, Loader2 } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
 import { useCheckout } from '@/hooks/useCheckout';
+import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const FinalCTASection = () => {
-  const { handleCheckout, isLoading } = useCheckout();
+  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
   const guarantees = [
     { icon: Shield, text: 'Garantia de 7 dias' },
