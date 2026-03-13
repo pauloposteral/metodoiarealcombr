@@ -292,43 +292,90 @@ const MembersDashboard = () => {
           </div>
         )}
 
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <Button 
-            onClick={() => navigate('/membros/ranking')}
-            className="h-auto py-5 justify-start gap-3 bg-accent/5 hover:bg-accent/10 border border-accent/20"
-            variant="ghost"
-          >
-            <Star className="w-5 h-5 text-accent" />
-            <div className="text-left">
-              <span className="font-medium text-foreground block">Ranking</span>
-              <span className="text-xs text-muted-foreground">#{userRank || '—'} no ranking geral</span>
+        {/* Recent Activity + Quick Actions */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Recent Lessons */}
+          <div className="md:col-span-2 bg-card rounded-2xl p-5 border border-border/50">
+            <div className="flex items-center gap-2 mb-4">
+              <Clock className="w-5 h-5 text-accent" />
+              <h2 className="font-display font-bold text-foreground">Atividade Recente</h2>
             </div>
-          </Button>
+            {recentLessons.length > 0 ? (
+              <div className="space-y-3">
+                {recentLessons.map((lesson) => (
+                  <button
+                    key={lesson.id}
+                    onClick={() => navigate(`/membros/aula/${lesson.id}`)}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 transition-colors text-left"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{lesson.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(lesson.completed_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-6">Nenhuma aula concluída ainda. Comece agora!</p>
+            )}
+          </div>
 
-          <Button 
-            onClick={() => navigate('/membros/comunidade')}
-            className="h-auto py-5 justify-start gap-3"
-            variant="ghost"
-          >
-            <Sparkles className="w-5 h-5 text-accent" />
-            <div className="text-left">
-              <span className="font-medium text-foreground block">Comunidade</span>
-              <span className="text-xs text-muted-foreground">Tire dúvidas e compartilhe</span>
-            </div>
-          </Button>
+          {/* Quick Actions */}
+          <div className="space-y-3">
+            <Button 
+              onClick={() => navigate('/membros/analytics')}
+              className="w-full h-auto py-4 justify-start gap-3 bg-accent/5 hover:bg-accent/10 border border-accent/20"
+              variant="ghost"
+            >
+              <BarChart3 className="w-5 h-5 text-accent" />
+              <div className="text-left">
+                <span className="font-medium text-foreground block">Meu Progresso</span>
+                <span className="text-xs text-muted-foreground">Gráficos e analytics</span>
+              </div>
+            </Button>
 
-          <Button 
-            onClick={() => navigate('/membros/materiais')}
-            className="h-auto py-5 justify-start gap-3"
-            variant="ghost"
-          >
-            <BookOpen className="w-5 h-5 text-accent" />
-            <div className="text-left">
-              <span className="font-medium text-foreground block">Materiais</span>
-              <span className="text-xs text-muted-foreground">Prompts e downloads</span>
-            </div>
-          </Button>
+            <Button 
+              onClick={() => navigate('/membros/ranking')}
+              className="w-full h-auto py-4 justify-start gap-3"
+              variant="ghost"
+            >
+              <Star className="w-5 h-5 text-accent" />
+              <div className="text-left">
+                <span className="font-medium text-foreground block">Ranking</span>
+                <span className="text-xs text-muted-foreground">#{userRank || '—'} · {totalAchievements} conquistas</span>
+              </div>
+            </Button>
+
+            <Button 
+              onClick={() => navigate('/membros/comunidade')}
+              className="w-full h-auto py-4 justify-start gap-3"
+              variant="ghost"
+            >
+              <MessageSquare className="w-5 h-5 text-accent" />
+              <div className="text-left">
+                <span className="font-medium text-foreground block">Comunidade</span>
+                <span className="text-xs text-muted-foreground">Tire dúvidas e compartilhe</span>
+              </div>
+            </Button>
+
+            <Button 
+              onClick={() => navigate('/membros/materiais')}
+              className="w-full h-auto py-4 justify-start gap-3"
+              variant="ghost"
+            >
+              <BookOpen className="w-5 h-5 text-accent" />
+              <div className="text-left">
+                <span className="font-medium text-foreground block">Materiais</span>
+                <span className="text-xs text-muted-foreground">Prompts e downloads</span>
+              </div>
+            </Button>
+          </div>
         </div>
 
         {/* Modules Overview */}
