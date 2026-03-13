@@ -1,10 +1,11 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Clock, Award, CheckCircle, Sparkles, Banknote, Loader2 } from 'lucide-react';
+import { ArrowRight, Shield, Clock, Award, CheckCircle, Sparkles, Banknote, Loader2, Lock, CreditCard } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
+import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const PricingAnchor = () => {
-  const { handleCheckout, isLoading } = useCheckout();
+  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
   const included = [
     'Acesso vitalício ao curso completo',
