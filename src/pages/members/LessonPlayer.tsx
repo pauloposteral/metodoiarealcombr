@@ -17,7 +17,9 @@ import {
   BookOpen,
   Sparkles,
   Award,
-  Play
+  Play,
+  Bookmark,
+  BookmarkCheck
 } from 'lucide-react';
 
 interface Lesson {
@@ -48,6 +50,7 @@ const LessonPlayer = () => {
   const [allLessons, setAllLessons] = useState<Lesson[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +94,15 @@ const LessonPlayer = () => {
 
           if (progressData?.completed) setIsCompleted(true);
           else setIsCompleted(false);
+
+          // Check bookmark
+          const { data: bookmarkData } = await supabase
+            .from('lesson_bookmarks')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('lesson_id', lessonId)
+            .maybeSingle();
+          setIsBookmarked(!!bookmarkData);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -132,6 +144,21 @@ const LessonPlayer = () => {
       toast({ title: "Erro", description: "Não foi possível salvar seu progresso.", variant: "destructive" });
     }
   };
+  const toggleBookmark = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !lessonId) return;
+
+    if (isBookmarked) {
+      await supabase.from('lesson_bookmarks').delete().eq('user_id', user.id).eq('lesson_id', lessonId);
+      setIsBookmarked(false);
+      toast({ title: 'Removido dos salvos' });
+    } else {
+      await supabase.from('lesson_bookmarks').insert({ user_id: user.id, lesson_id: lessonId });
+      setIsBookmarked(true);
+      toast({ title: 'Aula salva!', description: 'Acesse suas aulas salvas no menu lateral.' });
+    }
+  };
+
 
   const currentIndex = allLessons.findIndex(l => l.id === lessonId);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
@@ -203,9 +230,21 @@ const LessonPlayer = () => {
               </>
             )}
           </div>
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-            {lesson.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+              {lesson.title}
+            </h1>
+            <button
+              onClick={toggleBookmark}
+              className="p-2 hover:bg-secondary rounded-lg transition-colors flex-shrink-0 mt-1"
+              title={isBookmarked ? 'Remover dos salvos' : 'Salvar aula'}
+            >
+              {isBookmarked 
+                ? <BookmarkCheck className="w-5 h-5 text-accent" />
+                : <Bookmark className="w-5 h-5 text-muted-foreground" />
+              }
+            </button>
+          </div>
           {lesson.description && (
             <p className="text-muted-foreground mt-2">{lesson.description}</p>
           )}

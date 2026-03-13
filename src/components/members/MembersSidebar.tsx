@@ -13,19 +13,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { 
-  Home, 
-  BookOpen, 
-  FileText, 
-  Gift, 
-  Bell, 
-  HelpCircle,
-  LogOut,
-  ChevronLeft,
-  Award,
-  LayoutGrid,
-  Users,
-  Trophy,
-  GraduationCap
+  Home, BookOpen, FileText, Gift, Bell, HelpCircle,
+  LogOut, ChevronLeft, Award, LayoutGrid, Users, Trophy,
+  GraduationCap, Bookmark, UserCircle
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,12 +25,14 @@ const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
   { title: 'Cursos', url: '/membros/cursos', icon: GraduationCap },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
+  { title: 'Salvos', url: '/membros/salvos', icon: Bookmark },
   { title: 'Comunidade', url: '/membros/comunidade', icon: Users },
   { title: 'Ranking', url: '/membros/ranking', icon: Trophy },
   { title: 'Materiais', url: '/membros/materiais', icon: FileText },
   { title: 'Carrosséis', url: '/carrossel', icon: LayoutGrid },
   { title: 'Bônus', url: '/membros/bonus', icon: Gift },
   { title: 'Certificado', url: '/membros/certificado', icon: Award },
+  { title: 'Meu Perfil', url: '/membros/perfil', icon: UserCircle },
   { title: 'Atualizações', url: '/membros/atualizacoes', icon: Bell },
   { title: 'Suporte', url: '/membros/suporte', icon: HelpCircle },
 ];
