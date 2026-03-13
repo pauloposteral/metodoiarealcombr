@@ -6,7 +6,6 @@ export const UrgencyBar = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Set countdown to end of day or a fixed 6-hour window
     const getEndTime = () => {
       const stored = localStorage.getItem('urgency_end');
       if (stored) {
@@ -48,8 +47,8 @@ export const UrgencyBar = () => {
     <div className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-accent via-gold to-accent text-accent-foreground">
       <div className="container px-4 flex items-center justify-center gap-2 sm:gap-3 h-9 sm:h-10 text-xs sm:text-sm font-semibold relative">
         <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-pulse" />
-        <span className="hidden sm:inline">🔥 Oferta especial termina em</span>
-        <span className="sm:hidden">🔥 Oferta termina em</span>
+        <span className="hidden sm:inline">🔥 50% OFF — Oferta expira em</span>
+        <span className="sm:hidden">🔥 50% OFF expira em</span>
         <div className="flex items-center gap-1 font-mono font-bold text-sm sm:text-base">
           <span className="bg-accent-foreground/20 px-1.5 py-0.5 rounded">{pad(timeLeft.hours)}</span>
           <span>:</span>
@@ -57,11 +56,7 @@ export const UrgencyBar = () => {
           <span>:</span>
           <span className="bg-accent-foreground/20 px-1.5 py-0.5 rounded">{pad(timeLeft.seconds)}</span>
         </div>
-        <button
-          onClick={() => setIsVisible(false)}
-          className="absolute right-2 sm:right-4 p-1 hover:bg-accent-foreground/10 rounded transition-colors"
-          aria-label="Fechar"
-        >
+        <button onClick={() => setIsVisible(false)} className="absolute right-2 sm:right-4 p-1 hover:bg-accent-foreground/10 rounded transition-colors" aria-label="Fechar">
           <X className="w-3.5 h-3.5" />
         </button>
       </div>
