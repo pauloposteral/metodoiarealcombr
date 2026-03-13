@@ -4,6 +4,7 @@ import { MembersLayout } from '@/components/members/MembersLayout';
 import { LessonComments } from '@/components/community/LessonComments';
 import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
 import { QuizPlayer } from '@/components/course/QuizPlayer';
+import { AISandbox } from '@/components/course/AISandbox';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
@@ -259,6 +260,15 @@ const LessonPlayer = () => {
 
         {/* Quiz */}
         {lessonId && <QuizPlayer lessonId={lessonId} />}
+
+        {/* AI Sandbox */}
+        {lessonId && lesson && (
+          <AISandbox
+            lessonId={lessonId}
+            lessonTitle={lesson.title}
+            prompts={lesson.prompts || undefined}
+          />
+        )}
 
         {/* Complete button */}
         {!isCompleted && (
