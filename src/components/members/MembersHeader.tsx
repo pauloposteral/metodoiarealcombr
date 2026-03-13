@@ -5,6 +5,7 @@ import { Search, Sun, Moon } from 'lucide-react';
 import { GlobalSearch } from './GlobalSearch';
 import { NotificationBell } from './NotificationBell';
 import { useTheme } from '@/hooks/useTheme';
+import { StreakBadge } from '@/components/gamification/StreakBadge';
 
 interface MembersHeaderProps {
   user: User;
@@ -51,6 +52,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
         </div>
 
         <div className="flex items-center gap-3">
+          <StreakBadge userId={user.id} />
           <button
             onClick={toggleTheme}
             className="p-2 hover:bg-secondary rounded-lg transition-colors"

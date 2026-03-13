@@ -27,6 +27,7 @@ import MembersUpdates from "./pages/members/MembersUpdates";
 import MembersRanking from "./pages/members/MembersRanking";
 import MembersProfile from "./pages/members/MembersProfile";
 import MembersBookmarks from "./pages/members/MembersBookmarks";
+import MembersAnalytics from "./pages/members/MembersAnalytics";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
@@ -93,6 +94,7 @@ const App = () => (
             <Route path="/membros/ranking" element={<MembersRanking />} />
             <Route path="/membros/perfil" element={<MembersProfile />} />
             <Route path="/membros/salvos" element={<MembersBookmarks />} />
+            <Route path="/membros/analytics" element={<MembersAnalytics />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarrosselPage />} />

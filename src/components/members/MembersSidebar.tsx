@@ -15,7 +15,7 @@ import {
 import { 
   Home, BookOpen, FileText, Gift, Bell, HelpCircle,
   LogOut, ChevronLeft, Award, LayoutGrid, Users, Trophy,
-  GraduationCap, Bookmark, UserCircle
+  GraduationCap, Bookmark, UserCircle, BarChart3
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,6 +33,7 @@ const menuItems = [
   { title: 'Bônus', url: '/membros/bonus', icon: Gift },
   { title: 'Certificado', url: '/membros/certificado', icon: Award },
   { title: 'Meu Perfil', url: '/membros/perfil', icon: UserCircle },
+  { title: 'Meu Progresso', url: '/membros/analytics', icon: BarChart3 },
   { title: 'Atualizações', url: '/membros/atualizacoes', icon: Bell },
   { title: 'Suporte', url: '/membros/suporte', icon: HelpCircle },
 ];
