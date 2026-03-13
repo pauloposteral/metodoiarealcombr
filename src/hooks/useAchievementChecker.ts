@@ -35,7 +35,7 @@ export const useAchievementChecker = (userId?: string) => {
       for (const achievement of achievements) {
         if (earnedIds.has(achievement.id)) continue;
 
-        const criteria = achievement.criteria as AchievementCriteria;
+        const criteria = achievement.criteria as unknown as AchievementCriteria;
         let eligible = false;
 
         switch (criteria.type) {
