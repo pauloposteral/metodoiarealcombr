@@ -25,6 +25,8 @@ import MembersCommunity from "./pages/members/MembersCommunity";
 import CommunityPost from "./pages/members/CommunityPost";
 import MembersUpdates from "./pages/members/MembersUpdates";
 import MembersRanking from "./pages/members/MembersRanking";
+import MembersProfile from "./pages/members/MembersProfile";
+import MembersBookmarks from "./pages/members/MembersBookmarks";
 import ValidateCertificate from "./pages/ValidateCertificate";
 import CourseContentPage from "./pages/CourseContent";
 import Downloads from "./pages/Downloads";
