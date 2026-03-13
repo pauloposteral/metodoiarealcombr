@@ -156,6 +156,7 @@ export const GlobalSearch = ({ open, onClose }: GlobalSearchProps) => {
     course: GraduationCap,
     module: BookOpen,
     lesson: FileText,
+    community: Users,
   };
 
   return (
