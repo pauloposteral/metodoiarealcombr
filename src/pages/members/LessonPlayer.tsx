@@ -50,6 +50,7 @@ const LessonPlayer = () => {
   const [allLessons, setAllLessons] = useState<Lesson[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
