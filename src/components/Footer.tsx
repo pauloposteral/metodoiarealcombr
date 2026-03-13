@@ -11,7 +11,7 @@ export const Footer = () => {
           <img 
             src={logo} 
             alt="Método IA Real" 
-            className="h-10 md:h-12 mb-4 md:mb-6 opacity-80"
+            className="h-11 md:h-14 mb-4 md:mb-6 opacity-80 w-auto object-contain"
           />
           <p className="text-primary-foreground/50 text-xs md:text-sm mb-4 max-w-md px-4">
             Método IA Real — Aprenda a usar inteligência artificial de forma prática e aplicável.
