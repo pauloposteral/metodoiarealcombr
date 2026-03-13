@@ -120,6 +120,11 @@ const MembersCommunity = () => {
         query = query.eq('category', activeCategory);
       }
 
+      if (searchQuery.trim().length >= 2) {
+        const term = `%${searchQuery.trim()}%`;
+        query = query.or(`title.ilike.${term},content.ilike.${term}`);
+      }
+
       query = query.order('is_pinned', { ascending: false });
 
       if (sortBy === 'recent') {
