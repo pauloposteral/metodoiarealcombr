@@ -52,7 +52,10 @@ const LessonPlayer = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string>('');
 
+  // Track time spent on lesson
+  useLessonTimeTracker({ lessonId: lessonId || '', userId: currentUserId });
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
