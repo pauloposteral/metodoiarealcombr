@@ -5,7 +5,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import {
-  Search, BookOpen, GraduationCap, FileText,
+  Search, BookOpen, GraduationCap, FileText, Users,
   ArrowRight, Clock, Loader2
 } from 'lucide-react';
 
