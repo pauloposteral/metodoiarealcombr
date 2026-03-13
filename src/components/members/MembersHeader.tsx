@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Search } from 'lucide-react';
+import { Search, Sun, Moon } from 'lucide-react';
 import { GlobalSearch } from './GlobalSearch';
 import { NotificationBell } from './NotificationBell';
+import { useTheme } from '@/hooks/useTheme';
 
 interface MembersHeaderProps {
   user: User;
