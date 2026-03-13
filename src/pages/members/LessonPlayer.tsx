@@ -94,6 +94,15 @@ const LessonPlayer = () => {
 
           if (progressData?.completed) setIsCompleted(true);
           else setIsCompleted(false);
+
+          // Check bookmark
+          const { data: bookmarkData } = await supabase
+            .from('lesson_bookmarks')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('lesson_id', lessonId)
+            .maybeSingle();
+          setIsBookmarked(!!bookmarkData);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
