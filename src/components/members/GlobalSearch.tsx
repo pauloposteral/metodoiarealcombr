@@ -5,13 +5,13 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import {
-  Search, BookOpen, GraduationCap, FileText,
+  Search, BookOpen, GraduationCap, FileText, Users,
   ArrowRight, Clock, Loader2
 } from 'lucide-react';
 
 interface SearchResult {
   id: string;
-  type: 'lesson' | 'module' | 'course';
+  type: 'lesson' | 'module' | 'course' | 'community';
   title: string;
   description: string | null;
   path: string;
@@ -108,6 +108,24 @@ export const GlobalSearch = ({ open, onClose }: GlobalSearchProps) => {
         })));
       }
 
+      // Search community posts
+      const { data: posts } = await supabase
+        .from('community_posts')
+        .select('id, title, content, category')
+        .or(`title.ilike.${searchTerm},content.ilike.${searchTerm}`)
+        .limit(3);
+
+      if (posts) {
+        allResults.push(...posts.map(p => ({
+          id: p.id,
+          type: 'community' as const,
+          title: p.title,
+          description: p.content?.substring(0, 80) || null,
+          path: `/membros/comunidade/post/${p.id}`,
+          meta: p.category,
+        })));
+      }
+
       setResults(allResults);
       setSelectedIndex(0);
     } catch (error) {
@@ -138,6 +156,7 @@ export const GlobalSearch = ({ open, onClose }: GlobalSearchProps) => {
     course: GraduationCap,
     module: BookOpen,
     lesson: FileText,
+    community: Users,
   };
 
   return (

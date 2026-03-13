@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Trophy } from 'lucide-react';
+import { Users, Trophy, Search } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
 import { WelcomeMessage } from '@/components/community/WelcomeMessage';
 import { CommunityRules } from '@/components/community/CommunityRules';
@@ -12,6 +12,7 @@ import { LeaderboardCard } from '@/components/gamification/LeaderboardCard';
 import { useGamification } from '@/hooks/useGamification';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -47,6 +48,7 @@ const MembersCommunity = () => {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<CategoryType>('all');
   const [sortBy, setSortBy] = useState<SortType>('recent');
+  const [searchQuery, setSearchQuery] = useState('');
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState<string | undefined>();
   const [stats, setStats] = useState({
@@ -62,7 +64,7 @@ const MembersCommunity = () => {
     fetchUserName();
     fetchPosts();
     fetchStats();
-  }, [activeCategory, sortBy]);
+  }, [activeCategory, sortBy, searchQuery]);
 
   const fetchUserName = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -116,6 +118,11 @@ const MembersCommunity = () => {
 
       if (activeCategory !== 'all') {
         query = query.eq('category', activeCategory);
+      }
+
+      if (searchQuery.trim().length >= 2) {
+        const term = `%${searchQuery.trim()}%`;
+        query = query.or(`title.ilike.${term},content.ilike.${term}`);
       }
 
       query = query.order('is_pinned', { ascending: false });
@@ -245,22 +252,33 @@ const MembersCommunity = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main content */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <CategoryTabs 
-                activeCategory={activeCategory} 
-                onCategoryChange={setActiveCategory} 
-              />
-              
-              <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortType)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="recent">Mais recentes</SelectItem>
-                  <SelectItem value="popular">Mais relevantes</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Search + Filters */}
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Buscar na comunidade..."
+                  className="pl-9 bg-card/50 border-border/50"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <CategoryTabs 
+                  activeCategory={activeCategory} 
+                  onCategoryChange={setActiveCategory} 
+                />
+                
+                <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortType)}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recent">Mais recentes</SelectItem>
+                    <SelectItem value="popular">Mais relevantes</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Posts */}
