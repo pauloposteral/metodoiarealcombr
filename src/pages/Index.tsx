@@ -76,7 +76,6 @@ const Index = () => {
         <BonusSection />
         <PricingAnchor />
         <TestimonialsSection />
-        <FAQSection />
         <FinalCTASection />
         <Footer />
       </main>
