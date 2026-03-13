@@ -64,7 +64,7 @@ const MembersCommunity = () => {
     fetchUserName();
     fetchPosts();
     fetchStats();
-  }, [activeCategory, sortBy]);
+  }, [activeCategory, sortBy, searchQuery]);
 
   const fetchUserName = async () => {
     const { data: { user } } = await supabase.auth.getUser();
