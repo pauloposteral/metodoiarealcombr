@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import heroBg from '@/assets/hero-bg.jpg';
+import { SocialProofCounter } from '@/components/landing/SocialProofCounter';
 
 
 export const HeroSection = () => {
@@ -26,24 +27,22 @@ export const HeroSection = () => {
       <div className="hidden md:block absolute bottom-20 left-10 w-48 h-48 bg-gold-light/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }} />
 
       {/* Content */}
-      <div className="container relative z-10 pt-16 pb-6 md:pt-24 md:pb-16">
+      <div className="container relative z-10 pt-20 pb-6 md:pt-28 md:pb-16">
         <div className="max-w-3xl mx-auto">
           {/* Text content - Centered */}
           <div className="text-center">
-            {/* Title - Prominent and immediate */}
+            {/* Title - With specific number */}
             <ScrollReveal delay={0}>
               <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6">
-                Aprenda a usar{' '}
-                <span className="text-gradient-gold">
-                  IA de verdade
-                </span>{' '}
-                no seu dia a dia
+                <span className="text-gradient-gold">2.500+ alunos</span>{' '}
+                já usam IA no trabalho.{' '}
+                Aprenda em 7 dias.
               </h1>
             </ScrollReveal>
 
             {/* Subtitle - Compact */}
             <ScrollReveal delay={100}>
-              <p className="text-sm md:text-base lg:text-lg text-primary-foreground/80 max-w-xl mx-auto lg:mx-0 mb-5 md:mb-6 leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-primary-foreground/80 max-w-xl mx-auto mb-5 md:mb-6 leading-relaxed">
                 Chega de tutorial solto. Veja como pessoas reais usam IA — e aprenda a fazer igual.
               </p>
             </ScrollReveal>
@@ -86,6 +85,9 @@ export const HeroSection = () => {
                 <p className="text-primary-foreground/50 text-xs md:text-sm">Acesso imediato • 100% online • Certificado incluso</p>
               </div>
             </ScrollReveal>
+
+            {/* Social proof counter */}
+            <SocialProofCounter />
           </div>
         </div>
       </div>

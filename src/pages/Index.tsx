@@ -21,6 +21,18 @@ import { Footer } from '@/components/Footer';
 import { TopHeader } from '@/components/TopHeader';
 import { Helmet } from 'react-helmet-async';
 
+// Landing page conversion components
+import { UrgencyBar } from '@/components/landing/UrgencyBar';
+import { StickyMobileCTA } from '@/components/landing/StickyMobileCTA';
+import { WhatsAppBubble } from '@/components/landing/WhatsAppBubble';
+import { ReadingProgress } from '@/components/landing/ReadingProgress';
+import { ExitIntentPopup } from '@/components/landing/ExitIntentPopup';
+import { FloatingRating } from '@/components/landing/FloatingRating';
+import { PricingAnchor } from '@/components/landing/PricingAnchor';
+import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection';
+import { StorytellingSection } from '@/components/landing/StorytellingSection';
+import { ObjectionHandler } from '@/components/landing/ObjectionHandler';
+
 const Index = () => {
   const courseSchema = {
     "@context": "https://schema.org",
@@ -113,14 +125,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Método IA Real — Aprenda a usar IA de verdade no dia a dia</title>
+        <title>Método IA Real — 2.500+ alunos já usam IA no trabalho</title>
         <meta 
           name="description" 
-          content="Chega de tutorial solto. Aprenda IA vendo pessoas reais usando — e faça igual. Método prático, sem tecnicismo, para quem quer resultados." 
+          content="Aprenda IA em 7 dias com método prático. 2.500+ alunos, 4.9/5 de avaliação. Sem tecnicismo, resultados reais. Garantia de 7 dias." 
         />
         <meta name="keywords" content="curso de IA, inteligência artificial, IA prática, IA aplicada, aprender IA, curso online IA, método IA, prompts IA, ChatGPT, produtividade com IA" />
-        <meta property="og:title" content="Método IA Real — Aprenda a usar IA de verdade" />
-        <meta property="og:description" content="Chega de tutorial solto. Aqui você vê como pessoas reais usam IA — e aprende a fazer igual." />
+        <meta property="og:title" content="Método IA Real — 2.500+ alunos já usam IA no trabalho" />
+        <meta property="og:description" content="Aprenda IA em 7 dias. Método prático, sem tecnicismo. Garantia de 7 dias." />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
@@ -136,21 +148,48 @@ const Index = () => {
         </script>
       </Helmet>
       
+      {/* Conversion overlays */}
+      <UrgencyBar />
+      <ReadingProgress />
+      <FloatingRating />
+      <StickyMobileCTA />
+      <WhatsAppBubble />
+      <ExitIntentPopup />
+      
       <TopHeader />
       <main className="overflow-hidden">
         {/* Hero & Problem */}
         <HeroSection />
         <ProblemSection />
         
-        {/* Solution & How it works (didactic) */}
+        {/* Objection handler #1 */}
+        <ObjectionHandler
+          objection="Mas eu não entendo nada de tecnologia..."
+          answer="Perfeito! O curso foi feito justamente pra quem não é técnico. Você vai aprender usando linguagem simples e exemplos do dia a dia."
+        />
+        
+        {/* Solution & How it works */}
         <SolutionSection />
         <HowAIWorksSection />
         <ComparisonSection />
+        
+        {/* Before/After quantified comparison */}
+        <BeforeAfterSection />
+        
         <StepByStepSection />
+        
+        {/* Objection handler #2 */}
+        <ObjectionHandler
+          objection="Já vi outros cursos de IA e não funcionou..."
+          answer="A diferença é o método. Aqui você não aprende teoria — você vê pessoas reais usando e replica o processo. Por isso 98% dos alunos aprovam."
+        />
         
         {/* Real proof with example */}
         <PromptExampleSection />
         <RealProofSection />
+        
+        {/* Storytelling */}
+        <StorytellingSection />
         
         {/* Learning journey */}
         <LearningMapSection />
@@ -160,11 +199,20 @@ const Index = () => {
         <HumanSection />
         <TargetAudienceSection />
         
+        {/* Objection handler #3 */}
+        <ObjectionHandler
+          objection="E se eu não tiver tempo?"
+          answer="O curso tem 8h no total e você faz no seu ritmo. A maioria dos alunos estuda 30 min/dia e conclui em 2 semanas. Acesso vitalício."
+        />
+        
         {/* Course details */}
         <ModulesSection />
         <DifferentialsSection />
         <BonusSection />
         <HowItWorksSection />
+        
+        {/* Pricing with anchoring */}
+        <PricingAnchor />
         
         {/* Final conversion */}
         <TestimonialsSection />
