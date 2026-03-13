@@ -52,6 +52,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
         </div>
 
         <div className="flex items-center gap-3">
+          <StreakBadge userId={user.id} />
           <button
             onClick={toggleTheme}
             className="p-2 hover:bg-secondary rounded-lg transition-colors"
