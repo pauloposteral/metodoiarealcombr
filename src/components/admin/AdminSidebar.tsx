@@ -20,11 +20,13 @@ import {
   Settings,
   Shield,
   CreditCard,
-  BarChart3
+  BarChart3,
+  GraduationCap
 } from 'lucide-react';
 
 const mainMenuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/admin/dashboard' },
+  { icon: GraduationCap, label: 'Cursos', href: '/admin/cursos' },
   { icon: Building2, label: 'Empresas', href: '/admin/empresas' },
   { icon: Users, label: 'Usuários', href: '/admin/usuarios' },
   { icon: UserPlus, label: 'Leads', href: '/admin/leads' },
