@@ -252,22 +252,33 @@ const MembersCommunity = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main content */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <CategoryTabs 
-                activeCategory={activeCategory} 
-                onCategoryChange={setActiveCategory} 
-              />
-              
-              <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortType)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="recent">Mais recentes</SelectItem>
-                  <SelectItem value="popular">Mais relevantes</SelectItem>
-                </SelectContent>
-              </Select>
+            {/* Search + Filters */}
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Buscar na comunidade..."
+                  className="pl-9 bg-card/50 border-border/50"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <CategoryTabs 
+                  activeCategory={activeCategory} 
+                  onCategoryChange={setActiveCategory} 
+                />
+                
+                <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortType)}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recent">Mais recentes</SelectItem>
+                    <SelectItem value="popular">Mais relevantes</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Posts */}
