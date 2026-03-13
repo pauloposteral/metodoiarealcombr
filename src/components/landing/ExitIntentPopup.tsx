@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { X, ArrowRight, Shield, Gift, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCheckout } from '@/hooks/useCheckout';
+import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 
 export const ExitIntentPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { handleCheckout, isLoading } = useCheckout();
+  const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
   useEffect(() => {
     const hasShown = sessionStorage.getItem('exit_popup_shown');
