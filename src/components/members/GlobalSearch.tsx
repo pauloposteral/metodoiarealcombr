@@ -108,6 +108,24 @@ export const GlobalSearch = ({ open, onClose }: GlobalSearchProps) => {
         })));
       }
 
+      // Search community posts
+      const { data: posts } = await supabase
+        .from('community_posts')
+        .select('id, title, content, category')
+        .or(`title.ilike.${searchTerm},content.ilike.${searchTerm}`)
+        .limit(3);
+
+      if (posts) {
+        allResults.push(...posts.map(p => ({
+          id: p.id,
+          type: 'community' as const,
+          title: p.title,
+          description: p.content?.substring(0, 80) || null,
+          path: `/membros/comunidade/post/${p.id}`,
+          meta: p.category,
+        })));
+      }
+
       setResults(allResults);
       setSelectedIndex(0);
     } catch (error) {
