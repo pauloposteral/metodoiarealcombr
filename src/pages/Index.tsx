@@ -56,7 +56,6 @@ const Index = () => {
       <WhatsAppBubble />
       <ExitIntentPopup />
       
-      <UrgencyBar />
       <TopHeader />
       <main className="overflow-hidden">
         <HeroSection />
@@ -77,7 +76,6 @@ const Index = () => {
         <BonusSection />
         <PricingAnchor />
         <TestimonialsSection />
-        <FAQSection />
         <FinalCTASection />
         <Footer />
       </main>
