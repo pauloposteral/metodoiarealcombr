@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Play, BookOpen, Trophy, Clock, ArrowRight,
   Sparkles, CheckCircle2, Zap, Star, GraduationCap,
-  Target, Flame
+  Target, Flame, BarChart3, MessageSquare, Award
 } from 'lucide-react';
 
 interface CourseProgress {
