@@ -6,6 +6,7 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminExports } from '@/components/admin/AdminExports';
 import {
   Users, Building2, FileText, TrendingUp, Activity, DollarSign,
   UserPlus, Clock, Loader2, BookOpen, GraduationCap, Award, MessageSquare
@@ -282,6 +283,9 @@ export default function AdminDashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Exports */}
+              <AdminExports />
             </div>
           </main>
         </div>

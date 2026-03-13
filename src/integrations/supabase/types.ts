@@ -830,6 +830,42 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          email_achievements: boolean
+          email_community_replies: boolean
+          email_lesson_reminders: boolean
+          email_weekly_digest: boolean
+          id: string
+          push_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_achievements?: boolean
+          email_community_replies?: boolean
+          email_lesson_reminders?: boolean
+          email_weekly_digest?: boolean
+          id?: string
+          push_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_achievements?: boolean
+          email_community_replies?: boolean
+          email_lesson_reminders?: boolean
+          email_weekly_digest?: boolean
+          id?: string
+          push_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plans: {
         Row: {
           created_at: string | null

@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/hooks/use-toast';
 import { useGamification } from '@/hooks/useGamification';
+import { NotificationSettings } from '@/components/members/NotificationSettings';
 import {
   User, Camera, Save, Loader2, Trophy, Zap, CheckCircle2,
   BookOpen, Bookmark, Star, LogOut, Flame
@@ -206,6 +207,9 @@ const MembersProfile = () => {
             </Button>
           </div>
         </div>
+
+        {/* Notifications */}
+        <NotificationSettings userId={userId} />
 
         {/* Account */}
         <div className="bg-card rounded-2xl p-6 border border-border/50">
