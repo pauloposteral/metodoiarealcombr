@@ -85,6 +85,9 @@ export const HeroSection = () => {
                 <p className="text-primary-foreground/50 text-xs md:text-sm">Acesso imediato • 100% online • Certificado incluso</p>
               </div>
             </ScrollReveal>
+
+            {/* Social proof counter */}
+            <SocialProofCounter />
           </div>
         </div>
       </div>
