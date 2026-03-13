@@ -613,6 +613,14 @@ export default function AdminCursos() {
           </div>
         </DialogContent>
       </Dialog>
+      {quizLesson && (
+        <QuizManager
+          lessonId={quizLesson.id}
+          lessonTitle={quizLesson.title}
+          open={!!quizLesson}
+          onClose={() => setQuizLesson(null)}
+        />
+      )}
     </SidebarProvider>
   );
 }
