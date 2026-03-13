@@ -71,6 +71,7 @@ export default function AdminCursos() {
   const [editItem, setEditItem] = useState<any>(null);
   const [parentId, setParentId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [quizLesson, setQuizLesson] = useState<{ id: string; title: string } | null>(null);
 
   // Form state
   const [formTitle, setFormTitle] = useState('');
