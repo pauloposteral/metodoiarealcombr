@@ -63,7 +63,7 @@ export const MembersSidebar = () => {
           <img 
             src={logo} 
             alt="Método IA Real" 
-            className={`transition-all duration-300 ${collapsed ? 'h-8' : 'h-10'}`}
+            className={`transition-all duration-300 object-contain ${collapsed ? 'w-[40px]' : 'w-[180px]'} h-auto`}
           />
         </div>
       </SidebarHeader>

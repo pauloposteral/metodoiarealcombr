@@ -111,7 +111,7 @@ const Checkout = () => {
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </button>
-            <img src={logo} alt="Método IA Real" className="h-7 sm:h-8" />
+            <img src={logo} alt="Método IA Real" className="w-[250px] h-auto object-contain" />
             <div className="flex items-center gap-1.5 text-primary-foreground/50">
               <Lock className="w-3.5 h-3.5 text-green-500" />
               <span className="text-xs hidden sm:inline">Seguro</span>

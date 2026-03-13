@@ -17,7 +17,7 @@ const Privacidade = () => {
           <div className="container">
             <div className="flex items-center justify-between">
               <Link to="/">
-                <img src={logo} alt="Método IA Real" className="h-8" />
+                <img src={logo} alt="Método IA Real" className="w-[250px] h-auto object-contain" />
               </Link>
               <Link to="/" className="flex items-center gap-2 text-primary-foreground/70 hover:text-gold transition-colors text-sm">
                 <ArrowLeft className="w-4 h-4" />

@@ -115,7 +115,7 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       <DialogContent className="sm:max-w-lg p-0 gap-0 overflow-hidden bg-card border-accent/20 max-h-[95vh] overflow-y-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-accent/10 to-accent/5 p-4 sm:p-6 text-center border-b border-border/50">
-          <img src={logo} alt="Método IA Real" className="h-8 mx-auto mb-3 opacity-90" />
+          <img src={logo} alt="Método IA Real" className="w-[250px] h-auto mx-auto mb-3 opacity-90 object-contain" />
           <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">
             Finalizar Compra
           </h2>
