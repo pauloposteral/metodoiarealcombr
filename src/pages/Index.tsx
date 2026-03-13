@@ -58,7 +58,7 @@ const Index = () => {
       <ExitIntentPopup />
       
       <TopHeader />
-      <main className="overflow-hidden">
+      <main className="overflow-hidden pt-14 md:pt-16">
         <HeroSection />
         <ProblemSection />
         
