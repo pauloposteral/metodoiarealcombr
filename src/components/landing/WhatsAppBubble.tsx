@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, X } from 'lucide-react';
+import { WHATSAPP_URL } from '@/lib/constants';
 
 export const WhatsAppBubble = () => {
   const [isVisible, setIsVisible] = useState(false);
