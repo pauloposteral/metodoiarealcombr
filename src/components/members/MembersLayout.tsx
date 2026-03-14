@@ -16,13 +16,14 @@ interface MembersLayoutProps {
 export const MembersLayout = ({ children }: MembersLayoutProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Hook must be called unconditionally before any returns
+  useAchievementChecker(user?.id);
 
   useEffect(() => {
     // Set up auth listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
       setUser(session?.user ?? null);
       
       if (!session) {
@@ -32,7 +33,6 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
 
     // Then check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
       setUser(session?.user ?? null);
       
       if (!session) {
