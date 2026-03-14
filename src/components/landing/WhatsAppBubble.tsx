@@ -29,7 +29,7 @@ export const WhatsAppBubble = () => {
       
       {/* Button */}
       <a
-        href="https://wa.me/5500000000000?text=Olá! Tenho interesse no Método IA Real"
+        href={`${WHATSAPP_URL}?text=Olá! Tenho interesse no Método IA Real`}
         target="_blank"
         rel="noopener noreferrer"
         className="w-12 h-12 sm:w-14 sm:h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 shrink-0"

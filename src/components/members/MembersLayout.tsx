@@ -69,9 +69,6 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
     );
   }
 
-  // Achievement checker runs on every members page load
-  useAchievementChecker(user?.id);
-
   if (!user) return null;
 
   return (

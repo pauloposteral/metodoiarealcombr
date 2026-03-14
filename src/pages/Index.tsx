@@ -16,7 +16,6 @@ import { TopHeader } from '@/components/TopHeader';
 import { Helmet } from 'react-helmet-async';
 
 // Landing page conversion components
-import { UrgencyBar } from '@/components/landing/UrgencyBar';
 import { StickyMobileCTA } from '@/components/landing/StickyMobileCTA';
 import { WhatsAppBubble } from '@/components/landing/WhatsAppBubble';
 import { ReadingProgress } from '@/components/landing/ReadingProgress';

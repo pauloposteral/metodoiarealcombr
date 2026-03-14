@@ -18,7 +18,7 @@ export const ReadingProgress = () => {
   if (progress < 2) return null;
 
   return (
-    <div className="fixed top-9 sm:top-10 left-0 right-0 z-[55] h-0.5">
+    <div className="fixed top-14 md:top-16 left-0 right-0 z-[101] h-0.5">
       <div
         className="h-full bg-gradient-to-r from-accent via-gold to-gold-light transition-all duration-150 ease-out"
         style={{ width: `${progress}%` }}
