@@ -1258,3 +1258,37 @@
   background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);
   color:#fff;
 }
+
+/* ============ WOW #9: Cursor glow + Radar countdown ============ */
+.lv2-cursor-glow{
+  position:fixed; top:0; left:0; width:520px; height:520px;
+  border-radius:50%; pointer-events:none; z-index:1;
+  background:radial-gradient(closest-side, rgba(124,58,237,.18), rgba(34,211,238,.06) 45%, transparent 70%);
+  mix-blend-mode:screen; opacity:0; transition:opacity .5s ease;
+  filter:blur(6px);
+}
+@media (pointer:coarse){ .lv2-cursor-glow{ display:none } }
+@media (prefers-reduced-motion:reduce){ .lv2-cursor-glow{ display:none } }
+
+.lv2-radar-countdown{
+  margin-top:22px;
+  padding:18px 20px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+  display:flex; flex-direction:column; gap:12px;
+}
+.lv2-radar-countdown p{ font-size:12.5px; color:#8a8a95; margin:0 }
+.lv2-rc-cells{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
+.lv2-rc-cell{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:12px 8px; border-radius:10px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+}
+.lv2-rc-cell b{
+  font-family:'Space Mono',monospace; font-size:22px; font-weight:400;
+  color:#fff; letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+}
+.lv2-rc-cell span{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a95 }
