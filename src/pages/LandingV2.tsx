@@ -12,6 +12,7 @@ import {
   useRelativeRadar,
 } from '@/components/landing/LandingV2Enhancements';
 import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
+import { LandingPlayground } from '@/components/landing/LandingPlayground';
 import './landing-v2.css';
 
 const MODULES = [
@@ -427,6 +428,18 @@ export default function LandingV2() {
             <span>Prefere ver tudo? A trilha Formação Completa percorre os 13 módulos na ordem (~36h).</span>
             <a href="#oferta" className="lv2-link-cta">Ver o que está incluído ↓</a>
           </div>
+        </div>
+      </section>
+
+      {/* PLAYGROUND — live AI */}
+      <section className="lv2-section" id="playground" style={{ padding: '90px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
+            <span className="lv2-eyebrow">Playground · 100% ao vivo</span>
+            <h2>Antes de comprar, <span className="lv2-grad-text">teste a IA aqui.</span></h2>
+            <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Sem cadastro, sem cartão. Escolha um caso real, escreva uma frase e veja o resultado — é a mesma IA que você usa no curso.</p>
+          </div>
+          <LandingPlayground />
         </div>
       </section>
 
