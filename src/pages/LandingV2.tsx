@@ -523,6 +523,13 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* GUARANTEE SHIELD */}
+      <section className="lv2-section" style={{ padding: '20px 0 60px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><GuaranteeShield onCta={goCheckout} /></div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="lv2-section" id="faq">
         <div className="lv2-wrap">
