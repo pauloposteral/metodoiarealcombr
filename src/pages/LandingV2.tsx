@@ -13,6 +13,7 @@ import {
 } from '@/components/landing/LandingV2Enhancements';
 import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
 import { LandingPlayground } from '@/components/landing/LandingPlayground';
+import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
 import './landing-v2.css';
 
 const MODULES = [
