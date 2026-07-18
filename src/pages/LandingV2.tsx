@@ -11,6 +11,7 @@ import {
   SplitText,
   useRelativeRadar,
 } from '@/components/landing/LandingV2Enhancements';
+import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
 import './landing-v2.css';
 
 const MODULES = [
