@@ -45,10 +45,10 @@ const SOLUTIONS = [
 ];
 
 const RADAR_FEED = [
-  { when: 'SEM. 1', title: 'Radar do mês publicado', sub: 'O que mudou em cada ferramenta — e o que isso muda para você.' },
-  { when: 'SEM. 2', title: 'Aula nova no ar', sub: 'Direto para a sua trilha, já com selo de data.' },
-  { when: 'SEM. 3', title: 'Ferramenta testada a fundo', sub: 'Vale a pena? Quanto custa em reais? Substitui o quê?' },
-  { when: 'SEM. 4', title: 'Prompts do mês + changelog', sub: 'Aulas revisadas listadas uma a uma. Transparência total.' },
+  { when: 'há 2h', title: 'Radar do mês publicado', sub: 'O que mudou em cada ferramenta — e o que isso muda para você.' },
+  { when: 'há 1d', title: 'Aula nova no ar', sub: 'Direto para a sua trilha, já com selo de data.' },
+  { when: 'há 3d', title: 'Ferramenta testada a fundo', sub: 'Vale a pena? Quanto custa em reais? Substitui o quê?' },
+  { when: 'há 5d', title: 'Prompts do mês + changelog', sub: 'Aulas revisadas listadas uma a uma. Transparência total.' },
 ];
 
 const TRAILS = [
