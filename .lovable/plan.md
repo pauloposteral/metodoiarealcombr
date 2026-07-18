@@ -1,77 +1,69 @@
+# Nova Landing Page — Método IA Real (design premium editorial)
 
-# Plano: Reestruturar Curso para os 13 Módulos do PRD
+Aplicar o HTML enviado como a **nova landing `/`**, convertendo para React + Tailwind, mantendo integrações existentes (Stripe checkout, auth, roteamento).
 
-## Objetivo
-Alinhar o curso "Método IA Real — Fundamentos" com a estrutura MOD-00 a MOD-12 do PRD, **preservando 100% das aulas já cadastradas** e criando os módulos que faltam (vazios, prontos para receber conteúdo).
+## O que muda
 
-## Estado Atual (auditado)
+Substituir toda a landing atual (Hero + 12 seções) por uma versão mais enxuta, editorial e alinhada ao PRD "Escola de IA", com paleta escura (mint #6EE7B7 + blue #3B82F6), Space Grotesk + Instrument Sans + Space Mono.
 
-**Curso principal:** `Método IA Real — Fundamentos` (`0ddb2e14…`)
+## Estrutura nova (7 seções)
 
-**8 módulos órfãos** (sem `course_id`) contêm ~35 aulas. **3 módulos** já estão no curso principal mas com nomes desalinhados. Vou consolidar tudo dentro do curso principal.
+1. **Nav fixo** — logo "Método IA Real" + links âncora (Mapa, Radar IA, Trilhas, Oferta) + botão Entrar
+2. **Hero** — headline "O curso de IA mais organizado e atualizado do Brasil" + CTA + mini-mapa MOD-00 → MOD-12 animado
+3. **Marquee** — ferramentas rolando (ChatGPT, Claude, Gemini, Lovable, n8n, etc.)
+4. **Problema → Solução** — 3 dores (desorganização, desatualização, abandono) + 4 pilares
+5. **Mapa do curso** — accordion dos 13 módulos MOD-00 → MOD-12 com projeto de cada um, trilho vertical com progresso conforme scroll
+6. **Radar IA** — copy + feed simulado das semanas 1-4 do mês + selo "atualizado em jul/2026"
+7. **Trilhas** — 4 cards (Carreira, Empreendedor, Criador, Construtor) com chips dos módulos
+8. **Oferta** — stack de valor (R$ 3.252 → R$ 497), CTA Stripe, garantia 7 dias
+9. **FAQ** — 7 perguntas
+10. **Footer** minimalista
 
-### Mapeamento módulo atual → módulo PRD
+## Componentes React a criar
 
-| Módulo atual (aulas)                    | Vira no PRD                          | Ação                     |
-|-----------------------------------------|--------------------------------------|--------------------------|
-| O que é IA e por que importa (3)        | MOD-01 Fundamentos: como a IA pensa  | Renomear + reordenar     |
-| Fundamentos da IA (4) [órfão]           | MOD-01 (mesclar com o de cima)       | Fundir em MOD-01         |
-| Dominando Prompts (2)                   | MOD-02 Engenharia de Prompt          | Renomear                 |
-| Prompts que Funcionam (6) [órfão]       | MOD-02 (mesclar)                     | Fundir em MOD-02         |
-| Ferramentas Essenciais (5) [órfão]      | MOD-01 (aulas viram sub-tópicos)     | Migrar aulas p/ MOD-01   |
-| IA para Conteúdo (5) [órfão]            | MOD-11 IA para negócios e conteúdo   | Renomear + reordenar     |
-| IA para Negócios (5) [órfão]            | MOD-11 (mesclar)                     | Fundir em MOD-11         |
-| Produtividade com IA (3) [órfão]        | MOD-10 IA no trabalho: produtividade | Renomear                 |
-| IA como Renda Extra (4) [órfão]         | MOD-12 Monetização                   | Renomear                 |
-| O Jogo é Mental (3) [órfão]             | MOD-12 (mesclar como aulas finais)   | Fundir em MOD-12         |
-| IA na Prática Profissional (0)          | descartar (vazio, redundante)        | Deletar módulo vazio     |
+Em `src/components/landing-v2/`:
+- `NavV2.tsx`, `HeroV2.tsx`, `MarqueeV2.tsx`, `ProblemSolutionV2.tsx`
+- `CourseMapV2.tsx` (accordion + rail animado via IntersectionObserver)
+- `RadarV2.tsx`, `TrailsV2.tsx`, `OfferV2.tsx`, `FaqV2.tsx`, `FooterV2.tsx`
 
-### Módulos NOVOS a criar (vazios, `is_published=false`)
+`src/pages/Index.tsx` reescrito para renderizar apenas esses componentes.
 
-- **MOD-00** — Comece por aqui (Onboarding)
-- **MOD-03** — ChatGPT do zero ao avançado
-- **MOD-04** — Claude do zero ao avançado
-- **MOD-05** — Gemini e ecossistema Google
-- **MOD-06** — Imagem: do prompt à arte profissional
-- **MOD-07** — Vídeo, voz e música
-- **MOD-08** — ⭐ Lovable: primeiro app sem código
-- **MOD-09** — Automações e agentes
+## Design tokens
 
-Total final: **13 módulos** (MOD-00 a MOD-12) no curso `Método IA Real — Fundamentos`.
+Adicionar em `src/index.css` (sem quebrar tokens existentes):
+- `--ink`, `--ink-2`, `--ink-3`, `--mint`, `--blue`, `--grad-mint-blue`
+- Fontes: Space Grotesk (display), Instrument Sans (body), Space Mono (mono) via Google Fonts em `index.html`
+- Classes utilitárias `.grad-text`, `.eyebrow` no CSS global
 
-## Ordem de Execução (uma migração SQL única)
+## Integrações preservadas
 
-```text
-1. UPDATE modules SET course_id = <curso principal> nos 8 órfãos que serão preservados
-2. UPDATE modules SET title = 'MOD-01 Fundamentos: como a IA pensa', order_index = 1
-   nos módulos que viram MOD-01, MOD-02, MOD-10, MOD-11, MOD-12
-3. Para fusões: UPDATE lessons SET module_id = <módulo destino>, reindexar order_index;
-   depois DELETE do módulo agora vazio
-4. DELETE módulo "IA na Prática Profissional" (0 aulas)
-5. INSERT dos 8 módulos novos (MOD-00, 03, 04, 05, 06, 07, 08, 09) com is_published=false,
-   description do PRD, order_index correto
-6. Ajustar order_index final de todos os 13 módulos (0..12)
-```
+- CTAs "Quero minha vaga" e "Garantir minha vaga" → `useCheckout()` (Stripe já configurado, R$ 497)
+- Link "Entrar" → `/auth`
+- Meta tags (Helmet): title/description novos conforme HTML enviado
+- JSON-LD Course mantido, com preço 497
+- WhatsAppBubble e ReadingProgress: **removidos** (design pede tela limpa)
+- StickyMobileCTA: **removido** (Hero já tem CTA sempre visível em mobile)
 
-## Prefixo dos títulos
+## Componentes antigos a arquivar (não deletar)
 
-Todos os módulos vão receber prefixo `MOD-XX ` no `title` para bater com o PRD e facilitar navegação:
-- `MOD-00 Comece por aqui`
-- `MOD-01 Fundamentos: como a IA pensa`
-- ... até `MOD-12 Monetização: os 5 caminhos`
+Ficam no repo mas deixam de ser importados:
+`HeroSection`, `ProblemSection`, `SolutionSection`, `ProcessSection`, `ComparisonSection`, `PromptExampleSection`, `LearningSection`, `TargetAudienceSection`, `ModulesSection`, `BonusSection`, `TestimonialsSection`, `FAQSection`, `FinalCTASection`, `ObjectionHandler`, `PricingAnchor`, `TopHeader`, `Footer`.
 
-## Fora de escopo (não faço agora)
+## Interações JS
 
-- **Não** crio aulas novas dentro dos módulos vazios — o próprio admin (`/admin/cursos`) já permite adicionar aulas depois.
-- **Não** mexo em `courses` "IA para Criação de Conteúdo" nem "Introdução à IA — Gratuito" (ficam como estão).
-- **Não** implemento trilhas (fica para próxima rodada com o quiz).
-- **Não** mexo em UI/código — só reorganizo dados. A área de membros já lê `modules ORDER BY order_index` corretamente.
+- Nav ganha borda ao scrollar (>10px)
+- Mini-mapa hero e rail do mapa: preencher pontos conforme viewport passa por eles (IntersectionObserver)
+- Accordion módulos: um aberto por vez, `max-height` transition
+- FAQ: mesmo padrão do accordion
+- Reveals `.rv → .rv.in` via IntersectionObserver
 
-## Arquivos afetados
+## Responsivo
 
-- Nenhum arquivo de código. Só 1 migração SQL.
+- Mobile: nav só logo + Entrar; hero 1 coluna; grids 3→1; oferta padding reduzido
+- Respeitar `prefers-reduced-motion`
 
-## Riscos / Reversibilidade
+## Fora de escopo
 
-- Todas as operações são idempotentes por ID de módulo (não deleto aulas, só remapeio `module_id`).
-- Antes da migração rodar, você aprova o SQL. Se algo estiver errado, posso reverter em outra migração.
+- Não alterar `/membros`, `/admin`, `/metodo`, checkout, edge functions
+- Sem nova seção de depoimentos por enquanto (o HTML não trouxe — posso adicionar depois se quiser)
+- Nome comercial permanece "Método IA Real" (rebrand para "Escola de IA" fica para outra rodada)
