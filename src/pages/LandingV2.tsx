@@ -83,6 +83,9 @@ export default function LandingV2() {
   const [litCount, setLitCount] = useState(1);
   const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
   const modsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const heroRef = useRef<HTMLElement>(null);
+  const activeRadar = useRelativeRadar(RADAR_FEED.length);
+  useHeroSpotlight(heroRef);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
