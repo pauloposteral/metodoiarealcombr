@@ -246,8 +246,10 @@ export default function LandingV2() {
               ))}
             </div>
           </div>
+          <BeforeAfterSlider />
         </div>
       </section>
+
 
       {/* MAPA */}
       <section className="lv2-section" id="mapa">
