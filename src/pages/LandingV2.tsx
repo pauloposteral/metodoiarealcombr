@@ -16,6 +16,7 @@ import { LandingPlayground } from '@/components/landing/LandingPlayground';
 import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
 import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wow4';
 import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/components/landing/LandingV2Wow5';
+import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow6';
 import './landing-v2.css';
 
 const MODULES = [
@@ -245,6 +246,18 @@ export default function LandingV2() {
           {[...TOOLS, ...TOOLS].map((t, i) => <span key={i}>{t}</span>)}
         </div>
       </div>
+
+      {/* TOOLS EXPLORER */}
+      <section className="lv2-section" id="ferramentas" style={{ padding: '80px 0 40px' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px', maxWidth: 760 }}>
+            <span className="lv2-eyebrow">As ferramentas do curso</span>
+            <h2>16 IAs. Uma por vez. <span className="lv2-grad-text">E cada uma na hora certa.</span></h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Passe o mouse por qualquer ferramenta para descobrir pra que ela serve — e em qual módulo você aprende a usá-la de verdade.</p>
+          </div>
+          <div className="rv"><ToolsExplorer /></div>
+        </div>
+      </section>
 
       {/* LIVE COUNTERS */}
       <LiveCounters />
@@ -493,6 +506,13 @@ export default function LandingV2() {
             <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Não é promessa de riqueza. É um plano de execução — o que você entrega em cada marco.</p>
           </div>
           <JourneyTimeline />
+        </div>
+      </section>
+
+      {/* INSTRUCTOR CARD */}
+      <section className="lv2-section" id="mentor" style={{ padding: '30px 0 60px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><InstructorCard /></div>
         </div>
       </section>
 
