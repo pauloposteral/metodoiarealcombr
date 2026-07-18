@@ -19,6 +19,7 @@ import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/compone
 import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow6';
 import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/LandingV2Wow7';
 import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } from '@/components/landing/LandingV2Wow8';
+import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
 import './landing-v2.css';
 
 const MODULES = [
@@ -192,6 +193,7 @@ export default function LandingV2() {
 
   return (
     <div className="lv2">
+      <CursorGlow />
       <TopProgressBar />
       <Helmet>
         <title>Método IA Real — O curso de IA mais organizado e atualizado do Brasil</title>
@@ -386,6 +388,7 @@ export default function LandingV2() {
                 <li>O Radar chega todo mês, sem exceção — é a regra nº 1 da escola.</li>
               </ul>
               <span className="lv2-selo">Selo de toda aula: atualizado em jul/2026</span>
+              <RadarCountdown />
             </div>
 
             <div className="lv2-feed rv">
