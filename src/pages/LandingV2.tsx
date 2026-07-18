@@ -430,6 +430,13 @@ export default function LandingV2() {
             <span>Prefere ver tudo? A trilha Formação Completa percorre os 13 módulos na ordem (~36h).</span>
             <a href="#oferta" className="lv2-link-cta">Ver o que está incluído ↓</a>
           </div>
+
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '90px auto 0', maxWidth: 780 }}>
+            <span className="lv2-eyebrow">Comparativo honesto</span>
+            <h2>Onde a diferença aparece — <span className="lv2-grad-text">linha por linha.</span></h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Sem inventar defeitos alheios. É o que a maioria dos cursos e a internet grátis não entregam — e o que aqui é regra da casa.</p>
+          </div>
+          <div className="rv"><ComparisonTable /></div>
         </div>
       </section>
 
