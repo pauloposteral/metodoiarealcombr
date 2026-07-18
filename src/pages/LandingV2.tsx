@@ -421,6 +421,7 @@ export default function LandingV2() {
         </div>
       </footer>
 
+      <StickyMiniCTA onClick={goCheckout} />
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
