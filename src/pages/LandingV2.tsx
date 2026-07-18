@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
 import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
+import {
+  LiveCounters,
+  StickyMiniCTA,
+  useHeroSpotlight,
+  SplitText,
+  useRelativeRadar,
+} from '@/components/landing/LandingV2Enhancements';
 import './landing-v2.css';
 
 const MODULES = [
