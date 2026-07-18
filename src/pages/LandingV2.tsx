@@ -452,6 +452,17 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* TRUST WALL */}
+      <section className="lv2-section" style={{ padding: '60px 0 20px' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 20px', maxWidth: 760 }}>
+            <span className="lv2-eyebrow">Alunos falando</span>
+            <h2>Resultado real, no <span className="lv2-grad-text">tempo real de quem executou.</span></h2>
+          </div>
+          <div className="rv"><TrustWall /></div>
+        </div>
+      </section>
+
       {/* JOURNEY */}
       <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
         <div className="lv2-wrap">
