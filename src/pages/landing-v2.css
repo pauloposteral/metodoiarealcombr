@@ -464,3 +464,30 @@
   .lv2-journey-dot{width:46px;height:46px;font-size:.75rem}
   .lv2-journey-step{gap:18px}
 }
+
+/* Trail expandable weeks */
+.lv2-trail-toggle{
+  margin-top:18px;background:transparent;border:1px solid var(--line-2);color:var(--text);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:9px 14px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:border-color .25s,color .25s,background .25s;
+}
+.lv2-trail-toggle:hover{border-color:var(--mint);color:var(--mint)}
+.lv2-trail-toggle .arr{transition:transform .3s}
+.lv2-trail-toggle .arr.up{transform:rotate(-180deg)}
+.lv2-trail.open .lv2-trail-toggle{background:rgba(110,231,183,.08);border-color:var(--mint);color:var(--mint)}
+.lv2-trail-weeks{overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1)}
+.lv2-trail-weeks-in{
+  margin-top:18px;padding-top:18px;border-top:1px dashed var(--line-2);
+  display:flex;flex-direction:column;gap:14px;
+}
+.lv2-week{display:flex;gap:14px;align-items:flex-start}
+.lv2-week-tag{
+  flex-shrink:0;font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 9px;border-radius:6px;
+  background:rgba(110,231,183,.1);color:var(--mint);border:1px solid rgba(110,231,183,.25);
+  margin-top:2px;
+}
+.lv2-week strong{font-family:var(--disp);font-size:.95rem;color:var(--text);display:block;margin-bottom:2px}
+.lv2-week p{font-size:.88rem;color:var(--muted);line-height:1.55}
