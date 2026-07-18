@@ -509,6 +509,13 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* INSTRUCTOR CARD */}
+      <section className="lv2-section" id="mentor" style={{ padding: '30px 0 60px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><InstructorCard /></div>
+        </div>
+      </section>
+
       {/* OFERTA */}
       <section className="lv2-section lv2-offer" id="oferta">
         <div className="lv2-orb lv2-orb-c" />
