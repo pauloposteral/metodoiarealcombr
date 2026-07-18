@@ -14,6 +14,7 @@ import {
 import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
 import { LandingPlayground } from '@/components/landing/LandingPlayground';
 import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
+import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wow4';
 import './landing-v2.css';
 
 const MODULES = [
@@ -463,6 +464,18 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* ROI CALCULATOR */}
+      <section className="lv2-section" id="roi" style={{ padding: '70px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto', maxWidth: 760 }}>
+            <span className="lv2-eyebrow">Calculadora honesta</span>
+            <h2>Quanto <span className="lv2-grad-text">o seu tempo</span> vale, de verdade.</h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Arraste os controles com o seu contexto. Os números são seus — não uma média inventada.</p>
+          </div>
+          <div className="rv"><ROICalculator /></div>
+        </div>
+      </section>
+
       {/* JOURNEY */}
       <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
         <div className="lv2-wrap">
@@ -507,6 +520,13 @@ export default function LandingV2() {
               <span><b>◆</b> Pix ou cartão em até 12×</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* GUARANTEE SHIELD */}
+      <section className="lv2-section" style={{ padding: '20px 0 60px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><GuaranteeShield onCta={goCheckout} /></div>
         </div>
       </section>
 
