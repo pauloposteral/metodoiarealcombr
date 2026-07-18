@@ -131,6 +131,7 @@ export default function LandingV2() {
   const heroRef = useRef<HTMLElement>(null);
   const activeRadar = useRelativeRadar(RADAR_FEED.length);
   useHeroSpotlight(heroRef);
+  useCardTilt('.lv2 .lv2-trail');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
