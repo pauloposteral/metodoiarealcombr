@@ -18,6 +18,7 @@ import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wo
 import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/components/landing/LandingV2Wow5';
 import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow6';
 import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/LandingV2Wow7';
+import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } from '@/components/landing/LandingV2Wow8';
 import './landing-v2.css';
 
 const MODULES = [
@@ -191,6 +192,7 @@ export default function LandingV2() {
 
   return (
     <div className="lv2">
+      <TopProgressBar />
       <Helmet>
         <title>Método IA Real — O curso de IA mais organizado e atualizado do Brasil</title>
         <meta name="description" content="13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado." />
@@ -576,6 +578,13 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* MANIFESTO */}
+      <section className="lv2-section" style={{ padding: '20px 0 80px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><FoundersManifesto /></div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="lv2-section" id="faq">
         <div className="lv2-wrap">
@@ -612,6 +621,8 @@ export default function LandingV2() {
       <StickyMiniCTA onClick={goCheckout} />
       <FloatingSectionNav />
       <LiveEnrollmentFeed />
+      <LiveViewersBadge />
+      <ShortcutHint />
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
