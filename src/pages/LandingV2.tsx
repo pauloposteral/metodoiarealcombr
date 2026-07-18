@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
 import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
+import {
+  LiveCounters,
+  StickyMiniCTA,
+  useHeroSpotlight,
+  SplitText,
+  useRelativeRadar,
+} from '@/components/landing/LandingV2Enhancements';
 import './landing-v2.css';
 
 const MODULES = [
@@ -38,10 +45,10 @@ const SOLUTIONS = [
 ];
 
 const RADAR_FEED = [
-  { when: 'SEM. 1', title: 'Radar do mês publicado', sub: 'O que mudou em cada ferramenta — e o que isso muda para você.' },
-  { when: 'SEM. 2', title: 'Aula nova no ar', sub: 'Direto para a sua trilha, já com selo de data.' },
-  { when: 'SEM. 3', title: 'Ferramenta testada a fundo', sub: 'Vale a pena? Quanto custa em reais? Substitui o quê?' },
-  { when: 'SEM. 4', title: 'Prompts do mês + changelog', sub: 'Aulas revisadas listadas uma a uma. Transparência total.' },
+  { when: 'há 2h', title: 'Radar do mês publicado', sub: 'O que mudou em cada ferramenta — e o que isso muda para você.' },
+  { when: 'há 1d', title: 'Aula nova no ar', sub: 'Direto para a sua trilha, já com selo de data.' },
+  { when: 'há 3d', title: 'Ferramenta testada a fundo', sub: 'Vale a pena? Quanto custa em reais? Substitui o quê?' },
+  { when: 'há 5d', title: 'Prompts do mês + changelog', sub: 'Aulas revisadas listadas uma a uma. Transparência total.' },
 ];
 
 const TRAILS = [
@@ -76,6 +83,9 @@ export default function LandingV2() {
   const [litCount, setLitCount] = useState(1);
   const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
   const modsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const heroRef = useRef<HTMLElement>(null);
+  const activeRadar = useRelativeRadar(RADAR_FEED.length);
+  useHeroSpotlight(heroRef);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -145,14 +155,19 @@ export default function LandingV2() {
       </nav>
 
       {/* HERO */}
-      <section className="lv2-hero" id="top">
+      <section className="lv2-hero" id="top" ref={heroRef}>
+        <div className="lv2-hero-spot" aria-hidden />
         <div className="lv2-orb lv2-orb-a" />
         <div className="lv2-orb lv2-orb-b" />
         <div className="lv2-grid-bg" />
         <div className="lv2-wrap">
           <div className="lv2-hero-in">
             <span className="lv2-eyebrow rv">Radar IA · atualizado em jul/2026</span>
-            <h1 className="rv">O curso de IA mais <span className="lv2-grad-text">organizado e atualizado</span> do Brasil.</h1>
+            <h1 className="rv lv2-h1">
+              <SplitText text="O curso de IA mais" />{' '}
+              <span className="lv2-grad-text"><SplitText text="organizado e atualizado" /></span>{' '}
+              <SplitText text="do Brasil." />
+            </h1>
             <p className="lv2-lead rv">13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado, não com certificado vazio.</p>
             <div className="lv2-hero-cta rv">
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
@@ -182,6 +197,10 @@ export default function LandingV2() {
           {[...TOOLS, ...TOOLS].map((t, i) => <span key={i}>{t}</span>)}
         </div>
       </div>
+
+      {/* LIVE COUNTERS */}
+      <LiveCounters />
+
 
       {/* PROBLEMA + SOLUÇÃO */}
       <section className="lv2-section" id="problema">
@@ -284,10 +303,11 @@ export default function LandingV2() {
             <div className="lv2-feed rv">
               <div className="lv2-feed-bar">
                 <i /><i /><i />
-                <span>RADAR-IA — o seu mês, todo mês</span>
+                <span>RADAR-IA — feed ao vivo</span>
+                <span className="lv2-live-badge"><em /> AO VIVO</span>
               </div>
               {RADAR_FEED.map((f, i) => (
-                <div key={i} className="lv2-feed-item">
+                <div key={i} className={`lv2-feed-item ${activeRadar === i ? 'active' : ''}`}>
                   <div className="lv2-feed-when">{f.when}</div>
                   <div>
                     <p>{f.title}</p>
@@ -342,11 +362,13 @@ export default function LandingV2() {
             <h2>Tudo isso, pelo preço de um jantar por mês.</h2>
 
             <ul className="lv2-stack">
-              {STACK.map((s) => (
-                <li key={s.label}><span>{s.label}</span><span>{s.value}</span></li>
+              {STACK.map((s, i) => (
+                <li key={s.label} className="rv lv2-stack-li" style={{ transitionDelay: `${i * 90}ms` }}>
+                  <span>{s.label}</span><span>{s.value}</span>
+                </li>
               ))}
             </ul>
-            <div className="lv2-stack-total"><span>Valor total</span><s>R$ 3.252</s></div>
+            <div className="lv2-stack-total rv"><span>Valor total</span><s>R$ 3.252</s></div>
 
             <div className="lv2-price-line">
               <span className="lv2-price">R$ 497</span>
@@ -399,6 +421,7 @@ export default function LandingV2() {
         </div>
       </footer>
 
+      <StickyMiniCTA onClick={goCheckout} />
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );

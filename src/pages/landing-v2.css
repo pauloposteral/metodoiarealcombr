@@ -252,3 +252,104 @@
   .lv2 *,.lv2 *::before,.lv2 *::after{animation:none !important;transition:none !important}
   .lv2 .rv{opacity:1;transform:none}
 }
+
+/* ============ WOW PACK — spotlight, split, live, radar vivo, stack, mini CTA ============ */
+
+/* 1. Hero spotlight */
+.lv2-hero{--mx:50%;--my:30%}
+.lv2-hero-spot{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(600px circle at var(--mx) var(--my),
+    rgba(110,231,183,.10),transparent 55%);
+  transition:background .18s ease-out;
+  mix-blend-mode:screen;
+}
+.lv2-hero > .lv2-wrap{position:relative;z-index:1}
+
+/* 1b. Split-text reveal */
+.lv2-split{display:inline}
+.lv2-split-w{
+  display:inline-block;opacity:0;transform:translateY(24px);
+  animation:lv2splitIn .7s cubic-bezier(.2,.7,.2,1) forwards;
+}
+@keyframes lv2splitIn{to{opacity:1;transform:none}}
+.lv2-h1{overflow:visible}
+@media(prefers-reduced-motion:reduce){
+  .lv2-split-w{animation:none;opacity:1;transform:none}
+}
+
+/* 4. Live counters */
+.lv2-live{border-bottom:1px solid var(--line);padding:38px 0 42px;background:var(--ink)}
+.lv2-live-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.lv2-live-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:lv2pulse 2s infinite;display:inline-block}
+.lv2-live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:760px){.lv2-live-grid{grid-template-columns:1fr;gap:12px}}
+.lv2-live-cell{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;background:linear-gradient(180deg,var(--ink-2),var(--ink));position:relative;overflow:hidden}
+.lv2-live-cell::before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--grad);opacity:.6}
+.lv2-live-num{font-family:var(--disp);font-weight:700;font-size:clamp(1.6rem,3vw,2.1rem);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.lv2-live-lbl{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin-top:6px;text-transform:uppercase}
+
+/* 8. Radar AO VIVO badge + active item */
+.lv2-live-badge{
+  margin-left:auto !important;display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--mint);
+  border:1px solid rgba(110,231,183,.35);border-radius:999px;padding:3px 10px;
+  background:rgba(110,231,183,.06);
+}
+.lv2-live-badge em{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:lv2pulse 1.4s infinite;display:inline-block;font-style:normal}
+.lv2-feed-item{transition:background .5s ease,border-color .5s ease}
+.lv2-feed-item.active{background:linear-gradient(90deg,rgba(110,231,183,.05),transparent 60%)}
+.lv2-feed-item.active .lv2-feed-when{color:var(--mint);text-shadow:0 0 12px rgba(110,231,183,.5)}
+
+/* 13. Stack animado (recibo) */
+.lv2-stack-li{transition:opacity .55s ease,transform .55s ease}
+.lv2-stack-li.rv{opacity:0;transform:translateX(-14px)}
+.lv2-stack-li.rv.in{opacity:1;transform:none}
+.lv2-stack-li span:last-child{font-variant-numeric:tabular-nums}
+.lv2-price{animation:lv2priceIn .8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes lv2priceIn{
+  0%{opacity:0;transform:translateY(10px) scale(.96);filter:blur(6px)}
+  100%{opacity:1;transform:none;filter:none}
+}
+
+/* 14. Sticky mini CTA editorial */
+.lv2-mini-cta{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:40;
+  transform:translateY(140%);opacity:0;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .3s;
+  pointer-events:none;
+}
+.lv2-mini-cta.in{transform:none;opacity:1;pointer-events:auto}
+.lv2-mini-cta-in{
+  max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;gap:14px;justify-content:space-between;
+  padding:12px 14px 12px 18px;
+  border:1px solid var(--line-2);border-radius:14px;
+  background:linear-gradient(180deg,rgba(14,21,34,.92),rgba(10,15,24,.92));
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 20px 60px -20px rgba(0,0,0,.7),0 0 0 1px rgba(110,231,183,.08) inset;
+  position:relative;overflow:hidden;
+}
+.lv2-mini-cta-in::before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--grad)}
+.lv2-mini-cta-txt{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;min-width:0}
+.lv2-mini-cta-tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.lv2-mini-cta-price{font-family:var(--disp);font-weight:700;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lv2-mini-cta-alt{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.lv2-mini-cta-actions{display:flex;align-items:center;gap:8px;flex:none}
+.lv2-mini-cta-btn{
+  font-family:var(--disp);font-weight:600;font-size:.86rem;
+  background:var(--grad);color:#04121C;border:none;cursor:pointer;
+  padding:10px 18px;border-radius:999px;white-space:nowrap;
+  transition:transform .2s,box-shadow .2s;
+}
+.lv2-mini-cta-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px -8px rgba(110,231,183,.5)}
+.lv2-mini-cta-x{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);
+  background:transparent;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;
+  display:grid;place-items:center;transition:border-color .2s,color .2s;
+}
+.lv2-mini-cta-x:hover{border-color:var(--mint);color:var(--mint)}
+@media(max-width:520px){
+  .lv2-mini-cta-alt{display:none}
+  .lv2-mini-cta-in{padding:10px 10px 10px 14px}
+  .lv2-mini-cta-btn{padding:9px 14px;font-size:.8rem}
+}
