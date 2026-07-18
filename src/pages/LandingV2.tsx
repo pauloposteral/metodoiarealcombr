@@ -11,6 +11,7 @@ import {
   SplitText,
   useRelativeRadar,
 } from '@/components/landing/LandingV2Enhancements';
+import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
 import './landing-v2.css';
 
 const MODULES = [
@@ -201,6 +202,18 @@ export default function LandingV2() {
       {/* LIVE COUNTERS */}
       <LiveCounters />
 
+      {/* LIVE TERMINAL */}
+      <section className="lv2-section" style={{ padding: '80px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
+            <span className="lv2-eyebrow">Veja funcionando</span>
+            <h2>O que muda quando o <span className="lv2-grad-text">prompt é engenharia</span>, não sorte.</h2>
+          </div>
+          <LiveTerminal />
+        </div>
+      </section>
+
+
 
       {/* PROBLEMA + SOLUÇÃO */}
       <section className="lv2-section" id="problema">
@@ -233,8 +246,10 @@ export default function LandingV2() {
               ))}
             </div>
           </div>
+          <BeforeAfterSlider />
         </div>
       </section>
+
 
       {/* MAPA */}
       <section className="lv2-section" id="mapa">
@@ -350,6 +365,18 @@ export default function LandingV2() {
             <span>Prefere ver tudo? A trilha Formação Completa percorre os 13 módulos na ordem (~36h).</span>
             <a href="#oferta" className="lv2-link-cta">Ver o que está incluído ↓</a>
           </div>
+        </div>
+      </section>
+
+      {/* JOURNEY */}
+      <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 50px' }}>
+            <span className="lv2-eyebrow">Sua jornada · 30 dias</span>
+            <h2>Do primeiro login ao <span className="lv2-grad-text">portfólio publicado.</span></h2>
+            <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Não é promessa de riqueza. É um plano de execução — o que você entrega em cada marco.</p>
+          </div>
+          <JourneyTimeline />
         </div>
       </section>
 
