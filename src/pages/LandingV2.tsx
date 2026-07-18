@@ -303,10 +303,11 @@ export default function LandingV2() {
             <div className="lv2-feed rv">
               <div className="lv2-feed-bar">
                 <i /><i /><i />
-                <span>RADAR-IA — o seu mês, todo mês</span>
+                <span>RADAR-IA — feed ao vivo</span>
+                <span className="lv2-live-badge"><em /> AO VIVO</span>
               </div>
               {RADAR_FEED.map((f, i) => (
-                <div key={i} className="lv2-feed-item">
+                <div key={i} className={`lv2-feed-item ${activeRadar === i ? 'active' : ''}`}>
                   <div className="lv2-feed-when">{f.when}</div>
                   <div>
                     <p>{f.title}</p>
