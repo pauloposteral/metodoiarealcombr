@@ -202,6 +202,18 @@ export default function LandingV2() {
       {/* LIVE COUNTERS */}
       <LiveCounters />
 
+      {/* LIVE TERMINAL */}
+      <section className="lv2-section" style={{ padding: '80px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
+            <span className="lv2-eyebrow">Veja funcionando</span>
+            <h2>O que muda quando o <span className="lv2-grad-text">prompt é engenharia</span>, não sorte.</h2>
+          </div>
+          <LiveTerminal />
+        </div>
+      </section>
+
+
 
       {/* PROBLEMA + SOLUÇÃO */}
       <section className="lv2-section" id="problema">
