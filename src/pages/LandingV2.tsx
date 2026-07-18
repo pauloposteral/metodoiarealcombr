@@ -466,6 +466,13 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* TRACK QUIZ */}
+      <section className="lv2-section" id="quiz" style={{ padding: '80px 0 20px' }}>
+        <div className="lv2-wrap" style={{ maxWidth: 760 }}>
+          <div className="rv"><TrackQuiz onCta={goCheckout} /></div>
+        </div>
+      </section>
+
       {/* PLAYGROUND — live AI */}
       <section className="lv2-section" id="playground" style={{ padding: '90px 0' }}>
         <div className="lv2-wrap">
