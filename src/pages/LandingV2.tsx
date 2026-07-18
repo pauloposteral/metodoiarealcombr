@@ -53,11 +53,52 @@ const RADAR_FEED = [
 ];
 
 const TRAILS = [
-  { name: 'Carreira / CLT', hours: '~15h', body: 'Para quem quer se valorizar no emprego, ganhar horas na semana e parar de temer a IA — usando ela a seu favor amanhã de manhã.', chips: ['00', '01', '02', '03', '05', '10', '12'], hot: ['10'] },
-  { name: 'Empreendedor', hours: '~17h', body: 'Para quem quer vender mais e gastar menos: conteúdo, atendimento e automação com IA dentro do próprio negócio.', chips: ['00', '01', '02', '03', '09', '11', '12'], hot: ['09', '11'] },
-  { name: 'Criador de conteúdo', hours: '~18h', body: 'Para quem quer produzir em escala sem soar genérico: imagem, vídeo, voz e um sistema de conteúdo com a sua identidade.', chips: ['00', '01', '02', '06', '07', '11', '12'], hot: ['06', '07'] },
-  { name: 'Construtor de apps', hours: '~18h', body: 'Para quem quer publicar apps e produtos sem escrever código — do primeiro micro-app ao início de um micro-SaaS.', chips: ['00', '01', '02', '04', '08', '09', '12'], hot: ['08'] },
+  {
+    name: 'Carreira / CLT', hours: '~15h',
+    body: 'Para quem quer se valorizar no emprego, ganhar horas na semana e parar de temer a IA — usando ela a seu favor amanhã de manhã.',
+    chips: ['00', '01', '02', '03', '05', '10', '12'], hot: ['10'],
+    weeks: [
+      { w: 'Semana 1', t: 'Fundamentos + ChatGPT no dia a dia', d: 'Setup, 10 prompts de trabalho, memória e Projects.' },
+      { w: 'Semana 2', t: 'Gemini no Gmail/Docs/Sheets', d: 'IA dentro das ferramentas que você já usa.' },
+      { w: 'Semana 3', t: 'Produtividade 10× no trabalho', d: 'E-mails, atas, apresentações e planilhas com IA.' },
+      { w: 'Semana 4', t: 'Currículo, LinkedIn e pedido de aumento', d: 'Plano concreto para valorizar sua posição.' },
+    ],
+  },
+  {
+    name: 'Empreendedor', hours: '~17h',
+    body: 'Para quem quer vender mais e gastar menos: conteúdo, atendimento e automação com IA dentro do próprio negócio.',
+    chips: ['00', '01', '02', '03', '09', '11', '12'], hot: ['09', '11'],
+    weeks: [
+      { w: 'Semana 1', t: 'Fundamentos + prompt para negócio', d: 'A habilidade-mãe aplicada a copy, vendas e ops.' },
+      { w: 'Semana 2', t: '30 posts/mês com a sua voz', d: 'Sistema de conteúdo replicável, com calendário.' },
+      { w: 'Semana 3', t: 'Automações e WhatsApp com IA', d: 'n8n do zero + 3 automações rodando no seu negócio.' },
+      { w: 'Semana 4', t: 'Proposta, preço e monetização', d: 'Precificação com IA e plano de 30 dias.' },
+    ],
+  },
+  {
+    name: 'Criador de conteúdo', hours: '~18h',
+    body: 'Para quem quer produzir em escala sem soar genérico: imagem, vídeo, voz e um sistema de conteúdo com a sua identidade.',
+    chips: ['00', '01', '02', '06', '07', '11', '12'], hot: ['06', '07'],
+    weeks: [
+      { w: 'Semana 1', t: 'Fundamentos + estilo com a sua voz', d: 'Prompt, few-shot e Claude Projects como cérebro.' },
+      { w: 'Semana 2', t: 'Imagem profissional (Midjourney + edição)', d: 'Consistência de personagem e direitos comerciais.' },
+      { w: 'Semana 3', t: 'Vídeo, voz e música', d: 'Veo/Sora, ElevenLabs, Suno — do roteiro à legenda.' },
+      { w: 'Semana 4', t: 'Sistema de conteúdo publicado', d: 'Calendário de 30 dias + pack de identidade visual.' },
+    ],
+  },
+  {
+    name: 'Construtor de apps', hours: '~18h',
+    body: 'Para quem quer publicar apps e produtos sem escrever código — do primeiro micro-app ao início de um micro-SaaS.',
+    chips: ['00', '01', '02', '04', '08', '09', '12'], hot: ['08'],
+    weeks: [
+      { w: 'Semana 1', t: 'Fundamentos + Claude para código', d: 'Artifacts, documentos longos, seu "segundo cérebro".' },
+      { w: 'Semana 2', t: 'Lovable — primeiro app no ar', d: 'Do prompt ao link público em 30 minutos.' },
+      { w: 'Semana 3', t: 'Banco, login e domínio próprio', d: 'Sem medo: método de conserto quando quebra.' },
+      { w: 'Semana 4', t: 'Automação + micro-SaaS', d: 'n8n + agente, publicado e testado com usuários reais.' },
+    ],
+  },
 ];
+
 
 const STACK = [
   { label: 'Curso completo — 13 módulos, ~36h, 4 trilhas', value: 'R$ 1.497' },
