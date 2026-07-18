@@ -15,6 +15,7 @@ import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/l
 import { LandingPlayground } from '@/components/landing/LandingPlayground';
 import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
 import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wow4';
+import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/components/landing/LandingV2Wow5';
 import './landing-v2.css';
 
 const MODULES = [
@@ -476,6 +477,13 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* ANIMATED STATS */}
+      <section className="lv2-section" id="numeros" style={{ padding: '30px 0 60px' }}>
+        <div className="lv2-wrap">
+          <div className="rv"><AnimatedStats /></div>
+        </div>
+      </section>
+
       {/* JOURNEY */}
       <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
         <div className="lv2-wrap">
@@ -564,6 +572,8 @@ export default function LandingV2() {
       </footer>
 
       <StickyMiniCTA onClick={goCheckout} />
+      <FloatingSectionNav />
+      <LiveEnrollmentFeed />
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
