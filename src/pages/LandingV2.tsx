@@ -13,6 +13,7 @@ import {
 } from '@/components/landing/LandingV2Enhancements';
 import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/landing/LandingV2Wow2';
 import { LandingPlayground } from '@/components/landing/LandingPlayground';
+import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
 import './landing-v2.css';
 
 const MODULES = [
@@ -130,6 +131,7 @@ export default function LandingV2() {
   const heroRef = useRef<HTMLElement>(null);
   const activeRadar = useRelativeRadar(RADAR_FEED.length);
   useHeroSpotlight(heroRef);
+  useCardTilt('.lv2 .lv2-trail');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -428,6 +430,13 @@ export default function LandingV2() {
             <span>Prefere ver tudo? A trilha Formação Completa percorre os 13 módulos na ordem (~36h).</span>
             <a href="#oferta" className="lv2-link-cta">Ver o que está incluído ↓</a>
           </div>
+
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '90px auto 0', maxWidth: 780 }}>
+            <span className="lv2-eyebrow">Comparativo honesto</span>
+            <h2>Onde a diferença aparece — <span className="lv2-grad-text">linha por linha.</span></h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Sem inventar defeitos alheios. É o que a maioria dos cursos e a internet grátis não entregam — e o que aqui é regra da casa.</p>
+          </div>
+          <div className="rv"><ComparisonTable /></div>
         </div>
       </section>
 
@@ -440,6 +449,17 @@ export default function LandingV2() {
             <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Sem cadastro, sem cartão. Escolha um caso real, escreva uma frase e veja o resultado — é a mesma IA que você usa no curso.</p>
           </div>
           <LandingPlayground />
+        </div>
+      </section>
+
+      {/* TRUST WALL */}
+      <section className="lv2-section" style={{ padding: '60px 0 20px' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 20px', maxWidth: 760 }}>
+            <span className="lv2-eyebrow">Alunos falando</span>
+            <h2>Resultado real, no <span className="lv2-grad-text">tempo real de quem executou.</span></h2>
+          </div>
+          <div className="rv"><TrustWall /></div>
         </div>
       </section>
 
