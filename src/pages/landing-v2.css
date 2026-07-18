@@ -1292,3 +1292,54 @@
   font-variant-numeric:tabular-nums;
 }
 .lv2-rc-cell span{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a95 }
+
+/* ============ WOW #10: Back to top + Quote marquee ============ */
+.lv2-backtop{
+  position:fixed; left:20px; bottom:20px; z-index:70;
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(10,15,24,.85); backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.1);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; opacity:0; pointer-events:none;
+  transform:translateY(12px) scale(.9);
+  transition:opacity .35s ease, transform .35s ease, border-color .2s ease;
+}
+.lv2-backtop.on{ opacity:1; pointer-events:auto; transform:translateY(0) scale(1) }
+.lv2-backtop:hover{ border-color:rgba(110,231,183,.5) }
+.lv2-backtop svg{ position:absolute; inset:0; width:100%; height:100% }
+.lv2-backtop-track{ fill:none; stroke:rgba(255,255,255,.08); stroke-width:2 }
+.lv2-backtop-fill{
+  fill:none; stroke:url(#lv2BacktopGrad);
+  stroke:#6EE7B7; stroke-width:2; stroke-linecap:round;
+  transition:stroke-dashoffset .2s linear;
+}
+.lv2-backtop-arrow{
+  color:#E8EDF4; font-size:18px; line-height:1;
+  transform:translateY(-1px);
+}
+@media (max-width:640px){
+  .lv2-backtop{ left:14px; bottom:78px; width:44px; height:44px }
+}
+
+.lv2-quote-marquee{
+  overflow:hidden; padding:22px 0;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(180deg, rgba(255,255,255,.015), transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.lv2-quote-track{
+  display:flex; gap:0; width:max-content;
+  animation:lv2QuoteScroll 68s linear infinite;
+}
+.lv2-quote-item{
+  display:inline-flex; align-items:center; gap:28px;
+  padding:0 28px; white-space:nowrap;
+  font-family:'Instrument Serif','Georgia',serif;
+  font-style:italic; font-size:19px; color:#B8C0D0;
+  letter-spacing:-.01em;
+}
+.lv2-quote-dot{ color:#6EE7B7; font-size:10px; font-style:normal; opacity:.7 }
+@keyframes lv2QuoteScroll{ to{ transform:translateX(-50%) } }
+@media (prefers-reduced-motion:reduce){ .lv2-quote-track{ animation-duration:180s } }
