@@ -1,69 +1,79 @@
-# Nova Landing Page — Método IA Real (design premium editorial)
 
-Aplicar o HTML enviado como a **nova landing `/`**, convertendo para React + Tailwind, mantendo integrações existentes (Stripe checkout, auth, roteamento).
+# 15 Melhorias WOW para a Landing V2
 
-## O que muda
+Foco: elevar o nível editorial/premium sem quebrar a identidade Ink + Mint/Blue e sem re-adicionar bloqueadores (FAQ pesado, popups, urgency bars).
 
-Substituir toda a landing atual (Hero + 12 seções) por uma versão mais enxuta, editorial e alinhada ao PRD "Escola de IA", com paleta escura (mint #6EE7B7 + blue #3B82F6), Space Grotesk + Instrument Sans + Space Mono.
+## 1. Hero cinematográfico
+- **Cursor magnético + gradient spotlight** que segue o mouse na headline (efeito Linear/Vercel).
+- Headline com **split-text reveal** (palavras entrando em cascata, Space Grotesk).
+- Micro-badge animado "MOD-00 → MOD-12" com número girando tipo odômetro.
 
-## Estrutura nova (7 seções)
+## 2. Terminal IA "ao vivo" no Hero
+Substituir o mini-map por um **terminal typewriter** que digita prompts reais e mostra respostas simuladas (Space Mono). Loop de 3 exemplos: post, e-mail, planilha.
 
-1. **Nav fixo** — logo "Método IA Real" + links âncora (Mapa, Radar IA, Trilhas, Oferta) + botão Entrar
-2. **Hero** — headline "O curso de IA mais organizado e atualizado do Brasil" + CTA + mini-mapa MOD-00 → MOD-12 animado
-3. **Marquee** — ferramentas rolando (ChatGPT, Claude, Gemini, Lovable, n8n, etc.)
-4. **Problema → Solução** — 3 dores (desorganização, desatualização, abandono) + 4 pilares
-5. **Mapa do curso** — accordion dos 13 módulos MOD-00 → MOD-12 com projeto de cada um, trilho vertical com progresso conforme scroll
-6. **Radar IA** — copy + feed simulado das semanas 1-4 do mês + selo "atualizado em jul/2026"
-7. **Trilhas** — 4 cards (Carreira, Empreendedor, Criador, Construtor) com chips dos módulos
-8. **Oferta** — stack de valor (R$ 3.252 → R$ 497), CTA Stripe, garantia 7 dias
-9. **FAQ** — 7 perguntas
-10. **Footer** minimalista
+## 3. Trilho de módulos 3D horizontal (opcional desktop)
+Além do rail vertical atual, uma faixa horizontal com **scroll-hijack suave** onde os 13 módulos passam como cartões inclinados (perspective + parallax leve).
 
-## Componentes React a criar
+## 4. Contador de valor entregue
+Bloco "**Enquanto você lê isso**" com números incrementando em tempo real:
+- Prompts salvos por alunos: `12.847 →`
+- Horas economizadas nesta semana
+- Uso via `requestAnimationFrame`, não fetch.
 
-Em `src/components/landing-v2/`:
-- `NavV2.tsx`, `HeroV2.tsx`, `MarqueeV2.tsx`, `ProblemSolutionV2.tsx`
-- `CourseMapV2.tsx` (accordion + rail animado via IntersectionObserver)
-- `RadarV2.tsx`, `TrailsV2.tsx`, `OfferV2.tsx`, `FaqV2.tsx`, `FooterV2.tsx`
+## 5. Comparador interativo "Antes/Depois IA"
+Slider drag revelando dois textos lado a lado: e-mail cru vs. e-mail com Método IA Real. Instantâneo, sem vídeo.
 
-`src/pages/Index.tsx` reescrito para renderizar apenas esses componentes.
+## 6. Depoimentos em áudio (waveform)
+Cards com **waveform SVG animada** e play inline. Mais raro/premium que vídeo. 3 áudios de 20s.
 
-## Design tokens
+## 7. Prompt Playground embutido
+Mini-textarea no meio da página: usuário digita algo, IA responde (via edge function `ai-sandbox` já existente, com rate-limit por IP). Prova de valor real antes de comprar.
 
-Adicionar em `src/index.css` (sem quebrar tokens existentes):
-- `--ink`, `--ink-2`, `--ink-3`, `--mint`, `--blue`, `--grad-mint-blue`
-- Fontes: Space Grotesk (display), Instrument Sans (body), Space Mono (mono) via Google Fonts em `index.html`
-- Classes utilitárias `.grad-text`, `.eyebrow` no CSS global
+## 8. Radar IA "vivo"
+O feed atual vira **stream com timestamps relativos** ("há 2h") e um badge pulsante "AO VIVO". Adicionar rotação automática a cada 6s.
 
-## Integrações preservadas
+## 9. Trilhas com preview expansível
+Clicar em Carreira/Empreendedor/Criador/Construtor **expande inline** mostrando: 3 aulas-âncora + resultado esperado em 30 dias. Sem sair da página.
 
-- CTAs "Quero minha vaga" e "Garantir minha vaga" → `useCheckout()` (Stripe já configurado, R$ 497)
-- Link "Entrar" → `/auth`
-- Meta tags (Helmet): title/description novos conforme HTML enviado
-- JSON-LD Course mantido, com preço 497
-- WhatsAppBubble e ReadingProgress: **removidos** (design pede tela limpa)
-- StickyMobileCTA: **removido** (Hero já tem CTA sempre visível em mobile)
+## 10. Timeline "Sua jornada de 30 dias"
+Nova seção com 4 marcos (Dia 1, 7, 14, 30) em formato de trilho horizontal com ilustração minimalista de progresso. Ancoragem psicológica de resultado.
 
-## Componentes antigos a arquivar (não deletar)
+## 11. Prova social geolocalizada (sutil)
+Toast discreto canto inferior: "Alguém de **São Paulo** entrou agora" — rotativo, sem pop-up invasivo, tipografia mono, some em 4s.
 
-Ficam no repo mas deixam de ser importados:
-`HeroSection`, `ProblemSection`, `SolutionSection`, `ProcessSection`, `ComparisonSection`, `PromptExampleSection`, `LearningSection`, `TargetAudienceSection`, `ModulesSection`, `BonusSection`, `TestimonialsSection`, `FAQSection`, `FinalCTASection`, `ObjectionHandler`, `PricingAnchor`, `TopHeader`, `Footer`.
+## 12. Seção "Bastidores" — quem construiu
+Card editorial estilo revista: foto B&W do fundador, 3 linhas de manifesto, assinatura vetorial. Constrói autoridade sem parecer bio de LinkedIn.
 
-## Interações JS
+## 13. Oferta com stack animado
+Cada item da pilha (`lv2-stack li`) entra **um-a-um com contador subindo** ao entrar no viewport. O total riscado anima até revelar R$ 497. Efeito "recibo".
 
-- Nav ganha borda ao scrollar (>10px)
-- Mini-mapa hero e rail do mapa: preencher pontos conforme viewport passa por eles (IntersectionObserver)
-- Accordion módulos: um aberto por vez, `max-height` transition
-- FAQ: mesmo padrão do accordion
-- Reveals `.rv → .rv.in` via IntersectionObserver
+## 14. Sticky mini-CTA contextual
+Barra fina inferior que aparece apenas após 40% de scroll, com:
+- Preço R$ 497
+- Botão "Garantir vaga"
+- Fecha com X, lembra sessão.
+Substitui o antigo StickyMobileCTA com visual editorial (mint/blue thin border).
 
-## Responsivo
+## 15. Cursor trail + som opcional
+- Trail de partículas mint sutil no cursor (desktop only).
+- Ícone speaker no canto: liga/desliga **micro-sons** (hover, click) tipo Arc/Rauno. Off por padrão.
 
-- Mobile: nav só logo + Entrar; hero 1 coluna; grids 3→1; oferta padding reduzido
-- Respeitar `prefers-reduced-motion`
+---
 
-## Fora de escopo
+## Bônus técnicos (não visíveis, mas WOW)
+- **View Transitions API** entre seções âncoras.
+- **Preload de fonte** com `font-display: optional` para evitar FOUT.
+- **Lighthouse 95+**: lazyload de todas imagens, `prefers-reduced-motion` respeitado (já parcial).
+- **OG image dinâmica** gerada no build com título + preço.
 
-- Não alterar `/membros`, `/admin`, `/metodo`, checkout, edge functions
-- Sem nova seção de depoimentos por enquanto (o HTML não trouxe — posso adicionar depois se quiser)
-- Nome comercial permanece "Método IA Real" (rebrand para "Escola de IA" fica para outra rodada)
+---
+
+## Sugestão de priorização (impacto vs. esforço)
+
+| Prioridade | Itens |
+|---|---|
+| ⚡ Alto impacto, baixo esforço | 1 (spotlight), 4 (contador), 8 (radar vivo), 13 (stack animado), 14 (sticky mini) |
+| 🎯 Alto impacto, médio esforço | 2 (terminal), 5 (antes/depois), 9 (trilhas expansíveis), 10 (timeline 30d) |
+| 💎 Wow, maior esforço | 3 (3D rail), 6 (waveform áudio), 7 (playground live), 11 (geoproof), 15 (som) |
+
+Me diga quais quer que eu implemente — posso começar pelo pacote "Alto impacto / baixo esforço" (5 itens em uma leva) ou você escolhe à la carte.
