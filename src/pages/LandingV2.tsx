@@ -362,11 +362,13 @@ export default function LandingV2() {
             <h2>Tudo isso, pelo preço de um jantar por mês.</h2>
 
             <ul className="lv2-stack">
-              {STACK.map((s) => (
-                <li key={s.label}><span>{s.label}</span><span>{s.value}</span></li>
+              {STACK.map((s, i) => (
+                <li key={s.label} className="rv lv2-stack-li" style={{ transitionDelay: `${i * 90}ms` }}>
+                  <span>{s.label}</span><span>{s.value}</span>
+                </li>
               ))}
             </ul>
-            <div className="lv2-stack-total"><span>Valor total</span><s>R$ 3.252</s></div>
+            <div className="lv2-stack-total rv"><span>Valor total</span><s>R$ 3.252</s></div>
 
             <div className="lv2-price-line">
               <span className="lv2-price">R$ 497</span>
