@@ -155,14 +155,19 @@ export default function LandingV2() {
       </nav>
 
       {/* HERO */}
-      <section className="lv2-hero" id="top">
+      <section className="lv2-hero" id="top" ref={heroRef}>
+        <div className="lv2-hero-spot" aria-hidden />
         <div className="lv2-orb lv2-orb-a" />
         <div className="lv2-orb lv2-orb-b" />
         <div className="lv2-grid-bg" />
         <div className="lv2-wrap">
           <div className="lv2-hero-in">
             <span className="lv2-eyebrow rv">Radar IA · atualizado em jul/2026</span>
-            <h1 className="rv">O curso de IA mais <span className="lv2-grad-text">organizado e atualizado</span> do Brasil.</h1>
+            <h1 className="rv lv2-h1">
+              <SplitText text="O curso de IA mais" />{' '}
+              <span className="lv2-grad-text"><SplitText text="organizado e atualizado" /></span>{' '}
+              <SplitText text="do Brasil." />
+            </h1>
             <p className="lv2-lead rv">13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado, não com certificado vazio.</p>
             <div className="lv2-hero-cta rv">
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
@@ -192,6 +197,10 @@ export default function LandingV2() {
           {[...TOOLS, ...TOOLS].map((t, i) => <span key={i}>{t}</span>)}
         </div>
       </div>
+
+      {/* LIVE COUNTERS */}
+      <LiveCounters />
+
 
       {/* PROBLEMA + SOLUÇÃO */}
       <section className="lv2-section" id="problema">
