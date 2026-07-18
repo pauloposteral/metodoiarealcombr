@@ -17,6 +17,7 @@ import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/La
 import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wow4';
 import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/components/landing/LandingV2Wow5';
 import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow6';
+import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/LandingV2Wow7';
 import './landing-v2.css';
 
 const MODULES = [
@@ -174,8 +175,17 @@ export default function LandingV2() {
     return () => io.disconnect();
   }, []);
 
+  const fireConfetti = useConfetti();
+
   const goCheckout = (e?: React.MouseEvent) => {
     e?.preventDefault();
+    const target = e?.currentTarget as HTMLElement | undefined;
+    if (target) {
+      const r = target.getBoundingClientRect();
+      fireConfetti({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+    } else {
+      fireConfetti();
+    }
     handleCheckout();
   };
 
@@ -198,6 +208,7 @@ export default function LandingV2() {
             <a href="#radar">Radar IA</a>
             <a href="#trilhas">Trilhas</a>
             <a href="#oferta">Oferta</a>
+            <CommandPalette onCta={handleCheckout} />
             <Link to="/auth" className="lv2-nav-entrar">Entrar</Link>
           </div>
         </div>
