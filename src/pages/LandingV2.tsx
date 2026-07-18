@@ -368,6 +368,18 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* JOURNEY */}
+      <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 50px' }}>
+            <span className="lv2-eyebrow">Sua jornada · 30 dias</span>
+            <h2>Do primeiro login ao <span className="lv2-grad-text">portfólio publicado.</span></h2>
+            <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Não é promessa de riqueza. É um plano de execução — o que você entrega em cada marco.</p>
+          </div>
+          <JourneyTimeline />
+        </div>
+      </section>
+
       {/* OFERTA */}
       <section className="lv2-section lv2-offer" id="oferta">
         <div className="lv2-orb lv2-orb-c" />
