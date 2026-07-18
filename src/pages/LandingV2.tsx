@@ -386,21 +386,41 @@ export default function LandingV2() {
           </div>
 
           <div className="lv2-trail-grid">
-            {TRAILS.map((t) => (
-              <div key={t.name} className="lv2-trail rv">
-                <div className="lv2-trail-top">
-                  <h3>{t.name}</h3>
-                  <span className="lv2-trail-h">{t.hours}</span>
+            {TRAILS.map((t, ti) => {
+              const open = openTrail === ti;
+              return (
+                <div key={t.name} className={`lv2-trail rv ${open ? 'open' : ''}`}>
+                  <div className="lv2-trail-top">
+                    <h3>{t.name}</h3>
+                    <span className="lv2-trail-h">{t.hours}</span>
+                  </div>
+                  <p>{t.body}</p>
+                  <div className="lv2-chips">
+                    {t.chips.map((c) => (
+                      <span key={c} className={t.hot.includes(c) ? 'hot' : ''}>{c}</span>
+                    ))}
+                  </div>
+                  <button className="lv2-trail-toggle" onClick={() => setOpenTrail(open ? null : ti)}>
+                    {open ? 'Fechar prévia' : 'Ver semana a semana'} <span className={`arr ${open ? 'up' : ''}`}>↓</span>
+                  </button>
+                  <div className="lv2-trail-weeks" style={{ maxHeight: open ? 600 : 0 }}>
+                    <div className="lv2-trail-weeks-in">
+                      {t.weeks.map((w, wi) => (
+                        <div key={wi} className="lv2-week">
+                          <span className="lv2-week-tag">{w.w}</span>
+                          <div>
+                            <strong>{w.t}</strong>
+                            <p>{w.d}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <p>{t.body}</p>
-                <div className="lv2-chips">
-                  {t.chips.map((c) => (
-                    <span key={c} className={t.hot.includes(c) ? 'hot' : ''}>{c}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
+
 
           <div className="lv2-trail-note rv">
             <span>Prefere ver tudo? A trilha Formação Completa percorre os 13 módulos na ordem (~36h).</span>
