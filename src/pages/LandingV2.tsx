@@ -121,6 +121,7 @@ const FAQS = [
 export default function LandingV2() {
   const [scrolled, setScrolled] = useState(false);
   const [openMod, setOpenMod] = useState<number | null>(null);
+  const [openTrail, setOpenTrail] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [litCount, setLitCount] = useState(1);
   const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
