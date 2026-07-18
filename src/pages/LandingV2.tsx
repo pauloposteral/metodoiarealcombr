@@ -20,6 +20,7 @@ import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow
 import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/LandingV2Wow7';
 import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } from '@/components/landing/LandingV2Wow8';
 import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
+import { BackToTop, QuoteMarquee } from '@/components/landing/LandingV2Wow10';
 import './landing-v2.css';
 
 const MODULES = [
@@ -499,6 +500,7 @@ export default function LandingV2() {
           </div>
           <div className="rv"><TrustWall /></div>
         </div>
+        <div className="rv" style={{ marginTop: 40 }}><QuoteMarquee /></div>
       </section>
 
       {/* ROI CALCULATOR */}
@@ -626,6 +628,7 @@ export default function LandingV2() {
       <LiveEnrollmentFeed />
       <LiveViewersBadge />
       <ShortcutHint />
+      <BackToTop />
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );
