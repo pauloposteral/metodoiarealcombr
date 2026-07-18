@@ -464,6 +464,18 @@ export default function LandingV2() {
         </div>
       </section>
 
+      {/* ROI CALCULATOR */}
+      <section className="lv2-section" id="roi" style={{ padding: '70px 0' }}>
+        <div className="lv2-wrap">
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto', maxWidth: 760 }}>
+            <span className="lv2-eyebrow">Calculadora honesta</span>
+            <h2>Quanto <span className="lv2-grad-text">o seu tempo</span> vale, de verdade.</h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Arraste os controles com o seu contexto. Os números são seus — não uma média inventada.</p>
+          </div>
+          <div className="rv"><ROICalculator /></div>
+        </div>
+      </section>
+
       {/* JOURNEY */}
       <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
         <div className="lv2-wrap">
