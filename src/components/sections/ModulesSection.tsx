@@ -1,6 +1,7 @@
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { 
-  BookOpen, Wrench, MessageSquare, FileText, Briefcase, Rocket, DollarSign, Brain
+import {
+  Rocket, Brain, MessageSquare, Bot, Sparkles, Search,
+  Image, Video, Code2, Workflow, Zap, TrendingUp, DollarSign
 } from 'lucide-react';
 import {
   Accordion,
@@ -11,14 +12,19 @@ import {
 
 export const ModulesSection = () => {
   const modules = [
-    { number: '01', icon: BookOpen, title: 'Fundamentos da IA', description: 'O que é IA, como funciona e por que você precisa entender agora.' },
-    { number: '02', icon: Wrench, title: 'Ferramentas Essenciais', description: 'As principais ferramentas de IA e como escolher a melhor para você.' },
-    { number: '03', icon: MessageSquare, title: 'Prompts que Funcionam', description: 'A arte de conversar com IA e obter resultados impressionantes.' },
-    { number: '04', icon: FileText, title: 'IA para Conteúdo', description: 'Crie textos, imagens e vídeos profissionais com IA.' },
-    { number: '05', icon: Briefcase, title: 'IA para Negócios', description: 'Aplique IA para vender mais, atender melhor e crescer.' },
-    { number: '06', icon: Rocket, title: 'Produtividade com IA', description: 'Automatize tarefas e ganhe horas do seu dia.' },
-    { number: '07', icon: DollarSign, title: 'IA como Renda Extra', description: 'Monetize suas habilidades com IA e crie novas fontes de receita.' },
-    { number: '08', icon: Brain, title: 'O Jogo é Mental', description: 'Mentalidade e estratégia para se manter relevante na era da IA.' },
+    { number: '00', icon: Rocket, title: 'Comece por aqui', description: 'Onboarding: como aproveitar ao máximo a Escola de IA e escolher sua trilha ideal.' },
+    { number: '01', icon: Brain, title: 'Fundamentos: como a IA pensa', description: 'Entenda de verdade o que é IA generativa, LLMs, tokens e por que isso muda tudo.' },
+    { number: '02', icon: MessageSquare, title: 'Engenharia de Prompt', description: 'A arte e a técnica de conversar com IA para obter resultados profissionais.' },
+    { number: '03', icon: Bot, title: 'ChatGPT do zero ao avançado', description: 'Domine o ChatGPT: GPTs personalizados, projetos, memória, análise de dados e mais.' },
+    { number: '04', icon: Sparkles, title: 'Claude do zero ao avançado', description: 'A IA da Anthropic: raciocínio profundo, escrita longa, artifacts e workflows.' },
+    { number: '05', icon: Search, title: 'Gemini e ecossistema Google', description: 'Integre IA com Docs, Sheets, Gmail e todo o Google Workspace.' },
+    { number: '06', icon: Image, title: 'Imagem: do prompt à arte profissional', description: 'Midjourney, DALL-E, Nano Banana e ferramentas para criar imagens profissionais.' },
+    { number: '07', icon: Video, title: 'Vídeo, voz e música com IA', description: 'Sora, Runway, ElevenLabs, Suno: crie vídeos, áudios e músicas com IA.' },
+    { number: '08', icon: Code2, title: 'Lovable: primeiro app sem código', description: '⭐ Crie apps reais sem programar. Do zero ao MVP publicado.' },
+    { number: '09', icon: Workflow, title: 'Automações e agentes', description: 'n8n, Make, Zapier e agentes autônomos que trabalham por você 24/7.' },
+    { number: '10', icon: Zap, title: 'IA no trabalho: produtividade', description: 'Aplique IA em relatórios, reuniões, apresentações e rotina profissional.' },
+    { number: '11', icon: TrendingUp, title: 'IA para negócios e conteúdo', description: 'Marketing, vendas, atendimento e criação de conteúdo em escala com IA.' },
+    { number: '12', icon: DollarSign, title: 'Monetização: os 5 caminhos', description: 'Como transformar IA em renda: freelas, serviços, produtos, cursos e SaaS.' },
   ];
 
   return (
@@ -32,11 +38,11 @@ export const ModulesSection = () => {
               Conteúdo do Curso
             </span>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-3 leading-tight">
-              8 Módulos{' '}
+              13 Módulos{' '}
               <span className="text-gradient-gold">Completos</span>
             </h2>
             <p className="text-sm md:text-base text-primary-foreground/70">
-              Uma jornada estruturada do zero ao avançado.
+              Do onboarding à monetização — uma jornada estruturada do zero ao avançado.
             </p>
           </div>
         </ScrollReveal>
