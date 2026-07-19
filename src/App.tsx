@@ -73,8 +73,8 @@ const App = () => (
         <Toaster />
         <Sonner />
         <Analytics />
-        <CookieConsent />
         <BrowserRouter>
+          <CookieConsent />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/curso" element={<CourseContentPage />} />
