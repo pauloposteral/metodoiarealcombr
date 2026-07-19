@@ -66,6 +66,11 @@ export function ShortcutHint() {
   const shown = useRef(false);
   useEffect(() => {
     if (shown.current) return;
+    // Skip on touch/mobile devices — keyboard shortcut is irrelevant there
+    if (typeof window !== 'undefined') {
+      const isTouch = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+      if (isTouch) return;
+    }
     shown.current = true;
     const t1 = setTimeout(() => setShow(true), 6500);
     const t2 = setTimeout(() => setShow(false), 13500);
