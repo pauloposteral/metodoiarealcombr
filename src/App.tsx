@@ -61,6 +61,8 @@ import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminPrompts from "./pages/admin/AdminPrompts";
 import AdminSetup from "./pages/admin/AdminSetup";
 import AdminCursos from "./pages/admin/AdminCursos";
+import { Analytics } from "./components/Analytics";
+import { CookieConsent } from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <Analytics />
+        <CookieConsent />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />

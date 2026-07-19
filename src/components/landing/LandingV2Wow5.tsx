@@ -4,65 +4,19 @@ import { useEffect, useRef, useState } from 'react';
  * PACOTE WOW #5 — Prova social ao vivo + navegação flutuante
  * ============================================================ */
 
-/* 1) LIVE ENROLLMENT FEED — toasts discretos no canto inferior */
-const ENROLLMENTS = [
-  { name: 'João', city: 'São Paulo, SP', track: 'Trilha Empreendedor' },
-  { name: 'Marina', city: 'Belo Horizonte, MG', track: 'Trilha Carreira' },
-  { name: 'Rafael', city: 'Curitiba, PR', track: 'Trilha Construtor' },
-  { name: 'Camila', city: 'Recife, PE', track: 'Trilha Criador' },
-  { name: 'Pedro', city: 'Porto Alegre, RS', track: 'Trilha Empreendedor' },
-  { name: 'Ana', city: 'Fortaleza, CE', track: 'Trilha Carreira' },
-  { name: 'Lucas', city: 'Salvador, BA', track: 'Trilha Construtor' },
-  { name: 'Beatriz', city: 'Brasília, DF', track: 'Trilha Criador' },
-  { name: 'Diego', city: 'Florianópolis, SC', track: 'Trilha Empreendedor' },
-  { name: 'Juliana', city: 'Manaus, AM', track: 'Trilha Carreira' },
-];
-
+/* 1) LIVE ENROLLMENT FEED — desativado até o beta liberar dados reais.
+      Manter o componente exportado (para não quebrar imports) mas renderizar null.
+      Reativar quando houver base real de alunos + consentimento LGPD para exibir cidade/nome. */
 export function LiveEnrollmentFeed() {
-  const [current, setCurrent] = useState<number | null>(null);
-  const [dismissed, setDismissed] = useState(false);
-  const idxRef = useRef(0);
-
-  useEffect(() => {
-    if (dismissed) return;
-    // primeira aparição depois de 8s
-    const first = setTimeout(() => setCurrent(0), 8000);
-    return () => clearTimeout(first);
-  }, [dismissed]);
-
-  useEffect(() => {
-    if (current === null || dismissed) return;
-    // esconde depois de 5s, mostra a próxima depois de 12s
-    const hide = setTimeout(() => setCurrent(null), 5000);
-    const next = setTimeout(() => {
-      idxRef.current = (idxRef.current + 1) % ENROLLMENTS.length;
-      setCurrent(idxRef.current);
-    }, 17000);
-    return () => { clearTimeout(hide); clearTimeout(next); };
-  }, [current, dismissed]);
-
-  if (current === null || dismissed) return null;
-  const e = ENROLLMENTS[current];
-  const mins = 2 + ((current * 7) % 27);
-
-  return (
-    <div className="lv2-fomo" role="status" aria-live="polite">
-      <div className="lv2-fomo-dot" />
-      <div className="lv2-fomo-body">
-        <b>{e.name}</b> de {e.city}
-        <span>entrou na {e.track} · há {mins} min</span>
-      </div>
-      <button className="lv2-fomo-x" onClick={() => setDismissed(true)} aria-label="Fechar">×</button>
-    </div>
-  );
+  return null;
 }
 
-/* 2) ANIMATED STATS — números grandes que contam ao aparecer */
+/* 2) ANIMATED STATS — apenas números verificáveis no pré-lançamento. */
 const STATS = [
-  { end: 2847, suffix: '+', label: 'Alunos ativos executando' },
-  { end: 96, suffix: '%', label: 'Concluem o primeiro projeto' },
-  { end: 13, suffix: '', label: 'Módulos, 12 ferramentas dominadas' },
-  { end: 24, suffix: 'h', label: 'Tempo médio de resposta no suporte' },
+  { end: 13, suffix: '', label: 'Módulos com projeto em cada um' },
+  { end: 12, suffix: '', label: 'Ferramentas de IA dominadas na prática' },
+  { end: 24, suffix: 'h', label: 'Compromisso de resposta útil no suporte' },
+  { end: 7, suffix: ' dias', label: 'Garantia incondicional (CDC art. 49)' },
 ];
 
 function useCountUp(end: number, active: boolean, duration = 1600) {
