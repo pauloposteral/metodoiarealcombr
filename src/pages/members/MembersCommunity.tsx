@@ -11,6 +11,7 @@ import { ActivityIndicator } from '@/components/community/ActivityIndicator';
 import { LeaderboardCard } from '@/components/gamification/LeaderboardCard';
 import { useGamification } from '@/hooks/useGamification';
 import { supabase } from '@/integrations/supabase/client';
+import { databaseRpc, type ProfileCard } from '@/lib/databaseRpc';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -139,8 +140,10 @@ const MembersCommunity = () => {
       const profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
       
       if (userIds.length > 0) {
-        const { data: profiles } = await supabase
-          .rpc('get_profile_cards', { user_ids: userIds });
+        const { data: profiles } = await databaseRpc<ProfileCard[]>(
+          'get_profile_cards',
+          { user_ids: userIds },
+        );
         
         profiles?.forEach(p => {
           profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };

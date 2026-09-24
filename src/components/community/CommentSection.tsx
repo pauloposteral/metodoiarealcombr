@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { CommentItem } from './CommentItem';
+import { databaseRpc, type ProfileCard } from '@/lib/databaseRpc';
 
 interface Comment {
   id: string;
@@ -86,8 +87,10 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       const profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
       
       if (userIds.length > 0) {
-        const { data: profiles } = await supabase
-          .rpc('get_profile_cards', { user_ids: userIds });
+        const { data: profiles } = await databaseRpc<ProfileCard[]>(
+          'get_profile_cards',
+          { user_ids: userIds },
+        );
         
         profiles?.forEach(p => {
           profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };

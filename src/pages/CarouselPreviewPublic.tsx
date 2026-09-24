@@ -6,6 +6,13 @@ import { SlideCanvas } from '@/components/carousel-v2/SlideCanvas';
 import { Loader2, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { CarouselSlide, CarouselTheme } from '@/components/carousel-v2/types';
+import { databaseRpcSingle } from '@/lib/databaseRpc';
+
+type SharedCarousel = {
+  slides: CarouselSlide[];
+  theme: CarouselTheme;
+  topic: string;
+};
 
 const CarouselPreviewPublic = () => {
   const { shareId } = useParams<{ shareId: string }>();
@@ -28,9 +35,10 @@ const CarouselPreviewPublic = () => {
       setLoading(true); setError(''); setCurrentSlide(0);
       if (!shareId) { setError('Link inválido'); setLoading(false); return; }
 
-      const { data, error: err } = await supabase
-        .rpc('get_shared_carousel', { share_id: shareId })
-        .single();
+      const { data, error: err } = await databaseRpcSingle<SharedCarousel>(
+        'get_shared_carousel',
+        { share_id: shareId },
+      );
 
       if (err || !data) {
         setError('Carrossel não encontrado ou link expirado.');

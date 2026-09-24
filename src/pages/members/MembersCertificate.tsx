@@ -9,6 +9,7 @@ import { Award, Download, PartyPopper, Lock, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { databaseRpcSingle } from '@/lib/databaseRpc';
 
 interface Certificate {
   id: string;
@@ -93,9 +94,9 @@ const MembersCertificate = () => {
   const generateCertificate = async (userId: string, studentName: string, lessons: { duration_minutes: number | null }[]) => {
     setGenerating(true);
     try {
-      const { data, error } = await supabase.rpc('issue_certificate').single();
+      const { data, error } = await databaseRpcSingle<Certificate>('issue_certificate');
 
-      if (error) throw error;
+      if (error || !data) throw error || new Error('Certificate was not returned');
 
       setCertificate(data);
       setShowCongrats(true);

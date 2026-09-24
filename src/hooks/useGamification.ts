@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { databaseRpc, type ProfileCard } from '@/lib/databaseRpc';
 
 interface UserPoints {
   points: number;
@@ -133,8 +134,10 @@ export function useGamification(userId?: string) {
     if (pointsData && pointsData.length > 0) {
       const userIds = pointsData.map(p => p.user_id);
       
-      const { data: profiles } = await supabase
-        .rpc('get_profile_cards', { user_ids: userIds });
+      const { data: profiles } = await databaseRpc<ProfileCard[]>(
+        'get_profile_cards',
+        { user_ids: userIds },
+      );
 
       const profilesMap: Record<string, { full_name: string | null; avatar_url: string | null }> = {};
       profiles?.forEach(p => {
