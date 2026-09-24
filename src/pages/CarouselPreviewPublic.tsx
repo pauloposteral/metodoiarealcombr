@@ -10,27 +10,33 @@ import type { CarouselSlide, CarouselTheme } from '@/components/carousel-v2/type
 const CarouselPreviewPublic = () => {
   const { shareId } = useParams<{ shareId: string }>();
   const [slides, setSlides] = useState<CarouselSlide[]>([]);
-  const [theme, setTheme] = useState<any>(null);
+  const [theme, setTheme] = useState<CarouselTheme | null>(null);
   const [topic, setTopic] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [previewWidth, setPreviewWidth] = useState(() => Math.min(400, window.innerWidth - 64));
+
+  useEffect(() => {
+    const resize = () => setPreviewWidth(Math.min(400, window.innerWidth - 64));
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
 
   useEffect(() => {
     const fetchCarousel = async () => {
+      setLoading(true); setError(''); setCurrentSlide(0);
       if (!shareId) { setError('Link inválido'); setLoading(false); return; }
 
       const { data, error: err } = await supabase
-        .from('saved_carousels')
-        .select('slides, theme, topic')
-        .eq('public_share_id', shareId)
+        .rpc('get_shared_carousel', { share_id: shareId })
         .single();
 
       if (err || !data) {
         setError('Carrossel não encontrado ou link expirado.');
       } else {
         setSlides(data.slides as unknown as CarouselSlide[]);
-        setTheme(data.theme);
+        setTheme(data.theme as unknown as CarouselTheme);
         setTopic(data.topic);
       }
       setLoading(false);
@@ -68,9 +74,11 @@ const CarouselPreviewPublic = () => {
           <p className="text-sm text-muted-foreground">{slides.length} slides • Preview público</p>
         </div>
 
-        <div className="relative" style={{ width: 400, height: 500 }}>
+        <div className="relative shrink-0" style={{ width: previewWidth, height: previewWidth * 1.25 }}>
           {theme && slides[currentSlide] && (
-            <SlideCanvas slide={slides[currentSlide]} theme={theme as CarouselTheme} />
+            <div style={{ position: 'absolute', width: 1080, height: 1350, transform: `scale(${previewWidth / 1080})`, transformOrigin: 'top left' }}>
+              <SlideCanvas slide={slides[currentSlide]} theme={theme} />
+            </div>
           )}
           
           {/* Navigation */}
@@ -78,6 +86,7 @@ const CarouselPreviewPublic = () => {
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Slide anterior"
               className="h-10 w-10 rounded-full bg-background/80 backdrop-blur -ml-5"
               onClick={() => setCurrentSlide(i => Math.max(0, i - 1))}
               disabled={currentSlide === 0}
@@ -89,6 +98,7 @@ const CarouselPreviewPublic = () => {
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Próximo slide"
               className="h-10 w-10 rounded-full bg-background/80 backdrop-blur -mr-5"
               onClick={() => setCurrentSlide(i => Math.min(slides.length - 1, i + 1))}
               disabled={currentSlide === slides.length - 1}
@@ -103,6 +113,7 @@ const CarouselPreviewPublic = () => {
           {slides.map((_, i) => (
             <button
               key={i}
+              aria-label={`Ir para slide ${i + 1}`}
               className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentSlide ? 'bg-primary scale-125' : 'bg-muted-foreground/30'}`}
               onClick={() => setCurrentSlide(i)}
             />

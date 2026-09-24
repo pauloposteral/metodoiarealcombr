@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { CarouselSlide, CarouselTheme, ImageFilter, BackgroundPattern, TextShadowStyle, DecorativeShape, BlendMode, DividerStyle, DuotonePreset, ImageMaskShape, CardShadowStyle, GradientTextPreset } from './types';
 import { 
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
@@ -7,7 +8,7 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 
-const iconComponents: Record<string, React.ComponentType<any>> = {
+const iconComponents: Record<string, LucideIcon> = {
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle,
@@ -230,17 +231,17 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
       fontWeight: titleFontWeight,
       lineHeight: lineHeightTitle,
       letterSpacing: `${letterSpacing}em`,
-      textTransform: textTransform as any,
+      textTransform: textTransform as React.CSSProperties['textTransform'],
       textShadow: textShadow !== 'none' ? textShadow : '0 5px 35px rgba(0,0,0,0.55)',
       ...(slide.textStroke ? {
         WebkitTextStroke: `2px ${slide.textStrokeColor || accentColor}`,
-        paintOrder: 'stroke fill' as any,
+        paintOrder: 'stroke fill',
       } : {}),
       ...(slide.highlightColor ? {
         background: `linear-gradient(transparent 55%, ${slide.highlightColor}50 55%, ${slide.highlightColor}50 90%, transparent 90%)`,
         display: 'inline',
         padding: '0 6px',
-        boxDecorationBreak: 'clone' as any,
+        boxDecorationBreak: 'clone',
       } : {}),
       // #106 Gradient text
       ...(gradientTextCSS ? {
@@ -309,7 +310,7 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
               opacity: imageOpacity,
               filter: [imageFilter, duotoneCSS].filter(Boolean).join(' ') || undefined,
               // #81 Blend mode
-              mixBlendMode: (slide.imageBlendMode || 'normal') as any,
+              mixBlendMode: (slide.imageBlendMode || 'normal') as React.CSSProperties['mixBlendMode'],
               // #86 Background blur
               ...(slide.backgroundBlur ? { filter: [imageFilter, duotoneCSS, `blur(${slide.backgroundBlur}px)`].filter(Boolean).join(' ') } : {}),
               // #90 Image mask
@@ -557,7 +558,7 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           justifyContent: verticalJustify,
           alignItems: textJustify,
           padding: '85px 75px',
-          textAlign: textAlign as any,
+          textAlign: textAlign as React.CSSProperties['textAlign'],
         }}>
           {renderLogo('center', 95)}
           
@@ -669,7 +670,7 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
           justifyContent: verticalJustify,
           alignItems: textJustify,
           padding: '95px 85px',
-          textAlign: textAlign as any,
+          textAlign: textAlign as React.CSSProperties['textAlign'],
         }}>
           {/* Premium icon container */}
           <div style={{
@@ -799,7 +800,7 @@ export const SlideCanvas = ({ slide, theme, watermark, onInlineEdit }: SlideCanv
         flexDirection: 'column',
         justifyContent: verticalJustify,
         padding: '95px 85px',
-        textAlign: textAlign as any,
+        textAlign: textAlign as React.CSSProperties['textAlign'],
       }}>
         {/* Step indicator with icon */}
         <div style={{

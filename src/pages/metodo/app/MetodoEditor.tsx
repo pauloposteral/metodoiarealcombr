@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js';
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { 
@@ -22,7 +23,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface ContextType {
-  user: any;
+  user: User;
   companyData: {
     role: string;
     company: {
@@ -126,7 +127,8 @@ Empresa: ${companyData.company.name}
       }
 
       toast.success('Conteúdo gerado!');
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Error generating content:', error);
       if (error.message?.includes('429')) {
         toast.error('Limite de requisições atingido. Tente novamente em alguns segundos.');

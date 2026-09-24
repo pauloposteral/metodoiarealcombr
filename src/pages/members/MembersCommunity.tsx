@@ -136,13 +136,11 @@ const MembersCommunity = () => {
 
       // Get profiles for all users
       const userIds = [...new Set((data || []).map(p => p.user_id))];
-      let profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
+      const profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
       
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id, full_name, avatar_url')
-          .in('id', userIds);
+          .rpc('get_profile_cards', { user_ids: userIds });
         
         profiles?.forEach(p => {
           profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };

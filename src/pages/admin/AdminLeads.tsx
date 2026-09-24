@@ -185,7 +185,8 @@ export default function AdminLeads() {
       setApproveOpen(false);
       setSelectedLead(null);
       await loadLeads();
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       toast({
         title: 'Erro ao aprovar',
         description: error.message,

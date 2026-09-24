@@ -17,8 +17,8 @@ export const CookieConsent = () => {
   const set = (val: 'accepted' | 'declined') => {
     window.localStorage.setItem(KEY, val);
     setVisible(false);
-    // Recarrega para que o Analytics (que só injeta ao aceitar) rode agora
-    if (val === 'accepted') window.location.reload();
+    // Atualiza o consentimento sem recarregar formulários em andamento.
+    window.dispatchEvent(new Event('mir-consent-change'));
   };
 
   if (!visible) return null;

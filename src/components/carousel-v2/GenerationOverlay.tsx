@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TypingEffect, ThinkingDots } from './TypingEffect';
 import { GenerationProgress } from './types';
@@ -31,7 +32,7 @@ const statusMessages: Record<string, string[]> = {
   ],
 };
 
-const statusIcons: Record<string, React.ComponentType<any>> = {
+const statusIcons: Record<string, LucideIcon> = {
   'generating-script': FileText,
   'generating-images': Image,
   'quality-check': CheckCircle2,

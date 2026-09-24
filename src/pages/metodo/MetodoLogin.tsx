@@ -78,7 +78,8 @@ export default function MetodoLogin() {
         toast.success('Login realizado com sucesso!');
         navigate('/metodo/app');
       }
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Auth error:', error);
       toast.error('Erro ao processar. Tente novamente.');
     } finally {

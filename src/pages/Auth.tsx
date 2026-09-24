@@ -8,7 +8,7 @@ import { toast } from '@/hooks/use-toast';
 import logo from '@/assets/logo-iareal.png';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 
-type AuthMode = 'login' | 'signup' | 'reset';
+type AuthMode = 'login' | 'signup' | 'reset' | 'update';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -23,14 +23,28 @@ const Auth = () => {
     fullName: ''
   });
 
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(event => {
+      if (event === 'PASSWORD_RECOVERY') setMode('update');
+    });
+    if (searchParams.get('recovery') === '1') setMode('update');
+    return () => subscription.unsubscribe();
+  }, [searchParams]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (mode === 'reset') {
+      if (mode === 'update') {
+        if (formData.password.length < 8) throw new Error('Use pelo menos 8 caracteres.');
+        const { error } = await supabase.auth.updateUser({ password: formData.password });
+        if (error) throw error;
+        toast({ title: 'Senha atualizada', description: 'Sua nova senha já pode ser usada.' });
+        navigate('/membros');
+      } else if (mode === 'reset') {
         const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-          redirectTo: `${window.location.origin}/auth`,
+          redirectTo: `${window.location.origin}/auth?recovery=1`,
         });
         
         if (error) throw error;
@@ -56,7 +70,7 @@ const Auth = () => {
       } else {
         const redirectUrl = `${window.location.origin}/membros`;
         
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
@@ -71,11 +85,13 @@ const Auth = () => {
         
         toast({
           title: "Conta criada com sucesso!",
-          description: "Você já pode acessar a área de membros.",
+          description: data.session ? "Você já pode acessar a área de membros." : "Confirme seu e-mail pelo link enviado antes de entrar.",
         });
-        navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
+        if (data.session) navigate(redirectTo === 'checkout' ? '/checkout' : '/membros');
+        else setMode('login');
       }
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       let message = error.message;
       if (error.message.includes('Invalid login credentials')) {
         message = 'Email ou senha incorretos.';
@@ -97,6 +113,7 @@ const Auth = () => {
 
   const getTitle = () => {
     switch (mode) {
+      case 'update': return 'Defina sua nova senha';
       case 'reset': return 'Recuperar senha';
       case 'signup': return 'Crie sua conta';
       default: return 'Acesse sua conta';
@@ -105,6 +122,7 @@ const Auth = () => {
 
   const getSubtitle = () => {
     switch (mode) {
+      case 'update': return 'Escolha uma senha com pelo menos 8 caracteres';
       case 'reset': return 'Digite seu e-mail para receber o link de recuperação';
       case 'signup': return 'Comece sua jornada de aprendizado em IA';
       default: return 'Entre na área de membros do Método IA Real';
@@ -154,7 +172,7 @@ const Auth = () => {
               </div>
             )}
             
-            <div className="space-y-2">
+            {mode !== 'update' && <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -168,7 +186,7 @@ const Auth = () => {
                   required
                 />
               </div>
-            </div>
+            </div>}
 
             {mode !== 'reset' && (
               <div className="space-y-2">
@@ -183,10 +201,11 @@ const Auth = () => {
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="pl-11 pr-11 h-12 bg-secondary border-border"
                     required
-                    minLength={6}
+                    minLength={mode === 'update' ? 8 : 6}
                   />
                   <button
                     type="button"
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
@@ -217,7 +236,7 @@ const Auth = () => {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  {mode === 'reset' ? 'Enviar link de recuperação' : mode === 'login' ? 'Entrar' : 'Criar conta'}
+                  {mode === 'update' ? 'Salvar nova senha' : mode === 'reset' ? 'Enviar link de recuperação' : mode === 'login' ? 'Entrar' : 'Criar conta'}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </>
               )}
@@ -225,7 +244,7 @@ const Auth = () => {
           </form>
 
           <div className="mt-6 pt-6 border-t border-border text-center">
-            {mode === 'reset' ? (
+            {mode === 'reset' || mode === 'update' ? (
               <button
                 onClick={() => setMode('login')}
                 className="flex items-center justify-center gap-2 text-accent hover:text-accent/80 font-medium mx-auto transition-colors"

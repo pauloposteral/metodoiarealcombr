@@ -1,3 +1,6 @@
+import { safeFetchHtml } from '../_shared/safe-fetch.ts';
+import { errorResponse } from '../_shared/http.ts';
+import { guardAIRequest } from '../_shared/ai-guard.ts';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
@@ -7,6 +10,9 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const denied = await guardAIRequest(req);
+  if (denied) return denied;
 
   try {
     const { url } = await req.json();
@@ -18,30 +24,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Format URL
-    let formattedUrl = url.trim();
-    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-      formattedUrl = `https://${formattedUrl}`;
-    }
-
-    console.log('Scraping URL:', formattedUrl);
-
-    // Fetch the page HTML
-    const response = await fetch(formattedUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; CarouselBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml',
-      },
-    });
-
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ error: `Failed to fetch URL: ${response.status}` }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const html = await response.text();
+    const html = await safeFetchHtml(url);
 
     // Extract text content from HTML (basic extraction)
     const textContent = html
@@ -85,7 +68,7 @@ Deno.serve(async (req) => {
     }
 
     // Use AI to create a carousel-ready topic from the article
-    const aiResponse = await fetch('https://ai.lovable.dev/chat/completions', {
+    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -146,10 +129,6 @@ Responda APENAS com um JSON: { "topic": "...", "summary": "..." }
     );
 
   } catch (error) {
-    console.error('Error scraping URL:', error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Failed to scrape URL' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return errorResponse(error);
   }
 });

@@ -115,7 +115,7 @@ export function useGamification(userId?: string) {
 
       if (userBadges) {
         const earned = userBadges.map(ub => ({
-          ...(ub.badges as any),
+          ...ub.badges,
           earned_at: ub.earned_at
         }));
         setEarnedBadges(earned);
@@ -134,9 +134,7 @@ export function useGamification(userId?: string) {
       const userIds = pointsData.map(p => p.user_id);
       
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, full_name, avatar_url')
-        .in('id', userIds);
+        .rpc('get_profile_cards', { user_ids: userIds });
 
       const profilesMap: Record<string, { full_name: string | null; avatar_url: string | null }> = {};
       profiles?.forEach(p => {

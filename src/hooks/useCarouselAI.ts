@@ -25,14 +25,14 @@ export const useCarouselAI = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isRewriting, setIsRewriting] = useState(false);
   const [isExportLoading, setIsExportLoading] = useState(false);
-  const [abHooks, setAbHooks] = useState<any[]>([]);
-  const [clicheResults, setClicheResults] = useState<any>(null);
-  const [readabilityResults, setReadabilityResults] = useState<any>(null);
-  const [ctaSuggestions, setCtaSuggestions] = useState<any[]>([]);
-  const [variationsResults, setVariationsResults] = useState<any[]>([]);
-  const [postingTimeResults, setPostingTimeResults] = useState<any>(null);
-  const [psychologyResults, setPsychologyResults] = useState<any>(null);
-  const [languageResults, setLanguageResults] = useState<any>(null);
+  const [abHooks, setAbHooks] = useState<{ id: string; title: string; subtitle?: string; style?: string; reasoning?: string; approach?: string; score?: number }[]>([]);
+  const [clicheResults, setClicheResults] = useState<Record<string, unknown> | null>(null);
+  const [readabilityResults, setReadabilityResults] = useState<Record<string, unknown> | null>(null);
+  const [ctaSuggestions, setCtaSuggestions] = useState<Record<string, unknown>[]>([]);
+  const [variationsResults, setVariationsResults] = useState<Record<string, unknown>[]>([]);
+  const [postingTimeResults, setPostingTimeResults] = useState<Record<string, unknown> | null>(null);
+  const [psychologyResults, setPsychologyResults] = useState<Record<string, unknown> | null>(null);
+  const [languageResults, setLanguageResults] = useState<Record<string, unknown> | null>(null);
 
   const [progress, setProgress] = useState<GenerationProgress>({
     status: 'idle', currentSlide: 0, totalSlides: 0, message: '', percentage: 0,
@@ -134,7 +134,7 @@ export const useCarouselAI = ({
   }, [slides, config]);
 
   // Helper for simple AI actions
-  const invokeAI = async (action: string, body: Record<string, any>) => {
+  const invokeAI = async (action: string, body: Record<string, unknown>) => {
     setIsRewriting(true);
     try {
       const { data, error } = await supabase.functions.invoke('carousel-engine', { body: { action, ...body } });
@@ -179,7 +179,7 @@ export const useCarouselAI = ({
     } catch { toast.error('Erro ao gerar variações'); }
   };
 
-  const handleApplyABHook = (hook: any) => {
+  const handleApplyABHook = (hook: { title: string; subtitle?: string }) => {
     setSlides(prev => prev.map((s, i) => i === 0 ? { ...s, title: hook.title, subtitle: hook.subtitle || s.subtitle } : s));
     toast.success('Hook aplicado!');
   };
@@ -221,7 +221,7 @@ export const useCarouselAI = ({
     try {
       const data = await invokeAI('summarize-to-carousel', { textContent, config: defaultConfig });
       if (data.slides) {
-        const newSlides = data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
+        const newSlides = data.slides.map((s: CarouselSlide) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
         setSlides(newSlides);
         setCarousel({ id: crypto.randomUUID(), topic: data.summary || 'Carrossel de texto', config: defaultConfig, slides: newSlides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
         setTopic(data.summary || 'Carrossel de texto');
@@ -239,7 +239,7 @@ export const useCarouselAI = ({
     try {
       const data = await invokeAI('thread-to-carousel', { threadText, config: defaultConfig });
       if (data.slides) {
-        const newSlides = data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
+        const newSlides = data.slides.map((s: CarouselSlide) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
         setSlides(newSlides);
         setCarousel({ id: crypto.randomUUID(), topic: data.originalThreadSummary || 'Thread → Carrossel', config: defaultConfig, slides: newSlides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
         setTopic(data.originalThreadSummary || 'Thread → Carrossel');
@@ -257,7 +257,7 @@ export const useCarouselAI = ({
     try {
       const data = await invokeAI('podcast-to-carousel', { textContent: transcript, config: defaultConfig });
       if (data.slides) {
-        const newSlides = data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
+        const newSlides = data.slides.map((s: CarouselSlide) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
         setSlides(newSlides);
         setCarousel({ id: crypto.randomUUID(), topic: 'Podcast → Carrossel', config: defaultConfig, slides: newSlides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
         setTopic('Podcast → Carrossel');
@@ -275,7 +275,7 @@ export const useCarouselAI = ({
     try {
       const data = await invokeAI('data-storytelling', { dataPoints: dataInput, topic: topic || 'Dados', config: defaultConfig });
       if (data.slides) {
-        const newSlides = data.slides.map((s: any) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
+        const newSlides = data.slides.map((s: CarouselSlide) => ({ ...s, id: s.id || crypto.randomUUID(), isGeneratingImage: true }));
         setSlides(newSlides);
         setCarousel({ id: crypto.randomUUID(), topic: data.storyArc || 'Data Storytelling', config: defaultConfig, slides: newSlides, theme, createdAt: new Date(), caption: data.caption, hashtags: data.hashtags });
         setTopic(data.storyArc || 'Data Storytelling');
@@ -345,7 +345,7 @@ export const useCarouselAI = ({
       const data = await invokeAI('suggest-emojis', { slides });
       if (data.slides) {
         setSlides(prev => prev.map((s, i) => {
-          const emojiData = data.slides.find((e: any) => e.slideIndex === i);
+          const emojiData = data.slides.find((e: { slideIndex: number; emojis?: string[]; suggestedEmojis?: string[] }) => e.slideIndex === i);
           if (!emojiData) return s;
           return { ...s, title: emojiData.titleEmoji ? `${emojiData.titleEmoji} ${s.title}` : s.title };
         }));
@@ -395,7 +395,7 @@ export const useCarouselAI = ({
       if (data.suggestedOrder && Array.isArray(data.suggestedOrder)) {
         const reordered = data.suggestedOrder.map((idx: number) => slides[idx]).filter(Boolean);
         if (reordered.length === slides.length) {
-          setSlides(reordered.map((s: any, i: number) => ({ ...s, order: i })));
+          setSlides(reordered.map((s: CarouselSlide, i: number) => ({ ...s, order: i })));
           toast.success('Slides reordenados por psicologia!');
         }
       }
@@ -420,7 +420,7 @@ export const useCarouselAI = ({
       const data = await invokeAI('generate-alt-text', { slides });
       if (data.altTexts) {
         setSlides(prev => prev.map((s, i) => {
-          const alt = data.altTexts.find((a: any) => a.slideIndex === i);
+          const alt = data.altTexts.find((a: { slideIndex: number; altText: string }) => a.slideIndex === i);
           return alt ? { ...s, altText: alt.altText } : s;
         }));
       }

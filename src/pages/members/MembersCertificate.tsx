@@ -90,28 +90,10 @@ const MembersCertificate = () => {
     }
   };
 
-  const generateCertificate = async (userId: string, studentName: string, lessons: any[]) => {
+  const generateCertificate = async (userId: string, studentName: string, lessons: { duration_minutes: number | null }[]) => {
     setGenerating(true);
     try {
-      // Calculate total hours
-      const totalMinutes = lessons?.reduce((acc, l) => acc + (l.duration_minutes || 0), 0) || 0;
-      const totalHours = Math.max(1, Math.round(totalMinutes / 60));
-
-      // Generate unique code
-      const code = `IAR-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-
-      const { data, error } = await supabase
-        .from('certificates')
-        .insert({
-          user_id: userId,
-          certificate_code: code,
-          student_name: studentName,
-          course_name: 'Método IA Real',
-          total_hours: totalHours,
-          completed_at: new Date().toISOString()
-        })
-        .select()
-        .single();
+      const { data, error } = await supabase.rpc('issue_certificate').single();
 
       if (error) throw error;
 

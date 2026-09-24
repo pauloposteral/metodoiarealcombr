@@ -1,3 +1,5 @@
+import { consumeQuota } from '../_shared/ai-guard.ts';
+import { errorResponse, HttpError, readJson } from '../_shared/http.ts';
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -29,36 +31,19 @@ const PRESETS: Record<string, { system: string; user: (input: string) => string;
   },
 };
 
-// In-memory soft rate limit (per edge instance)
-const buckets = new Map<string, { count: number; reset: number }>();
-const WINDOW_MS = 60 * 1000;
-const MAX_PER_WINDOW = 5;
-
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const b = buckets.get(ip);
-  if (!b || now > b.reset) {
-    buckets.set(ip, { count: 1, reset: now + WINDOW_MS });
-    return false;
-  }
-  b.count++;
-  return b.count > MAX_PER_WINDOW;
-}
-
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "anon";
-    if (rateLimited(ip)) {
-      return new Response(
-        JSON.stringify({ error: "Muitas requisições. Aguarde 1 minuto." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    if (req.method !== 'POST') throw new HttpError(405, 'Método não permitido.');
+    // The global daily budget also limits distributed/spoofed-IP abuse.
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+    const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip)))).map(b => b.toString(16).padStart(2, '0')).join('');
+    await consumeQuota(`demo:ip:${hash}`, 5, 60);
+    await consumeQuota('demo:global:day', 100, 86400);
 
-    const { preset, input } = await req.json();
-    const cfg = PRESETS[preset];
+    const { preset, input } = await readJson(req);
+    const cfg = typeof preset === 'string' && Object.hasOwn(PRESETS, preset) ? PRESETS[preset] : undefined;
     if (!cfg) {
       return new Response(JSON.stringify({ error: "Preset inválido" }), {
         status: 400,
@@ -122,10 +107,6 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("Playground error:", e);
-    return new Response(JSON.stringify({ error: "Erro interno" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return errorResponse(e);
   }
 });

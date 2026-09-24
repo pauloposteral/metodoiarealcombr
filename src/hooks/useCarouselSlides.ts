@@ -52,7 +52,7 @@ export const useCarouselSlides = () => {
     if (e?.shiftKey) {
       setMultiSelectedIndices(prev => {
         const next = new Set(prev);
-        next.has(index) ? next.delete(index) : next.add(index);
+        if (next.has(index)) next.delete(index); else next.add(index);
         next.add(selectedSlideIndex);
         return next;
       });

@@ -1,9 +1,11 @@
+import type { Json } from '@/integrations/supabase/types';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { CarouselSlide, CarouselTheme, CarouselConfig, CarouselData, QualityScore } from '@/components/carousel-v2/types';
 
 export interface SavedCarousel {
+  folder_id?: string | null;
   id: string;
   user_id: string;
   topic: string;
@@ -68,14 +70,14 @@ export function useCarouselPersistence() {
       const payload = {
         user_id: user.id,
         topic: carouselData.topic,
-        config: config as any,
-        slides: slides as any,
-        theme: theme as any,
+        config: config as unknown as Json,
+        slides: slides as unknown as Json,
+        theme: theme as unknown as Json,
         caption: carouselData.caption || null,
         hashtags: carouselData.hashtags || [],
         first_comment: carouselData.firstComment || null,
         alternative_title: carouselData.alternativeTitle || null,
-        quality_score: qualityScore as any,
+        quality_score: qualityScore as unknown as Json,
         thumbnail_url: slides[0]?.imageUrl || null,
       };
 
@@ -158,14 +160,14 @@ export function useCarouselPersistence() {
         .insert({
           user_id: user.id,
           topic: `${original.topic} (cópia)`,
-          config: original.config as any,
-          slides: original.slides as any,
-          theme: original.theme as any,
+          config: original.config as unknown as Json,
+          slides: original.slides as unknown as Json,
+          theme: original.theme as unknown as Json,
           caption: original.caption,
           hashtags: original.hashtags,
           first_comment: original.first_comment,
           alternative_title: original.alternative_title,
-          quality_score: original.quality_score as any,
+          quality_score: original.quality_score as unknown as Json,
           thumbnail_url: original.thumbnail_url,
         });
 

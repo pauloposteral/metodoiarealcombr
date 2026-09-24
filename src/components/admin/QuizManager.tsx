@@ -1,3 +1,4 @@
+import type { Json } from '@/integrations/supabase/types';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,7 @@ export const QuizManager = ({ lessonId, lessonTitle, open, onClose }: QuizManage
       .maybeSingle();
 
     if (data) {
-      setQuiz(data as any);
+      setQuiz({ ...data, questions: data.questions as unknown as QuizQuestion[] });
       setTitle(data.title);
       setPassingScore(String(data.passing_score ?? 70));
       setTimeLimit(data.time_limit_minutes ? String(data.time_limit_minutes) : '');
@@ -76,7 +77,7 @@ export const QuizManager = ({ lessonId, lessonTitle, open, onClose }: QuizManage
     setQuestions(prev => [...prev, { question: '', options: ['', '', '', ''], correct: 0, explanation: '' }]);
   };
 
-  const updateQuestion = (index: number, field: string, value: any) => {
+  const updateQuestion = (index: number, field: keyof QuizQuestion, value: QuizQuestion[keyof QuizQuestion]) => {
     setQuestions(prev => prev.map((q, i) => i === index ? { ...q, [field]: value } : q));
   };
 
@@ -110,16 +111,18 @@ export const QuizManager = ({ lessonId, lessonTitle, open, onClose }: QuizManage
       const payload = {
         lesson_id: lessonId,
         title,
-        questions: questions as any,
+        questions: questions as unknown as Json,
         passing_score: Number(passingScore) || 70,
         time_limit_minutes: timeLimit ? Number(timeLimit) : null,
         max_attempts: Number(maxAttempts) || 3,
       };
 
       if (quiz) {
-        await supabase.from('quizzes').update(payload).eq('id', quiz.id);
+        const { error } = await supabase.from('quizzes').update(payload).eq('id', quiz.id);
+        if (error) throw error;
       } else {
-        await supabase.from('quizzes').insert(payload);
+        const { error } = await supabase.from('quizzes').insert(payload);
+        if (error) throw error;
       }
 
       toast.success('Quiz salvo com sucesso!');

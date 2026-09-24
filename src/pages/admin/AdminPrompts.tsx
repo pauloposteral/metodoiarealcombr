@@ -172,7 +172,8 @@ export default function AdminPrompts() {
       setEditingPrompt(null);
       resetForm();
       await loadPrompts();
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       toast({ title: 'Erro', description: error.message, variant: 'destructive' });
     }
   };

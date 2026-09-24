@@ -76,14 +76,14 @@ export const BrandKitManager = ({ onApplyBrandKit, compact }: BrandKitManagerPro
           font_title: editingKit.font_title,
           font_body: editingKit.font_body,
           logo_url: editingKit.logo_url,
-        } as any).eq('id', editingKit.id);
+        }).eq('id', editingKit.id);
         if (error) throw error;
         toast.success('Brand Kit atualizado!');
       } else {
         const { error } = await supabase.from('brand_kits').insert({
           user_id: user.id,
           ...editingKit,
-        } as any);
+        });
         if (error) throw error;
         toast.success('Brand Kit criado!');
       }
@@ -108,8 +108,8 @@ export const BrandKitManager = ({ onApplyBrandKit, compact }: BrandKitManagerPro
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     // Remove default from all
-    await supabase.from('brand_kits').update({ is_default: false } as any).eq('user_id', user.id);
-    await supabase.from('brand_kits').update({ is_default: true } as any).eq('id', id);
+    await supabase.from('brand_kits').update({ is_default: false }).eq('user_id', user.id);
+    await supabase.from('brand_kits').update({ is_default: true }).eq('id', id);
     await loadKits();
     toast.success('Brand Kit padrão definido!');
   };

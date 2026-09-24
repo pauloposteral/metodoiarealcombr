@@ -95,7 +95,7 @@ export const WorkflowBoard = ({ onOpenCarousel }: WorkflowBoardProps) => {
   };
 
   const updateStatus = async (id: string, status: WorkflowStatus) => {
-    const updates: any = { workflow_status: status };
+    const updates: { workflow_status: string; approved_at?: string | null; approved_by?: string | null } = { workflow_status: status };
     if (status === 'aprovado') {
       const { data: { user } } = await supabase.auth.getUser();
       updates.approved_by = user?.email || 'unknown';
@@ -108,18 +108,18 @@ export const WorkflowBoard = ({ onOpenCarousel }: WorkflowBoardProps) => {
   };
 
   const updatePriority = async (id: string, priority: Priority) => {
-    await supabase.from('saved_carousels').update({ priority } as any).eq('id', id);
+    await supabase.from('saved_carousels').update({ priority }).eq('id', id);
     await loadCarousels();
   };
 
   const updateSchedule = async (id: string, date: Date | undefined) => {
-    await supabase.from('saved_carousels').update({ scheduled_at: date?.toISOString() || null } as any).eq('id', id);
+    await supabase.from('saved_carousels').update({ scheduled_at: date?.toISOString() || null }).eq('id', id);
     toast.success(date ? `Agendado para ${format(date, 'dd/MM/yyyy')}` : 'Agendamento removido');
     await loadCarousels();
   };
 
   const updateNotes = async (id: string, notes: string) => {
-    await supabase.from('saved_carousels').update({ notes } as any).eq('id', id);
+    await supabase.from('saved_carousels').update({ notes }).eq('id', id);
   };
 
   const loadComments = async (carouselId: string) => {
@@ -140,7 +140,7 @@ export const WorkflowBoard = ({ onOpenCarousel }: WorkflowBoardProps) => {
       user_id: user.id,
       slide_index: commentSlideIndex,
       content: newComment.trim(),
-    } as any);
+    });
     if (error) { toast.error('Erro ao comentar'); return; }
     setNewComment('');
     await loadComments(selectedCarousel.id);
@@ -148,7 +148,7 @@ export const WorkflowBoard = ({ onOpenCarousel }: WorkflowBoardProps) => {
   };
 
   const toggleResolveComment = async (commentId: string, resolved: boolean) => {
-    await supabase.from('slide_comments').update({ is_resolved: !resolved } as any).eq('id', commentId);
+    await supabase.from('slide_comments').update({ is_resolved: !resolved }).eq('id', commentId);
     if (selectedCarousel) await loadComments(selectedCarousel.id);
   };
 

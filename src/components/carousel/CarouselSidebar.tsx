@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +19,7 @@ import {
   Loader2, Wand2, Image as ImageIcon
 } from 'lucide-react';
 
-const iconComponents: Record<string, React.ComponentType<any>> = {
+const iconComponents: Record<string, LucideIcon> = {
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles: Sparkles, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle
@@ -290,7 +291,7 @@ export const CarouselSidebar = ({
                       <Label>Tipo de Slide</Label>
                       <Select 
                         value={selectedSlide.type} 
-                        onValueChange={(v) => onUpdateSlide(selectedSlideIndex, { type: v as any })}
+                        onValueChange={(v) => onUpdateSlide(selectedSlideIndex, { type: v as CarouselSlide['type'] })}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />

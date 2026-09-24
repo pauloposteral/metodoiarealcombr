@@ -63,7 +63,8 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       setIsAuthenticated(true);
       setUserEmail(formData.email);
       toast.success('Autenticado com sucesso!');
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       let message = error.message;
       if (error.message.includes('Invalid login credentials')) message = 'Email ou senha incorretos.';
       else if (error.message.includes('User already registered')) message = 'Este email já está cadastrado. Faça login.';
@@ -77,8 +78,8 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
     setIsLoading(true);
     try {
       // Meta Pixel tracking
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'InitiateCheckout', {
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
           content_name: 'Método IA Real',
           currency: 'BRL',
           value: 497,
@@ -94,7 +95,8 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       } else {
         throw new Error('URL de checkout não recebida');
       }
-    } catch (err: any) {
+    } catch (caught) {
+      const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Checkout error:', err);
       toast.error('Erro ao iniciar pagamento. Tente novamente.');
     } finally {

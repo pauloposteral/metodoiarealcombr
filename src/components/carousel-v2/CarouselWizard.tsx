@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,7 @@ import {
   CAROUSEL_THEMES
 } from './types';
 
-const iconMap: Record<string, React.ComponentType<any>> = {
+const iconMap: Record<string, LucideIcon> = {
   BookOpen, Target, Award, Zap, Heart, MessageSquare, Users
 };
 
@@ -36,7 +37,7 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
   const [topic, setTopic] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
-  const [suggestedIdeas, setSuggestedIdeas] = useState<any[]>([]);
+  const [suggestedIdeas, setSuggestedIdeas] = useState<{ id: string; title: string; score?: number; reasoning?: string; topic?: string; viralScore?: number; description?: string; category?: string }[]>([]);
   const [isLoadingIdeas, setIsLoadingIdeas] = useState(false);
   const [referenceImage, setReferenceImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -483,7 +484,7 @@ export const CarouselWizard = ({ onComplete, isGenerating }: CarouselWizardProps
 
               {suggestedIdeas.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {suggestedIdeas.map((idea: any) => (
+                  {suggestedIdeas.map((idea) => (
                     <Card
                       key={idea.id}
                       className="p-3 cursor-pointer hover:ring-2 hover:ring-accent/50 transition-all"

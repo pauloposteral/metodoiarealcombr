@@ -14,12 +14,12 @@ interface CommunityTemplate {
   name: string;
   category: string;
   description: string | null;
-  slides: any;
-  theme: any;
-  config: any;
+  slides: CarouselSlide[];
+  theme: CarouselTheme;
+  config: CarouselConfig | null;
   usage_count: number;
   is_public: boolean;
-  preview_colors: any;
+  preview_colors: string[];
   user_id: string;
 }
 
@@ -67,14 +67,14 @@ export const CommunityTemplates = ({ onLoadTemplate }: CommunityTemplatesProps) 
 
   const handleUseTemplate = async (template: CommunityTemplate) => {
     // Increment usage count
-    await supabase.from('carousel_templates').update({ usage_count: (template.usage_count || 0) + 1 } as any).eq('id', template.id);
+    await supabase.from('carousel_templates').update({ usage_count: (template.usage_count || 0) + 1 }).eq('id', template.id);
     onLoadTemplate(template.slides, template.theme, template.config);
     toast.success(`Template "${template.name}" aplicado!`);
   };
 
   const handleTogglePublic = async (template: CommunityTemplate) => {
     const newPublic = !template.is_public;
-    const { error } = await supabase.from('carousel_templates').update({ is_public: newPublic } as any).eq('id', template.id);
+    const { error } = await supabase.from('carousel_templates').update({ is_public: newPublic }).eq('id', template.id);
     if (error) { toast.error('Erro ao atualizar'); return; }
     toast.success(newPublic ? 'Template publicado na comunidade!' : 'Template removido da comunidade');
     await loadTemplates();

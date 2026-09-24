@@ -1,3 +1,5 @@
+import type { LucideIcon } from 'lucide-react';
+import type { User } from '@supabase/supabase-js';
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -45,7 +47,7 @@ interface Prompt {
 }
 
 interface ContextType {
-  user: any;
+  user: User;
   companyData: {
     role: string;
     company: {
@@ -56,7 +58,7 @@ interface ContextType {
   };
 }
 
-const categoryIcons: Record<string, any> = {
+const categoryIcons: Record<string, LucideIcon> = {
   marketing: Megaphone,
   conteudo: FileText,
   atendimento: Headphones,

@@ -114,7 +114,7 @@ export default function AdminUsuarios() {
     if (!error && data) {
       // Fetch profiles for each user
       const usersWithProfiles = await Promise.all(
-        data.map(async (u: any) => {
+        data.map(async (u) => {
           const { data: profile } = await supabase
             .from('profiles')
             .select('full_name')

@@ -1,0 +1,419 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 check
+> npm run typecheck && npm run lint && npm test && npm run build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 typecheck
+> tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.edge.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 lint
+> eslint .
+
+
+src/components/ScrollReveal.tsx
+  41:32  warning  The ref value 'ref.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'ref.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+src/components/admin/QuizManager.tsx
+  48:6  warning  React Hook useEffect has a missing dependency: 'fetchQuiz'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/carousel-v2/CanvasSnapGuides.tsx
+  68:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/carousel-v2/CarouselWorkspace.tsx
+  144:6  warning  React Hook useEffect has missing dependencies: 'config', 'persistence', and 'qualityScore'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/community/CategoryTabs.tsx
+  39:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/community/CommentSection.tsx
+  43:6  warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/course/LessonNotes.tsx
+  43:6  warning  React Hook useEffect has missing dependencies: 'lastSaved' and 'saveNotes'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/course/QuizPlayer.tsx
+  59:6  warning  React Hook useEffect has a missing dependency: 'fetchQuiz'. Either include it or remove the dependency array     react-hooks/exhaustive-deps
+  70:6  warning  React Hook useEffect has a missing dependency: 'handleFinish'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/components/landing/LandingV2Enhancements.tsx
+  101:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  133:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/landing/LandingV2Wow2.tsx
+  113:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/landing/LandingV2Wow3.tsx
+  90:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/landing/LandingV2Wow7.tsx
+  257:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/badge.tsx
+  29:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/button.tsx
+  54:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/form.tsx
+  129:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/navigation-menu.tsx
+  111:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/sidebar.tsx
+  636:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/sonner.tsx
+  27:19  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/components/ui/toggle.tsx
+  37:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+src/hooks/useCarouselAI.ts
+  120:6  warning  React Hook useCallback has a missing dependency: 'setSlides'. Either include it or remove the dependency array. If 'setSlides' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+  134:6  warning  React Hook useCallback has a missing dependency: 'setSlides'. Either include it or remove the dependency array. If 'setSlides' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+src/hooks/useCarouselHotkeys.ts
+  56:6  warning  React Hook useEffect has missing dependencies: 'handleCopySlides', 'handleDeleteMultiSelected', 'handleDuplicateCurrentSlide', 'handleNewCarousel', 'handlePasteSlides', 'handleSave', 'redo', 'setIsFullscreen', 'setSelectedSlideIndex', and 'undo'. Either include them or remove the dependency array. If 'setIsFullscreen' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+src/hooks/useGamification.ts
+  242:6  warning  React Hook useEffect has missing dependencies: 'fetchBadges', 'fetchLeaderboard', and 'fetchUserPoints'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  248:6  warning  React Hook useEffect has a missing dependency: 'checkAndAwardBadges'. Either include it or remove the dependency array                                       react-hooks/exhaustive-deps
+
+src/pages/admin/AdminDashboard.tsx
+  61:6  warning  React Hook useEffect has a missing dependency: 'verifyAdminAndLoadStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/admin/AdminEmpresas.tsx
+  102:6  warning  React Hook useEffect has a missing dependency: 'verifyAndLoad'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/admin/AdminLeads.tsx
+  95:6  warning  React Hook useEffect has a missing dependency: 'verifyAndLoad'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/admin/AdminPrompts.tsx
+  104:6  warning  React Hook useEffect has a missing dependency: 'verifyAndLoad'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/admin/AdminUsuarios.tsx
+  77:6  warning  React Hook useEffect has a missing dependency: 'verifyAndLoad'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/members/CommunityPost.tsx
+  51:6  warning  React Hook useEffect has a missing dependency: 'fetchPost'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/members/MembersCertificate.tsx
+  37:6  warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/members/MembersCommunity.tsx
+  67:6  warning  React Hook useEffect has a missing dependency: 'fetchPosts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/members/MembersProfile.tsx
+  37:6  warning  React Hook useEffect has a missing dependency: 'fetchProfile'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/metodo/app/MetodoApp.tsx
+  56:6  warning  React Hook useEffect has a missing dependency: 'fetchCompanyData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/metodo/app/MetodoEquipe.tsx
+  71:6  warning  React Hook useEffect has a missing dependency: 'fetchTeamMembers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+✖ 37 problems (0 errors, 37 warnings)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 test
+> node --experimental-vm-modules --test tests/*.test.mjs
+
+▶ All migrations restore a clean database; RLS blocks unauthorised writes
+  ✔ New account has no paid entitlement (2.744819ms)
+  ✔ Anonymous cannot read purchase records (2.419559ms)
+  ✔ Cannot grant yourself paid access (2.75826ms)
+  ✔ Cannot grant yourself administrator role (1.010705ms)
+  ✔ Cannot create a forged certificate (0.766726ms)
+  ✔ Cannot reset the AI counter or choose your own quota (0.545753ms)
+  ✔ Cannot upload into another user namespace (1.472381ms)
+  ✔ Teams load without recursion and hide the other company (2.056451ms)
+  ✔ A company admin cannot transfer members to another tenant (1.748767ms)
+  ✔ A company admin cannot upgrade their plan or seats (4.113394ms)
+  ✔ Shared carousel rows cannot be enumerated; exact link exposes only public fields (2.681945ms)
+  ✔ Free accounts cannot fetch paid lesson content (4.633227ms)
+  ✔ One-time payment grants access and a refund removes it (7.752051ms)
+  ✔ Incomplete students cannot request a certificate (4.372485ms)
+  ✔ Completing the course produces one certificate with server-calculated hours (7.092977ms)
+  ✔ Repeated completion cannot inflate points (3.625298ms)
+  ✔ Study streak is idempotent within a day and cannot be forged (3.160356ms)
+  ✔ The database grades quiz answers, limits attempts and safely handles retries (6.579122ms)
+  ✔ A member cannot award themselves an unearned achievement (2.312688ms)
+  ✔ Greenn retries are idempotent and older paid events cannot undo a refund (8.034287ms)
+  ✔ Atomic quota rejects requests after the limit (2.604358ms)
+✔ All migrations restore a clean database; RLS blocks unauthorised writes (1964.043964ms)
+(node:102) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ generate-carousel denies anonymous access before charging AI credits (103.05923ms)
+✔ generate-image denies anonymous access before charging AI credits (29.200579ms)
+✔ generate-slide-image denies anonymous access before charging AI credits (24.647658ms)
+✔ generate-story denies anonymous access before charging AI credits (16.684673ms)
+✔ carousel-engine denies anonymous access before charging AI credits (61.049512ms)
+✔ scrape-url denies anonymous access before charging AI credits (28.281539ms)
+✔ ai-sandbox denies anonymous access before charging AI credits (25.295701ms)
+✔ Stripe webhook fails closed without configured signing secret (22.658593ms)
+✔ Stripe webhook rejects a missing signature (23.264638ms)
+✔ Stripe webhook rejects an invalid signature (24.617447ms)
+✔ Stripe webhook returns 500 when saving a verified payment fails, allowing retries (17.604151ms)
+✔ Checkout rejects unsupported prices and ignores caller-controlled redirect origins (18.071745ms)
+✔ Billing refuses an account with an unverified email (10.333595ms)
+✔ Greenn webhook refuses untrusted events before touching the database (13.77895ms)
+✔ Subscription lookup preserves the paid customer mapping after an email change (13.621003ms)
+✔ A verified free account cannot bypass the paid Sandbox entitlement (17.525411ms)
+✔ Markdown rejects executable or ambiguous URL "javascript:alert(1)" (2.26727ms)
+✔ Markdown rejects executable or ambiguous URL "JaVaScRiPt:alert(1)" (0.163757ms)
+✔ Markdown rejects executable or ambiguous URL "data:text/html,payload" (0.083866ms)
+✔ Markdown rejects executable or ambiguous URL "java\nscript:alert(1)" (0.06619ms)
+✔ Markdown rejects executable or ambiguous URL "//evil.test" (0.179451ms)
+✔ Markdown rejects executable or ambiguous URL "/\\evil.test" (0.087602ms)
+✔ Markdown keeps valid web and internal links (0.131508ms)
+✔ CSV neutralizes formula "=1+1" (0.262546ms)
+✔ CSV neutralizes formula " +cmd" (0.2454ms)
+✔ CSV neutralizes formula "-cmd" (0.13953ms)
+✔ CSV neutralizes formula "@SUM(A1:A2)" (0.115554ms)
+✔ CSV neutralizes formula "\tformula" (0.082264ms)
+✔ CSV neutralizes formula "\rformula" (0.095283ms)
+✔ CSV escapes quotes and preserves numeric negatives (0.126181ms)
+✔ Scraper rejects unsafe target http://127.0.0.1 (0.765454ms)
+✔ Scraper rejects unsafe target http://2130706433 (0.164889ms)
+✔ Scraper rejects unsafe target http://169.254.169.254 (0.069395ms)
+✔ Scraper rejects unsafe target http://[::1] (0.0528ms)
+✔ Scraper rejects unsafe target file:///etc/passwd (0.048684ms)
+✔ Scraper rejects unsafe target https://user:password@example.com (0.102044ms)
+✔ Scraper rejects unsafe target http://localhost (0.052879ms)
+✔ Scraper rejects unsafe target http://internal.local (0.14563ms)
+✔ Scraper rejects unsafe target https://example.com:9999 (0.072429ms)
+✔ Scraper rejects private DNS answer 127.0.0.1 (0.179981ms)
+✔ Scraper rejects private DNS answer 10.0.0.1 (0.056325ms)
+✔ Scraper rejects private DNS answer 172.16.1.1 (0.042434ms)
+✔ Scraper rejects private DNS answer 192.168.1.1 (0.034572ms)
+✔ Scraper rejects private DNS answer 169.254.169.254 (0.031637ms)
+✔ Scraper rejects private DNS answer 100.64.0.1 (0.036835ms)
+✔ Scraper rejects private DNS answer 0.0.0.0 (0.06009ms)
+✔ Scraper rejects private DNS answer 224.0.0.1 (0.041633ms)
+✔ Scraper rejects private DNS answer ::1 (0.076655ms)
+✔ Scraper rejects private DNS answer fe80::1 (0.091538ms)
+✔ Scraper rejects private DNS answer ::ffff:127.0.0.1 (0.058578ms)
+✔ Scraper accepts public addresses (0.133942ms)
+✔ Stripe accepts only the intended price/mode pairs (0.127822ms)
+✔ Stripe supports both Basil item periods and legacy periods (0.501126ms)
+✔ Greenn uses the provider documented top-level status and sale.method (0.218079ms)
+✔ Greenn rejects missing, weak, and incorrect secrets (13.090453ms)
+✔ Body reader rejects invalid JSON and oversized chunked bodies (5.428987ms)
+ℹ tests 78
+ℹ suites 0
+ℹ pass 78
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2098.992261
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 4086 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                        2.92 kB │ gzip:   1.03 kB
+dist/assets/business-growth-CYnKBIvj.jpg              14.19 kB
+dist/assets/sales-funnel-DGX4Jt9Y.jpg                 20.99 kB
+dist/assets/ai-flow-diagram-DIR3qFK7.jpg              21.40 kB
+dist/assets/content-repurposing-BUrGfiJh.jpg          24.59 kB
+dist/assets/refinement-cycle-CCRvoEpb.jpg             26.12 kB
+dist/assets/productivity-calendar-BbPsn3l_.jpg        26.37 kB
+dist/assets/prompt-structure-C0pjsm0-.jpg             32.31 kB
+dist/assets/method-comparison-eiRiffUG.jpg            53.48 kB
+dist/assets/future-work-BNOHIJKj.jpg                  56.90 kB
+dist/assets/person-working-laptop-VFJJtxTh.jpg        72.47 kB
+dist/assets/entrepreneur-cafe-CA_KJRY9.jpg            75.12 kB
+dist/assets/realis-feed-square-BtMOhDsU.png           75.89 kB
+dist/assets/realis-stories-thinking-ZI3SKsKl.png      92.47 kB
+dist/assets/team-collaboration-CaVHXz98.jpg           95.87 kB
+dist/assets/realis-reels-teaching-BOO_MXg6.png       132.93 kB
+dist/assets/realis-stories-welcome-BtjipU2j.png      135.88 kB
+dist/assets/realis-welcoming-_KiX16-l.png          1,520.13 kB
+dist/assets/realis-confident-t6NDeQ0N.png          1,604.45 kB
+dist/assets/realis-presenting-DrnHMsYE.png         1,636.86 kB
+dist/assets/logo-iareal-NQvW_e2N.png               2,130.80 kB
+dist/assets/realis-guiding-GHjrjiRk.png            2,630.26 kB
+dist/assets/realis-thinking-pGRShK7I.png           2,714.53 kB
+dist/assets/realis-teaching-BbXf8XmU.png           2,808.31 kB
+dist/assets/realis-promo-video-BJGvr0m9.mp4       17,941.86 kB
+dist/assets/Index-Cv8vcAck.css                        58.28 kB │ gzip:  11.34 kB
+dist/assets/index-CwbUvU1C.css                       133.64 kB │ gzip:  20.82 kB
+dist/assets/logo-iareal-B_WEXQDo.js                    0.06 kB │ gzip:   0.08 kB
+dist/assets/AdminSetup-D8ifh-eW.js                     0.13 kB │ gzip:   0.14 kB
+dist/assets/index-RqLHaTC2.js                          0.14 kB │ gzip:   0.14 kB
+dist/assets/skeleton-B4FMqoM8.js                       0.17 kB │ gzip:   0.16 kB
+dist/assets/index-4WL2p-e6.js                          0.23 kB │ gzip:   0.17 kB
+dist/assets/check-h0bb7tok.js                          0.29 kB │ gzip:   0.24 kB
+dist/assets/chevron-left-D1w2eZHl.js                   0.29 kB │ gzip:   0.24 kB
+dist/assets/chevron-right-MZpjiR8Z.js                  0.29 kB │ gzip:   0.24 kB
+dist/assets/play-BaBgk6b_.js                           0.30 kB │ gzip:   0.25 kB
+dist/assets/loader-circle-Df1CQJ0D.js                  0.31 kB │ gzip:   0.25 kB
+dist/assets/message-circle-DmYGgbyW.js                 0.31 kB │ gzip:   0.26 kB
+dist/assets/plus-BceLlnHa.js                           0.32 kB │ gzip:   0.25 kB
+dist/assets/arrow-left-Bc04haE9.js                     0.33 kB │ gzip:   0.26 kB
+dist/assets/arrow-right-C5m9XxkX.js                    0.33 kB │ gzip:   0.26 kB
+dist/assets/search-DEJCcoLe.js                         0.34 kB │ gzip:   0.27 kB
+dist/assets/message-square-CoXtAYSW.js                 0.34 kB │ gzip:   0.27 kB
+dist/assets/circle-check-O4WmFvXB.js                   0.35 kB │ gzip:   0.27 kB
+dist/assets/index-6SlmFoCo.js                          0.35 kB │ gzip:   0.28 kB
+dist/assets/clock-Cm_R8rOL.js                          0.35 kB │ gzip:   0.27 kB
+dist/assets/circle-check-big-DOspNLI2.js               0.36 kB │ gzip:   0.28 kB
+dist/assets/user-RqfQbR_i.js                           0.36 kB │ gzip:   0.28 kB
+dist/assets/circle-play-dqq3DMd0.js                    0.36 kB │ gzip:   0.27 kB
+dist/assets/rotate-ccw-_SmRP4Ad.js                     0.36 kB │ gzip:   0.28 kB
+dist/assets/trending-up-DIR_gW0x.js                    0.37 kB │ gzip:   0.28 kB
+dist/assets/circle-x-5z8uuKl8.js                       0.37 kB │ gzip:   0.28 kB
+dist/assets/lock-D_pHfmMg.js                           0.37 kB │ gzip:   0.29 kB
+dist/assets/credit-card-CJHGmOl9.js                    0.37 kB │ gzip:   0.29 kB
+dist/assets/bell-DeXis8yX.js                           0.37 kB │ gzip:   0.29 kB
+dist/assets/mail-CuQwKQrC.js                           0.38 kB │ gzip:   0.30 kB
+dist/assets/dollar-sign-SIg9jElD.js                    0.38 kB │ gzip:   0.29 kB
+dist/assets/target-CPR82DCT.js                         0.40 kB │ gzip:   0.26 kB
+dist/assets/ellipsis-Bh1h_F1q.js                       0.40 kB │ gzip:   0.27 kB
+dist/assets/copy-x7wLFwE3.js                           0.40 kB │ gzip:   0.31 kB
+dist/assets/circle-help-C2L9wsI_.js                    0.40 kB │ gzip:   0.30 kB
+dist/assets/activity-C39wils7.js                       0.40 kB │ gzip:   0.30 kB
+dist/assets/menu-d1Cpxwuy.js                           0.41 kB │ gzip:   0.28 kB
+dist/assets/heart-CaSf5oq9.js                          0.41 kB │ gzip:   0.31 kB
+dist/assets/chart-column-BQhrROrP.js                   0.42 kB │ gzip:   0.29 kB
+dist/assets/calendar-DWjB_2QU.js                       0.42 kB │ gzip:   0.30 kB
+dist/assets/eye-CJmt-6Sz.js                            0.43 kB │ gzip:   0.30 kB
+dist/assets/download-CARz_pFZ.js                       0.43 kB │ gzip:   0.32 kB
+dist/assets/triangle-alert-BRdatDm3.js                 0.43 kB │ gzip:   0.31 kB
+dist/assets/zap-BRb_ZkqH.js                            0.43 kB │ gzip:   0.31 kB
+dist/assets/shield-Bulk1u8T.js                         0.44 kB │ gzip:   0.33 kB
+dist/assets/award-C3Kxv0BV.js                          0.44 kB │ gzip:   0.33 kB
+dist/assets/pencil-4BkTPzK1.js                         0.45 kB │ gzip:   0.33 kB
+dist/assets/book-open-B007lDx8.js                      0.45 kB │ gzip:   0.31 kB
+dist/assets/lightbulb-BRBf16sw.js                      0.45 kB │ gzip:   0.32 kB
+dist/assets/constants-ojfygF9y.js                      0.45 kB │ gzip:   0.34 kB
+dist/assets/house-BfzaUgg5.js                          0.46 kB │ gzip:   0.32 kB
+dist/assets/send-DJTbuz4G.js                           0.46 kB │ gzip:   0.33 kB
+dist/assets/users-ZBLjCC7C.js                          0.47 kB │ gzip:   0.32 kB
+dist/assets/user-plus-CzhljDeK.js                      0.47 kB │ gzip:   0.33 kB
+dist/assets/textarea-BNTOMfFT.js                       0.48 kB │ gzip:   0.32 kB
+dist/assets/refresh-cw-CFIpwc0w.js                     0.48 kB │ gzip:   0.32 kB
+dist/assets/square-pen-DZw9gXRu.js                     0.49 kB │ gzip:   0.34 kB
+dist/assets/file-text-Cf74-uZ1.js                      0.50 kB │ gzip:   0.31 kB
+dist/assets/save-CdG3BQCO.js                           0.50 kB │ gzip:   0.33 kB
+dist/assets/graduation-cap-Dtr5S7Eh.js                 0.50 kB │ gzip:   0.35 kB
+dist/assets/layout-dashboard-C6h9DaqV.js               0.52 kB │ gzip:   0.31 kB
+dist/assets/trash-2-B-o5r6hc.js                        0.52 kB │ gzip:   0.35 kB
+dist/assets/crown-CNfDfD7w.js                          0.53 kB │ gzip:   0.36 kB
+dist/assets/layers-DiVz4HNO.js                         0.53 kB │ gzip:   0.34 kB
+dist/assets/label-EHjR27pe.js                          0.55 kB │ gzip:   0.37 kB
+dist/assets/ScrollReveal-DaHYrDB6.js                   0.58 kB │ gzip:   0.37 kB
+dist/assets/input-CrwQI4lo.js                          0.58 kB │ gzip:   0.35 kB
+dist/assets/eye-off-7tKnDqEI.js                        0.59 kB │ gzip:   0.37 kB
+dist/assets/NotFound-Hekota85.js                       0.63 kB │ gzip:   0.38 kB
+dist/assets/pen-tool-DbEl8H5w.js                       0.63 kB │ gzip:   0.40 kB
+dist/assets/star-BdeMN4rx.js                           0.64 kB │ gzip:   0.40 kB
+dist/assets/sparkles-CIGwWRDu.js                       0.68 kB │ gzip:   0.40 kB
+dist/assets/badge-BFDwONFF.js                          0.71 kB │ gzip:   0.37 kB
+dist/assets/party-popper-CXCMQlP8.js                   0.89 kB │ gzip:   0.51 kB
+dist/assets/settings-B33GBgIv.js                       0.89 kB │ gzip:   0.44 kB
+dist/assets/brain-CTkx4qaG.js                          0.90 kB │ gzip:   0.46 kB
+dist/assets/UserAvatar-MyPdQHvJ.js                     0.91 kB │ gzip:   0.58 kB
+dist/assets/card-C8MkL-8N.js                           0.99 kB │ gzip:   0.38 kB
+dist/assets/tslib.es6-eMSY344_.js                      1.08 kB │ gzip:   0.54 kB
+dist/assets/rocket-CGDlu6Jk.js                         1.10 kB │ gzip:   0.55 kB
+dist/assets/CategoryTabs-D1vm0DR-.js                   1.33 kB │ gzip:   0.65 kB
+dist/assets/table-PDAFck4e.js                          1.49 kB │ gzip:   0.51 kB
+dist/assets/type-C1OIx3Ue.js                           1.53 kB │ gzip:   0.63 kB
+dist/assets/zoom-out-BXVZLJDy.js                       1.70 kB │ gzip:   0.52 kB
+dist/assets/useSubscription-DoUqF5Lb.js                1.74 kB │ gzip:   0.86 kB
+dist/assets/progress-rky4u0yK.js                       1.90 kB │ gzip:   0.95 kB
+dist/assets/sheet-xECo-gkH.js                          2.05 kB │ gzip:   0.80 kB
+dist/assets/MetodoAcessoPendente-CmsX6mDo.js           2.07 kB │ gzip:   0.90 kB
+dist/assets/dialog-DAlydIUs.js                         2.17 kB │ gzip:   0.84 kB
+dist/assets/AcessoBloqueado-DKhNSVHV.js                2.42 kB │ gzip:   1.03 kB
+dist/assets/puzzle-BS587ZMc.js                         2.45 kB │ gzip:   0.77 kB
+dist/assets/switch-B3jROiXW.js                         2.47 kB │ gzip:   1.24 kB
+dist/assets/useGamification-DvZSEJCG.js                2.96 kB │ gzip:   1.29 kB
+dist/assets/tabs-D_hX4t-w.js                           3.25 kB │ gzip:   1.36 kB
+dist/assets/avatar-DvyBsAyf.js                         3.28 kB │ gzip:   1.51 kB
+dist/assets/Obrigado-DGEMuMhV.js                       3.35 kB │ gzip:   1.40 kB
+dist/assets/index-CdRxGhTu.js                          3.48 kB │ gzip:   1.58 kB
+dist/assets/CarouselPreviewPublic-Bz1p5d1h.js          3.91 kB │ gzip:   1.70 kB
+dist/assets/MembersMaterials-CYmzS_eh.js               3.92 kB │ gzip:   1.59 kB
+dist/assets/MembersBookmarks-BmJ9Xd1T.js               4.17 kB │ gzip:   1.76 kB
+dist/assets/AdminLogin-sR5Hgveh.js                     4.17 kB │ gzip:   1.73 kB
+dist/assets/MembersModules-BsJ8SXD6.js                 4.48 kB │ gzip:   1.90 kB
+dist/assets/MembersBonus-BcNOiZqi.js                   4.95 kB │ gzip:   1.86 kB
+dist/assets/ValidateCertificate-Ca_hS6-L.js            5.07 kB │ gzip:   1.75 kB
+dist/assets/ModuleDetail-CQxNsmkf.js                   5.13 kB │ gzip:   2.03 kB
+dist/assets/MetodoLogin-Dtnt-orO.js                    5.16 kB │ gzip:   2.07 kB
+dist/assets/index-9HGX-zMA.js                          5.23 kB │ gzip:   1.99 kB
+dist/assets/MetodoTreinamento-DUVUk6wD.js              5.37 kB │ gzip:   1.84 kB
+dist/assets/MembersSupport-DWx-O5g0.js                 5.51 kB │ gzip:   2.13 kB
+dist/assets/MetodoPricing-CDrfSuVk.js                  5.72 kB │ gzip:   2.04 kB
+dist/assets/Pricing-C0qQ-wAL.js                        5.76 kB │ gzip:   2.37 kB
+dist/assets/AdminHeader-Czt353F2.js                    5.77 kB │ gzip:   2.07 kB
+dist/assets/MetodoSolicitar-DuaKLOf9.js                6.32 kB │ gzip:   2.15 kB
+dist/assets/MembersCourses-CkhjvcAL.js                 6.37 kB │ gzip:   2.55 kB
+dist/assets/AdminUsuarios-Dq4Kk2b4.js                  6.59 kB │ gzip:   2.65 kB
+dist/assets/MetodoApp-CtyWieSe.js                      6.69 kB │ gzip:   2.48 kB
+dist/assets/MembersUpdates-CSF-0Wdn.js                 6.74 kB │ gzip:   2.65 kB
+dist/assets/MetodoEquipe-H3eDLt2a.js                   6.84 kB │ gzip:   2.53 kB
+dist/assets/CommunityPost-39Q4s6zp.js                  7.10 kB │ gzip:   2.74 kB
+dist/assets/Auth-Dfi65ZHd.js                           7.20 kB │ gzip:   2.63 kB
+dist/assets/MetodoPrompts-DBCpEFFW.js                  7.26 kB │ gzip:   2.88 kB
+dist/assets/CourseOverview-wgabHMXe.js                 7.32 kB │ gzip:   2.73 kB
+dist/assets/MetodoEditor-Bg0gw5BR.js                   7.73 kB │ gzip:   3.16 kB
+dist/assets/MetodoDashboard-BAI3KrdE.js                7.92 kB │ gzip:   2.66 kB
+dist/assets/AdminEmpresas-BLj2FiiI.js                  8.51 kB │ gzip:   2.97 kB
+dist/assets/AdminPrompts-RWjRf03g.js                   8.75 kB │ gzip:   3.05 kB
+dist/assets/Termos-B0nV1qI1.js                         8.98 kB │ gzip:   3.04 kB
+dist/assets/MembersAnalytics-C5po9i05.js               9.09 kB │ gzip:   2.96 kB
+dist/assets/AdminLeads-D-4ni952.js                     9.34 kB │ gzip:   3.38 kB
+dist/assets/MetodoLanding-CvJhohO2.js                  9.83 kB │ gzip:   2.66 kB
+dist/assets/CommentSection-Dm41psvm.js                 9.83 kB │ gzip:   3.35 kB
+dist/assets/Privacidade-CE6YvCCW.js                    9.88 kB │ gzip:   2.97 kB
+dist/assets/formatDistanceToNow-BDm0u4tt.js           10.10 kB │ gzip:   3.48 kB
+dist/assets/MembersProfile-DSVZMxNK.js                10.14 kB │ gzip:   3.61 kB
+dist/assets/MembersCertificate-BpiL34H9.js            10.95 kB │ gzip:   3.66 kB
+dist/assets/Checkout-B_JBL89f.js                      11.42 kB │ gzip:   3.38 kB
+dist/assets/MembersDashboard-DGUY0MSs.js              12.35 kB │ gzip:   3.64 kB
+dist/assets/scroll-area-DhIK8nYc.js                   12.52 kB │ gzip:   3.94 kB
+dist/assets/format-D-DTxF_b.js                        13.05 kB │ gzip:   3.47 kB
+dist/assets/pt-BR-B7PTkgv2.js                         13.58 kB │ gzip:   4.09 kB
+dist/assets/MembersRanking-D-OnTdB4.js                13.70 kB │ gzip:   4.34 kB
+dist/assets/sidebar-CPWIKCgh.js                       14.76 kB │ gzip:   4.13 kB
+dist/assets/index-DxUdg-iv.js                         15.80 kB │ gzip:   5.99 kB
+dist/assets/AdminDashboard-Du8MjeCQ.js                16.24 kB │ gzip:   5.30 kB
+dist/assets/MembersCommunity-DygVs-lt.js              17.11 kB │ gzip:   5.78 kB
+dist/assets/AdminCursos-nzN0-QCx.js                   18.73 kB │ gzip:   5.57 kB
+dist/assets/dropdown-menu-SFJgXGl1.js                 21.02 kB │ gzip:   6.24 kB
+dist/assets/select-DrSy2yHl.js                        21.36 kB │ gzip:   7.49 kB
+dist/assets/SlideCanvas-DWiny0Xi.js                   21.59 kB │ gzip:   6.85 kB
+dist/assets/Downloads-DzM6ZXYS.js                     23.67 kB │ gzip:   6.40 kB
+dist/assets/MembersLayout-CdiOFwC8.js                 24.26 kB │ gzip:   7.78 kB
+dist/assets/purify.es-DBIK8olT.js                     29.40 kB │ gzip:  11.31 kB
+dist/assets/CarouselEditor-0CrjgZ-u.js                30.18 kB │ gzip:   8.76 kB
+dist/assets/StoriesPage-vl-3SD1-.js                   32.77 kB │ gzip:   9.56 kB
+dist/assets/LessonPlayer-C7T5ZyuJ.js                  32.82 kB │ gzip:   9.57 kB
+dist/assets/types-DHgsoueE.js                         53.34 kB │ gzip:  12.16 kB
+dist/assets/Index-DeYDzJzZ.js                         80.49 kB │ gzip:  24.05 kB
+dist/assets/jszip.min-Cqzf3oV4.js                     97.79 kB │ gzip:  30.44 kB
+dist/assets/CourseContent-CpwcKIKF.js                 97.81 kB │ gzip:  31.73 kB
+dist/assets/proxy-CsYk9ZSk.js                        120.11 kB │ gzip:  39.68 kB
+dist/assets/index.es-CC7JSV1J.js                     159.39 kB │ gzip:  53.43 kB
+dist/assets/client-B55P2dZs.js                       172.87 kB │ gzip:  45.06 kB
+dist/assets/html2canvas.esm-QH1iLAAe.js              202.38 kB │ gzip:  48.04 kB
+dist/assets/CarrosselPage-BDZ2SmWW.js                298.79 kB │ gzip:  81.39 kB
+dist/assets/index-CpTTLhlA.js                        369.70 kB │ gzip: 120.40 kB
+dist/assets/jspdf.es.min-BB8g3SOB.js                 390.17 kB │ gzip: 128.54 kB
+dist/assets/AreaChart-XIQJiO7I.js                    392.03 kB │ gzip: 107.84 kB
+✓ built in 9.10s

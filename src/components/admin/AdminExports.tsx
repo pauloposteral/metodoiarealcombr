@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { exportToCSV } from '@/lib/exportCSV';
@@ -10,7 +11,7 @@ interface ExportOption {
   id: string;
   label: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   color: string;
 }
 
@@ -76,7 +77,7 @@ export const AdminExports = () => {
             .eq('completed', true)
             .order('completed_at', { ascending: false });
           if (data) {
-            const rows = data.map((p: any) => ({
+            const rows = data.map((p) => ({
               user_id: p.user_id,
               lesson: p.lessons?.title || '',
               module: p.lessons?.modules?.title || '',

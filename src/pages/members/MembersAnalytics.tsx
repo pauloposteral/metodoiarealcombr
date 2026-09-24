@@ -64,9 +64,9 @@ const MembersAnalytics = () => {
       setTotalTime(total);
 
       // Module progress
-      const modules = (modulesRes.data || []) as any[];
+      const modules = (modulesRes.data || []);
       const modProg: ModuleProgress[] = modules.map(m => {
-        const lessonIds = (m.lessons || []).map((l: any) => l.id);
+        const lessonIds = (m.lessons || []).map((l) => l.id);
         const done = lessonIds.filter((id: string) => completedIds.has(id)).length;
         return {
           name: m.title.length > 18 ? m.title.substring(0, 18) + '…' : m.title,

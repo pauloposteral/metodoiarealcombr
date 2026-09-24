@@ -9,37 +9,18 @@ const Obrigado = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Facebook Pixel - Purchase Event
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Purchase', {
-        content_name: 'Método IA Real',
-        content_category: 'Curso Online',
-        currency: 'BRL',
-      });
-    }
-    
-    // Google Analytics - Conversion Event
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'purchase', {
-        transaction_id: Date.now().toString(),
-        items: [{
-          item_name: 'Método IA Real',
-          item_category: 'Curso Online',
-        }]
-      });
-    }
   }, []);
 
   const nextSteps = [
     {
       icon: Mail,
       title: 'Verifique seu e-mail',
-      description: 'Enviamos os dados de acesso para o e-mail cadastrado na compra.',
+      description: 'Use o e-mail informado na compra. Se precisar criar uma senha, selecione “Esqueci minha senha” na tela de login.',
     },
     {
       icon: PlayCircle,
       title: 'Acesse o curso',
-      description: 'Clique no link do e-mail ou faça login na área de membros.',
+      description: 'Faça login na área de membros. O conteúdo pago fica disponível após a confirmação do pagamento.',
     },
     {
       icon: Users,
@@ -71,12 +52,12 @@ const Obrigado = () => {
 
           {/* Title */}
           <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-4">
-            Parabéns! Você está dentro! 🎉
+            Acompanhe sua inscrição
           </h1>
 
           <p className="text-xl text-primary-foreground/80 mb-8 max-w-lg mx-auto">
-            Sua inscrição no <strong className="text-gold-light">Método IA Real</strong> foi confirmada. 
-            Agora é hora de começar sua jornada.
+            O acesso ao <strong className="text-gold-light">Método IA Real</strong> é liberado após a confirmação do pagamento.
+            Entre na sua conta para acompanhar.
           </p>
 
           {/* Next Steps */}

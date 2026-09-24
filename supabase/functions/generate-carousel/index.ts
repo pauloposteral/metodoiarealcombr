@@ -1,3 +1,4 @@
+import { guardAIRequest } from '../_shared/ai-guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -10,6 +11,9 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const denied = await guardAIRequest(req);
+  if (denied) return denied;
 
   try {
     const { topic, slideCount } = await req.json();
@@ -132,7 +136,7 @@ Responda APENAS com JSON válido:
     const parsed = JSON.parse(jsonContent);
 
     // Ensure IDs are unique
-    const slides = parsed.slides.map((slide: any, index: number) => ({
+    const slides = parsed.slides.map((slide: Record<string, unknown>, index: number) => ({
       ...slide,
       id: crypto.randomUUID(),
       order: index,

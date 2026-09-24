@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import type { Json } from '@/integrations/supabase/types';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -37,6 +38,8 @@ interface QuizPlayerProps {
 }
 
 export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
+  const attemptId = useRef(crypto.randomUUID());
+  const submitting = useRef(false);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,7 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
 
   // Timer
   useEffect(() => {
-    if (!started || !timeLeft || finished) return;
+    if (!started || timeLeft === null || finished) return;
     if (timeLeft <= 0) {
       handleFinish();
       return;
@@ -101,6 +104,7 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
   };
 
   const handleStart = () => {
+    attemptId.current = crypto.randomUUID();
     setStarted(true);
     setCurrentQuestion(0);
     setSelectedAnswer(null);
@@ -134,7 +138,8 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
   };
 
   const handleFinish = async () => {
-    if (!quiz) return;
+    if (!quiz || submitting.current) return;
+    submitting.current = true;
     const allAnswers = { ...answers };
     if (selectedAnswer !== null && !answered) {
       allAnswers[currentQuestion] = selectedAnswer;
@@ -147,23 +152,20 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
     const finalScore = Math.round((correct / quiz.questions.length) * 100);
     const passed = finalScore >= (quiz.passing_score ?? 70);
 
-    setScore(finalScore);
     setFinished(true);
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      await supabase.from('quiz_attempts').insert({
-        user_id: user.id,
-        quiz_id: quiz.id,
-        answers: allAnswers as any,
-        score: finalScore,
-        passed,
-        time_spent_seconds: quiz.time_limit_minutes ? (quiz.time_limit_minutes * 60) - (timeLeft ?? 0) : null,
-      });
-
-      setAttempts(prev => [{ id: crypto.randomUUID(), score: finalScore, passed, completed_at: new Date().toISOString() }, ...prev]);
+      const { data: attempt, error } = await supabase.rpc('submit_quiz_attempt', {
+        quiz_identifier: quiz.id, submitted_answers: allAnswers,
+        attempt_key: attemptId.current,
+        seconds_spent: quiz.time_limit_minutes ? (quiz.time_limit_minutes * 60) - (timeLeft ?? 0) : null,
+      }).single();
+      if (error || !attempt) throw error || new Error('Attempt not saved');
+      setScore(attempt.score);
+      setAttempts(prev => [attempt, ...prev.filter(a => a.id !== attempt.id)]);
 
       toast({
         title: passed ? "🎉 Aprovado!" : "Tente novamente",
@@ -173,6 +175,10 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
       });
     } catch (error) {
       console.error('Error saving attempt:', error);
+      setFinished(false);
+      toast({ title: 'Não foi possível salvar a tentativa', description: 'Tente novamente.', variant: 'destructive' });
+    } finally {
+      submitting.current = false;
     }
   };
 
