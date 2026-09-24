@@ -1221,11 +1221,13 @@
   color:var(--muted);font-size:.72rem;font-family:var(--mono);letter-spacing:.02em;
 }
 .lv2-cmd-foot span{display:inline-flex;align-items:center;gap:6px}
-@media (max-width:520px){
-  .lv2-cmd-hint span{display:none}
+@media (max-width:820px){
+  /* Sem teclado físico: o chip de atalho não faz sentido em toque */
+  .lv2-cmd-hint{display:none}
   .lv2-cmd-overlay{padding-top:6vh}
   .lv2-cmd-foot{display:none}
 }
+
 
 /* Confetti */
 .lv2-confetti{
