@@ -23,6 +23,7 @@ import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
 import { BackToTop, QuoteMarquee } from '@/components/landing/LandingV2Wow10';
 import { CinematicHeroBackground } from '@/components/landing/CinematicHeroBackground';
 import { CinematicChapter } from '@/components/landing/CinematicChapter';
+import { ExpandableBlock } from '@/components/landing/LandingExpandable';
 import act2Poster from '@/assets/landing/cinematic-act-2-poster.jpg';
 import act3Poster from '@/assets/landing/cinematic-act-3-poster.jpg';
 import act4Poster from '@/assets/landing/cinematic-act-4-poster.jpg';
@@ -256,7 +257,7 @@ export default function LandingV2() {
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Quero minha vaga <span className="arr">→</span></>}
               </button>
-              <p className="lv2-btn-note">R$ 497 à vista ou 12× de R$ 51 · garantia incondicional de 7 dias</p>
+              <p className="lv2-btn-note">R$ 497 à vista ou 12× de R$ 41,41 · Pix ou cartão · garantia incondicional de 7 dias</p>
             </div>
 
             <div className="lv2-mini-map rv">
@@ -289,7 +290,11 @@ export default function LandingV2() {
             <h2>16 IAs. Uma por vez. <span className="lv2-grad-text">E cada uma na hora certa.</span></h2>
             <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Passe o mouse por qualquer ferramenta para descobrir pra que ela serve — e em qual módulo você aprende a usá-la de verdade.</p>
           </div>
-          <div className="rv"><ToolsExplorer /></div>
+          <div className="rv">
+            <ExpandableBlock label="Ver as 16 ferramentas" labelOpen="Recolher ferramentas">
+              <ToolsExplorer />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
@@ -507,7 +512,11 @@ export default function LandingV2() {
             <h2>Onde a diferença aparece — <span className="lv2-grad-text">linha por linha.</span></h2>
             <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Sem inventar defeitos alheios. É o que a maioria dos cursos e a internet grátis não entregam — e o que aqui é regra da casa.</p>
           </div>
-          <div className="rv"><ComparisonTable /></div>
+          <div className="rv">
+            <ExpandableBlock label="Ver o comparativo completo" labelOpen="Recolher comparativo">
+              <ComparisonTable />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
@@ -534,7 +543,9 @@ export default function LandingV2() {
             <h2>Antes de comprar, <span className="lv2-grad-text">teste a IA aqui.</span></h2>
             <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Sem cadastro, sem cartão. Escolha um caso real, escreva uma frase e veja o resultado — é a mesma IA que você usa no curso.</p>
           </div>
-          <LandingPlayground />
+          <ExpandableBlock label="Abrir o playground" labelOpen="Fechar o playground">
+            <LandingPlayground />
+          </ExpandableBlock>
         </div>
       </section>
 
@@ -558,7 +569,11 @@ export default function LandingV2() {
             <h2>Quanto <span className="lv2-grad-text">o seu tempo</span> vale, de verdade.</h2>
             <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Arraste os controles com o seu contexto. Os números são seus — não uma média inventada.</p>
           </div>
-          <div className="rv"><ROICalculator /></div>
+          <div className="rv" style={{ marginTop: 28 }}>
+            <ExpandableBlock label="Abrir a calculadora" labelOpen="Fechar a calculadora">
+              <ROICalculator />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
@@ -586,7 +601,9 @@ export default function LandingV2() {
             <h2>Do primeiro login ao <span className="lv2-grad-text">portfólio publicado.</span></h2>
             <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Não é promessa de riqueza. É um plano de execução — o que você entrega em cada marco.</p>
           </div>
-          <JourneyTimeline />
+          <ExpandableBlock label="Ver o plano de 30 dias" labelOpen="Recolher o plano">
+            <JourneyTimeline />
+          </ExpandableBlock>
         </div>
       </section>
 
@@ -616,7 +633,7 @@ export default function LandingV2() {
 
             <div className="lv2-price-line">
               <span className="lv2-price">R$ 497</span>
-              <span className="lv2-price-alt">à vista · ou 12× de R$ 51</span>
+              <span className="lv2-price-alt">à vista · ou 12× de R$ 41,41</span>
             </div>
 
             <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
@@ -642,7 +659,11 @@ export default function LandingV2() {
       {/* MANIFESTO */}
       <section className="lv2-section lv2-section-tight">
         <div className="lv2-wrap">
-          <div className="rv"><FoundersManifesto /></div>
+          <div className="rv">
+            <ExpandableBlock label="Ler o manifesto dos fundadores" labelOpen="Recolher o manifesto">
+              <FoundersManifesto />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
