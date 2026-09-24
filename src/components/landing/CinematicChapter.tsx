@@ -25,6 +25,7 @@ export function CinematicChapter({ act, title, body, poster, video, align = 'lef
       && connection?.effectiveType !== '2g'
       && Boolean(video);
   });
+  const [shouldLoad, setShouldLoad] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
@@ -34,26 +35,37 @@ export function CinematicChapter({ act, title, body, poster, video, align = 'lef
     if (!root) return;
 
     if (!canPlay) return;
+    const checkProximity = () => {
+      const bounds = root.getBoundingClientRect();
+      if (bounds.top <= window.innerHeight + 500 && bounds.bottom >= -500) setShouldLoad(true);
+    };
     const playbackObserver = new IntersectionObserver(
       ([entry]) => setIsVisible(Boolean(entry?.isIntersecting)),
       { rootMargin: '180px 0px', threshold: 0.08 },
     );
 
+    checkProximity();
+    window.addEventListener('scroll', checkProximity, { passive: true });
+    window.addEventListener('resize', checkProximity);
     playbackObserver.observe(root);
-    return () => playbackObserver.disconnect();
+    return () => {
+      window.removeEventListener('scroll', checkProximity);
+      window.removeEventListener('resize', checkProximity);
+      playbackObserver.disconnect();
+    };
   }, [canPlay]);
 
   useEffect(() => {
     const media = videoRef.current;
-    if (!media || !canPlay) return;
+    if (!media || !shouldLoad) return;
     if (isVisible) media.play().catch(() => setHasFailed(true));
     else media.pause();
-  }, [canPlay, isVisible]);
+  }, [isVisible, shouldLoad]);
 
   return (
     <section ref={rootRef} className={`lv2-cinema-chapter lv2-cinema-${align}`} aria-label={`${act}: ${title}`}>
       <img className="lv2-cinema-poster" src={poster} alt="" loading="lazy" width={1536} height={864} />
-      {canPlay && !hasFailed && (
+      {shouldLoad && !hasFailed && (
         <video
           ref={videoRef}
           className={`lv2-cinema-video ${isReady ? 'is-ready' : ''}`}

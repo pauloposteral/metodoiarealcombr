@@ -7,4 +7,4 @@
 - [x] Definir narrativa cinematográfica em seis atos
 - [x] Gerar cinco novos vídeos e capas coerentes
 - [x] Integrar capítulos com carregamento progressivo
-- [ ] Validar a história completa em mobile, desktop e movimento reduzido
+- [x] Validar a história completa em mobile, desktop e movimento reduzido
