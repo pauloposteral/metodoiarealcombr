@@ -1645,11 +1645,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      record_study_day: { Args: Record<string, never>; Returns: Database["public"]["Tables"]["user_streaks"]["Row"][] };
-      submit_quiz_attempt: { Args: { quiz_identifier: string; submitted_answers: Json; attempt_key: string; seconds_spent?: number | null }; Returns: Database["public"]["Tables"]["quiz_attempts"]["Row"][] };
-      get_shared_carousel: { Args: { share_id: string }; Returns: { slides: Json; theme: Json; topic: string }[] };
-      issue_certificate: { Args: Record<string, never>; Returns: Database["public"]["Tables"]["certificates"]["Row"][] };
-      get_profile_cards: { Args: { user_ids: string[] }; Returns: { id: string; full_name: string | null; avatar_url: string | null }[] };
       get_user_company_id: { Args: { _user_id: string }; Returns: string }
       has_active_company: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
