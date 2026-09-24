@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { databaseRpcSingle } from '@/lib/databaseRpc';
 interface StreakData { current_streak: number; longest_streak: number; last_activity_date: string | null; }
 export const useStreak = (userId?: string) => {
   const [streak, setStreak] = useState<StreakData>({ current_streak: 0, longest_streak: 0, last_activity_date: null });
@@ -8,7 +9,7 @@ export const useStreak = (userId?: string) => {
     let cancelled = false;
     if (!userId) { setLoading(false); return; }
     setLoading(true);
-    supabase.rpc('record_study_day').single().then(({ data, error }) => {
+    databaseRpcSingle<StreakData>('record_study_day').then(({ data, error }) => {
       if (cancelled) return;
       if (!error && data) setStreak(data);
       setLoading(false);

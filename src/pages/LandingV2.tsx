@@ -21,6 +21,7 @@ import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/Lan
 import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } from '@/components/landing/LandingV2Wow8';
 import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
 import { BackToTop, QuoteMarquee } from '@/components/landing/LandingV2Wow10';
+import { CinematicHeroBackground } from '@/components/landing/CinematicHeroBackground';
 import './landing-v2.css';
 
 const MODULES = [
@@ -155,10 +156,17 @@ export default function LandingV2() {
           if (e.isIntersecting) e.target.classList.add('in');
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.06, rootMargin: '0px 0px -24px 0px' }
     );
-    document.querySelectorAll('.lv2 .rv').forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const revealItems = Array.from(document.querySelectorAll('.lv2 .rv'));
+    revealItems.forEach((el) => io.observe(el));
+    const visibilityFallback = window.setTimeout(() => {
+      revealItems.forEach((el) => el.classList.add('in'));
+    }, 900);
+    return () => {
+      window.clearTimeout(visibilityFallback);
+      io.disconnect();
+    };
   }, []);
 
   // Progressive lit modules based on scroll
@@ -221,9 +229,8 @@ export default function LandingV2() {
 
       {/* HERO */}
       <section className="lv2-hero" id="top" ref={heroRef}>
+        <CinematicHeroBackground />
         <div className="lv2-hero-spot" aria-hidden />
-        <div className="lv2-orb lv2-orb-a" />
-        <div className="lv2-orb lv2-orb-b" />
         <div className="lv2-grid-bg" />
         <div className="lv2-wrap">
           <div className="lv2-hero-in">
@@ -264,7 +271,7 @@ export default function LandingV2() {
       </div>
 
       {/* TOOLS EXPLORER */}
-      <section className="lv2-section" id="ferramentas" style={{ padding: '80px 0 40px' }}>
+      <section className="lv2-section lv2-section-tight-bottom" id="ferramentas">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px', maxWidth: 760 }}>
             <span className="lv2-eyebrow">As ferramentas do curso</span>
@@ -279,7 +286,7 @@ export default function LandingV2() {
       <LiveCounters />
 
       {/* LIVE TERMINAL */}
-      <section className="lv2-section" style={{ padding: '80px 0' }}>
+      <section className="lv2-section">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
             <span className="lv2-eyebrow">Veja funcionando</span>
@@ -473,14 +480,14 @@ export default function LandingV2() {
       </section>
 
       {/* TRACK QUIZ */}
-      <section className="lv2-section" id="quiz" style={{ padding: '80px 0 20px' }}>
+      <section className="lv2-section lv2-section-tight-bottom" id="quiz">
         <div className="lv2-wrap" style={{ maxWidth: 760 }}>
           <div className="rv"><TrackQuiz onCta={goCheckout} /></div>
         </div>
       </section>
 
       {/* PLAYGROUND — live AI */}
-      <section className="lv2-section" id="playground" style={{ padding: '90px 0' }}>
+      <section className="lv2-section" id="playground">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
             <span className="lv2-eyebrow">Playground · 100% ao vivo</span>
@@ -492,7 +499,7 @@ export default function LandingV2() {
       </section>
 
       {/* TRUST WALL */}
-      <section className="lv2-section" style={{ padding: '60px 0 20px' }}>
+      <section className="lv2-section lv2-section-tight-bottom">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 20px', maxWidth: 760 }}>
             <span className="lv2-eyebrow">Alunos falando</span>
@@ -504,7 +511,7 @@ export default function LandingV2() {
       </section>
 
       {/* ROI CALCULATOR */}
-      <section className="lv2-section" id="roi" style={{ padding: '70px 0' }}>
+      <section className="lv2-section" id="roi">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto', maxWidth: 760 }}>
             <span className="lv2-eyebrow">Calculadora honesta</span>
@@ -516,14 +523,14 @@ export default function LandingV2() {
       </section>
 
       {/* ANIMATED STATS */}
-      <section className="lv2-section" id="numeros" style={{ padding: '30px 0 60px' }}>
+      <section className="lv2-section lv2-section-tight" id="numeros">
         <div className="lv2-wrap">
           <div className="rv"><AnimatedStats /></div>
         </div>
       </section>
 
       {/* JOURNEY */}
-      <section className="lv2-section" id="jornada" style={{ padding: '90px 0' }}>
+      <section className="lv2-section" id="jornada">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 50px' }}>
             <span className="lv2-eyebrow">Sua jornada · 30 dias</span>
@@ -535,7 +542,7 @@ export default function LandingV2() {
       </section>
 
       {/* INSTRUCTOR CARD */}
-      <section className="lv2-section" id="mentor" style={{ padding: '30px 0 60px' }}>
+      <section className="lv2-section lv2-section-tight" id="mentor">
         <div className="lv2-wrap">
           <div className="rv"><InstructorCard /></div>
         </div>
@@ -577,14 +584,14 @@ export default function LandingV2() {
       </section>
 
       {/* GUARANTEE SHIELD */}
-      <section className="lv2-section" style={{ padding: '20px 0 60px' }}>
+      <section className="lv2-section lv2-section-tight">
         <div className="lv2-wrap">
           <div className="rv"><GuaranteeShield onCta={goCheckout} /></div>
         </div>
       </section>
 
       {/* MANIFESTO */}
-      <section className="lv2-section" style={{ padding: '20px 0 80px' }}>
+      <section className="lv2-section lv2-section-tight">
         <div className="lv2-wrap">
           <div className="rv"><FoundersManifesto /></div>
         </div>

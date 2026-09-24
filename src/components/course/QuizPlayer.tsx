@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { databaseRpcSingle } from '@/lib/databaseRpc';
 import {
   Brain, CheckCircle2, XCircle, RotateCcw, Trophy,
   ChevronRight, Clock, Target, Sparkles
@@ -158,11 +159,11 @@ export const QuizPlayer = ({ lessonId }: QuizPlayerProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data: attempt, error } = await supabase.rpc('submit_quiz_attempt', {
+      const { data: attempt, error } = await databaseRpcSingle<QuizAttempt>('submit_quiz_attempt', {
         quiz_identifier: quiz.id, submitted_answers: allAnswers,
         attempt_key: attemptId.current,
         seconds_spent: quiz.time_limit_minutes ? (quiz.time_limit_minutes * 60) - (timeLeft ?? 0) : null,
-      }).single();
+      });
       if (error || !attempt) throw error || new Error('Attempt not saved');
       setScore(attempt.score);
       setAttempts(prev => [attempt, ...prev.filter(a => a.id !== attempt.id)]);
