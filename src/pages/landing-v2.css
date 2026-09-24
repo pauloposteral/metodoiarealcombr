@@ -45,9 +45,9 @@
 .lv2-lead{color:var(--muted);font-size:clamp(1rem,1.6vw,1.18rem);max-width:640px}
 
 .lv2-wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-.lv2-section{padding:78px 0}
-.lv2-section-tight{padding:36px 0}
-.lv2-section-tight-bottom{padding:70px 0 34px}
+.lv2-section{padding:58px 0}
+.lv2-section-tight{padding:26px 0}
+.lv2-section-tight-bottom{padding:52px 0 24px}
 .lv2-section-head{max-width:680px;margin-bottom:44px}
 .lv2-section-head .lv2-lead{margin-top:16px}
 
@@ -128,7 +128,7 @@
 
 /* CAPÍTULOS CINEMATOGRÁFICOS */
 .lv2-cinema-chapter{
-  position:relative;min-height:clamp(430px,64vw,650px);overflow:hidden;
+  position:relative;min-height:clamp(300px,36vw,390px);overflow:hidden;
   display:flex;align-items:flex-end;isolation:isolate;border-block:1px solid var(--line);
   background:var(--ink-2);
 }
@@ -150,7 +150,7 @@
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
   background-size:72px 72px;mask-image:linear-gradient(180deg,transparent,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000);
 }
-.lv2-cinema-content{width:100%;padding-top:150px;padding-bottom:52px}
+.lv2-cinema-content{width:100%;padding-top:96px;padding-bottom:42px}
 .lv2-cinema-right .lv2-cinema-content{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
 .lv2-cinema-act{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mint);margin-bottom:14px}
 .lv2-cinema-content h2{font-size:clamp(1.9rem,4.2vw,3.5rem);max-width:720px;margin:0 0 18px;text-wrap:balance}
@@ -158,10 +158,10 @@
 .lv2-cinema-line{display:block;width:96px;height:2px;margin-top:26px;background:var(--grad)}
 
 @media(max-width:760px){
-  .lv2-cinema-chapter{min-height:500px;align-items:flex-end}
+  .lv2-cinema-chapter{min-height:320px;align-items:flex-end}
   .lv2-cinema-poster,.lv2-cinema-video{object-position:center}
   .lv2-cinema-scrim,.lv2-cinema-right .lv2-cinema-scrim{background:linear-gradient(180deg,rgba(6,9,15,.08),rgba(6,9,15,.38) 44%,rgba(6,9,15,.98) 88%)}
-  .lv2-cinema-content,.lv2-cinema-right .lv2-cinema-content{padding-top:180px;padding-bottom:38px;align-items:flex-start;text-align:left}
+  .lv2-cinema-content,.lv2-cinema-right .lv2-cinema-content{padding-top:110px;padding-bottom:30px;align-items:flex-start;text-align:left}
   .lv2-cinema-content h2{font-size:2rem}
   .lv2-cinema-content p{font-size:.96rem;line-height:1.58}
 }
@@ -301,9 +301,9 @@
 @media(max-width:760px){
   .lv2{font-size:16px}
   .lv2-wrap{padding:0 18px}
-  .lv2-section{padding:56px 0}
-  .lv2-section-tight{padding:28px 0}
-  .lv2-section-tight-bottom{padding:52px 0 24px}
+  .lv2-section{padding:42px 0}
+  .lv2-section-tight{padding:20px 0}
+  .lv2-section-tight-bottom{padding:38px 0 18px}
   .lv2-section-head{margin-bottom:32px}
   .lv2-hero{min-height:calc(100svh - 8px);padding:112px 0 42px;align-items:flex-start}
   .lv2-hero-poster,.lv2-hero-video{object-position:68% center}
@@ -1418,3 +1418,14 @@
 .lv2-quote-dot{ color:#6EE7B7; font-size:10px; font-style:normal; opacity:.7 }
 @keyframes lv2QuoteScroll{ to{ transform:translateX(-50%) } }
 @media (prefers-reduced-motion:reduce){ .lv2-quote-track{ animation-duration:180s } }
+
+/* ===== Compact reveal blocks (keeps every section, collapsed by default) ===== */
+.lv2-expand{text-align:center}
+.lv2-expand-hint{color:var(--muted);font-size:.95rem;max-width:620px;margin:0 auto 18px}
+.lv2-expand-btn{background:rgba(255,255,255,.03);border:1px solid var(--line-2);color:var(--text);font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:14px 26px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:border-color .3s,background .3s,color .3s}
+.lv2-expand-btn:hover{border-color:var(--mint);color:var(--mint);background:rgba(110,231,183,.06)}
+.lv2-expand-arr{transition:transform .3s}
+.lv2-expand.open .lv2-expand-arr{transform:rotate(180deg)}
+.lv2-expand-body{margin-top:34px;text-align:left;animation:lv2-expand-in .45s ease both}
+@keyframes lv2-expand-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lv2-expand-body{animation:none}}

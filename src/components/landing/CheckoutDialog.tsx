@@ -130,7 +130,7 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
             <div className="flex items-center justify-between mb-3">
               <span className="font-semibold text-foreground">Método IA Real</span>
               <div className="text-right">
-                <span className="text-sm text-muted-foreground line-through block">R$ 997</span>
+                <span className="text-sm text-muted-foreground line-through block">R$ 3.252</span>
                 <span className="text-xl font-bold text-foreground">R$ 497</span>
               </div>
             </div>
@@ -260,7 +260,7 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 ) : (
                   <>
                     <CreditCard className="w-5 h-5 mr-2" />
-                    Pagar com Cartão — 12x R$41
+                    Pagar com Cartão — 12× R$ 41,41
                     <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
