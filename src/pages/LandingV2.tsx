@@ -6,7 +6,6 @@ import { useCheckout } from '@/hooks/useCheckout';
 import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 import {
   LiveCounters,
-  StickyMiniCTA,
   useHeroSpotlight,
   SplitText,
   useRelativeRadar,
@@ -15,10 +14,11 @@ import { LiveTerminal, BeforeAfterSlider, JourneyTimeline } from '@/components/l
 import { LandingPlayground } from '@/components/landing/LandingPlayground';
 import { ComparisonTable, TrustWall, useCardTilt } from '@/components/landing/LandingV2Wow3';
 import { ROICalculator, GuaranteeShield } from '@/components/landing/LandingV2Wow4';
-import { LiveEnrollmentFeed, AnimatedStats, FloatingSectionNav } from '@/components/landing/LandingV2Wow5';
+import { AnimatedStats } from '@/components/landing/LandingV2Wow5';
 import { ToolsExplorer, InstructorCard } from '@/components/landing/LandingV2Wow6';
 import { TrackQuiz, CommandPalette, useConfetti } from '@/components/landing/LandingV2Wow7';
-import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } from '@/components/landing/LandingV2Wow8';
+import { TopProgressBar, FoundersManifesto } from '@/components/landing/LandingV2Wow8';
+
 import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
 import { BackToTop, QuoteMarquee } from '@/components/landing/LandingV2Wow10';
 import { CinematicHeroBackground } from '@/components/landing/CinematicHeroBackground';
@@ -728,12 +728,8 @@ export default function LandingV2() {
         </div>
       </footer>
 
-      <StickyMiniCTA onClick={goCheckout} />
-      <FloatingSectionNav />
-      <LiveEnrollmentFeed />
-      <LiveViewersBadge />
-      <ShortcutHint />
       <BackToTop />
+
       <CheckoutDialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog} />
     </div>
   );

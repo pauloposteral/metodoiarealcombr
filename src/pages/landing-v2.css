@@ -90,7 +90,8 @@
 .lv2-link-cta:hover{border-color:var(--mint)}
 
 /* HERO */
-.lv2-hero{position:relative;min-height:min(820px,100svh);padding:150px 0 64px;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.lv2-hero{position:relative;min-height:min(760px,100svh);padding:132px 0 56px;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+
 .lv2-hero-media{position:absolute;inset:0;z-index:-3;background:var(--ink)}
 .lv2-hero-poster,.lv2-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 44%}
 .lv2-hero-poster{filter:saturate(.82) contrast(1.04)}
