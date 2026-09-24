@@ -87,7 +87,7 @@ export const CarouselHistory = ({
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm truncate">{carousel.topic}</p>
                   <p className="text-xs text-muted-foreground">
-                    {(carousel.slides as any[])?.length || 0} slides
+                    {(carousel.slides as unknown[])?.length || 0} slides
                   </p>
                   <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
                     <Clock className="w-3 h-3" />

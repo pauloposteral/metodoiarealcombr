@@ -1,3 +1,7 @@
+-- Skip this data-only transformation when its production seed course is absent.
+DO $migration$
+BEGIN
+IF EXISTS (SELECT 1 FROM public.courses WHERE id = '0ddb2e14-13b7-4341-9fbb-27c2c73b6cc7') THEN
 
 -- ========================================
 -- Reestruturar curso "Método IA Real — Fundamentos" nos 13 módulos do PRD
@@ -118,3 +122,7 @@ INSERT INTO public.modules (course_id, title, description, order_index, is_publi
     'MOD-09 Automações e agentes',
     'n8n, Make, Zapier, WhatsApp + IA, agentes de múltiplas etapas e quando NÃO automatizar. 1 automação real rodando.',
     9, false);
+
+END IF;
+END;
+$migration$;

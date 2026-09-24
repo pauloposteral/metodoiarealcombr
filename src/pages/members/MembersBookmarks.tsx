@@ -35,7 +35,7 @@ const MembersBookmarks = () => {
       .order('created_at', { ascending: false });
 
     if (data) {
-      setBookmarks(data.map((b: any) => ({
+      setBookmarks(data.map((b) => ({
         id: b.lessons.id,
         bookmark_id: b.id,
         title: b.lessons.title,

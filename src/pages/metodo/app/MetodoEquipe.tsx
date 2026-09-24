@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js';
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,7 +35,7 @@ interface TeamMember {
 }
 
 interface ContextType {
-  user: any;
+  user: User;
   companyData: {
     role: string;
     company: {
@@ -143,7 +144,7 @@ export default function MetodoEquipe() {
     try {
       const { error } = await supabase
         .from('company_users')
-        .update({ role: newRole as any })
+        .update({ role: newRole as 'admin' | 'user' })
         .eq('id', memberId);
 
       if (error) throw error;

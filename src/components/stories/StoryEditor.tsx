@@ -278,7 +278,7 @@ export const StoryEditor = ({
                   <Label className="mb-2 block">Estilo do Texto</Label>
                   <Select 
                     value={selectedSlide.textOverlay?.style || 'modern'}
-                    onValueChange={(v) => updateTextOverlay({ style: v as any })}
+                    onValueChange={(v) => updateTextOverlay({ style: v as NonNullable<StorySlide['textOverlay']>['style'] })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -297,7 +297,7 @@ export const StoryEditor = ({
                   <Label className="mb-2 block">Tamanho</Label>
                   <Select 
                     value={selectedSlide.textOverlay?.fontSize || 'lg'}
-                    onValueChange={(v) => updateTextOverlay({ fontSize: v as any })}
+                    onValueChange={(v) => updateTextOverlay({ fontSize: v as NonNullable<StorySlide['textOverlay']>['fontSize'] })}
                   >
                     <SelectTrigger>
                       <SelectValue />

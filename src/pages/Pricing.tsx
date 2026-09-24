@@ -243,6 +243,10 @@ export default function Pricing() {
             );
           })}
         </div>
+        <p className="max-w-3xl mx-auto px-4 pb-12 text-center text-sm text-muted-foreground">
+          As ferramentas de IA compartilham limites de proteção de 60 solicitações por hora e 200 por dia por conta.
+          No Sandbox Pro, o limite é de 50 prompts por dia. O Premium não tem cota adicional de plano.
+        </p>
       </div>
     </>
   );

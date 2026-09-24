@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
@@ -26,7 +27,7 @@ import {
   DollarSign, Percent, Calendar, Bell, Gift, Bookmark, ImagePlus
 } from 'lucide-react';
 
-const iconComponents: Record<string, React.ComponentType<any>> = {
+const iconComponents: Record<string, LucideIcon> = {
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle,

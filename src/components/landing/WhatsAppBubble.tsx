@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, X } from 'lucide-react';
-import { WHATSAPP_URL } from '@/lib/constants';
+import { HAS_WHATSAPP, SUPPORT_URL } from '@/lib/constants';
 
 export const WhatsAppBubble = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,11 +29,11 @@ export const WhatsAppBubble = () => {
       
       {/* Button */}
       <a
-        href={`${WHATSAPP_URL}?text=Olá! Tenho interesse no Método IA Real`}
+        href={SUPPORT_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="w-12 h-12 sm:w-14 sm:h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 shrink-0"
-        aria-label="Contato via WhatsApp"
+        aria-label={HAS_WHATSAPP ? 'Contato via WhatsApp' : 'Contato por e-mail'}
       >
         <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
       </a>

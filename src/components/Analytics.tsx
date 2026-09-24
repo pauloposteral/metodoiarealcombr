@@ -1,59 +1,39 @@
 import { useEffect } from 'react';
 
-/**
- * Injeta Meta Pixel e GA4 SOMENTE quando:
- * 1) O visitante deu consentimento (localStorage 'mir-consent' === 'accepted');
- * 2) Os IDs estão configurados em VITE_META_PIXEL_ID e VITE_GA_MEASUREMENT_ID.
- *
- * Sem ID, nada é injetado — evita snippet placeholder em produção.
- */
 export const Analytics = () => {
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const consent = window.localStorage.getItem('mir-consent');
-    if (consent !== 'accepted') return;
-
-    const pixelId = import.meta.env.VITE_META_PIXEL_ID as string | undefined;
-    const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
-
-    // ---------- Meta Pixel ----------
-    if (pixelId && !(window as any).fbq) {
-      /* eslint-disable */
-      (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      /* eslint-enable */
-      (window as any).fbq('init', pixelId);
-      (window as any).fbq('track', 'PageView');
-    }
-
-    // ---------- GA4 ----------
-    if (gaId && !(window as any).__gaLoaded) {
-      const s = document.createElement('script');
-      s.async = true;
-      s.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-      document.head.appendChild(s);
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      const gtag = (...args: any[]) => (window as any).dataLayer.push(args);
-      (window as any).gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', gaId, { anonymize_ip: true });
-      (window as any).__gaLoaded = true;
-    }
+    const initialize = () => {
+      if (window.localStorage.getItem('mir-consent') !== 'accepted') return;
+      const pixelId = import.meta.env.VITE_META_PIXEL_ID;
+      const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+      if (pixelId && !window.fbq) {
+        const pixel: MetaPixel = Object.assign((...args: unknown[]) => {
+          if (pixel.callMethod) pixel.callMethod(...args); else pixel.queue.push(args);
+        }, { queue: [] as unknown[][], loaded: true, version: '2.0' });
+        window.fbq = pixel;
+        window._fbq = pixel;
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+        document.head.appendChild(script);
+        pixel('init', pixelId);
+        pixel('track', 'PageView');
+      }
+      if (gaId && !window.__gaLoaded) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function (...args: unknown[]) { window.dataLayer.push(args); };
+        window.gtag('js', new Date());
+        window.gtag('config', gaId, { anonymize_ip: true });
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`;
+        document.head.appendChild(script);
+        window.__gaLoaded = true;
+      }
+    };
+    initialize();
+    window.addEventListener('mir-consent-change', initialize);
+    return () => window.removeEventListener('mir-consent-change', initialize);
   }, []);
-
   return null;
 };

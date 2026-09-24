@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local credentials and audit output
+.env.*
+!.env.example
+*.dump
+*.dump.*
+playwright-report
+test-results
+# Backup utilities and private metadata
+*.sql.gz
+*.backup

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 // Certificate system routes
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -5,62 +6,62 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-import Obrigado from "./pages/Obrigado";
-import Termos from "./pages/Termos";
-import Privacidade from "./pages/Privacidade";
-import MembersDashboard from "./pages/members/MembersDashboard";
-import MembersCourses from "./pages/members/MembersCourses";
-import CourseOverview from "./pages/members/CourseOverview";
-import MembersModules from "./pages/members/MembersModules";
-import ModuleDetail from "./pages/members/ModuleDetail";
-import LessonPlayer from "./pages/members/LessonPlayer";
-import MembersMaterials from "./pages/members/MembersMaterials";
-import MembersBonus from "./pages/members/MembersBonus";
-import MembersSupport from "./pages/members/MembersSupport";
-import MembersCertificate from "./pages/members/MembersCertificate";
-import MembersCommunity from "./pages/members/MembersCommunity";
-import CommunityPost from "./pages/members/CommunityPost";
-import MembersUpdates from "./pages/members/MembersUpdates";
-import MembersRanking from "./pages/members/MembersRanking";
-import MembersProfile from "./pages/members/MembersProfile";
-import MembersBookmarks from "./pages/members/MembersBookmarks";
-import MembersAnalytics from "./pages/members/MembersAnalytics";
-import ValidateCertificate from "./pages/ValidateCertificate";
-import CourseContentPage from "./pages/CourseContent";
-import Downloads from "./pages/Downloads";
-import CarouselEditor from "./pages/CarouselEditor";
-import CarrosselPage from "./pages/CarrosselPage";
-import StoriesPage from "./pages/StoriesPage";
-import AcessoBloqueado from "./pages/AcessoBloqueado";
-import CarouselPreviewPublic from "./pages/CarouselPreviewPublic";
-import Pricing from "./pages/Pricing";
-import Checkout from "./pages/Checkout";
+const Index = lazy(() => import("./pages/Index"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Obrigado = lazy(() => import("./pages/Obrigado"));
+const Termos = lazy(() => import("./pages/Termos"));
+const Privacidade = lazy(() => import("./pages/Privacidade"));
+const MembersDashboard = lazy(() => import("./pages/members/MembersDashboard"));
+const MembersCourses = lazy(() => import("./pages/members/MembersCourses"));
+const CourseOverview = lazy(() => import("./pages/members/CourseOverview"));
+const MembersModules = lazy(() => import("./pages/members/MembersModules"));
+const ModuleDetail = lazy(() => import("./pages/members/ModuleDetail"));
+const LessonPlayer = lazy(() => import("./pages/members/LessonPlayer"));
+const MembersMaterials = lazy(() => import("./pages/members/MembersMaterials"));
+const MembersBonus = lazy(() => import("./pages/members/MembersBonus"));
+const MembersSupport = lazy(() => import("./pages/members/MembersSupport"));
+const MembersCertificate = lazy(() => import("./pages/members/MembersCertificate"));
+const MembersCommunity = lazy(() => import("./pages/members/MembersCommunity"));
+const CommunityPost = lazy(() => import("./pages/members/CommunityPost"));
+const MembersUpdates = lazy(() => import("./pages/members/MembersUpdates"));
+const MembersRanking = lazy(() => import("./pages/members/MembersRanking"));
+const MembersProfile = lazy(() => import("./pages/members/MembersProfile"));
+const MembersBookmarks = lazy(() => import("./pages/members/MembersBookmarks"));
+const MembersAnalytics = lazy(() => import("./pages/members/MembersAnalytics"));
+const ValidateCertificate = lazy(() => import("./pages/ValidateCertificate"));
+const CourseContentPage = lazy(() => import("./pages/CourseContent"));
+const Downloads = lazy(() => import("./pages/Downloads"));
+const CarouselEditor = lazy(() => import("./pages/CarouselEditor"));
+const CarrosselPage = lazy(() => import("./pages/CarrosselPage"));
+const StoriesPage = lazy(() => import("./pages/StoriesPage"));
+const AcessoBloqueado = lazy(() => import("./pages/AcessoBloqueado"));
+const CarouselPreviewPublic = lazy(() => import("./pages/CarouselPreviewPublic"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Checkout = lazy(() => import("./pages/Checkout"));
 
 // Método IA SaaS
-import MetodoLanding from "./pages/metodo/MetodoLanding";
-import MetodoPricing from "./pages/metodo/MetodoPricing";
-import MetodoSolicitar from "./pages/metodo/MetodoSolicitar";
-import MetodoLogin from "./pages/metodo/MetodoLogin";
-import MetodoAcessoPendente from "./pages/metodo/MetodoAcessoPendente";
-import MetodoApp from "./pages/metodo/app/MetodoApp";
-import MetodoDashboard from "./pages/metodo/app/MetodoDashboard";
-import MetodoPrompts from "./pages/metodo/app/MetodoPrompts";
-import MetodoEditor from "./pages/metodo/app/MetodoEditor";
-import MetodoTreinamento from "./pages/metodo/app/MetodoTreinamento";
-import MetodoEquipe from "./pages/metodo/app/MetodoEquipe";
+const MetodoLanding = lazy(() => import("./pages/metodo/MetodoLanding"));
+const MetodoPricing = lazy(() => import("./pages/metodo/MetodoPricing"));
+const MetodoSolicitar = lazy(() => import("./pages/metodo/MetodoSolicitar"));
+const MetodoLogin = lazy(() => import("./pages/metodo/MetodoLogin"));
+const MetodoAcessoPendente = lazy(() => import("./pages/metodo/MetodoAcessoPendente"));
+const MetodoApp = lazy(() => import("./pages/metodo/app/MetodoApp"));
+const MetodoDashboard = lazy(() => import("./pages/metodo/app/MetodoDashboard"));
+const MetodoPrompts = lazy(() => import("./pages/metodo/app/MetodoPrompts"));
+const MetodoEditor = lazy(() => import("./pages/metodo/app/MetodoEditor"));
+const MetodoTreinamento = lazy(() => import("./pages/metodo/app/MetodoTreinamento"));
+const MetodoEquipe = lazy(() => import("./pages/metodo/app/MetodoEquipe"));
 
 // Admin Panel
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminEmpresas from "./pages/admin/AdminEmpresas";
-import AdminLeads from "./pages/admin/AdminLeads";
-import AdminUsuarios from "./pages/admin/AdminUsuarios";
-import AdminPrompts from "./pages/admin/AdminPrompts";
-import AdminSetup from "./pages/admin/AdminSetup";
-import AdminCursos from "./pages/admin/AdminCursos";
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminEmpresas = lazy(() => import("./pages/admin/AdminEmpresas"));
+const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
+const AdminUsuarios = lazy(() => import("./pages/admin/AdminUsuarios"));
+const AdminPrompts = lazy(() => import("./pages/admin/AdminPrompts"));
+const AdminSetup = lazy(() => import("./pages/admin/AdminSetup"));
+const AdminCursos = lazy(() => import("./pages/admin/AdminCursos"));
 import { Analytics } from "./components/Analytics";
 import { CookieConsent } from "./components/CookieConsent";
 
@@ -75,6 +76,7 @@ const App = () => (
         <Analytics />
         <BrowserRouter>
           <CookieConsent />
+          <Suspense fallback={<div role="status" className="min-h-screen grid place-items-center">Carregando...</div>}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/curso" element={<CourseContentPage />} />
@@ -135,6 +137,7 @@ const App = () => (
             
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

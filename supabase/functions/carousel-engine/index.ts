@@ -1,3 +1,6 @@
+interface EngineSlide { title: string; content?: string; subtitle?: string; type?: string; imagePrompt?: string; [key: string]: unknown }
+interface EngineResult { title?: string; content?: string; ideas: Record<string, unknown>[]; hooks: Record<string, unknown>[]; variations: Record<string, unknown>[]; issues: Record<string, unknown>[]; slides: EngineSlide[]; [key: string]: unknown }
+import { guardAIRequest } from '../_shared/ai-guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -29,6 +32,9 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const denied = await guardAIRequest(req);
+  if (denied) return denied;
 
   try {
     const { action, config, topic, slides, slideIndex, improvementAction, targetLang, voicePerson, userPrompt, textContent, dataPoints, rssUrl, threadText, editInstruction, currentImagePrompt } = await req.json();
@@ -211,7 +217,7 @@ Responda APENAS com JSON:
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   
   return {
-    ideas: content.ideas.map((idea: any) => ({
+    ideas: content.ideas.map((idea: Record<string, unknown>) => ({
       ...idea,
       id: crypto.randomUUID(),
     })),
@@ -276,7 +282,7 @@ Responda APENAS com JSON:
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   
   return {
-    hooks: content.hooks.map((hook: any) => ({
+    hooks: content.hooks.map((hook: Record<string, unknown>) => ({
       ...hook,
       id: crypto.randomUUID(),
     })),
@@ -379,7 +385,7 @@ Responda APENAS com JSON:
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   
   return {
-    slides: content.slides.map((slide: any, index: number) => ({
+    slides: content.slides.map((slide: EngineSlide, index: number) => ({
       ...slide,
       id: crypto.randomUUID(),
       order: index,
@@ -396,7 +402,7 @@ Responda APENAS com JSON:
 // ==========================================
 // Improve Slide with AI
 // ==========================================
-async function improveSlide(apiKey: string, slides: any[], slideIndex: number, action: string) {
+async function improveSlide(apiKey: string, slides: EngineSlide[], slideIndex: number, action: string) {
   const slide = slides[slideIndex];
   
   const actionPrompts: Record<string, string> = {
@@ -464,7 +470,7 @@ Responda APENAS com JSON:
 // ==========================================
 // QualityScore - Automatic QA
 // ==========================================
-async function qualityCheck(apiKey: string, slides: any[], config: CarouselConfig) {
+async function qualityCheck(apiKey: string, slides: EngineSlide[], config: CarouselConfig) {
   const systemPrompt = `Você é um QA especialista em carrosséis de Instagram.
 Analise este carrossel e pontue de 0-100.
 
@@ -497,7 +503,7 @@ Responda APENAS com JSON:
   ]
 }`;
 
-  const slidesText = slides.map((s, i) => 
+  const slidesText = slides.map((s, i) =>
     `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
   ).join('\n');
 
@@ -531,7 +537,7 @@ Responda APENAS com JSON:
       coerenciaNarrativa: content.coerenciaNarrativa,
       consistenciaVisual: content.consistenciaVisual,
       ctaClaro: content.ctaClaro,
-      issues: (content.issues || []).map((issue: any) => ({
+      issues: (content.issues || []).map((issue: Record<string, unknown>) => ({
         ...issue,
         id: crypto.randomUUID(),
       })),
@@ -542,7 +548,7 @@ Responda APENAS com JSON:
 // ==========================================
 // Generate Caption
 // ==========================================
-async function generateCaption(apiKey: string, topic: string, slides: any[]) {
+async function generateCaption(apiKey: string, topic: string, slides: EngineSlide[]) {
   const systemPrompt = `Você é um copywriter de Instagram.
 Crie uma legenda engajante para este carrossel.
 
@@ -631,7 +637,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #4 Rewrite Carousel
 // ==========================================
-async function rewriteCarousel(apiKey: string, slides: any[], config: CarouselConfig, topic: string) {
+async function rewriteCarousel(apiKey: string, slides: EngineSlide[], config: CarouselConfig, topic: string) {
   const systemPrompt = `Você é um editor sênior de carrosséis virais. Reescreva TODOS os slides mantendo a estrutura mas melhorando:
 - Copywriting mais impactante
 - Textos mais curtos e diretos
@@ -653,7 +659,7 @@ Responda APENAS com JSON:
   ]
 }`;
 
-  const slidesText = slides.map((s: any, i: number) => 
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): Título: "${s.title}" | Conteúdo: "${s.content || ''}"`
   ).join('\n');
 
@@ -678,7 +684,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #5 Translate Carousel
 // ==========================================
-async function translateCarousel(apiKey: string, slides: any[], targetLang: string) {
+async function translateCarousel(apiKey: string, slides: EngineSlide[], targetLang: string) {
   const langNames: Record<string, string> = { en: 'English', es: 'Spanish', fr: 'French', de: 'German', it: 'Italian' };
   const langName = langNames[targetLang] || 'English';
 
@@ -696,7 +702,7 @@ Respond ONLY with JSON:
   ]
 }`;
 
-  const slidesText = slides.map((s: any, i: number) => 
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1}: Título: "${s.title}" | Subtítulo: "${s.subtitle || ''}" | Conteúdo: "${s.content || ''}"`
   ).join('\n');
 
@@ -763,7 +769,7 @@ Responda APENAS com JSON:
   const aiResponse = await response.json();
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   return {
-    hooks: content.hooks.map((h: any) => ({ ...h, id: crypto.randomUUID() })),
+    hooks: content.hooks.map((h: Record<string, unknown>) => ({ ...h, id: crypto.randomUUID() })),
   };
 }
 
@@ -808,14 +814,14 @@ Responda APENAS com JSON:
   const aiResponse = await response.json();
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
   return {
-    ideas: content.ideas.map((idea: any) => ({ ...idea, id: crypto.randomUUID() })),
+    ideas: content.ideas.map((idea: Record<string, unknown>) => ({ ...idea, id: crypto.randomUUID() })),
   };
 }
 
 // ==========================================
 // #61 Detect Clichés and Weak Phrases
 // ==========================================
-async function detectCliches(apiKey: string, slides: any[]) {
+async function detectCliches(apiKey: string, slides: EngineSlide[]) {
   const systemPrompt = `Você é um editor de copy exigente. Analise os slides e detecte:
 - Clichês e frases batidas
 - Frases fracas ou vagas
@@ -839,7 +845,7 @@ Responda APENAS com JSON:
   "summary": "resumo geral da qualidade do copy"
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
   ).join('\n');
 
@@ -907,7 +913,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #63 Readability Score
 // ==========================================
-async function readabilityScore(apiKey: string, slides: any[]) {
+async function readabilityScore(apiKey: string, slides: EngineSlide[]) {
   const systemPrompt = `Você é um especialista em legibilidade para mobile.
 Analise cada slide e pontue a legibilidade de 0-100.
 
@@ -933,7 +939,7 @@ Responda APENAS com JSON:
   "worstSlide": number
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): Título(${(s.title || '').length}chars): "${s.title}" | Conteúdo(${(s.content || '').length}chars): "${s.content || ''}"`
   ).join('\n');
 
@@ -956,7 +962,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #66 Suggest Strategic Emojis
 // ==========================================
-async function suggestEmojis(apiKey: string, slides: any[]) {
+async function suggestEmojis(apiKey: string, slides: EngineSlide[]) {
   const systemPrompt = `Você é um estrategista de emojis para Instagram.
 Para cada slide, sugira 1-2 emojis estratégicos que:
 - Reforçam a mensagem visualmente
@@ -975,7 +981,7 @@ Responda APENAS com JSON:
   ]
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
   ).join('\n');
 
@@ -1082,13 +1088,13 @@ Responda APENAS com JSON:
   if (!response.ok) throw new Error(`AI API error: ${response.status}`);
   const aiResponse = await response.json();
   const content = parseJsonFromResponse(aiResponse.choices?.[0]?.message?.content);
-  return { variations: content.variations.map((v: any) => ({ ...v, id: crypto.randomUUID() })) };
+  return { variations: content.variations.map((v: Record<string, unknown>) => ({ ...v, id: crypto.randomUUID() })) };
 }
 
 // ==========================================
 // #68 Rewrite in Specific Person's Voice
 // ==========================================
-async function rewriteVoice(apiKey: string, slides: any[], voicePerson: string) {
+async function rewriteVoice(apiKey: string, slides: EngineSlide[], voicePerson: string) {
   const systemPrompt = `Você é um ghostwriter especialista em adaptar textos ao tom de voz de pessoas específicas.
 Reescreva todos os slides no estilo/tom de voz de "${voicePerson}".
 
@@ -1113,7 +1119,7 @@ Responda APENAS com JSON:
   "voiceNotes": "observações sobre o tom aplicado"
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): "${s.title}" | "${s.content || ''}"`
   ).join('\n');
 
@@ -1136,7 +1142,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #74 Ideal Slide Sequence by Psychology
 // ==========================================
-async function sequencePsychology(apiKey: string, slides: any[], config: CarouselConfig) {
+async function sequencePsychology(apiKey: string, slides: EngineSlide[], config: CarouselConfig) {
   const systemPrompt = `Você é um psicólogo comportamental especialista em sequenciamento de conteúdo.
 Analise a ordem dos slides e sugira a MELHOR sequência baseada em:
 
@@ -1159,7 +1165,7 @@ Responda APENAS com JSON:
   "tips": ["dica 1", "dica 2"]
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): "${s.title}" - "${s.content || ''}"`
   ).join('\n');
 
@@ -1227,7 +1233,7 @@ Responda APENAS com JSON:
 // ==========================================
 // #59 Auto-generate Alt Text
 // ==========================================
-async function generateAltText(apiKey: string, slides: any[]) {
+async function generateAltText(apiKey: string, slides: EngineSlide[]) {
   const systemPrompt = `Você é um especialista em acessibilidade web.
 Gere textos alternativos (alt-text) descritivos para cada slide de carrossel.
 
@@ -1247,7 +1253,7 @@ Responda APENAS com JSON:
   ]
 }`;
 
-  const slidesText = slides.map((s: any, i: number) =>
+  const slidesText = slides.map((s: EngineSlide, i: number) =>
     `Slide ${i + 1} (${s.type}): Título: "${s.title}" | Conteúdo: "${s.content || ''}" | ImagePrompt: "${s.imagePrompt || ''}"`
   ).join('\n');
 
@@ -1453,8 +1459,8 @@ Use o padrão: Contexto surpreendente → Dados que chocam → Comparação → 
 // ==========================================
 // #72 Auto Language Detection & Cultural Adaptation
 // ==========================================
-async function detectLanguageAndAdapt(apiKey: string, slides: any[]) {
-  const slidesText = slides.map((s: any, i: number) => `Slide ${i + 1}: ${s.title} - ${s.content}`).join('\n');
+async function detectLanguageAndAdapt(apiKey: string, slides: EngineSlide[]) {
+  const slidesText = slides.map((s: EngineSlide, i: number) => `Slide ${i + 1}: ${s.title} - ${s.content}`).join('\n');
   
   const systemPrompt = `Analise o conteúdo dos slides e:
 1. Detecte o idioma principal
@@ -1500,7 +1506,7 @@ Retorne JSON:
 // ==========================================
 // Edit Image Prompt with AI
 // ==========================================
-async function editImagePrompt(apiKey: string, currentPrompt: string, instruction: string, slideContext?: any): Promise<any> {
+async function editImagePrompt(apiKey: string, currentPrompt: string, instruction: string, slideContext?: EngineSlide): Promise<unknown> {
   const systemPrompt = `You are an expert at crafting image generation prompts. Given the current image prompt and user's edit instruction, create an improved prompt.
 
 Current image prompt: "${currentPrompt || 'No current prompt'}"
@@ -1533,7 +1539,7 @@ Return JSON:
 // ==========================================
 // Helper: Parse JSON from AI response
 // ==========================================
-function parseJsonFromResponse(content: string): any {
+function parseJsonFromResponse(content: string): EngineResult {
   if (!content) {
     throw new Error('Empty AI response');
   }

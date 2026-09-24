@@ -39,7 +39,7 @@ export const ShareLinkButton = ({ carouselId }: ShareLinkButtonProps) => {
       }
 
       // Generate new share ID
-      const shareId = crypto.randomUUID().slice(0, 12);
+      const shareId = crypto.randomUUID();
       const { error } = await supabase
         .from('saved_carousels')
         .update({ public_share_id: shareId })

@@ -1,3 +1,4 @@
+import type { Tables } from '@/integrations/supabase/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -27,7 +28,7 @@ interface DashboardStats {
   totalCertificates: number;
   totalLessonsCompleted: number;
   totalCommunityPosts: number;
-  recentActivity: any[];
+  recentActivity: Tables<'company_leads'>[];
   signupsByDay: { date: string; count: number }[];
   lessonsByModule: { name: string; completed: number }[];
 }
@@ -79,7 +80,7 @@ export default function AdminDashboard() {
         supabase.from('companies').select('*', { count: 'exact', head: true }).eq('status', 'active'),
         supabase.from('company_users').select('*', { count: 'exact', head: true }),
         supabase.from('company_leads').select('*', { count: 'exact', head: true }),
-        supabase.from('company_leads').select('*', { count: 'exact', head: true }).eq('status', 'novo'),
+        supabase.from('company_leads').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
         supabase.from('purchases').select('*', { count: 'exact', head: true }),
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
         supabase.from('certificates').select('*', { count: 'exact', head: true }),
@@ -95,7 +96,7 @@ export default function AdminDashboard() {
       const moduleMap = new Map<string, string>();
       (modulesRes.data || []).forEach(m => moduleMap.set(m.id, m.title));
       const moduleCountMap = new Map<string, number>();
-      (progressRes.data || []).forEach((p: any) => {
+      (progressRes.data || []).forEach((p) => {
         const mid = p.lessons?.module_id;
         if (mid) moduleCountMap.set(mid, (moduleCountMap.get(mid) || 0) + 1);
       });
@@ -115,7 +116,7 @@ export default function AdminDashboard() {
         const key = d.toISOString().split('T')[0];
         signupsByDayMap.set(key, 0);
       }
-      (recentProfilesRes.data || []).forEach((p: any) => {
+      (recentProfilesRes.data || []).forEach((p) => {
         const key = new Date(p.created_at).toISOString().split('T')[0];
         if (signupsByDayMap.has(key)) {
           signupsByDayMap.set(key, (signupsByDayMap.get(key) || 0) + 1);
@@ -259,7 +260,7 @@ export default function AdminDashboard() {
                 <CardContent>
                   {stats.recentActivity.length > 0 ? (
                     <div className="space-y-3">
-                      {stats.recentActivity.map((lead: any) => (
+                      {stats.recentActivity.map((lead) => (
                         <div key={lead.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                           <div>
                             <p className="font-medium text-foreground text-sm">{lead.company_name}</p>

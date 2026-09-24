@@ -1,0 +1,20 @@
+{
+  "method": "Read-only anonymous HEAD checks; no rows requested or modified",
+  "checks": [
+    {
+      "table": "purchases",
+      "status": 200,
+      "content_range": "*/0"
+    },
+    {
+      "table": "profiles",
+      "status": 200,
+      "content_range": "*/0"
+    },
+    {
+      "table": "saved_carousels",
+      "status": 200,
+      "content_range": "*/0"
+    }
+  ]
+}

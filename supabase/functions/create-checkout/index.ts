@@ -1,84 +1,39 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import Stripe from 'npm:stripe@18.5.0';
+import { requireUser } from '../_shared/auth.ts';
+import { checkoutProduct } from '../_shared/billing.ts';
+import { applicationOrigin, corsHeaders, errorResponse, HttpError, json, readJson, requireEnv } from '../_shared/http.ts';
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
-};
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
-
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-  );
-
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
   try {
-    logStep("Function started");
-
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
-    logStep("User authenticated", { email: user.email });
-
-    const { priceId, mode = "subscription" } = await req.json();
-    if (!priceId) throw new Error("priceId is required");
-    logStep("Request received", { priceId, mode });
-
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
-
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId: string | undefined;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-      logStep("Existing customer found", { customerId });
+    if (req.method !== 'POST') throw new HttpError(405, 'Método não permitido.');
+    const { user } = await requireUser(req);
+    const { priceId, mode = 'subscription' } = await readJson(req);
+    const product = checkoutProduct(priceId, mode);
+    if (!product) throw new HttpError(400, 'Produto ou modalidade inválida.');
+    const stripe = new Stripe(requireEnv('STRIPE_SECRET_KEY'), { apiVersion: '2025-08-27.basil' });
+    const customers = await stripe.customers.list({ email: user.email, limit: 100 });
+    const customer = customers.data.find(c => c.metadata.supabase_user_id === user.id)
+      ?? customers.data.find(c => !c.metadata.supabase_user_id)
+      ?? await stripe.customers.create({ email: user.email, metadata: { supabase_user_id: user.id } }, { idempotencyKey: `customer:${user.id}` });
+    if (mode === 'subscription') {
+      const subscriptions = await stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 100 });
+      if (subscriptions.data.some(s => ['active', 'trialing', 'past_due'].includes(s.status))) {
+        throw new HttpError(409, 'Você já possui uma assinatura. Use Gerenciar assinatura para alterar seu plano.');
+      }
     }
-
-    const origin = req.headers.get("origin") || "https://metodoiarealcombr.lovable.app";
-
-    const sessionParams: any = {
-      customer: customerId,
-      customer_email: customerId ? undefined : user.email,
-      line_items: [{ price: priceId, quantity: 1 }],
-      mode,
+    const origin = applicationOrigin();
+    const metadata = { supabase_user_id: user.id, purchase_kind: product.kind, ...(product.plan ? { plan_slug: product.plan } : {}) };
+    const session = await stripe.checkout.sessions.create({
+      customer: customer.id,
+      line_items: [{ price: priceId as string, quantity: 1 }],
+      mode: mode as 'payment' | 'subscription',
       success_url: `${origin}/membros?checkout=success`,
-      cancel_url: `${origin}/pricing?checkout=cancelled`,
-    };
-
-    // For one-time payments, enable card + PIX
-    if (mode === "payment") {
-      sessionParams.payment_method_types = ["card"];
-      // PIX requires BRL currency and Brazil-based Stripe account
-      // Add PIX if available on the account
-      try {
-        sessionParams.payment_method_types.push("boleto");
-      } catch (_) { /* boleto not available */ }
-    }
-
-    const session = await stripe.checkout.sessions.create(sessionParams);
-    logStep("Checkout session created", { sessionId: session.id, mode });
-
-    return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    logStep("ERROR", { message: msg });
-    return new Response(JSON.stringify({ error: msg }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
-    });
-  }
+      cancel_url: `${origin}/${mode === 'payment' ? 'checkout' : 'pricing'}?checkout=cancelled`,
+      metadata,
+      ...(mode === 'subscription' ? { subscription_data: { metadata } } : { payment_intent_data: { metadata } }),
+    }, { idempotencyKey: `checkout:${user.id}:${priceId}:${Math.floor(Date.now() / 300000)}` });
+    if (!session.url) throw new Error('Checkout URL missing');
+    return json({ url: session.url });
+  } catch (error) { return errorResponse(error); }
 });

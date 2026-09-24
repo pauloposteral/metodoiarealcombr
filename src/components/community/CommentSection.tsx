@@ -59,7 +59,7 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
   const fetchComments = async () => {
     try {
-      let rawData: any[] = [];
+      let rawData: Comment[] = [];
       
       if (type === 'community' && postId) {
         const { data, error } = await supabase
@@ -83,13 +83,11 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
       // Get profiles for all users
       const userIds = [...new Set(rawData.map(c => c.user_id))];
-      let profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
+      const profilesMap: { [key: string]: { full_name: string | null; avatar_url: string | null } } = {};
       
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id, full_name, avatar_url')
-          .in('id', userIds);
+          .rpc('get_profile_cards', { user_ids: userIds });
         
         profiles?.forEach(p => {
           profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url };
@@ -100,7 +98,7 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
       const { data: { user } } = await supabase.auth.getUser();
       const likeColumn = type === 'community' ? 'community_comment_id' : 'lesson_comment_id';
       
-      let likes: { [key: string]: { count: number; userLiked: boolean } } = {};
+      const likes: { [key: string]: { count: number; userLiked: boolean } } = {};
       
       if (rawData.length > 0) {
         const commentIds = rawData.map(c => c.id);

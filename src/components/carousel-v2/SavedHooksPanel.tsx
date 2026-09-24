@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,7 +28,7 @@ interface SavedHooksPanelProps {
   currentHook?: string;
 }
 
-const hookTypeIcons: Record<string, React.ComponentType<any>> = {
+const hookTypeIcons: Record<string, LucideIcon> = {
   curiosidade: Sparkles,
   contraste: Target,
   'erro-comum': MessageSquare,
@@ -143,7 +144,7 @@ export const SavedHooksPanel = ({ onSelectHook, currentHook }: SavedHooksPanelPr
     }
   };
 
-  const useHook = async (hook: SavedHook) => {
+  const applySavedHook = async (hook: SavedHook) => {
     try {
       // Update usage count
       await supabase
@@ -269,7 +270,7 @@ export const SavedHooksPanel = ({ onSelectHook, currentHook }: SavedHooksPanelPr
                       variant="secondary"
                       size="sm"
                       className="h-7 text-xs gap-1.5"
-                      onClick={() => useHook(hook)}
+                      onClick={() => applySavedHook(hook)}
                     >
                       <Copy className="w-3 h-3" />
                       Usar

@@ -9,8 +9,8 @@ export const useCheckout = () => {
 
   const handleCheckout = async () => {
     // Meta Pixel tracking
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'InitiateCheckout', {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'InitiateCheckout', {
         content_name: 'Método IA Real',
         currency: 'BRL',
         value: 497,
@@ -38,7 +38,8 @@ export const useCheckout = () => {
       } else {
         throw new Error('URL de checkout não recebida');
       }
-    } catch (err: any) {
+    } catch (caught) {
+      const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Checkout error:', err);
       toast.error('Erro ao iniciar pagamento. Tente novamente.');
     } finally {

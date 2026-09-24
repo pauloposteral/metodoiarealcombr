@@ -155,7 +155,7 @@ export const CarouselWorkspace = () => {
     step,
     selectedSlideIndex: slideManager.selectedSlideIndex,
     slidesLength: slideManager.slides.length,
-    setSelectedSlideIndex: slideManager.setSelectedSlideIndex as any,
+    setSelectedSlideIndex: slideManager.setSelectedSlideIndex,
     handleSave,
     undo: slideManager.undo,
     redo: slideManager.redo,
@@ -305,7 +305,7 @@ export const CarouselWorkspace = () => {
               <h3 className="font-semibold mt-4 mb-4 text-lg">📂 Seus Carrosséis</h3>
               <CarouselHistory
                 carousels={selectedFolderId
-                  ? persistence.savedCarousels.filter((c: any) => c.folder_id === selectedFolderId)
+                  ? persistence.savedCarousels.filter((c) => c.folder_id === selectedFolderId)
                   : persistence.savedCarousels}
                 isLoading={persistence.isLoading}
                 onLoad={handleLoadCarousel}
@@ -318,7 +318,7 @@ export const CarouselWorkspace = () => {
               <h3 className="font-semibold mb-4 text-lg">📋 Workflow</h3>
               <WorkflowBoard
                 onOpenCarousel={(id) => {
-                  const c = persistence.savedCarousels.find((c: any) => c.id === id);
+                  const c = persistence.savedCarousels.find((c) => c.id === id);
                   if (c) handleLoadCarousel(c);
                 }}
               />
@@ -500,7 +500,7 @@ export const CarouselWorkspace = () => {
                 <Button variant="ghost" size="sm" onClick={() => ai.setAbHooks([])}>✕</Button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {ai.abHooks.map((hook: any) => (
+                {ai.abHooks.map((hook) => (
                   <Card key={hook.id} className="p-3 cursor-pointer hover:ring-2 hover:ring-accent/50 transition-all" onClick={() => ai.handleApplyABHook(hook)}>
                     <p className="font-bold text-sm">{hook.title}</p>
                     {hook.subtitle && <p className="text-xs text-muted-foreground mt-1">{hook.subtitle}</p>}
@@ -522,7 +522,7 @@ export const CarouselWorkspace = () => {
                 <AlertTriangle className="w-4 h-4 text-yellow-500" /> Feedback de Qualidade
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {qualityScore.issues.map((issue: any) => (
+                {qualityScore.issues.map((issue) => (
                   <div key={issue.id} className={`p-3 rounded-lg text-xs ${issue.type === 'error' ? 'bg-red-500/10 border border-red-500/20' : 'bg-yellow-500/10 border border-yellow-500/20'}`}>
                     <p className="font-medium">{issue.type === 'error' ? '❌' : '⚠️'} Slide {(issue.slideIndex || 0) + 1}: {issue.message}</p>
                     <p className="text-muted-foreground mt-1">💡 {issue.suggestion}</p>

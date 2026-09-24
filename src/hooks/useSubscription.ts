@@ -38,6 +38,7 @@ export function useSubscription(): UseSubscriptionReturn {
       if (!session) {
         setSubscribed(false);
         setPlan('free');
+        setSubscriptionEnd(null);
         setLoading(false);
         return;
       }
@@ -49,6 +50,7 @@ export function useSubscription(): UseSubscriptionReturn {
       setPlan(data?.plan ?? 'free');
       setSubscriptionEnd(data?.subscription_end ?? null);
     } catch (err) {
+      setSubscribed(false); setPlan('free'); setSubscriptionEnd(null);
       console.error('Error checking subscription:', err);
     } finally {
       setLoading(false);
@@ -63,7 +65,8 @@ export function useSubscription(): UseSubscriptionReturn {
 
     // Also refresh on auth state change
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      checkSubscription();
+      // Defer Supabase calls until the auth callback releases its lock.
+      setTimeout(() => void checkSubscription(), 0);
     });
 
     return () => {
@@ -82,7 +85,7 @@ export function useSubscription(): UseSubscriptionReturn {
 
     if (error) throw error;
     if (data?.url) {
-      window.open(data.url, '_blank');
+      window.location.assign(data.url);
     }
   };
 
@@ -90,7 +93,7 @@ export function useSubscription(): UseSubscriptionReturn {
     const { data, error } = await supabase.functions.invoke('customer-portal');
     if (error) throw error;
     if (data?.url) {
-      window.open(data.url, '_blank');
+      window.location.assign(data.url);
     }
   };
 

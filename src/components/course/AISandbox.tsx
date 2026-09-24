@@ -62,7 +62,8 @@ export const AISandbox = ({ lessonId, lessonTitle, prompts }: AISandboxProps) =>
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, assistantMessage]);
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       const errMsg = error?.message || 'Erro ao consultar IA';
       toast({ title: 'Erro', description: errMsg, variant: 'destructive' });
       // Remove the user message if failed

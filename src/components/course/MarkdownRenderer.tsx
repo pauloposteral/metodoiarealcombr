@@ -1,3 +1,4 @@
+import { safeContentUrl } from '@/lib/safeUrl';
 import React from 'react';
 import { TipBox, WarningBox, SuccessBox, ExerciseBox } from './ContentBlocks';
 
@@ -202,7 +203,7 @@ function renderInline(text: string): React.ReactNode {
       parts.push(
         <img
           key={partKey++}
-          src={imgMatch[2]}
+          src={safeContentUrl(imgMatch[2], true)}
           alt={imgMatch[1]}
           className="rounded-xl max-w-full h-auto my-2"
           loading="lazy"
@@ -218,7 +219,7 @@ function renderInline(text: string): React.ReactNode {
       parts.push(
         <a
           key={partKey++}
-          href={linkMatch[2]}
+          href={safeContentUrl(linkMatch[2])}
           target="_blank"
           rel="noopener noreferrer"
           className="text-accent hover:text-accent/80 underline underline-offset-2"
@@ -270,7 +271,7 @@ function renderInline(text: string): React.ReactNode {
     }
 
     // Regular text - take until next special char
-    const nextSpecial = remaining.search(/[`*\[!]/);
+    const nextSpecial = remaining.search(/[`*[!]/);
     if (nextSpecial === -1) {
       parts.push(remaining);
       break;

@@ -77,7 +77,8 @@ export default function AdminLogin() {
       });
 
       navigate('/admin/dashboard');
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Login error:', error);
       toast({
         title: 'Erro ao entrar',

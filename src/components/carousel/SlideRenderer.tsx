@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 import { CarouselSlide, CarouselTheme } from './types';
 import { 
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
@@ -6,7 +7,7 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 
-const iconComponents: Record<string, React.ComponentType<any>> = {
+const iconComponents: Record<string, LucideIcon> = {
   Lightbulb, Target, Rocket, TrendingUp, Zap, Star, Award, CheckCircle,
   ArrowRight, Brain, Cpu, MessageSquare, Users, BarChart, Sparkles, Shield,
   Clock, Settings, Layers, BookOpen, Compass, Flag, Heart, Puzzle

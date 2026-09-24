@@ -118,7 +118,7 @@ const MembersDashboard = () => {
             .limit(5);
 
           if (recentDone) {
-            setRecentLessons(recentDone.map((r: any) => ({
+            setRecentLessons(recentDone.map((r) => ({
               id: r.lesson_id,
               title: r.lessons?.title || 'Aula',
               completed_at: r.completed_at,

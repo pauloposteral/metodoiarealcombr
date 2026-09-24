@@ -1,3 +1,4 @@
+import type { Json } from '@/integrations/supabase/types';
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -45,9 +46,9 @@ export const SaveAsTemplateDialog = ({ slides, theme, config, topic }: SaveAsTem
         user_id: user.id,
         name: name.trim(),
         category,
-        slides: slides as any,
-        theme: theme as any,
-        config: config as any,
+        slides: slides as unknown as Json,
+        theme: theme as unknown as Json,
+        config: config as unknown as Json,
       });
 
       if (error) throw error;

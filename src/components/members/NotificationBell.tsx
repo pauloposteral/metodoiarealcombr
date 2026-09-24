@@ -45,7 +45,7 @@ export const NotificationBell = () => {
       .limit(3);
 
     if (badges) {
-      badges.forEach((b: any) => {
+      badges.forEach((b) => {
         if (b.badges) {
           notifs.push({
             id: `badge-${b.id}`,
@@ -70,7 +70,7 @@ export const NotificationBell = () => {
       .limit(3);
 
     if (progress) {
-      progress.forEach((p: any) => {
+      progress.forEach((p) => {
         if (p.lessons && p.completed_at) {
           notifs.push({
             id: `progress-${p.id}`,

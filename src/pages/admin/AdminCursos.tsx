@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -68,7 +69,7 @@ export default function AdminCursos() {
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editMode, setEditMode] = useState<EditMode>('course');
-  const [editItem, setEditItem] = useState<any>(null);
+  const [editItem, setEditItem] = useState<Partial<Course & Module & Lesson> | null>(null);
   const [parentId, setParentId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [quizLesson, setQuizLesson] = useState<{ id: string; title: string } | null>(null);
@@ -87,12 +88,14 @@ export default function AdminCursos() {
   const [formContent, setFormContent] = useState('');
   const [formVideoUrl, setFormVideoUrl] = useState('');
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { navigate('/admin/login'); return; }
+      const { data: role, error } = await supabase.from('user_roles').select('role').eq('user_id', user.id).eq('role', 'admin').maybeSingle();
+      if (error || !role) { navigate('/admin/login', { replace: true }); return; }
       setUser(user);
       await fetchCourses();
       setLoading(false);
@@ -145,7 +148,7 @@ export default function AdminCursos() {
     setExpandedModules(next);
   };
 
-  const openDialog = (mode: EditMode, item?: any, parent?: string) => {
+  const openDialog = (mode: EditMode, item?: Partial<Course & Module & Lesson>, parent?: string) => {
     setEditMode(mode);
     setEditItem(item || null);
     setParentId(parent || null);
@@ -262,7 +265,8 @@ export default function AdminCursos() {
       }
 
       setDialogOpen(false);
-    } catch (err: any) {
+    } catch (caught) {
+      const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       toast.error(err.message || 'Erro ao salvar');
     } finally {
       setSaving(false);

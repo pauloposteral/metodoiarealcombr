@@ -1,3 +1,4 @@
+import { guardAIRequest } from '../_shared/ai-guard.ts';
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -10,6 +11,9 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const denied = await guardAIRequest(req, { sandbox: true });
+  if (denied) return denied;
 
   try {
     const supabaseClient = createClient(
@@ -35,21 +39,6 @@ serve(async (req) => {
       });
     }
 
-    // Rate limit: max 20 requests per hour per user
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { count } = await supabaseClient
-      .from("sandbox_sessions")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .gte("created_at", oneHourAgo);
-
-    if ((count ?? 0) >= 20) {
-      return new Response(JSON.stringify({ error: "Limite de 20 consultas por hora atingido. Tente novamente mais tarde." }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     const systemPrompt = `Você é um mentor de IA especializado em ensinar sobre Inteligência Artificial aplicada a negócios e marketing digital.
 Você está ajudando um aluno que está praticando prompts em um curso online.
 ${context ? `Contexto da aula: ${context}` : ""}
@@ -65,7 +54,7 @@ Mantenha respostas concisas (máx 500 palavras). Use markdown para formatar.`;
       });
     }
 
-    const aiResponse = await fetch("https://api.lovable.dev/v1/chat/completions", {
+    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

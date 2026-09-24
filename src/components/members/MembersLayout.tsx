@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { User, Session } from '@supabase/supabase-js';
 import { MembersSidebar } from '@/components/members/MembersSidebar';
 import { MembersHeader } from '@/components/members/MembersHeader';
 import { OnboardingDialog } from '@/components/members/OnboardingDialog';
@@ -17,45 +17,36 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [accessError, setAccessError] = useState(false);
 
   // Hook must be called unconditionally before any returns
   useAchievementChecker(user?.id);
 
   useEffect(() => {
-    // Set up auth listener first
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      
-      if (!session) {
-        navigate('/auth');
+    let disposed = false;
+    let generation = 0;
+    const checkAccess = async (session: Session | null) => {
+      const request = ++generation;
+      setLoading(true); setAccessError(false); setUser(null);
+      if (!session) { navigate('/auth', { replace: true }); setLoading(false); return; }
+      try {
+        const { data: profile, error } = await supabase.from('profiles').select('access_status').eq('id', session.user.id).single();
+        if (disposed || request !== generation) return;
+        if (error || !profile) { setAccessError(true); return; }
+        if (profile.access_status === 'revoked') { navigate('/acesso-bloqueado', { replace: true }); return; }
+        setUser(session.user);
+      } catch {
+        if (!disposed && request === generation) setAccessError(true);
+      } finally {
+        if (!disposed && request === generation) setLoading(false);
       }
+    };
+    const pending = new Set<ReturnType<typeof setTimeout>>();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const timer = setTimeout(() => { pending.delete(timer); if (!disposed) void checkAccess(session); }, 0);
+      pending.add(timer);
     });
-
-    // Then check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      
-      if (!session) {
-        navigate('/auth');
-        setLoading(false);
-        return;
-      }
-
-      // Check access status
-      supabase
-        .from('profiles')
-        .select('access_status')
-        .eq('id', session.user.id)
-        .single()
-        .then(({ data: profile }) => {
-          if (profile?.access_status === 'revoked') {
-            navigate('/acesso-bloqueado');
-          }
-          setLoading(false);
-        });
-    });
-
-    return () => subscription.unsubscribe();
+    return () => { disposed = true; generation++; pending.forEach(clearTimeout); subscription.unsubscribe(); };
   }, [navigate]);
 
   if (loading) {
@@ -69,6 +60,11 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
     );
   }
 
+  if (accessError) return (
+    <div className="min-h-screen grid place-items-center p-6" role="alert">
+      <div><p>Não foi possível verificar seu acesso.</p><button className="underline mt-4" onClick={() => window.location.reload()}>Tentar novamente</button></div>
+    </div>
+  );
   if (!user) return null;
 
   return (

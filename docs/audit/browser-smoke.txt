@@ -1,0 +1,102 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> vite_react_shadcn_ts@0.0.0 test:smoke
+> node scripts/smoke.mjs
+
+{
+  "browser": "141.0.7390.37",
+  "externalServices": "mocked",
+  "checks": 18,
+  "results": [
+    {
+      "width": 1440,
+      "path": "/",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/auth",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/auth?recovery=1",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/pricing",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/checkout",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/admin/setup",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/membros",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/preview/audit-share-123456",
+      "result": "pass"
+    },
+    {
+      "width": 1440,
+      "path": "/obrigado",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/auth",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/auth?recovery=1",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/pricing",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/checkout",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/admin/setup",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/membros",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/preview/audit-share-123456",
+      "result": "pass"
+    },
+    {
+      "width": 390,
+      "path": "/obrigado",
+      "result": "pass"
+    }
+  ]
+}

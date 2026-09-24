@@ -56,7 +56,8 @@ const Checkout = () => {
       setIsAuthenticated(true);
       setUserEmail(formData.email);
       toast.success('Conta verificada com sucesso!');
-    } catch (error: any) {
+    } catch (caught) {
+      const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       let message = error.message;
       if (error.message.includes('Invalid login credentials')) message = 'Email ou senha incorretos.';
       else if (error.message.includes('User already registered')) message = 'Este email já está cadastrado. Faça login.';
@@ -69,8 +70,8 @@ const Checkout = () => {
   const handlePayment = async () => {
     setIsLoading(true);
     try {
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'InitiateCheckout', { content_name: 'Método IA Real', currency: 'BRL', value: 497 });
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', { content_name: 'Método IA Real', currency: 'BRL', value: 497 });
       }
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: { priceId: COURSE_PRICE_ID, mode: 'payment' },
@@ -78,7 +79,8 @@ const Checkout = () => {
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
       else throw new Error('URL não recebida');
-    } catch (err: any) {
+    } catch (caught) {
+      const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       toast.error('Erro ao iniciar pagamento. Tente novamente.');
     } finally {
       setIsLoading(false);

@@ -65,14 +65,14 @@ export const AnalyticsDashboard = () => {
       });
 
       const avgSlides = Math.round(
-        carousels.reduce((sum, c) => sum + ((c.slides as any[])?.length || 0), 0) / carousels.length
+        carousels.reduce((sum, c) => sum + ((c.slides as unknown[])?.length || 0), 0) / carousels.length
       );
 
       // Extract niches from config
       const nicheMap: Record<string, number> = {};
       const styleMap: Record<string, number> = {};
       carousels.forEach(c => {
-        const cfg = c.config as any;
+        const cfg = c.config as { objective?: string; audience?: { niche?: string }; format?: { style?: string } };
         if (cfg?.audience?.niche) {
           const n = cfg.audience.niche;
           nicheMap[n] = (nicheMap[n] || 0) + 1;

@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { useOutletContext, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,7 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollReveal } from '@/components/ScrollReveal';
 
 interface ContextType {
-  user: any;
+  user: User;
   companyData: {
     role: string;
     company: {
