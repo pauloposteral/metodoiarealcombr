@@ -126,6 +126,48 @@
 .lv2-tick.on span{color:var(--mint)}
 @media(max-width:640px){.lv2-tick:nth-child(even) span{visibility:hidden}}
 
+/* CAPÍTULOS CINEMATOGRÁFICOS */
+.lv2-cinema-chapter{
+  position:relative;min-height:clamp(430px,64vw,650px);overflow:hidden;
+  display:flex;align-items:flex-end;isolation:isolate;border-block:1px solid var(--line);
+  background:var(--ink-2);
+}
+.lv2-cinema-poster,.lv2-cinema-video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
+}
+.lv2-cinema-poster{z-index:-4;filter:saturate(.8) contrast(1.08)}
+.lv2-cinema-video{z-index:-3;opacity:0;transition:opacity .8s ease;filter:saturate(.8) contrast(1.08)}
+.lv2-cinema-video.is-ready{opacity:1}
+.lv2-cinema-scrim{
+  position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(180deg,rgba(6,9,15,.12),rgba(6,9,15,.22) 42%,rgba(6,9,15,.94) 100%),linear-gradient(90deg,rgba(6,9,15,.9),rgba(6,9,15,.18) 72%);
+}
+.lv2-cinema-right .lv2-cinema-scrim{
+  background:linear-gradient(180deg,rgba(6,9,15,.12),rgba(6,9,15,.22) 42%,rgba(6,9,15,.94) 100%),linear-gradient(-90deg,rgba(6,9,15,.9),rgba(6,9,15,.18) 72%);
+}
+.lv2-cinema-grid{
+  position:absolute;inset:0;z-index:-1;opacity:.22;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:linear-gradient(180deg,transparent,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000);
+}
+.lv2-cinema-content{width:100%;padding-top:150px;padding-bottom:52px}
+.lv2-cinema-right .lv2-cinema-content{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.lv2-cinema-act{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mint);margin-bottom:14px}
+.lv2-cinema-content h2{font-size:clamp(1.9rem,4.2vw,3.5rem);max-width:720px;margin:0 0 18px;text-wrap:balance}
+.lv2-cinema-content p{max-width:590px;color:var(--text);font-size:clamp(.98rem,1.6vw,1.12rem);text-shadow:0 2px 20px var(--ink)}
+.lv2-cinema-line{display:block;width:96px;height:2px;margin-top:26px;background:var(--grad)}
+
+@media(max-width:760px){
+  .lv2-cinema-chapter{min-height:500px;align-items:flex-end}
+  .lv2-cinema-poster,.lv2-cinema-video{object-position:center}
+  .lv2-cinema-scrim,.lv2-cinema-right .lv2-cinema-scrim{background:linear-gradient(180deg,rgba(6,9,15,.08),rgba(6,9,15,.38) 44%,rgba(6,9,15,.98) 88%)}
+  .lv2-cinema-content,.lv2-cinema-right .lv2-cinema-content{padding-top:180px;padding-bottom:38px;align-items:flex-start;text-align:left}
+  .lv2-cinema-content h2{font-size:2rem}
+  .lv2-cinema-content p{font-size:.96rem;line-height:1.58}
+}
+
+@media(prefers-reduced-motion:reduce){.lv2-cinema-video{display:none}}
+
 /* MARQUEE */
 .lv2-marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;position:relative}
 .lv2-marquee-wrap::before,.lv2-marquee-wrap::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
