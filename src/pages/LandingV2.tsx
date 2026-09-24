@@ -309,7 +309,9 @@ export default function LandingV2() {
             <span className="lv2-eyebrow">Veja funcionando</span>
             <h2>O que muda quando o <span className="lv2-grad-text">prompt é engenharia</span>, não sorte.</h2>
           </div>
-          <LiveTerminal />
+          <ExpandableBlock label="Ver a demonstração" labelOpen="Fechar a demonstração">
+            <LiveTerminal />
+          </ExpandableBlock>
         </div>
       </section>
 
@@ -352,7 +354,11 @@ export default function LandingV2() {
               ))}
             </div>
           </div>
-          <BeforeAfterSlider />
+          <div style={{ marginTop: 28 }}>
+            <ExpandableBlock label="Comparar antes e depois" labelOpen="Recolher comparação">
+              <BeforeAfterSlider />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
@@ -475,6 +481,7 @@ export default function LandingV2() {
             <p className="lv2-lead">Um quiz de 2 minutos no primeiro acesso define a sua trilha. Você segue um caminho de 15 a 18 horas, na ordem certa para o seu objetivo.</p>
           </div>
 
+          <ExpandableBlock label="Ver as 4 trilhas" labelOpen="Recolher trilhas">
           <div className="lv2-trail-grid">
             {TRAILS.map((t, ti) => {
               const open = openTrail === ti;
@@ -510,6 +517,7 @@ export default function LandingV2() {
               );
             })}
           </div>
+          </ExpandableBlock>
 
 
           <div className="lv2-trail-note rv">
@@ -541,7 +549,11 @@ export default function LandingV2() {
       {/* TRACK QUIZ */}
       <section className="lv2-section lv2-section-tight-bottom" id="quiz">
         <div className="lv2-wrap" style={{ maxWidth: 760 }}>
-          <div className="rv"><TrackQuiz onCta={goCheckout} /></div>
+          <div className="rv">
+            <ExpandableBlock label="Descobrir a minha trilha" labelOpen="Fechar o teste">
+              <TrackQuiz onCta={goCheckout} />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 

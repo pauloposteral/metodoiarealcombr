@@ -128,7 +128,7 @@
 
 /* CAPÍTULOS CINEMATOGRÁFICOS */
 .lv2-cinema-chapter{
-  position:relative;min-height:clamp(340px,44vw,470px);overflow:hidden;
+  position:relative;min-height:clamp(300px,36vw,390px);overflow:hidden;
   display:flex;align-items:flex-end;isolation:isolate;border-block:1px solid var(--line);
   background:var(--ink-2);
 }
@@ -158,7 +158,7 @@
 .lv2-cinema-line{display:block;width:96px;height:2px;margin-top:26px;background:var(--grad)}
 
 @media(max-width:760px){
-  .lv2-cinema-chapter{min-height:360px;align-items:flex-end}
+  .lv2-cinema-chapter{min-height:320px;align-items:flex-end}
   .lv2-cinema-poster,.lv2-cinema-video{object-position:center}
   .lv2-cinema-scrim,.lv2-cinema-right .lv2-cinema-scrim{background:linear-gradient(180deg,rgba(6,9,15,.08),rgba(6,9,15,.38) 44%,rgba(6,9,15,.98) 88%)}
   .lv2-cinema-content,.lv2-cinema-right .lv2-cinema-content{padding-top:110px;padding-bottom:30px;align-items:flex-start;text-align:left}
