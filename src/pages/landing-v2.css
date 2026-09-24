@@ -1418,3 +1418,14 @@
 .lv2-quote-dot{ color:#6EE7B7; font-size:10px; font-style:normal; opacity:.7 }
 @keyframes lv2QuoteScroll{ to{ transform:translateX(-50%) } }
 @media (prefers-reduced-motion:reduce){ .lv2-quote-track{ animation-duration:180s } }
+
+/* ===== Compact reveal blocks (keeps every section, collapsed by default) ===== */
+.lv2-expand{text-align:center}
+.lv2-expand-hint{color:var(--muted);font-size:.95rem;max-width:620px;margin:0 auto 18px}
+.lv2-expand-btn{background:rgba(255,255,255,.03);border:1px solid var(--line-2);color:var(--text);font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:14px 26px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:border-color .3s,background .3s,color .3s}
+.lv2-expand-btn:hover{border-color:var(--mint);color:var(--mint);background:rgba(110,231,183,.06)}
+.lv2-expand-arr{transition:transform .3s}
+.lv2-expand.open .lv2-expand-arr{transform:rotate(180deg)}
+.lv2-expand-body{margin-top:34px;text-align:left;animation:lv2-expand-in .45s ease both}
+@keyframes lv2-expand-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lv2-expand-body{animation:none}}
