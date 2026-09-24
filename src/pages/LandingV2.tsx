@@ -143,6 +143,7 @@ const FAQS = [
 export default function LandingV2() {
   const [scrolled, setScrolled] = useState(false);
   const [openMod, setOpenMod] = useState<number | null>(null);
+  const [showAllMods, setShowAllMods] = useState(false);
   const [openTrail, setOpenTrail] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [litCount, setLitCount] = useState(1);
@@ -378,6 +379,7 @@ export default function LandingV2() {
                 key={m.code}
                 ref={(el) => (modsRef.current[i] = el)}
                 data-idx={i}
+                hidden={!showAllMods && i >= 5}
                 className={`lv2-mod rv ${i < litCount ? 'lit' : ''} ${openMod === i ? 'open' : ''}`}
               >
                 <span className="lv2-mod-dot" />
@@ -402,6 +404,14 @@ export default function LandingV2() {
               </div>
             ))}
           </div>
+
+          <div className="lv2-expand" style={{ marginTop: 22 }}>
+            <button type="button" className="lv2-expand-btn" onClick={() => setShowAllMods((v) => !v)} aria-expanded={showAllMods}>
+              {showAllMods ? 'Recolher módulos' : 'Ver os 13 módulos'}
+              <span className="lv2-expand-arr" aria-hidden style={showAllMods ? { transform: 'rotate(180deg)' } : undefined}>↓</span>
+            </button>
+          </div>
+
 
           <div className="lv2-map-foot rv">
             <span className="lv2-dotg" />
@@ -507,7 +517,7 @@ export default function LandingV2() {
             <a href="#oferta" className="lv2-link-cta">Ver o que está incluído ↓</a>
           </div>
 
-          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '90px auto 0', maxWidth: 780 }}>
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '46px auto 0', maxWidth: 780 }}>
             <span className="lv2-eyebrow">Comparativo honesto</span>
             <h2>Onde a diferença aparece — <span className="lv2-grad-text">linha por linha.</span></h2>
             <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Sem inventar defeitos alheios. É o que a maioria dos cursos e a internet grátis não entregam — e o que aqui é regra da casa.</p>
@@ -556,7 +566,11 @@ export default function LandingV2() {
             <span className="lv2-eyebrow">Alunos falando</span>
             <h2>Resultado real, no <span className="lv2-grad-text">tempo real de quem executou.</span></h2>
           </div>
-          <div className="rv"><TrustWall /></div>
+          <div className="rv">
+            <ExpandableBlock label="Ler os depoimentos" labelOpen="Recolher depoimentos">
+              <TrustWall />
+            </ExpandableBlock>
+          </div>
         </div>
         <div className="rv" style={{ marginTop: 40 }}><QuoteMarquee /></div>
       </section>
@@ -670,20 +684,22 @@ export default function LandingV2() {
       {/* FAQ */}
       <section className="lv2-section" id="faq">
         <div className="lv2-wrap">
-          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 60px' }}>
+          <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 30px' }}>
             <span className="lv2-eyebrow">Dúvidas frequentes</span>
             <h2>O que você provavelmente quer saber</h2>
           </div>
-          <div className="lv2-faq">
-            {FAQS.map((f, i) => (
-              <div key={i} className={`lv2-faq-item ${openFaq === i ? 'open' : ''}`}>
-                <button className="lv2-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>{f.q}</button>
-                <div className="lv2-faq-a" style={{ maxHeight: openFaq === i ? 400 : 0 }}>
-                  <p>{f.a}</p>
+          <ExpandableBlock label="Abrir as dúvidas" labelOpen="Recolher as dúvidas">
+            <div className="lv2-faq">
+              {FAQS.map((f, i) => (
+                <div key={i} className={`lv2-faq-item ${openFaq === i ? 'open' : ''}`}>
+                  <button className="lv2-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>{f.q}</button>
+                  <div className="lv2-faq-a" style={{ maxHeight: openFaq === i ? 400 : 0 }}>
+                    <p>{f.a}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ExpandableBlock>
         </div>
       </section>
 
