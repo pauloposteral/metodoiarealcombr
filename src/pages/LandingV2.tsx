@@ -22,6 +22,17 @@ import { TopProgressBar, LiveViewersBadge, FoundersManifesto, ShortcutHint } fro
 import { CursorGlow, RadarCountdown } from '@/components/landing/LandingV2Wow9';
 import { BackToTop, QuoteMarquee } from '@/components/landing/LandingV2Wow10';
 import { CinematicHeroBackground } from '@/components/landing/CinematicHeroBackground';
+import { CinematicChapter } from '@/components/landing/CinematicChapter';
+import act2Poster from '@/assets/landing/cinematic-act-2-poster.jpg';
+import act3Poster from '@/assets/landing/cinematic-act-3-poster.jpg';
+import act4Poster from '@/assets/landing/cinematic-act-4-poster.jpg';
+import act5Poster from '@/assets/landing/cinematic-act-5-poster.jpg';
+import act6Poster from '@/assets/landing/cinematic-act-6-poster.jpg';
+import act2Video from '@/assets/landing/cinematic-act-2-noise.mp4.asset.json';
+import act3Video from '@/assets/landing/cinematic-act-3-map.mp4.asset.json';
+import act4Video from '@/assets/landing/cinematic-act-4-living-intelligence.mp4.asset.json';
+import act5Video from '@/assets/landing/cinematic-act-5-execution.mp4.asset.json';
+import act6Video from '@/assets/landing/cinematic-act-6-horizon.mp4.asset.json';
 import './landing-v2.css';
 
 const MODULES = [
@@ -296,8 +307,14 @@ export default function LandingV2() {
         </div>
       </section>
 
-
-
+      <CinematicChapter
+        act="Ato 02 · O ruído"
+        title="Quando tudo parece importante, nada vira caminho."
+        body="Ferramentas, novidades e prompts chegam de todos os lados. O próximo passo é trocar excesso por direção."
+        poster={act2Poster}
+        video={act2Video.url}
+        align="right"
+      />
       {/* PROBLEMA + SOLUÇÃO */}
       <section className="lv2-section" id="problema">
         <div className="lv2-wrap">
@@ -333,7 +350,13 @@ export default function LandingV2() {
         </div>
       </section>
 
-
+      <CinematicChapter
+        act="Ato 03 · O mapa"
+        title="O caos começa a obedecer a uma sequência."
+        body="Cada habilidade encontra seu lugar, cada etapa termina em algo construído e o aprendizado deixa de depender de sorte."
+        poster={act3Poster}
+        video={act3Video.url}
+      />
       {/* MAPA */}
       <section className="lv2-section" id="mapa">
         <div className="lv2-wrap">
@@ -381,6 +404,15 @@ export default function LandingV2() {
           </div>
         </div>
       </section>
+
+      <CinematicChapter
+        act="Ato 04 · A inteligência viva"
+        title="Um bom mapa não fica parado enquanto o mundo muda."
+        body="A estrutura continua clara, mas o conhecimento evolui: novas ferramentas entram, rotas se adaptam e você segue no contexto certo."
+        poster={act4Poster}
+        video={act4Video.url}
+        align="right"
+      />
 
       {/* RADAR */}
       <section className="lv2-section" id="radar">
@@ -479,6 +511,14 @@ export default function LandingV2() {
         </div>
       </section>
 
+      <CinematicChapter
+        act="Ato 05 · A execução"
+        title="Conhecimento só ganha valor quando encontra o trabalho real."
+        body="Agora a intenção humana encontra a velocidade da IA: testar, ajustar, medir e transformar ideias em entregas concretas."
+        poster={act5Poster}
+        video={act5Video.url}
+      />
+
       {/* TRACK QUIZ */}
       <section className="lv2-section lv2-section-tight-bottom" id="quiz">
         <div className="lv2-wrap" style={{ maxWidth: 760 }}>
@@ -528,6 +568,15 @@ export default function LandingV2() {
           <div className="rv"><AnimatedStats /></div>
         </div>
       </section>
+
+      <CinematicChapter
+        act="Ato 06 · O horizonte"
+        title="O futuro deixa de ser uma ameaça e vira território."
+        body="Com método, prática e repertório, você não precisa prever cada mudança. Precisa saber avançar quando ela chegar."
+        poster={act6Poster}
+        video={act6Video.url}
+        align="right"
+      />
 
       {/* JOURNEY */}
       <section className="lv2-section" id="jornada">
