@@ -258,7 +258,7 @@ export default function LandingV2() {
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Quero minha vaga <span className="arr">→</span></>}
               </button>
-              <p className="lv2-btn-note">R$ 497 à vista ou 12× de R$ 41,41 · Pix ou cartão · garantia incondicional de 7 dias</p>
+              <p className="lv2-btn-note">R$ 497 ou 12× de R$ 41,41 · garantia de 7 dias</p>
             </div>
 
             <div className="lv2-mini-map rv">
