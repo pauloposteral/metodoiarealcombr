@@ -162,7 +162,7 @@ export default function LandingV2() {
     revealItems.forEach((el) => io.observe(el));
     const visibilityFallback = window.setTimeout(() => {
       revealItems.forEach((el) => el.classList.add('in'));
-    }, 1800);
+    }, 900);
     return () => {
       window.clearTimeout(visibilityFallback);
       io.disconnect();

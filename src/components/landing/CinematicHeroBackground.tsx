@@ -8,7 +8,14 @@ type NetworkInformation = {
 };
 
 export function CinematicHeroBackground() {
-  const [canPlay, setCanPlay] = useState(false);
+  const [canPlay, setCanPlay] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const connection = (navigator as Navigator & { connection?: NetworkInformation }).connection;
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      && !connection?.saveData
+      && connection?.effectiveType !== '2g'
+      && Boolean(heroVideo.url);
+  });
   const [isReady, setIsReady] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
 
@@ -17,7 +24,7 @@ export function CinematicHeroBackground() {
     const connection = (navigator as Navigator & { connection?: NetworkInformation }).connection;
     const constrainedNetwork = connection?.saveData || connection?.effectiveType === '2g';
 
-    if (!reducedMotion && !constrainedNetwork) setCanPlay(true);
+    setCanPlay(!reducedMotion && !constrainedNetwork && Boolean(heroVideo.url));
   }, []);
 
   return (
@@ -28,7 +35,6 @@ export function CinematicHeroBackground() {
         alt=""
         width={1536}
         height={864}
-        fetchPriority="high"
       />
       {canPlay && !hasFailed && (
         <video
