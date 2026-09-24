@@ -17,7 +17,14 @@ type CinematicChapterProps = {
 export function CinematicChapter({ act, title, body, poster, video, align = 'left' }: CinematicChapterProps) {
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
+  const [canPlay] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const connection = (navigator as Navigator & { connection?: NetworkInformation }).connection;
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      && !connection?.saveData
+      && connection?.effectiveType !== '2g'
+      && Boolean(video);
+  });
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
@@ -26,43 +33,27 @@ export function CinematicChapter({ act, title, body, poster, video, align = 'lef
     const root = rootRef.current;
     if (!root) return;
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const connection = (navigator as Navigator & { connection?: NetworkInformation }).connection;
-    const constrainedNetwork = connection?.saveData || connection?.effectiveType === '2g';
-    if (reducedMotion || constrainedNetwork || !video) return;
-
-    const preloadObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-        setShouldLoad(true);
-        preloadObserver.disconnect();
-      },
-      { rootMargin: '500px 0px' },
-    );
+    if (!canPlay) return;
     const playbackObserver = new IntersectionObserver(
       ([entry]) => setIsVisible(Boolean(entry?.isIntersecting)),
-      { threshold: 0.18 },
+      { rootMargin: '180px 0px', threshold: 0.08 },
     );
 
-    preloadObserver.observe(root);
     playbackObserver.observe(root);
-    return () => {
-      preloadObserver.disconnect();
-      playbackObserver.disconnect();
-    };
-  }, [video]);
+    return () => playbackObserver.disconnect();
+  }, [canPlay]);
 
   useEffect(() => {
     const media = videoRef.current;
-    if (!media || !shouldLoad) return;
+    if (!media || !canPlay) return;
     if (isVisible) media.play().catch(() => setHasFailed(true));
     else media.pause();
-  }, [isVisible, shouldLoad]);
+  }, [canPlay, isVisible]);
 
   return (
     <section ref={rootRef} className={`lv2-cinema-chapter lv2-cinema-${align}`} aria-label={`${act}: ${title}`}>
       <img className="lv2-cinema-poster" src={poster} alt="" loading="lazy" width={1536} height={864} />
-      {shouldLoad && !hasFailed && (
+      {canPlay && !hasFailed && (
         <video
           ref={videoRef}
           className={`lv2-cinema-video ${isReady ? 'is-ready' : ''}`}
@@ -71,7 +62,7 @@ export function CinematicChapter({ act, title, body, poster, video, align = 'lef
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           disablePictureInPicture
           onCanPlay={() => setIsReady(true)}
           onError={() => setHasFailed(true)}
