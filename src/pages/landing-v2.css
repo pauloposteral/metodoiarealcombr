@@ -347,11 +347,17 @@
   display:inline-block;opacity:0;transform:translateY(24px);
   animation:lv2splitIn .7s cubic-bezier(.2,.7,.2,1) forwards;
 }
+/* Safari/iOS: background-clip:text não atravessa filhos inline-block.
+   Reaplica o gradiente em cada palavra para o texto nunca ficar invisível. */
+.lv2-grad-text .lv2-split-w{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
 @keyframes lv2splitIn{to{opacity:1;transform:none}}
 .lv2-h1{overflow:visible}
 @media(prefers-reduced-motion:reduce){
   .lv2-split-w{animation:none;opacity:1;transform:none}
 }
+
 
 /* 4. Live counters */
 .lv2-live{border-bottom:1px solid var(--line);padding:38px 0 42px;background:var(--ink)}
