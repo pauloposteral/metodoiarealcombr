@@ -24,7 +24,7 @@ export const ExpandableBlock = ({ label, labelOpen, hint, children }: Expandable
     window.requestAnimationFrame(() => {
       if (before === undefined || !rootRef.current) return;
       const delta = rootRef.current.getBoundingClientRect().top - before;
-      if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: 'instant' });
+      if (Math.abs(delta) > 1) window.scrollBy(0, delta);
     });
   };
 
