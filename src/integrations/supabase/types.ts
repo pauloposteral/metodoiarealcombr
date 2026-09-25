@@ -489,6 +489,36 @@ export type Database = {
           },
         ]
       }
+      course_payments: {
+        Row: {
+          created_at: string
+          status: string
+          stripe_charge_id: string | null
+          stripe_checkout_session_id: string
+          stripe_payment_intent_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          status: string
+          stripe_charge_id?: string | null
+          stripe_checkout_session_id: string
+          stripe_payment_intent_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          status?: string
+          stripe_charge_id?: string | null
+          stripe_checkout_session_id?: string
+          stripe_payment_intent_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           created_at: string | null
@@ -1645,6 +1675,27 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ai_sandbox_daily_limit: { Args: never; Returns: number }
+      consume_ai_quota: {
+        Args: { quota_key: string; quota_limit: number; window_seconds: number }
+        Returns: boolean
+      }
+      get_profile_cards: {
+        Args: { user_ids: string[] }
+        Returns: {
+          avatar_url: string
+          full_name: string
+          id: string
+        }[]
+      }
+      get_shared_carousel: {
+        Args: { share_id: string }
+        Returns: {
+          slides: Json
+          theme: Json
+          topic: string
+        }[]
+      }
       get_user_company_id: { Args: { _user_id: string }; Returns: string }
       has_active_company: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
@@ -1656,6 +1707,25 @@ export type Database = {
       }
       is_company_admin: { Args: { _user_id: string }; Returns: boolean }
       is_moderator: { Args: { _user_id: string }; Returns: boolean }
+      issue_certificate: {
+        Args: never
+        Returns: {
+          certificate_code: string
+          completed_at: string
+          course_name: string
+          created_at: string
+          id: string
+          student_name: string
+          total_hours: number
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "certificates"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       validate_certificate: {
         Args: { cert_code: string }
         Returns: {
