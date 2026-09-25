@@ -20,5 +20,6 @@
 - [x] Motion cinematográfico, circuitos SVG e transições avançadas nas 6 cenas
 - [x] Auditoria passo 1: remover números inventados da landing e redirecionar /curso para /completo
 - [x] Auditoria passo 2: mesclar branch do currículo mantendo a home cinematográfica
-- [ ] Auditoria passo 3: aplicar atualização do banco e importar as 124 aulas
+- [x] Auditoria passo 3a: aplicar atualização do banco (4 migrações)
+- [ ] Auditoria passo 3b: importar as 124 aulas (bloqueado: nenhuma conta admin definida)
 - [ ] Auditoria passo 4: testar deslogado, no celular e no computador
