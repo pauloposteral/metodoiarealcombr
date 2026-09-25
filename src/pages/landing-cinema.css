@@ -16,6 +16,7 @@
 
 /* ---------- scene ---------- */
 .lcn-scene {
+  --lcn-visibility: 0;
   position: relative;
   min-height: 100svh;
   display: flex;
@@ -27,6 +28,170 @@
   padding-bottom: clamp(3.5rem, 8vh, 6rem);
   border-bottom: 1px solid rgba(244, 243, 239, 0.06);
 }
+
+/* ---------- cinematic vector system ---------- */
+.lcn-vector-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--lcn-gold);
+  opacity: calc(0.18 + var(--lcn-visibility) * 0.52);
+  transition: opacity 700ms ease;
+}
+
+.lcn-tone-arsenal .lcn-vector-layer { color: #78b7ff; }
+.lcn-tone-mestre .lcn-vector-layer { color: #e3bd67; }
+.lcn-tone-prejuizo .lcn-vector-layer { color: #ff806f; }
+.lcn-tone-fabrica .lcn-vector-layer { color: #76e9c4; }
+.lcn-tone-horizonte .lcn-vector-layer { color: #f0ce7a; }
+
+.lcn-circuit-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  transform: scale(calc(1.04 - var(--lcn-visibility) * 0.04));
+  transform-origin: center;
+  transition: transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lcn-circuit-grid path {
+  stroke: currentColor;
+  stroke-width: 0.8;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+.lcn-circuit-flow path {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.08 0.92;
+  animation: lcn-circuit-travel 5.5s linear infinite;
+  vector-effect: non-scaling-stroke;
+}
+
+.lcn-circuit-flow path:nth-child(2) { animation-delay: -2.4s; animation-duration: 6.8s; }
+.lcn-circuit-flow path:nth-child(3) { animation-delay: -4.1s; animation-duration: 7.4s; }
+
+@keyframes lcn-circuit-travel {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  18%, 72% { opacity: 0.95; }
+  to { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.lcn-circuit-nodes circle {
+  fill: currentColor;
+  filter: drop-shadow(0 0 7px currentColor);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lcn-node-pulse 2.8s ease-in-out infinite;
+}
+
+.lcn-circuit-nodes circle:nth-child(2n) { animation-delay: -1.4s; }
+
+@keyframes lcn-node-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.65); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+.lcn-vector-core {
+  stroke: currentColor;
+  stroke-width: 0.75;
+  opacity: 0.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lcn-core-spin 34s linear infinite;
+}
+
+.lcn-vector-core circle { stroke-dasharray: 3 10; }
+.lcn-vector-core circle + circle { stroke-dasharray: 34 12 4 16; }
+.lcn-core-arc { stroke-width: 2; stroke-dasharray: 0.18 0.82; path-length: 1; }
+.lcn-core-arc-alt { opacity: 0.5; }
+
+@keyframes lcn-core-spin { to { rotate: 360deg; } }
+
+.lcn-frame-corners path {
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.lcn-anamorphic-flare {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor 38%, rgba(244, 243, 239, 0.8) 50%, currentColor 62%, transparent);
+  box-shadow: 0 0 18px currentColor, 0 0 48px currentColor;
+  opacity: 0;
+  transform: scaleX(0.1);
+}
+
+.lcn-scene.is-live .lcn-anamorphic-flare {
+  animation: lcn-flare-pass 2.2s cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+}
+
+@keyframes lcn-flare-pass {
+  0% { opacity: 0; transform: scaleX(0.08) translateX(-25%); }
+  32% { opacity: 0.72; }
+  100% { opacity: 0; transform: scaleX(1) translateX(12%); }
+}
+
+.lcn-scan-beam {
+  position: absolute;
+  inset: -25% 0 auto;
+  height: 32%;
+  background: linear-gradient(to bottom, transparent, currentColor 98%, transparent);
+  opacity: 0.05;
+  animation: lcn-scan 7s linear infinite;
+}
+
+@keyframes lcn-scan { to { transform: translateY(470%); } }
+
+.lcn-transition-shutter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 10%;
+  background: linear-gradient(to bottom, var(--lcn-bg), transparent);
+  opacity: calc(0.92 - var(--lcn-visibility) * 0.92);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms ease;
+}
+
+.lcn-transition-shutter-top { top: 0; transform: translateY(calc(var(--lcn-visibility) * -100%)); }
+.lcn-transition-shutter-bottom { bottom: 0; rotate: 180deg; transform: translateY(calc(var(--lcn-visibility) * -100%)); }
+
+.lcn-hud-status {
+  position: fixed;
+  top: 1.1rem;
+  left: 50%;
+  z-index: 46;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(244, 243, 239, 0.36);
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  transform: translateX(-50%);
+}
+
+.lcn-hud-status i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--lcn-gold);
+  box-shadow: 0 0 8px var(--lcn-gold);
+  animation: lcn-status 1.8s ease-in-out infinite;
+}
+
+@keyframes lcn-status { 50% { opacity: 0.25; } }
 
 .lcn-frame {
   position: absolute;
@@ -105,6 +270,7 @@
 /* ---------- content ---------- */
 .lcn-content {
   position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 54rem;
 }
@@ -117,7 +283,12 @@
   text-transform: uppercase;
   color: var(--lcn-gold);
   margin-bottom: 0.85rem;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 600ms ease 120ms, transform 600ms ease 120ms;
 }
+
+.lcn-scene.is-live .lcn-kicker { opacity: 1; transform: translateX(0); }
 
 .lcn-title {
   font-size: clamp(2rem, 7.2vw, 4.6rem);
@@ -132,13 +303,15 @@
   display: inline-block;
   margin-right: 0.28em;
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(22px) scale(0.97);
+  filter: blur(7px);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 700ms ease;
 }
 
 .lcn-scene.is-live .lcn-word {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 .lcn-body {
@@ -160,9 +333,16 @@
   flex-wrap: wrap;
   gap: 0.7rem;
   margin-top: 1.4rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 600ms ease 460ms, transform 600ms ease 460ms;
 }
 
+.lcn-scene.is-live .lcn-actions { opacity: 1; transform: translateY(0); }
+
 .lcn-cta {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -177,6 +357,18 @@
   box-shadow: 0 18px 40px -18px rgba(216, 178, 95, 0.75);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
+
+.lcn-cta::after {
+  content: '';
+  position: absolute;
+  inset: -60% auto -60% -35%;
+  width: 24%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  transform: skewX(-18deg);
+  transition: left 650ms ease;
+}
+
+.lcn-cta:hover::after { left: 120%; }
 
 .lcn-cta:hover { transform: translateY(-2px); box-shadow: 0 24px 50px -18px rgba(216, 178, 95, 0.9); }
 
@@ -202,7 +394,12 @@
   flex-wrap: wrap;
   gap: 0.4rem 0.5rem;
   margin-top: 1.3rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 700ms ease 620ms, transform 700ms ease 620ms;
 }
+
+.lcn-scene.is-live .lcn-dock { opacity: 1; transform: translateY(0); }
 
 .lcn-dock-item {
   font-family: 'Space Mono', ui-monospace, monospace;
@@ -331,6 +528,7 @@
 
 .lcn-index-item.is-active { color: var(--lcn-gold); }
 .lcn-index-item.is-active .lcn-index-dash { width: 34px; }
+.lcn-index-item.is-active .lcn-index-dash { box-shadow: 0 0 10px currentColor; }
 .lcn-index-item:hover { color: var(--lcn-ink); }
 
 .lcn-sticky {
@@ -360,11 +558,27 @@
 @media (max-width: 899px) {
   .lcn-scene { padding-bottom: 6.5rem; }
   .lcn-scene:last-child { padding-bottom: 9.5rem; }
+  .lcn-vector-core { opacity: 0.11; }
+  .lcn-circuit-grid path:nth-child(n+4),
+  .lcn-circuit-flow path:nth-child(3),
+  .lcn-circuit-nodes circle:nth-child(n+5) { display: none; }
+  .lcn-hud-status { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .lcn-grain { animation: none; }
+  .lcn-vector-layer { opacity: 0.22; }
+  .lcn-circuit-flow path,
+  .lcn-circuit-nodes circle,
+  .lcn-vector-core,
+  .lcn-scan-beam,
+  .lcn-hud-status i { animation: none; }
+  .lcn-anamorphic-flare,
+  .lcn-transition-shutter { display: none; }
   .lcn-word,
-  .lcn-body { opacity: 1; transform: none; transition: none; }
+  .lcn-body,
+  .lcn-kicker,
+  .lcn-actions,
+  .lcn-dock { opacity: 1; transform: none; filter: none; transition: none; }
   .lcn-reel { scroll-snap-type: none; }
 }

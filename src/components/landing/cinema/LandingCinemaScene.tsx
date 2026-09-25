@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { CinemaScene } from './cinemaScenes';
+import { CinemaVectorOverlay } from './CinemaVectorOverlay';
 
 type NetworkInformation = { saveData?: boolean; effectiveType?: string };
 
@@ -37,8 +38,9 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
         if (visible) setShouldLoad(true);
         setIsVisible(visible);
         root.classList.toggle('is-live', visible);
+        root.style.setProperty('--lcn-visibility', `${entry?.intersectionRatio ?? 0}`);
       },
-      { rootMargin: '250px 0px', threshold: 0.25 },
+      { rootMargin: '250px 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
     observer.observe(root);
     return () => observer.disconnect();
@@ -82,6 +84,8 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
         <div className="lcn-grain" aria-hidden="true" />
         <div className="lcn-vignette" aria-hidden="true" />
       </div>
+
+      <CinemaVectorOverlay index={index} />
 
       <div className="lcn-slate" aria-hidden="true">
         <span>{scene.slate}</span>

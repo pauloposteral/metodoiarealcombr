@@ -17,3 +17,4 @@
 - [x] Dock de gigantes de IA abaixo do hero e CTAs enxutos
 - [x] Oferta R$ 497 / 12x R$ 41,41 com checkout Stripe na cena final
 - [x] Landing editorial anterior preservada em /completo
+- [x] Motion cinematográfico, circuitos SVG e transições avançadas nas 6 cenas
