@@ -1733,6 +1733,48 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      record_study_day: {
+        Args: never
+        Returns: {
+          created_at: string
+          current_streak: number
+          id: string
+          last_activity_date: string | null
+          longest_streak: number
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "user_streaks"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      submit_quiz_attempt: {
+        Args: {
+          attempt_key: string
+          quiz_identifier: string
+          seconds_spent?: number
+          submitted_answers: Json
+        }
+        Returns: {
+          answers: Json
+          completed_at: string | null
+          id: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          time_spent_seconds: number | null
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "quiz_attempts"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       validate_certificate: {
         Args: { cert_code: string }
         Returns: {

@@ -15,6 +15,13 @@
       "when": 1790329904666,
       "tag": "0001_greenn_events",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790329944200,
+      "tag": "0002_progress_integrity",
+      "breakpoints": true
     }
   ]
 }
