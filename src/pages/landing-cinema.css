@@ -552,7 +552,7 @@
 .lcn-hero-logo {
   position: relative;
   display: inline-flex;
-  margin-bottom: 1.75rem;
+  margin: 1.5rem 0 2rem;
   isolation: isolate;
 }
 
@@ -568,11 +568,11 @@
 
 .lcn-hero-logo-halo {
   position: absolute;
-  inset: -38% -14%;
+  inset: -30% -10%;
   z-index: 0;
   background:
-    radial-gradient(58% 62% at 50% 50%, rgba(243, 223, 168, 0.92) 0%, rgba(212, 175, 55, 0.42) 46%, rgba(212, 175, 55, 0) 74%);
-  filter: blur(6px);
+    radial-gradient(58% 62% at 50% 50%, rgba(243, 223, 168, 0.6) 0%, rgba(212, 175, 55, 0.28) 46%, rgba(212, 175, 55, 0) 74%);
+  filter: blur(10px);
   border-radius: 999px;
   animation: lcn-logo-halo 5.5s ease-in-out infinite;
 }
