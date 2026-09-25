@@ -8,3 +8,7 @@
 - [x] Gerar cinco novos vídeos e capas coerentes
 - [x] Integrar capítulos com carregamento progressivo
 - [x] Validar a história completa em mobile, desktop e movimento reduzido
+- [x] Reorganizar a landing em seis atos cromáticos conectados
+- [x] Adicionar parallax progressivo com fallback acessível
+- [x] Compactar seções sem remover conteúdo ou CTAs principais
+- [x] Validar expansões, checkout, navegação e boot anônimo

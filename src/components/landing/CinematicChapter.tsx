@@ -12,9 +12,10 @@ type CinematicChapterProps = {
   poster: string;
   video: string;
   align?: 'left' | 'right';
+  tone?: 'noise' | 'map' | 'living' | 'execution' | 'horizon';
 };
 
-export function CinematicChapter({ act, title, body, poster, video, align = 'left' }: CinematicChapterProps) {
+export function CinematicChapter({ act, title, body, poster, video, align = 'left', tone = 'map' }: CinematicChapterProps) {
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canPlay] = useState(() => {
@@ -62,8 +63,32 @@ export function CinematicChapter({ act, title, body, poster, video, align = 'lef
     else media.pause();
   }, [isVisible, shouldLoad]);
 
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(pointer: coarse)').matches) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = root.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+      const progress = Math.max(-1, Math.min(1, (center - viewportCenter) / window.innerHeight));
+      root.style.setProperty('--chapter-shift', `${progress * -36}px`);
+      root.style.setProperty('--chapter-copy', `${progress * 14}px`);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
-    <section ref={rootRef} className={`lv2-cinema-chapter lv2-cinema-${align}`} aria-label={`${act}: ${title}`}>
+    <section ref={rootRef} className={`lv2-cinema-chapter lv2-cinema-${align} lv2-tone-${tone}`} aria-label={`${act}: ${title}`}>
       <img className="lv2-cinema-poster" src={poster} alt="" loading="lazy" width={1536} height={864} />
       {shouldLoad && !hasFailed && (
         <video
