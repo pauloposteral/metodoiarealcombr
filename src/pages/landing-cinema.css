@@ -554,6 +554,7 @@
 .lcn-hero-logo {
   position: relative;
   display: flex;
+  width: fit-content;
   margin: 1.5rem auto 2rem;
   isolation: isolate;
 }
