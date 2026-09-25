@@ -232,10 +232,10 @@ export default function LandingV2() {
       <CursorGlow />
       <TopProgressBar activeChapter={activeChapter} />
       <Helmet>
-        <title>Método IA Real — O curso de IA mais organizado e atualizado do Brasil</title>
-        <meta name="description" content="13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado." />
-        <meta property="og:title" content="Método IA Real — O curso de IA mais organizado e atualizado do Brasil" />
-        <meta property="og:description" content="13 módulos, 4 trilhas por perfil e atualização mensal garantida." />
+        <title>Método IA Real — Aprenda IA fazendo projetos reais</title>
+        <meta name="description" content="Aprenda a escrever, criar imagens e vídeos, automatizar tarefas e publicar seu próprio app em 13 módulos práticos." />
+        <meta property="og:title" content="Método IA Real — Aprenda IA fazendo projetos reais" />
+        <meta property="og:description" content="Do primeiro prompt ao seu próprio app: 13 módulos práticos e um projeto em cada etapa." />
         <link rel="canonical" href="https://metodoiareal.com.br" />
       </Helmet>
 
@@ -261,16 +261,16 @@ export default function LandingV2() {
         <div className="lv2-grid-bg" />
         <div className="lv2-wrap">
           <div className="lv2-hero-in">
-            <span className="lv2-eyebrow rv">Radar IA · atualizado em jul/2026</span>
+            <span className="lv2-eyebrow rv">Do primeiro prompt ao seu próprio app</span>
             <h1 className="rv lv2-h1">
-              <SplitText text="O curso de IA mais" />{' '}
-              <span className="lv2-grad-text"><SplitText text="organizado e atualizado" /></span>{' '}
-              <SplitText text="do Brasil." />
+              <SplitText text="Aprenda IA fazendo:" />{' '}
+              <span className="lv2-grad-text"><SplitText text="escreva, crie, automatize" /></span>{' '}
+              <SplitText text="e publique." />
             </h1>
-            <p className="lv2-lead rv">13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado, não com certificado vazio.</p>
+            <p className="lv2-lead rv">São 13 módulos práticos, do primeiro prompt ao seu próprio app. Cada etapa termina em uma entrega para usar no trabalho ou colocar no portfólio.</p>
             <div className="lv2-hero-cta rv">
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
-                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Quero minha vaga <span className="arr">→</span></>}
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Quero aprender na prática <span className="arr">→</span></>}
               </button>
               <p className="lv2-btn-note">R$ 497 ou 12× de R$ 41,41 · garantia de 7 dias</p>
             </div>
@@ -302,8 +302,8 @@ export default function LandingV2() {
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px', maxWidth: 760 }}>
             <span className="lv2-eyebrow">As ferramentas do curso</span>
-            <h2>16 IAs. Uma por vez. <span className="lv2-grad-text">E cada uma na hora certa.</span></h2>
-            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Passe o mouse por qualquer ferramenta para descobrir pra que ela serve — e em qual módulo você aprende a usá-la de verdade.</p>
+            <h2>16 ferramentas, <span className="lv2-grad-text">cada uma com uma função clara.</span></h2>
+            <p className="lv2-lead" style={{ margin: '14px auto 0' }}>Descubra qual usar para escrever, pesquisar, criar imagens, produzir vídeos, automatizar tarefas ou publicar um app.</p>
           </div>
           <div className="rv">
             <ExpandableBlock label="Ver as 16 ferramentas" labelOpen="Recolher ferramentas">
@@ -320,8 +320,8 @@ export default function LandingV2() {
       <section className="lv2-section lv2-act-discovery lv2-compact-follow">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
-            <span className="lv2-eyebrow">Veja funcionando</span>
-            <h2>O que muda quando o <span className="lv2-grad-text">prompt é engenharia</span>, não sorte.</h2>
+            <span className="lv2-eyebrow">Do pedido ao resultado</span>
+            <h2>Veja uma instrução vaga virar <span className="lv2-grad-text">uma resposta pronta para usar.</span></h2>
           </div>
           <ExpandableBlock label="Ver a demonstração" labelOpen="Fechar a demonstração">
             <LiveTerminal />
@@ -330,9 +330,9 @@ export default function LandingV2() {
       </section>
 
       <CinematicChapter
-        act="Ato 02 · O ruído"
-        title="Quando tudo parece importante, nada vira caminho."
-        body="Ferramentas, novidades e prompts chegam de todos os lados. O próximo passo é trocar excesso por direção."
+        act="Ato 02 · Escolha"
+        title="Pare de testar tudo. Aprenda o que resolve o seu trabalho."
+        body="Você escolhe a ferramenta pelo resultado que precisa: um texto melhor, uma imagem, um vídeo, uma automação ou um app."
         poster={act2Poster}
         video={act2Video.url}
         align="right"
@@ -343,8 +343,8 @@ export default function LandingV2() {
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">O problema</span>
-            <h2>Por que a maioria trava — e desiste — ao aprender IA</h2>
-            <p className="lv2-lead">Não é falta de conteúdo. A internet está cheia de aula sobre IA. O que falta é o que vem depois do play.</p>
+            <h2>Você não precisa de mais tutoriais. Precisa saber o próximo passo.</h2>
+            <p className="lv2-lead">O problema não é falta de conteúdo. É tentar juntar vídeos soltos, telas antigas e ferramentas demais sem um projeto para concluir.</p>
           </div>
           <div className="lv2-pain-grid">
             {PAINS.map((p, i) => (
@@ -378,9 +378,9 @@ export default function LandingV2() {
       </section>
 
       <CinematicChapter
-        act="Ato 03 · O mapa"
-        title="O caos começa a obedecer a uma sequência."
-        body="Cada habilidade encontra seu lugar, cada etapa termina em algo construído e o aprendizado deixa de depender de sorte."
+        act="Ato 03 · Sequência"
+        title="Uma habilidade por vez. Um projeto pronto em cada etapa."
+        body="Você começa pelo básico, aprende a pedir melhor, domina as ferramentas e usa tudo em entregas que podem ser publicadas."
         poster={act3Poster}
         video={act3Video.url}
         tone="map"
@@ -390,8 +390,8 @@ export default function LandingV2() {
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">O mapa</span>
-            <h2>13 módulos. Um caminho. <span className="lv2-grad-text">Zero achismo.</span></h2>
-            <p className="lv2-lead">Cada módulo termina com um projeto publicável. Toque em qualquer etapa para ver exatamente o que você constrói nela.</p>
+            <h2>13 módulos, do primeiro prompt ao <span className="lv2-grad-text">app publicado.</span></h2>
+            <p className="lv2-lead">Abra uma etapa para ver o que você aprende e qual projeto termina pronto.</p>
           </div>
 
           <div className="lv2-map-rail">
@@ -443,9 +443,9 @@ export default function LandingV2() {
       </section>
 
       <CinematicChapter
-        act="Ato 04 · A inteligência viva"
-        title="Um bom mapa não fica parado enquanto o mundo muda."
-        body="A estrutura continua clara, mas o conhecimento evolui: novas ferramentas entram, rotas se adaptam e você segue no contexto certo."
+        act="Ato 04 · Atualização"
+        title="Quando uma ferramenta muda, a aula muda junto."
+        body="Você vê a data de revisão antes de assistir e recebe novas aulas quando uma mudança realmente altera o seu jeito de trabalhar."
         poster={act4Poster}
         video={act4Video.url}
         align="right"
@@ -458,8 +458,8 @@ export default function LandingV2() {
           <div className="lv2-radar-grid">
             <div className="lv2-radar-copy rv">
               <span className="lv2-eyebrow">Radar IA</span>
-              <h2>Atualização não é promessa. <span className="lv2-grad-text">É produto.</span></h2>
-              <p className="lv2-lead">IA muda toda semana — e é exatamente por isso que a atualização aqui é um compromisso público, com data e changelog, não uma frase de página de vendas.</p>
+              <h2>Você sempre sabe <span className="lv2-grad-text">quando a aula foi revisada.</span></h2>
+              <p className="lv2-lead">Cada aula mostra a data da última revisão. Mudanças importantes viram correções e novas aulas com registro público.</p>
               <ul className="lv2-radar-points">
                 <li>Toda aula carrega o selo "atualizado em mês/ano" — você vê a data antes do play.</li>
                 <li>Mudança crítica numa ferramenta vira aula corrigida em até 7 dias, com registro no changelog.</li>
@@ -494,8 +494,8 @@ export default function LandingV2() {
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">As trilhas</span>
-            <h2>Feito para o seu momento — não para um aluno genérico.</h2>
-            <p className="lv2-lead">Um quiz de 2 minutos no primeiro acesso define a sua trilha. Você segue um caminho de 15 a 18 horas, na ordem certa para o seu objetivo.</p>
+            <h2>Escolha o que quer colocar em prática primeiro.</h2>
+            <p className="lv2-lead">Em 2 minutos, você recebe uma sequência de 15 a 18 horas para carreira, negócio, conteúdo ou criação de apps.</p>
           </div>
 
           <ExpandableBlock label="Ver as 4 trilhas" labelOpen="Recolher trilhas">
@@ -556,9 +556,9 @@ export default function LandingV2() {
       </section>
 
       <CinematicChapter
-        act="Ato 05 · A execução"
-        title="Conhecimento só ganha valor quando encontra o trabalho real."
-        body="Agora a intenção humana encontra a velocidade da IA: testar, ajustar, medir e transformar ideias em entregas concretas."
+        act="Ato 05 · Prática"
+        title="Teste agora a mesma IA usada nas aulas."
+        body="Escreva uma frase e transforme-a em e-mail, post ou fórmula. Depois, repita o processo com as suas tarefas reais."
         poster={act5Poster}
         video={act5Video.url}
         tone="execution"
@@ -579,9 +579,9 @@ export default function LandingV2() {
       <section className="lv2-section lv2-act-execution lv2-compact-follow" id="playground">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
-            <span className="lv2-eyebrow">Playground · 100% ao vivo</span>
-            <h2>Antes de comprar, <span className="lv2-grad-text">teste a IA aqui.</span></h2>
-            <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Sem cadastro, sem cartão. Escolha um caso real, escreva uma frase e veja o resultado — é a mesma IA que você usa no curso.</p>
+            <span className="lv2-eyebrow">Teste gratuito · sem cadastro</span>
+            <h2>Transforme uma frase em <span className="lv2-grad-text">algo pronto para usar.</span></h2>
+            <p className="lv2-lead" style={{ margin: '16px auto 0' }}>Escolha e-mail, post ou planilha, descreva o que precisa e veja o resultado na hora.</p>
           </div>
           <ExpandableBlock label="Abrir o playground" labelOpen="Fechar o playground">
             <LandingPlayground />
@@ -629,9 +629,9 @@ export default function LandingV2() {
       </section>
 
       <CinematicChapter
-        act="Ato 06 · O horizonte"
-        title="O futuro deixa de ser uma ameaça e vira território."
-        body="Com método, prática e repertório, você não precisa prever cada mudança. Precisa saber avançar quando ela chegar."
+        act="Ato 06 · Portfólio"
+        title="Termine com trabalhos que mostram o que você sabe fazer."
+        body="Prompts testados, imagens, vídeo, automação e app publicados: resultados concretos para usar, apresentar ou vender."
         poster={act6Poster}
         video={act6Video.url}
         align="right"
