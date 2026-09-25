@@ -742,6 +742,7 @@ export type Database = {
           module_id: string
           order_index: number
           prompts: string[] | null
+          reviewed_at: string | null
           slug: string | null
           title: string
           type: string | null
@@ -758,6 +759,7 @@ export type Database = {
           module_id: string
           order_index?: number
           prompts?: string[] | null
+          reviewed_at?: string | null
           slug?: string | null
           title: string
           type?: string | null
@@ -774,6 +776,7 @@ export type Database = {
           module_id?: string
           order_index?: number
           prompts?: string[] | null
+          reviewed_at?: string | null
           slug?: string | null
           title?: string
           type?: string | null
@@ -821,34 +824,52 @@ export type Database = {
       }
       modules: {
         Row: {
+          code: string | null
           course_id: string | null
           created_at: string | null
           description: string | null
+          hours_label: string | null
           id: string
+          intro: string | null
           is_published: boolean | null
+          is_star: boolean
           order_index: number
+          project_title: string | null
           slug: string | null
           title: string
+          trails: string[]
         }
         Insert: {
+          code?: string | null
           course_id?: string | null
           created_at?: string | null
           description?: string | null
+          hours_label?: string | null
           id?: string
+          intro?: string | null
           is_published?: boolean | null
+          is_star?: boolean
           order_index?: number
+          project_title?: string | null
           slug?: string | null
           title: string
+          trails?: string[]
         }
         Update: {
+          code?: string | null
           course_id?: string | null
           created_at?: string | null
           description?: string | null
+          hours_label?: string | null
           id?: string
+          intro?: string | null
           is_published?: boolean | null
+          is_star?: boolean
           order_index?: number
+          project_title?: string | null
           slug?: string | null
           title?: string
+          trails?: string[]
         }
         Relationships: [
           {
@@ -975,6 +996,7 @@ export type Database = {
           created_at: string | null
           full_name: string | null
           id: string
+          learning_track: string | null
           onboarding_done: boolean | null
           updated_at: string | null
         }
@@ -985,6 +1007,7 @@ export type Database = {
           created_at?: string | null
           full_name?: string | null
           id: string
+          learning_track?: string | null
           onboarding_done?: boolean | null
           updated_at?: string | null
         }
@@ -995,10 +1018,49 @@ export type Database = {
           created_at?: string | null
           full_name?: string | null
           id?: string
+          learning_track?: string | null
           onboarding_done?: boolean | null
           updated_at?: string | null
         }
         Relationships: []
+      }
+      project_submissions: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_id: string
+          notes: string | null
+          updated_at: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_id: string
+          notes?: string | null
+          updated_at?: string
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          notes?: string | null
+          updated_at?: string
+          url?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_submissions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       prompts: {
         Row: {
@@ -1678,6 +1740,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_finalize_curriculum_import: {
+        Args: { payload: Json }
+        Returns: Json
+      }
+      admin_import_curriculum_module: { Args: { payload: Json }; Returns: Json }
       ai_sandbox_daily_limit: { Args: never; Returns: number }
       apply_greenn_purchase: {
         Args: { purchase_data: Json }
@@ -1686,6 +1753,42 @@ export type Database = {
       consume_ai_quota: {
         Args: { quota_key: string; quota_limit: number; window_seconds: number }
         Returns: boolean
+      }
+      get_certificate_status: {
+        Args: never
+        Returns: {
+          completed_lessons: number
+          eligible: boolean
+          final_project_done: boolean
+          final_project_lesson_id: string
+          required_lessons: number
+          threshold_percent: number
+          total_minutes: number
+          track: string
+        }[]
+      }
+      get_course_outline: {
+        Args: { course_slug: string }
+        Returns: {
+          accessible: boolean
+          course_id: string
+          estimated_minutes: number
+          is_free: boolean
+          lesson_description: string
+          lesson_id: string
+          lesson_order: number
+          lesson_title: string
+          lesson_type: string
+          module_code: string
+          module_description: string
+          module_hours_label: string
+          module_id: string
+          module_is_star: boolean
+          module_order: number
+          module_project_title: string
+          module_title: string
+          module_trails: string[]
+        }[]
       }
       get_profile_cards: {
         Args: { user_ids: string[] }
