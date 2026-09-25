@@ -18,3 +18,7 @@
 - [x] Oferta R$ 497 / 12x R$ 41,41 com checkout Stripe na cena final
 - [x] Landing editorial anterior preservada em /completo
 - [x] Motion cinematográfico, circuitos SVG e transições avançadas nas 6 cenas
+- [x] Auditoria passo 1: remover números inventados da landing e redirecionar /curso para /completo
+- [ ] Auditoria passo 2: mesclar branch do currículo mantendo a home cinematográfica
+- [ ] Auditoria passo 3: aplicar atualização do banco e importar as 124 aulas
+- [ ] Auditoria passo 4: testar deslogado, no celular e no computador
