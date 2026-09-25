@@ -331,23 +331,23 @@
 @media(max-width:760px){
   .lv2{font-size:16px}
   .lv2-wrap{padding:0 18px}
-  .lv2-section{padding:22px 0}
-  .lv2-section-tight{padding:10px 0}
-  .lv2-section-tight-bottom{padding:20px 0 10px}
-  .lv2-section-head{margin-bottom:20px}
-  .lv2-hero{min-height:calc(100svh - 8px);padding:92px 0 30px;align-items:flex-start}
+  .lv2-section{padding:18px 0}
+  .lv2-section-tight{padding:8px 0}
+  .lv2-section-tight-bottom{padding:18px 0 8px}
+  .lv2-section-head{margin-bottom:16px}
+  .lv2-hero{min-height:auto;padding:88px 0 24px;align-items:flex-start}
   .lv2-hero-poster,.lv2-hero-video{object-position:68% center}
   .lv2-hero-scrim{background:linear-gradient(180deg,rgba(6,9,15,.72) 0%,rgba(6,9,15,.78) 42%,rgba(6,9,15,.94) 78%,var(--ink) 100%)}
   .lv2-hero-in{max-width:100%}
   .lv2-hero h1{margin-bottom:18px}
-  .lv2-hero .lv2-lead{margin-bottom:26px;max-width:94%}
+  .lv2-hero .lv2-lead{margin-bottom:22px;max-width:100%}
   .lv2-hero-cta,.lv2-hero-cta .lv2-btn{width:100%}
   .lv2-hero-cta .lv2-btn{justify-content:center}
   .lv2-btn-note{max-width:32rem;line-height:1.5}
-  .lv2-mini-map{margin-top:24px}
+  .lv2-mini-map{margin-top:20px}
   .lv2-mini-map-label{margin-bottom:10px}
   .lv2-tick span{font-size:.56rem}
-  .lv2-section.lv2-compact-follow{padding-top:18px}
+  .lv2-section.lv2-compact-follow{padding-top:12px}
   .lv2-pain-grid{gap:10px;margin-bottom:28px}
   .lv2-pain{padding:18px}
   .lv2-sol-band{padding:24px 18px}
@@ -1476,6 +1476,7 @@
 .lv2-expand-arr{transition:transform .3s}
 .lv2-expand.open .lv2-expand-arr{transform:rotate(180deg)}
 .lv2-expand-body{margin-top:24px;text-align:left;animation:lv2-expand-in .45s ease both}
-@media(max-width:760px){.lv2-expand-body{margin-top:18px}.lv2-expand-btn{padding:12px 18px;font-size:.7rem}}
+.lv2-expand-body .rv{opacity:1;transform:none}
+@media(max-width:760px){.lv2-expand-body{margin-top:14px}.lv2-expand-btn{padding:12px 18px;font-size:.7rem}}
 @keyframes lv2-expand-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.lv2-expand-body{animation:none}}

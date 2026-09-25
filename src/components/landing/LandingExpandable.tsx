@@ -20,7 +20,15 @@ export const ExpandableBlock = ({ label, labelOpen, hint, children }: Expandable
 
   const toggle = () => {
     const before = rootRef.current?.getBoundingClientRect().top;
-    setOpen((value) => !value);
+    setOpen((value) => {
+      const nextOpen = !value;
+      if (nextOpen) {
+        window.requestAnimationFrame(() => {
+          rootRef.current?.querySelectorAll('.rv').forEach((item) => item.classList.add('in'));
+        });
+      }
+      return nextOpen;
+    });
     window.requestAnimationFrame(() => {
       if (before === undefined || !rootRef.current) return;
       const delta = rootRef.current.getBoundingClientRect().top - before;
