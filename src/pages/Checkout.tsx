@@ -26,6 +26,16 @@ const Checkout = () => {
       if (session?.user) {
         setIsAuthenticated(true);
         setUserEmail(session.user.email || '');
+        // Already has access (active or admin) → never ask to buy again.
+        const [{ data: profile }, { data: isAdmin }] = await Promise.all([
+          supabase.from('profiles').select('access_status').eq('id', session.user.id).maybeSingle(),
+          supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' }),
+        ]);
+        if (isAdmin || profile?.access_status === 'active') {
+          toast.success('Você já tem acesso ao Método IA Real.');
+          navigate('/membros', { replace: true });
+          return;
+        }
       }
       setCheckingAuth(false);
     };

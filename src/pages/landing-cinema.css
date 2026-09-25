@@ -531,6 +531,38 @@
 .lcn-index-item.is-active .lcn-index-dash { box-shadow: 0 0 10px currentColor; }
 .lcn-index-item:hover { color: var(--lcn-ink); }
 
+.lcn-account {
+  position: fixed;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 60;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 2.25rem;
+}
+.lcn-account-btn,
+.lcn-account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--lcn-ink);
+  background: rgba(8, 8, 12, 0.72);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  transition: border-color 200ms ease, color 200ms ease;
+}
+.lcn-account-link { border-color: rgba(244, 243, 239, 0.2); }
+.lcn-account-btn:hover,
+.lcn-account-link:hover { color: var(--lcn-gold); border-color: var(--lcn-gold); }
+.lcn-account-btn:focus-visible,
+.lcn-account-link:focus-visible { outline: 2px solid var(--lcn-gold); outline-offset: 2px; }
+a.lcn-sticky, a.lcn-cta { text-decoration: none; text-align: center; }
+
 .lcn-sticky {
   position: fixed;
   left: 0.75rem;

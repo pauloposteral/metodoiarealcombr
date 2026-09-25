@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, ShieldCheck, LogIn, UserRound } from 'lucide-react';
 import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 import { LandingCinemaScene } from '@/components/landing/cinema/LandingCinemaScene';
 import { CINEMA_SCENES, GIANTS } from '@/components/landing/cinema/cinemaScenes';
+import { useAccess } from '@/hooks/useAccess';
 import logoIaReal from '@/assets/logo-ia-real.png';
 import './landing-cinema.css';
 
 const LandingCinema = () => {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const access = useAccess();
+  const navigate = useNavigate();
+  const buy = () => (access.hasAccess ? navigate('/membros') : setCheckoutOpen(true));
   const [active, setActive] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRefs = useRef<Array<HTMLElement | null>>([]);
@@ -57,6 +61,22 @@ const LandingCinema = () => {
         <span style={{ width: `${progress}%` }} />
       </div>
 
+      <div className="lcn-account" aria-busy={access.status === 'loading'}>
+        {access.status === 'loading' ? null : access.hasAccess ? (
+          <>
+            {access.status === 'admin' && <Link to="/admin/dashboard" className="lcn-account-link">Painel admin</Link>}
+            <Link to="/membros" className="lcn-account-btn">
+              <UserRound size={15} aria-hidden="true" />
+              {access.name?.split(' ')[0] || 'Minha área'} · Minha área
+            </Link>
+          </>
+        ) : (
+          <Link to="/auth?redirect=/membros" className="lcn-account-btn">
+            <LogIn size={15} aria-hidden="true" /> Entrar
+          </Link>
+        )}
+      </div>
+
       <nav className="lcn-index" aria-label="Índice de cenas">
         {CINEMA_SCENES.map((scene, idx) => (
           <button
@@ -90,10 +110,17 @@ const LandingCinema = () => {
                   <img src={logoIaReal} alt="" width={250} height={143} decoding="async" fetchPriority="high" />
                 </div>
                 <div className="lcn-actions">
-                  <button type="button" className="lcn-cta" onClick={() => setCheckoutOpen(true)}>
-                    Entrar para o time que constrói
-                    <ArrowRight size={18} aria-hidden="true" />
-                  </button>
+                  {access.hasAccess ? (
+                    <Link to="/membros" className="lcn-cta">
+                      Continuar estudando
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <button type="button" className="lcn-cta" onClick={buy}>
+                      Entrar para o time que constrói
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </button>
+                  )}
                   <button type="button" className="lcn-ghost" onClick={() => goTo(1)}>
                     Ver o que você domina
                   </button>
@@ -136,10 +163,17 @@ const LandingCinema = () => {
                   <span className="lcn-price-inst">ou 12× R$ 41,41</span>
                 </div>
                 <div className="lcn-actions">
-                  <button type="button" className="lcn-cta" onClick={() => setCheckoutOpen(true)}>
-                    Quero acesso completo agora
-                    <ArrowRight size={18} aria-hidden="true" />
-                  </button>
+                  {access.hasAccess ? (
+                    <Link to="/membros" className="lcn-cta">
+                      Você já tem acesso — continuar
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <button type="button" className="lcn-cta" onClick={buy}>
+                      Quero acesso completo agora
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </button>
+                  )}
                 </div>
                 <p className="lcn-guarantee">
                   <ShieldCheck size={16} aria-hidden="true" /> 7 dias de garantia — cancela e devolvemos tudo.
@@ -163,11 +197,15 @@ const LandingCinema = () => {
         <span>LIVE</span>
       </div>
 
-      <button type="button" className="lcn-sticky" onClick={() => setCheckoutOpen(true)}>
-        Garantir meu acesso · R$ 497
-      </button>
+      {access.hasAccess ? (
+        <Link to="/membros" className="lcn-sticky">Continuar estudando</Link>
+      ) : (
+        <button type="button" className="lcn-sticky" onClick={buy} disabled={access.status === 'loading'}>
+          Garantir meu acesso · R$ 497
+        </button>
+      )}
 
-      <CheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+      {!access.hasAccess && <CheckoutDialog open={checkoutOpen} onOpenChange={setCheckoutOpen} />}
     </div>
   );
 };
