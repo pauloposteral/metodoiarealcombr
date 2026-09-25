@@ -8,6 +8,13 @@
       "when": 1790329884897,
       "tag": "0000_security_and_billing",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790329904666,
+      "tag": "0001_greenn_events",
+      "breakpoints": true
     }
   ]
 }

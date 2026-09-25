@@ -1059,6 +1059,7 @@ export type Database = {
           payment_method: string | null
           product_id: number | null
           product_name: string
+          provider_updated_at: string | null
           raw_payload: Json | null
           status: string
           updated_at: string | null
@@ -1077,6 +1078,7 @@ export type Database = {
           payment_method?: string | null
           product_id?: number | null
           product_name: string
+          provider_updated_at?: string | null
           raw_payload?: Json | null
           status: string
           updated_at?: string | null
@@ -1095,6 +1097,7 @@ export type Database = {
           payment_method?: string | null
           product_id?: number | null
           product_name?: string
+          provider_updated_at?: string | null
           raw_payload?: Json | null
           status?: string
           updated_at?: string | null
@@ -1676,6 +1679,10 @@ export type Database = {
     }
     Functions: {
       ai_sandbox_daily_limit: { Args: never; Returns: number }
+      apply_greenn_purchase: {
+        Args: { purchase_data: Json }
+        Returns: undefined
+      }
       consume_ai_quota: {
         Args: { quota_key: string; quota_limit: number; window_seconds: number }
         Returns: boolean
