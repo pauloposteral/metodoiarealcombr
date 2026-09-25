@@ -655,7 +655,11 @@ export default function LandingV2() {
       {/* INSTRUCTOR CARD */}
       <section className="lv2-section lv2-section-tight lv2-act-horizon lv2-compact-follow" id="mentor">
         <div className="lv2-wrap">
-          <div className="rv"><InstructorCard /></div>
+          <div className="rv">
+            <ExpandableBlock label="Conhecer quem assina o método" labelOpen="Recolher apresentação">
+              <InstructorCard />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
@@ -697,7 +701,11 @@ export default function LandingV2() {
       {/* GUARANTEE SHIELD */}
       <section className="lv2-section lv2-section-tight lv2-act-horizon lv2-compact-follow">
         <div className="lv2-wrap">
-          <div className="rv"><GuaranteeShield onCta={goCheckout} /></div>
+          <div className="rv">
+            <ExpandableBlock label="Ver a garantia completa" labelOpen="Recolher garantia">
+              <GuaranteeShield onCta={goCheckout} />
+            </ExpandableBlock>
+          </div>
         </div>
       </section>
 
