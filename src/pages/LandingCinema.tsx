@@ -5,6 +5,7 @@ import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 import { LandingCinemaScene } from '@/components/landing/cinema/LandingCinemaScene';
 import { CINEMA_SCENES, GIANTS } from '@/components/landing/cinema/cinemaScenes';
+import logoIaReal from '@/assets/logo-ia-real.png.asset.json';
 import './landing-cinema.css';
 
 const LandingCinema = () => {
@@ -84,6 +85,10 @@ const LandingCinema = () => {
           >
             {idx === 0 && (
               <>
+                <div className="lcn-hero-logo" aria-hidden="true">
+                  <span className="lcn-hero-logo-halo" />
+                  <img src={logoIaReal.url} alt="" width={250} />
+                </div>
                 <div className="lcn-actions">
                   <button type="button" className="lcn-cta" onClick={() => setCheckoutOpen(true)}>
                     Entrar para o time que constrói
