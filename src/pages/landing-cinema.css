@@ -629,6 +629,9 @@
   .lcn-vector-core,
   .lcn-scan-beam,
   .lcn-hud-status i { animation: none; }
+  .lcn-hero-logo img,
+  .lcn-hero-logo-halo { animation: none; }
+  .lcn-hero-logo::after { display: none; }
   .lcn-anamorphic-flare,
   .lcn-transition-shutter { display: none; }
   .lcn-word,
