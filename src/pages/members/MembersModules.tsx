@@ -1,180 +1,109 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { BookOpen, Layers } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
-import { supabase } from '@/integrations/supabase/client';
-import { BookOpen, ChevronRight, CheckCircle2, Clock } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+import { EmptyState, PageError, PageLoading } from '@/components/members/PageStates';
+import { ModuleSummary } from '@/components/course/ModuleSummary';
+import { useCompletedLessons, useCourseCatalog, type CourseCatalog } from '@/hooks/useCourseOutline';
+import { useLearningTrack } from '@/hooks/useLearningTrack';
+import { TRACKS, curriculumModules, formatMinutes, isModuleInTrack, type OutlineModule, type TrackKey } from '@/lib/curriculum';
 
-interface Module {
-  id: string;
-  title: string;
-  description: string;
-  order_index: number;
-}
-
-interface Lesson {
-  id: string;
-  module_id: string;
-  title: string;
-  duration_minutes: number;
+/** Curriculum modules (with a MOD-NN code) of every published course; all modules before the import. */
+function listModules(catalog: CourseCatalog): OutlineModule[] {
+  const entries = catalog.main ? [catalog.main, ...catalog.entries.filter((entry) => entry !== catalog.main)] : catalog.entries;
+  const curriculum = curriculumModules(entries.flatMap((entry) => entry.outline.modules));
+  // Coded modules follow order_index; the pre-import fallback keeps each course's own order.
+  return curriculum.some((module) => module.code) ? [...curriculum].sort((a, b) => a.order_index - b.order_index) : curriculum;
 }
 
 const MembersModules = () => {
-  const navigate = useNavigate();
-  const [modules, setModules] = useState<Module[]>([]);
-  const [lessonsPerModule, setLessonsPerModule] = useState<Record<string, Lesson[]>>({});
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
+  const catalog = useCourseCatalog();
+  const completed = useCompletedLessons();
+  const track = useLearningTrack();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-
-        // Fetch modules
-        const { data: modulesData } = await supabase
-          .from('modules')
-          .select('*')
-          .order('order_index');
-
-        if (modulesData) {
-          setModules(modulesData);
-        }
-
-        // Fetch all lessons
-        const { data: lessonsData } = await supabase
-          .from('lessons')
-          .select('*')
-          .order('order_index');
-
-        if (lessonsData) {
-          const grouped: Record<string, Lesson[]> = {};
-          lessonsData.forEach(lesson => {
-            if (!grouped[lesson.module_id]) {
-              grouped[lesson.module_id] = [];
-            }
-            grouped[lesson.module_id].push(lesson);
-          });
-          setLessonsPerModule(grouped);
-        }
-
-        // Fetch completed lessons
-        if (user) {
-          const { data: progressData } = await supabase
-            .from('lesson_progress')
-            .select('lesson_id')
-            .eq('user_id', user.id)
-            .eq('completed', true);
-
-          if (progressData) {
-            setCompletedLessons(new Set(progressData.map(p => p.lesson_id)));
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const getModuleProgress = (moduleId: string) => {
-    const lessons = lessonsPerModule[moduleId] || [];
-    if (lessons.length === 0) return 0;
-    const completed = lessons.filter(l => completedLessons.has(l.id)).length;
-    return Math.round((completed / lessons.length) * 100);
-  };
-
-  const getTotalDuration = (moduleId: string) => {
-    const lessons = lessonsPerModule[moduleId] || [];
-    return lessons.reduce((acc, l) => acc + (l.duration_minutes || 0), 0);
-  };
+  let body;
+  if (catalog.isPending || completed.isPending || track.isPending) {
+    body = <PageLoading label="Carregando módulos…" className="max-w-5xl" />;
+  } else if (catalog.isError || completed.isError || track.isError) {
+    body = (
+      <PageError
+        title="Não foi possível carregar os módulos"
+        onRetry={() => {
+          void catalog.refetch();
+          void completed.refetch();
+          void track.refetch();
+        }}
+      />
+    );
+  } else {
+    body = <ModulesView modules={listModules(catalog.data)} completed={completed.data ?? new Set<string>()} track={track.data ?? null} />;
+  }
 
   return (
     <MembersLayout>
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-            Módulos do Curso
-          </h1>
-          <p className="text-muted-foreground">
-            {modules.length} módulos disponíveis para você
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {modules.map((module, index) => {
-            const progress = getModuleProgress(module.id);
-            const lessonCount = lessonsPerModule[module.id]?.length || 0;
-            const completedCount = lessonsPerModule[module.id]?.filter(l => completedLessons.has(l.id)).length || 0;
-            const totalMinutes = getTotalDuration(module.id);
-
-            return (
-              <button
-                key={module.id}
-                onClick={() => navigate(`/membros/modulos/${module.id}`)}
-                className="w-full bg-card rounded-2xl p-6 border border-border/50 hover:border-accent/30 hover:shadow-elegant transition-all text-left group"
-              >
-                <div className="flex items-start gap-4">
-                  {/* Module Number */}
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
-                    {progress === 100 ? (
-                      <CheckCircle2 className="w-6 h-6 text-green-500" />
-                    ) : (
-                      <span className="text-accent font-bold text-lg">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h2 className="font-display font-bold text-lg text-foreground mb-1 group-hover:text-accent transition-colors">
-                          {module.title}
-                        </h2>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                          {module.description}
-                        </p>
-                      </div>
-                      <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors flex-shrink-0 mt-1" />
-                    </div>
-
-                    {/* Stats */}
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-                      <span className="flex items-center gap-1">
-                        <BookOpen className="w-3.5 h-3.5" />
-                        {lessonCount} aulas
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5" />
-                        {totalMinutes} min
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        {completedCount}/{lessonCount} concluídas
-                      </span>
-                    </div>
-
-                    {/* Progress bar */}
-                    <div className="flex items-center gap-3">
-                      <Progress value={progress} className="h-2 flex-1" />
-                      <span className="text-xs font-medium text-accent w-10 text-right">
-                        {progress}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <Helmet>
+        <title>Módulos | Método IA Real</title>
+      </Helmet>
+      {body}
     </MembersLayout>
   );
 };
+
+function ModulesView({ modules, completed, track }: { modules: OutlineModule[]; completed: ReadonlySet<string>; track: TrackKey | null }) {
+  const minutes = modules.reduce((sum, module) => sum + module.lessons.reduce((total, lesson) => total + lesson.minutes, 0), 0);
+  const inTrack = modules.filter((module) => isModuleInTrack(module, track));
+  const hasTrackSubset = track !== null && track !== 'completa' && inTrack.length > 0 && inTrack.length < modules.length;
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-6">
+      <header>
+        <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">Módulos do curso</h1>
+        <p className="mt-1 text-muted-foreground">
+          {modules.length} módulos{minutes > 0 ? ` · ${formatMinutes(minutes)} de conteúdo` : ''}
+          {hasTrackSubset && ` · ${inTrack.length} na sua trilha ${TRACKS[track].shortLabel}`}
+        </p>
+        {track === null && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Não sabe por onde começar?{' '}
+            <Link
+              to="/membros/trilha"
+              className="rounded-sm font-medium text-foreground underline decoration-accent decoration-2 underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Descubra a sua trilha
+            </Link>
+            .
+          </p>
+        )}
+      </header>
+
+      {modules.length === 0 ? (
+        <EmptyState
+          icon={<Layers className="h-12 w-12" />}
+          title="Nenhum módulo publicado ainda"
+          description="Os módulos aparecem aqui assim que forem liberados."
+          action={
+            <Link to="/membros/cursos" className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4">
+              <BookOpen className="h-4 w-4" aria-hidden="true" />
+              Ver cursos
+            </Link>
+          }
+        />
+      ) : (
+        <ul role="list" className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {modules.map((module) => (
+            <li key={module.id} className="overflow-hidden rounded-2xl border border-border/50 bg-card transition-colors hover:border-accent/40">
+              <ModuleSummary
+                module={module}
+                completed={completed}
+                isExtra={hasTrackSubset && !isModuleInTrack(module, track)}
+                headingLevel="h2"
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export default MembersModules;

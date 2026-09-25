@@ -346,8 +346,8 @@ export const CommentSection = ({ postId, lessonId, type }: CommentSectionProps) 
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 text-lg font-semibold text-primary-foreground">
-        <MessageCircle className="w-5 h-5 text-gold" />
+      <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
+        <MessageCircle className="w-5 h-5 text-gold" aria-hidden="true" />
         Comentários ({comments.length})
       </div>
 

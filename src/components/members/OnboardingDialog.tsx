@@ -1,191 +1,179 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, ArrowRight, User, Target, Loader2, Briefcase, Lightbulb, Rocket, PenTool } from 'lucide-react';
+import { Sparkles, ArrowRight, User, Loader2, Route as RouteIcon, PenLine } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface OnboardingDialogProps {
   userId: string;
 }
 
-const goals = [
-  { id: 'productivity', label: 'Produtividade', desc: 'Automatizar tarefas do dia a dia', icon: Rocket },
-  { id: 'content', label: 'Criar conteúdo', desc: 'Posts, carrosséis e textos com IA', icon: PenTool },
-  { id: 'business', label: 'Negócios', desc: 'Usar IA para crescer meu negócio', icon: Briefcase },
-  { id: 'learning', label: 'Aprender IA', desc: 'Entender como funciona a fundo', icon: Lightbulb },
-];
+const STEP_COUNT = 4;
 
 export const OnboardingDialog = ({ userId }: OnboardingDialogProps) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [fullName, setFullName] = useState('');
   const [bio, setBio] = useState('');
-  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const checkOnboarding = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('onboarding_done')
         .eq('id', userId)
         .maybeSingle();
-
-      if (data && !data.onboarding_done) {
-        setOpen(true);
+      if (error) {
+        console.error('[OnboardingDialog] could not read onboarding state', error);
+        return;
       }
+      if (data && !data.onboarding_done) setOpen(true);
     };
-    if (userId) checkOnboarding();
+    if (userId) void checkOnboarding();
   }, [userId]);
 
-  const toggleGoal = (id: string) => {
-    setSelectedGoals(prev =>
-      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
-    );
-  };
-
-  const handleFinish = async () => {
+  /** Saves name/bio (when filled) and marks onboarding as done. */
+  const finish = async (goToTrail: boolean) => {
     setSaving(true);
     try {
-      await supabase
+      const { error } = await supabase
         .from('profiles')
         .update({
-          full_name: fullName || undefined,
-          bio: bio || undefined,
+          full_name: fullName.trim() || undefined,
+          bio: bio.trim() || undefined,
           onboarding_done: true,
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId);
-
-      toast({ title: 'Bem-vindo! 🎉', description: 'Sua conta está pronta. Bons estudos!' });
+      if (error) throw error;
       setOpen(false);
-    } catch {
-      toast({ title: 'Erro', variant: 'destructive' });
+      if (goToTrail) navigate('/membros/trilha');
+      else toast({ title: 'Tudo pronto!', description: 'Bons estudos. O quiz da trilha fica em Minha trilha, no menu.' });
+    } catch (error) {
+      console.error('[OnboardingDialog] could not save onboarding', error);
+      toast({ title: 'Não foi possível salvar seu perfil', description: 'Tente de novo em instantes.', variant: 'destructive' });
     } finally {
       setSaving(false);
     }
   };
 
   const handleSkip = async () => {
-    await supabase
+    const { error } = await supabase
       .from('profiles')
       .update({ onboarding_done: true, updated_at: new Date().toISOString() })
       .eq('id', userId);
+    if (error) console.error('[OnboardingDialog] could not skip onboarding', error);
     setOpen(false);
   };
 
   const steps = [
     // Step 0: Welcome
-    <div key="welcome" className="text-center space-y-4">
-      <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center mx-auto">
-        <Sparkles className="w-8 h-8 text-accent" />
+    <div key="welcome" className="space-y-4 text-center">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/20">
+        <Sparkles className="h-8 w-8 text-gold-dark dark:text-accent" aria-hidden="true" />
       </div>
-      <h2 className="text-2xl font-bold font-display text-foreground">Bem-vindo ao IA Real! 🚀</h2>
-      <p className="text-muted-foreground text-sm max-w-sm mx-auto">
-        Estamos felizes em ter você aqui. Vamos configurar seu perfil em poucos segundos.
-      </p>
-      <Button onClick={() => setStep(1)} className="bg-accent hover:bg-accent/90 text-accent-foreground w-full">
-        Começar <ArrowRight className="w-4 h-4 ml-2" />
+      <DialogTitle className="font-display text-2xl font-bold text-foreground">Bem-vindo ao Método IA Real!</DialogTitle>
+      <DialogDescription className="mx-auto max-w-sm text-sm text-muted-foreground">
+        Vamos configurar seu perfil e escolher a sua trilha de estudo. Leva poucos minutos.
+      </DialogDescription>
+      <Button onClick={() => setStep(1)} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+        Começar <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
       </Button>
     </div>,
     // Step 1: Name
     <div key="name" className="space-y-4">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-          <User className="w-5 h-5 text-accent" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20">
+          <User className="h-5 w-5 text-gold-dark dark:text-accent" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="font-bold font-display text-foreground">Como podemos te chamar?</h2>
-          <p className="text-xs text-muted-foreground">Seu nome aparecerá na comunidade</p>
+          <DialogTitle className="font-display font-bold text-foreground">Como podemos te chamar?</DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">Seu nome aparece na comunidade e no certificado.</DialogDescription>
         </div>
       </div>
-      <div>
-        <Label>Nome completo</Label>
-        <Input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Seu nome" autoFocus />
+      <div className="space-y-1.5">
+        <Label htmlFor="onboarding-name">Nome completo</Label>
+        <Input id="onboarding-name" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Seu nome" autoComplete="name" autoFocus />
       </div>
       <div className="flex gap-2">
         <Button variant="outline" onClick={() => setStep(0)} className="flex-1">Voltar</Button>
-        <Button onClick={() => setStep(2)} className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground">
-          Continuar <ArrowRight className="w-4 h-4 ml-2" />
+        <Button onClick={() => setStep(2)} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90">
+          Continuar <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </div>,
-    // Step 2: Goals
-    <div key="goals" className="space-y-4">
+    // Step 2: Bio
+    <div key="bio" className="space-y-4">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-          <Target className="w-5 h-5 text-accent" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20">
+          <PenLine className="h-5 w-5 text-gold-dark dark:text-accent" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="font-bold font-display text-foreground">Qual seu objetivo?</h2>
-          <p className="text-xs text-muted-foreground">Selecione um ou mais (opcional)</p>
+          <DialogTitle className="font-display font-bold text-foreground">Conte um pouco sobre você</DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">Opcional. Aparece no seu perfil da comunidade.</DialogDescription>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {goals.map(goal => {
-          const selected = selectedGoals.includes(goal.id);
-          return (
-            <button
-              key={goal.id}
-              onClick={() => toggleGoal(goal.id)}
-              className={`p-3 rounded-xl border text-left transition-all ${
-                selected
-                  ? 'border-accent bg-accent/10'
-                  : 'border-border/50 hover:border-accent/30'
-              }`}
-            >
-              <goal.icon className={`w-5 h-5 mb-1.5 ${selected ? 'text-accent' : 'text-muted-foreground'}`} />
-              <p className="text-sm font-medium text-foreground">{goal.label}</p>
-              <p className="text-[10px] text-muted-foreground">{goal.desc}</p>
-            </button>
-          );
-        })}
+      <div className="space-y-1.5">
+        <Label htmlFor="onboarding-bio">Bio (opcional)</Label>
+        <Input id="onboarding-bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Ex.: Empreendedora, apaixonada por IA…" />
       </div>
       <div className="flex gap-2">
         <Button variant="outline" onClick={() => setStep(1)} className="flex-1">Voltar</Button>
-        <Button onClick={() => setStep(3)} className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground">
-          Continuar <ArrowRight className="w-4 h-4 ml-2" />
+        <Button onClick={() => setStep(3)} className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90">
+          Continuar <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </div>,
-    // Step 3: Bio + finish
-    <div key="bio" className="space-y-4">
+    // Step 3: Trail
+    <div key="trail" className="space-y-4">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-accent" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20">
+          <RouteIcon className="h-5 w-5 text-gold-dark dark:text-accent" aria-hidden="true" />
         </div>
         <div>
-          <h2 className="font-bold font-display text-foreground">Quase lá!</h2>
-          <p className="text-xs text-muted-foreground">Conte um pouco sobre você (opcional)</p>
+          <DialogTitle className="font-display font-bold text-foreground">Descubra a sua trilha</DialogTitle>
+          <DialogDescription className="text-xs text-muted-foreground">5 perguntas, cerca de 2 minutos.</DialogDescription>
         </div>
       </div>
-      <div>
-        <Label>Bio (opcional)</Label>
-        <Input value={bio} onChange={e => setBio(e.target.value)} placeholder="Ex: Empreendedor, apaixonado por IA..." />
-      </div>
-      <Button onClick={handleFinish} disabled={saving} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-        {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
-        Começar a aprender!
+      <p className="text-sm text-muted-foreground">
+        Carreira, Empreendedor, Criador de conteúdo, Construtor de apps ou Formação completa: o quiz indica por onde começar
+        e você pode trocar quando quiser.
+      </p>
+      <Button onClick={() => void finish(true)} disabled={saving} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+        {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <RouteIcon className="mr-2 h-4 w-4" aria-hidden="true" />}
+        Fazer o quiz da trilha
       </Button>
+      <div className="flex gap-2">
+        <Button variant="outline" onClick={() => setStep(2)} className="flex-1" disabled={saving}>Voltar</Button>
+        <Button variant="ghost" onClick={() => void finish(false)} className="flex-1" disabled={saving}>Explorar por conta própria</Button>
+      </div>
     </div>,
   ];
 
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md" onPointerDownOutside={e => e.preventDefault()}>
+    // Closing (X or Esc) counts as "Pular por agora"; clicks outside are ignored to avoid accidental skips.
+    <Dialog open={open} onOpenChange={(next) => { if (!next && !saving) void handleSkip(); }}>
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
         <div className="p-2">
-          {/* Progress dots */}
-          <div className="flex items-center justify-center gap-2 mb-6">
-            {[0, 1, 2, 3].map(i => (
+          <p className="sr-only" aria-live="polite">Passo {step + 1} de {STEP_COUNT}</p>
+          <div className="mb-6 flex items-center justify-center gap-2" aria-hidden="true">
+            {Array.from({ length: STEP_COUNT }, (_, i) => (
               <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-8 bg-accent' : i < step ? 'w-2 bg-accent/50' : 'w-2 bg-border'}`} />
             ))}
           </div>
           {steps[step]}
           {step > 0 && (
-            <button onClick={handleSkip} className="text-xs text-muted-foreground hover:text-foreground mt-4 block mx-auto transition-colors">
+            <button
+              type="button"
+              onClick={() => void handleSkip()}
+              className="mx-auto mt-4 block rounded-sm text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
               Pular por agora
             </button>
           )}

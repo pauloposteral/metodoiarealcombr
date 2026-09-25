@@ -15,7 +15,8 @@ import {
 import { 
   Home, BookOpen, FileText, Gift, Bell, HelpCircle,
   LogOut, ChevronLeft, Award, LayoutGrid, Users, Trophy,
-  GraduationCap, Bookmark, UserCircle, BarChart3
+  GraduationCap, Bookmark, UserCircle, BarChart3,
+  Route as RouteIcon, Sparkles, BookA, Wrench
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,6 +26,10 @@ const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
   { title: 'Cursos', url: '/membros/cursos', icon: GraduationCap },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
+  { title: 'Minha trilha', url: '/membros/trilha', icon: RouteIcon },
+  { title: 'Prompts', url: '/membros/prompts', icon: Sparkles },
+  { title: 'Glossário', url: '/membros/glossario', icon: BookA },
+  { title: 'Ferramentas e custos', url: '/membros/ferramentas', icon: Wrench },
   { title: 'Salvos', url: '/membros/salvos', icon: Bookmark },
   { title: 'Comunidade', url: '/membros/comunidade', icon: Users },
   { title: 'Ranking', url: '/membros/ranking', icon: Trophy },

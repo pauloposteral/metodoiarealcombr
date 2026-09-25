@@ -1,629 +1,355 @@
 import type { User } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { FileJson, GraduationCap, Loader2, Plus, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
+import { QuizManager } from '@/components/admin/QuizManager';
+import { CourseItemDialog } from '@/components/admin/CourseItemDialog';
+import { CurriculumImportDialog } from '@/components/admin/CurriculumImportDialog';
+import { CourseRow, LessonRow, ModuleRow } from '@/components/admin/CourseTree';
+import type { AdminCourse, AdminLesson, AdminModule, CourseItemTarget } from '@/components/admin/courseAdminTypes';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
-import {
-  Plus, Pencil, Trash2, BookOpen, ChevronRight, ChevronDown,
-  GraduationCap, Loader2, Eye, EyeOff, GripVertical, Brain
-} from 'lucide-react';
-import { QuizManager } from '@/components/admin/QuizManager';
+import { describeDeleteError, nextOrderIndex } from '@/lib/adminCourseForm';
+import { moduleCode, moduleDisplayTitle } from '@/lib/curriculum';
 
-interface Course {
-  id: string;
-  title: string;
-  slug: string;
-  description: string | null;
-  thumbnail_url: string | null;
-  estimated_hours: number | null;
-  difficulty: string | null;
-  is_free: boolean | null;
-  is_published: boolean | null;
-  tags: string[] | null;
+// `*` keeps the tree usable while the curriculum migration is rolling out (new columns optional).
+async function fetchCourses(): Promise<AdminCourse[]> {
+  const { data, error } = await supabase.from('courses').select('*').order('created_at');
+  if (error) throw error;
+  return data ?? [];
 }
 
-interface Module {
-  id: string;
-  title: string;
-  description: string | null;
-  order_index: number;
-  course_id: string | null;
-  is_published: boolean | null;
+async function fetchModules(courseId: string): Promise<AdminModule[]> {
+  const { data, error } = await supabase.from('modules').select('*').eq('course_id', courseId).order('order_index');
+  if (error) throw error;
+  return data ?? [];
 }
 
-interface Lesson {
-  id: string;
-  title: string;
-  description: string | null;
-  order_index: number;
-  module_id: string;
-  estimated_minutes: number | null;
-  is_free: boolean | null;
-  type: string | null;
-  content: string | null;
-  video_url: string | null;
+async function fetchLessons(moduleId: string): Promise<AdminLesson[]> {
+  const { data, error } = await supabase.from('lessons').select('*').eq('module_id', moduleId).order('order_index');
+  if (error) throw error;
+  return data ?? [];
 }
 
-type EditMode = 'course' | 'module' | 'lesson';
+type DeletableTable = 'courses' | 'modules' | 'lessons';
+
+async function deleteRow(table: DeletableTable, id: string): Promise<void> {
+  const { error } = table === 'courses'
+    ? await supabase.from('courses').delete().eq('id', id)
+    : table === 'modules'
+      ? await supabase.from('modules').delete().eq('id', id)
+      : await supabase.from('lessons').delete().eq('id', id);
+  if (error) throw error;
+}
+
+function toggled(set: Set<string>, id: string): Set<string> {
+  const next = new Set(set);
+  if (next.has(id)) next.delete(id);
+  else next.add(id);
+  return next;
+}
+
+function withItem(set: Set<string>, id: string): Set<string> {
+  return new Set(set).add(id);
+}
+
+function withoutItem(set: Set<string>, id: string): Set<string> {
+  const next = new Set(set);
+  next.delete(id);
+  return next;
+}
+
+function AdminShell({ user, children }: { user: User | null; children: ReactNode }) {
+  return (
+    <div className="flex min-h-screen w-full bg-background">
+      <AdminSidebar />
+      <div className="flex min-w-0 flex-1 flex-col">
+        {user && <AdminHeader user={user} />}
+        <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">{children}</main>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminCursos() {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [modules, setModules] = useState<Record<string, Module[]>>({});
-  const [lessons, setLessons] = useState<Record<string, Lesson[]>>({});
-  const [loading, setLoading] = useState(true);
-  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(new Set());
-  const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
-
-  // Dialog state
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editMode, setEditMode] = useState<EditMode>('course');
-  const [editItem, setEditItem] = useState<Partial<Course & Module & Lesson> | null>(null);
-  const [parentId, setParentId] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [quizLesson, setQuizLesson] = useState<{ id: string; title: string } | null>(null);
-
-  // Form state
-  const [formTitle, setFormTitle] = useState('');
-  const [formSlug, setFormSlug] = useState('');
-  const [formDescription, setFormDescription] = useState('');
-  const [formDifficulty, setFormDifficulty] = useState('beginner');
-  const [formHours, setFormHours] = useState('');
-  const [formThumbnail, setFormThumbnail] = useState('');
-  const [formPublished, setFormPublished] = useState(true);
-  const [formFree, setFormFree] = useState(false);
-  const [formMinutes, setFormMinutes] = useState('');
-  const [formType, setFormType] = useState('text');
-  const [formContent, setFormContent] = useState('');
-  const [formVideoUrl, setFormVideoUrl] = useState('');
-
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [courses, setCourses] = useState<AdminCourse[]>([]);
+  const [modules, setModules] = useState<Record<string, AdminModule[]>>({});
+  const [lessons, setLessons] = useState<Record<string, AdminLesson[]>>({});
+  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(() => new Set());
+  const [expandedModules, setExpandedModules] = useState<Set<string>>(() => new Set());
+  const [editTarget, setEditTarget] = useState<CourseItemTarget | null>(null);
+  const [quizLesson, setQuizLesson] = useState<{ id: string; title: string } | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
+
+  const loadCourses = useCallback(async () => {
+    try {
+      setCourses(await fetchCourses());
+      setLoadFailed(false);
+    } catch (error) {
+      console.error('[AdminCursos] failed to load courses', error);
+      setLoadFailed(true);
+      toast.error('Não foi possível carregar os cursos.');
+    }
+  }, []);
+
+  const loadModules = useCallback(async (courseId: string): Promise<AdminModule[] | null> => {
+    try {
+      const list = await fetchModules(courseId);
+      setModules((previous) => ({ ...previous, [courseId]: list }));
+      return list;
+    } catch (error) {
+      console.error('[AdminCursos] failed to load modules', { courseId, error });
+      setExpandedCourses((previous) => withoutItem(previous, courseId));
+      toast.error('Não foi possível carregar os módulos. Tente abrir o curso de novo.');
+      return null;
+    }
+  }, []);
+
+  const loadLessons = useCallback(async (moduleId: string): Promise<AdminLesson[] | null> => {
+    try {
+      const list = await fetchLessons(moduleId);
+      setLessons((previous) => ({ ...previous, [moduleId]: list }));
+      return list;
+    } catch (error) {
+      console.error('[AdminCursos] failed to load lessons', { moduleId, error });
+      setExpandedModules((previous) => withoutItem(previous, moduleId));
+      toast.error('Não foi possível carregar as aulas. Tente abrir o módulo de novo.');
+      return null;
+    }
+  }, []);
 
   useEffect(() => {
+    let active = true;
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { navigate('/admin/login'); return; }
-      const { data: role, error } = await supabase.from('user_roles').select('role').eq('user_id', user.id).eq('role', 'admin').maybeSingle();
-      if (error || !role) { navigate('/admin/login', { replace: true }); return; }
-      setUser(user);
-      await fetchCourses();
-      setLoading(false);
+      try {
+        const { data: { user: current } } = await supabase.auth.getUser();
+        if (!active) return;
+        if (!current) { navigate('/admin/login', { replace: true }); return; }
+        const { data: role, error } = await supabase.from('user_roles').select('role').eq('user_id', current.id).eq('role', 'admin').maybeSingle();
+        if (!active) return;
+        if (error || !role) { navigate('/admin/login', { replace: true }); return; }
+        setUser(current);
+        await loadCourses();
+      } catch (error) {
+        console.error('[AdminCursos] failed to verify admin access', error);
+        if (active) setLoadFailed(true);
+      } finally {
+        if (active) setLoading(false);
+      }
     };
-    init();
-  }, [navigate]);
-
-  const fetchCourses = async () => {
-    const { data } = await supabase.from('courses').select('*').order('created_at');
-    setCourses(data || []);
-  };
-
-  const fetchModules = async (courseId: string) => {
-    const { data } = await supabase
-      .from('modules')
-      .select('*')
-      .eq('course_id', courseId)
-      .order('order_index');
-    setModules(prev => ({ ...prev, [courseId]: data || [] }));
-  };
-
-  const fetchLessons = async (moduleId: string) => {
-    const { data } = await supabase
-      .from('lessons')
-      .select('*')
-      .eq('module_id', moduleId)
-      .order('order_index');
-    setLessons(prev => ({ ...prev, [moduleId]: data || [] }));
-  };
+    void init();
+    return () => { active = false; };
+  }, [navigate, loadCourses]);
 
   const toggleCourse = (courseId: string) => {
-    const next = new Set(expandedCourses);
-    if (next.has(courseId)) {
-      next.delete(courseId);
-    } else {
-      next.add(courseId);
-      if (!modules[courseId]) fetchModules(courseId);
-    }
-    setExpandedCourses(next);
+    if (!expandedCourses.has(courseId) && !modules[courseId]) void loadModules(courseId);
+    setExpandedCourses((previous) => toggled(previous, courseId));
   };
 
   const toggleModule = (moduleId: string) => {
-    const next = new Set(expandedModules);
-    if (next.has(moduleId)) {
-      next.delete(moduleId);
-    } else {
-      next.add(moduleId);
-      if (!lessons[moduleId]) fetchLessons(moduleId);
-    }
-    setExpandedModules(next);
+    if (!expandedModules.has(moduleId) && !lessons[moduleId]) void loadLessons(moduleId);
+    setExpandedModules((previous) => toggled(previous, moduleId));
   };
 
-  const openDialog = (mode: EditMode, item?: Partial<Course & Module & Lesson>, parent?: string) => {
-    setEditMode(mode);
-    setEditItem(item || null);
-    setParentId(parent || null);
-
-    if (item) {
-      setFormTitle(item.title || '');
-      setFormSlug(item.slug || '');
-      setFormDescription(item.description || '');
-      setFormDifficulty(item.difficulty || 'beginner');
-      setFormHours(item.estimated_hours?.toString() || '');
-      setFormThumbnail(item.thumbnail_url || '');
-      setFormPublished(item.is_published ?? true);
-      setFormFree(item.is_free ?? false);
-      setFormMinutes(item.estimated_minutes?.toString() || '');
-      setFormType(item.type || 'text');
-      setFormContent(item.content || '');
-      setFormVideoUrl(item.video_url || '');
-    } else {
-      setFormTitle('');
-      setFormSlug('');
-      setFormDescription('');
-      setFormDifficulty('beginner');
-      setFormHours('');
-      setFormThumbnail('');
-      setFormPublished(true);
-      setFormFree(false);
-      setFormMinutes('10');
-      setFormType('text');
-      setFormContent('');
-      setFormVideoUrl('');
-    }
-
-    setDialogOpen(true);
+  const openNewModule = async (courseId: string) => {
+    const list = modules[courseId] ?? await loadModules(courseId);
+    if (!list) return;
+    setExpandedCourses((previous) => withItem(previous, courseId));
+    setEditTarget({ mode: 'module', item: null, courseId, orderIndex: nextOrderIndex(list) });
   };
 
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
+  const openNewLesson = async (moduleId: string) => {
+    const list = lessons[moduleId] ?? await loadLessons(moduleId);
+    if (!list) return;
+    setExpandedModules((previous) => withItem(previous, moduleId));
+    setEditTarget({ mode: 'lesson', item: null, moduleId, orderIndex: nextOrderIndex(list) });
   };
 
-  const handleSave = async () => {
-    if (!formTitle.trim()) {
-      toast.error('Título é obrigatório');
-      return;
-    }
-    setSaving(true);
+  const handleSaved = (target: CourseItemTarget) => {
+    setEditTarget(null);
+    if (target.mode === 'course') void loadCourses();
+    else if (target.mode === 'module') void loadModules(target.courseId);
+    else void loadLessons(target.moduleId);
+  };
 
+  const handleDelete = async (label: string, table: DeletableTable, id: string, refresh: () => Promise<unknown>) => {
+    if (!window.confirm(`Excluir ${label}? Esta ação não pode ser desfeita.`)) return;
     try {
-      if (editMode === 'course') {
-        const payload = {
-          title: formTitle,
-          slug: formSlug || generateSlug(formTitle),
-          description: formDescription || null,
-          difficulty: formDifficulty,
-          estimated_hours: formHours ? parseFloat(formHours) : null,
-          thumbnail_url: formThumbnail || null,
-          is_published: formPublished,
-          is_free: formFree,
-        };
-
-        if (editItem) {
-          await supabase.from('courses').update(payload).eq('id', editItem.id);
-          toast.success('Curso atualizado');
-        } else {
-          await supabase.from('courses').insert(payload);
-          toast.success('Curso criado');
-        }
-        await fetchCourses();
-      } else if (editMode === 'module') {
-        const existingModules = modules[parentId!] || [];
-        const payload = {
-          title: formTitle,
-          description: formDescription || null,
-          course_id: parentId!,
-          is_published: formPublished,
-          order_index: editItem?.order_index ?? existingModules.length,
-          slug: generateSlug(formTitle),
-        };
-
-        if (editItem) {
-          await supabase.from('modules').update(payload).eq('id', editItem.id);
-          toast.success('Módulo atualizado');
-        } else {
-          await supabase.from('modules').insert(payload);
-          toast.success('Módulo criado');
-        }
-        await fetchModules(parentId!);
-      } else if (editMode === 'lesson') {
-        const existingLessons = lessons[parentId!] || [];
-        const payload = {
-          title: formTitle,
-          description: formDescription || null,
-          module_id: parentId!,
-          estimated_minutes: formMinutes ? parseInt(formMinutes) : 10,
-          is_free: formFree,
-          type: formType,
-          content: formContent || null,
-          video_url: formVideoUrl || null,
-          order_index: editItem?.order_index ?? existingLessons.length,
-        };
-
-        if (editItem) {
-          await supabase.from('lessons').update(payload).eq('id', editItem.id);
-          toast.success('Aula atualizada');
-        } else {
-          await supabase.from('lessons').insert(payload);
-          toast.success('Aula criada');
-        }
-        await fetchLessons(parentId!);
-      }
-
-      setDialogOpen(false);
-    } catch (caught) {
-      const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
-      toast.error(err.message || 'Erro ao salvar');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async (mode: EditMode, id: string, parentCourseId?: string, parentModuleId?: string) => {
-    if (!confirm('Tem certeza que deseja excluir?')) return;
-
-    try {
-      if (mode === 'course') {
-        await supabase.from('courses').delete().eq('id', id);
-        await fetchCourses();
-      } else if (mode === 'module') {
-        await supabase.from('modules').delete().eq('id', id);
-        if (parentCourseId) await fetchModules(parentCourseId);
-      } else {
-        await supabase.from('lessons').delete().eq('id', id);
-        if (parentModuleId) await fetchLessons(parentModuleId);
-      }
+      await deleteRow(table, id);
       toast.success('Excluído com sucesso');
-    } catch {
-      toast.error('Erro ao excluir');
+      await refresh();
+    } catch (error) {
+      console.error('[AdminCursos] delete failed', { table, id, error });
+      toast.error(describeDeleteError(error));
     }
+  };
+
+  const handleImported = async (courseId: string) => {
+    setModules({});
+    setLessons({});
+    setExpandedModules(new Set());
+    setExpandedCourses(new Set([courseId]));
+    await Promise.all([loadCourses(), loadModules(courseId)]);
+  };
+
+  const renderLessons = (module: AdminModule) => {
+    const list = lessons[module.id];
+    if (!list) return <p role="status" className="py-3 pl-4 text-xs text-muted-foreground sm:pl-20">Carregando aulas…</p>;
+    if (list.length === 0) {
+      return (
+        <p className="py-3 pl-4 text-xs text-muted-foreground sm:pl-20">
+          Sem aulas.{' '}
+          <button type="button" onClick={() => void openNewLesson(module.id)} className="font-medium text-foreground underline underline-offset-2">
+            Adicionar aula
+          </button>
+        </p>
+      );
+    }
+    return (
+      <ul>
+        {list.map((lesson) => (
+          <LessonRow
+            key={lesson.id}
+            lesson={lesson}
+            onQuiz={() => setQuizLesson({ id: lesson.id, title: lesson.title })}
+            onEdit={() => setEditTarget({ mode: 'lesson', item: lesson, moduleId: module.id, orderIndex: lesson.order_index })}
+            onDelete={() => void handleDelete(`a aula "${lesson.title}"`, 'lessons', lesson.id, () => loadLessons(module.id))}
+          />
+        ))}
+      </ul>
+    );
+  };
+
+  const renderModules = (course: AdminCourse) => {
+    const list = modules[course.id];
+    if (!list) return <p role="status" className="p-4 text-sm text-muted-foreground">Carregando módulos…</p>;
+    if (list.length === 0) {
+      return (
+        <p className="p-4 text-center text-sm text-muted-foreground">
+          Nenhum módulo ainda.{' '}
+          <button type="button" onClick={() => void openNewModule(course.id)} className="font-medium text-foreground underline underline-offset-2">
+            Criar primeiro módulo
+          </button>
+        </p>
+      );
+    }
+    return (
+      <ul>
+        {list.map((module) => {
+          const code = moduleCode(module);
+          const label = `o módulo "${code ? `${code} ` : ''}${moduleDisplayTitle(module)}" e as aulas dele`;
+          return (
+            <ModuleRow
+              key={module.id}
+              module={module}
+              expanded={expandedModules.has(module.id)}
+              onToggle={() => toggleModule(module.id)}
+              onAddLesson={() => void openNewLesson(module.id)}
+              onEdit={() => setEditTarget({ mode: 'module', item: module, courseId: course.id, orderIndex: module.order_index })}
+              onDelete={() => void handleDelete(label, 'modules', module.id, () => loadModules(course.id))}
+            >
+              {renderLessons(module)}
+            </ModuleRow>
+          );
+        })}
+      </ul>
+    );
   };
 
   if (loading) {
     return (
       <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-background">
-          <AdminSidebar />
-          <div className="flex-1 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        <AdminShell user={null}>
+          <div role="status" className="flex h-full items-center justify-center py-24">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-hidden="true" />
+            <span className="sr-only">Carregando cursos…</span>
           </div>
-        </div>
+        </AdminShell>
       </SidebarProvider>
     );
   }
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AdminSidebar />
-        <div className="flex-1 flex flex-col">
-          <AdminHeader user={user} />
-          <main className="flex-1 p-6 lg:p-8 overflow-auto">
-            <div className="max-w-5xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-                    <GraduationCap className="w-6 h-6 text-accent" />
-                    Gerenciar Cursos
-                  </h1>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    Crie e organize cursos, módulos e aulas
-                  </p>
-                </div>
-                <Button onClick={() => openDialog('course')} className="bg-accent hover:bg-accent/90">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Novo Curso
-                </Button>
-              </div>
-
-              {/* Course List */}
-              {courses.length === 0 ? (
-                <div className="text-center py-20 bg-card rounded-2xl border border-border/50">
-                  <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h2 className="text-lg font-semibold text-foreground mb-2">Nenhum curso criado</h2>
-                  <p className="text-muted-foreground mb-4">Comece criando seu primeiro curso</p>
-                  <Button onClick={() => openDialog('course')}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Criar Curso
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {courses.map(course => (
-                    <div key={course.id} className="bg-card rounded-xl border border-border/50 overflow-hidden">
-                      {/* Course row */}
-                      <div className="flex items-center gap-3 p-4">
-                        <button onClick={() => toggleCourse(course.id)} className="text-muted-foreground hover:text-foreground">
-                          {expandedCourses.has(course.id) ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-foreground truncate">{course.title}</h3>
-                            <Badge variant={course.is_published ? 'default' : 'secondary'} className="text-xs">
-                              {course.is_published ? 'Publicado' : 'Rascunho'}
-                            </Badge>
-                            {course.is_free && <Badge variant="outline" className="text-xs">Grátis</Badge>}
-                          </div>
-                          <p className="text-xs text-muted-foreground">/{course.slug}</p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="icon" onClick={() => openDialog('module', null, course.id)} title="Adicionar módulo">
-                            <Plus className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => openDialog('course', course)}>
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete('course', course.id)} className="text-destructive hover:text-destructive">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Modules */}
-                      {expandedCourses.has(course.id) && (
-                        <div className="border-t border-border/50 bg-secondary/20">
-                          {(modules[course.id] || []).length === 0 ? (
-                            <div className="p-4 text-center text-sm text-muted-foreground">
-                              Nenhum módulo ainda.{' '}
-                              <button onClick={() => openDialog('module', null, course.id)} className="text-accent hover:underline">
-                                Criar primeiro módulo
-                              </button>
-                            </div>
-                          ) : (
-                            (modules[course.id] || []).map(mod => (
-                              <div key={mod.id}>
-                                <div className="flex items-center gap-3 px-4 py-3 pl-12 border-b border-border/30">
-                                  <button onClick={() => toggleModule(mod.id)} className="text-muted-foreground hover:text-foreground">
-                                    {expandedModules.has(mod.id) ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                                  </button>
-                                  <BookOpen className="w-4 h-4 text-accent flex-shrink-0" />
-                                  <div className="flex-1 min-w-0">
-                                    <span className="text-sm font-medium text-foreground truncate block">{mod.title}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openDialog('lesson', null, mod.id)} title="Adicionar aula">
-                                      <Plus className="w-3.5 h-3.5" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openDialog('module', mod, course.id)}>
-                                      <Pencil className="w-3.5 h-3.5" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleDelete('module', mod.id, course.id)}>
-                                      <Trash2 className="w-3.5 h-3.5" />
-                                    </Button>
-                                  </div>
-                                </div>
-
-                                {/* Lessons */}
-                                {expandedModules.has(mod.id) && (
-                                  <div className="bg-secondary/10">
-                                    {(lessons[mod.id] || []).length === 0 ? (
-                                      <div className="p-3 pl-20 text-xs text-muted-foreground">
-                                        Sem aulas.{' '}
-                                        <button onClick={() => openDialog('lesson', null, mod.id)} className="text-accent hover:underline">
-                                          Adicionar aula
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      (lessons[mod.id] || []).map(lesson => (
-                                        <div key={lesson.id} className="flex items-center gap-3 px-4 py-2.5 pl-20 border-b border-border/20">
-                                          <span className="text-xs text-muted-foreground w-4">{lesson.order_index + 1}</span>
-                                          <div className="flex-1 min-w-0">
-                                            <span className="text-sm text-foreground truncate block">{lesson.title}</span>
-                                            <span className="text-xs text-muted-foreground">
-                                              {lesson.estimated_minutes}min · {lesson.type}
-                                              {lesson.is_free && ' · Grátis'}
-                                            </span>
-                                          </div>
-                                          <div className="flex items-center gap-1">
-                                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setQuizLesson({ id: lesson.id, title: lesson.title })} title="Quiz">
-                                              <Brain className="w-3.5 h-3.5" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openDialog('lesson', lesson, mod.id)}>
-                                              <Pencil className="w-3.5 h-3.5" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => handleDelete('lesson', lesson.id, undefined, mod.id)}>
-                                              <Trash2 className="w-3.5 h-3.5" />
-                                            </Button>
-                                          </div>
-                                        </div>
-                                      ))
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+      <AdminShell user={user}>
+        <div className="mx-auto max-w-5xl space-y-6">
+          <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground">
+                <GraduationCap className="h-6 w-6 text-accent" aria-hidden="true" />
+                Gerenciar cursos
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground">Crie e organize cursos, módulos e aulas, ou importe o pacote do currículo.</p>
             </div>
-          </main>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="outline" onClick={() => setImportOpen(true)}>
+                <FileJson aria-hidden="true" />
+                Importar currículo
+              </Button>
+              <Button type="button" onClick={() => setEditTarget({ mode: 'course', item: null })} className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Plus aria-hidden="true" />
+                Novo curso
+              </Button>
+            </div>
+          </header>
+
+          {loadFailed && courses.length === 0 ? (
+            <div role="alert" className="rounded-2xl border border-border/50 bg-card py-16 text-center">
+              <p className="mb-4 text-foreground">Não foi possível carregar os cursos.</p>
+              <Button type="button" variant="outline" onClick={() => void loadCourses()}>
+                <RotateCcw aria-hidden="true" />
+                Tentar de novo
+              </Button>
+            </div>
+          ) : courses.length === 0 ? (
+            <div className="rounded-2xl border border-border/50 bg-card py-16 text-center">
+              <GraduationCap className="mx-auto mb-4 h-12 w-12 text-muted-foreground" aria-hidden="true" />
+              <h2 className="mb-2 text-lg font-semibold text-foreground">Nenhum curso criado</h2>
+              <p className="mb-4 text-muted-foreground">Crie o primeiro curso ou importe o pacote do currículo.</p>
+              <Button type="button" onClick={() => setEditTarget({ mode: 'course', item: null })}>
+                <Plus aria-hidden="true" />
+                Criar curso
+              </Button>
+            </div>
+          ) : (
+            <ul className="space-y-3" aria-label="Cursos">
+              {courses.map((course) => (
+                <CourseRow
+                  key={course.id}
+                  course={course}
+                  expanded={expandedCourses.has(course.id)}
+                  onToggle={() => toggleCourse(course.id)}
+                  onAddModule={() => void openNewModule(course.id)}
+                  onEdit={() => setEditTarget({ mode: 'course', item: course })}
+                  onDelete={() => void handleDelete(`o curso "${course.title}" e todo o conteúdo dele`, 'courses', course.id, loadCourses)}
+                >
+                  {renderModules(course)}
+                </CourseRow>
+              ))}
+            </ul>
+          )}
         </div>
-      </div>
+      </AdminShell>
 
-      {/* Create/Edit Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {editItem ? 'Editar' : 'Criar'}{' '}
-              {editMode === 'course' ? 'Curso' : editMode === 'module' ? 'Módulo' : 'Aula'}
-            </DialogTitle>
-            <DialogDescription>
-              Preencha os dados abaixo
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 pt-2">
-            <div>
-              <Label>Título *</Label>
-              <Input
-                value={formTitle}
-                onChange={e => {
-                  setFormTitle(e.target.value);
-                  if (!editItem && editMode === 'course') {
-                    setFormSlug(generateSlug(e.target.value));
-                  }
-                }}
-                placeholder="Ex: Fundamentos de IA"
-              />
-            </div>
-
-            {editMode === 'course' && (
-              <div>
-                <Label>Slug</Label>
-                <Input
-                  value={formSlug}
-                  onChange={e => setFormSlug(e.target.value)}
-                  placeholder="fundamentos-de-ia"
-                />
-              </div>
-            )}
-
-            <div>
-              <Label>Descrição</Label>
-              <Textarea
-                value={formDescription}
-                onChange={e => setFormDescription(e.target.value)}
-                placeholder="Breve descrição..."
-                rows={3}
-              />
-            </div>
-
-            {editMode === 'course' && (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label>Dificuldade</Label>
-                    <Select value={formDifficulty} onValueChange={setFormDifficulty}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beginner">Iniciante</SelectItem>
-                        <SelectItem value="intermediate">Intermediário</SelectItem>
-                        <SelectItem value="advanced">Avançado</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Horas estimadas</Label>
-                    <Input
-                      type="number"
-                      value={formHours}
-                      onChange={e => setFormHours(e.target.value)}
-                      placeholder="10"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Label>URL da thumbnail</Label>
-                  <Input
-                    value={formThumbnail}
-                    onChange={e => setFormThumbnail(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
-              </>
-            )}
-
-            {editMode === 'lesson' && (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label>Tipo</Label>
-                    <Select value={formType} onValueChange={setFormType}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="text">Texto</SelectItem>
-                        <SelectItem value="video">Vídeo</SelectItem>
-                        <SelectItem value="quiz">Quiz</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Duração (min)</Label>
-                    <Input
-                      type="number"
-                      value={formMinutes}
-                      onChange={e => setFormMinutes(e.target.value)}
-                      placeholder="10"
-                    />
-                  </div>
-                </div>
-                {formType === 'video' && (
-                  <div>
-                    <Label>URL do vídeo</Label>
-                    <Input
-                      value={formVideoUrl}
-                      onChange={e => setFormVideoUrl(e.target.value)}
-                      placeholder="https://youtube.com/..."
-                    />
-                  </div>
-                )}
-                <div>
-                  <Label>Conteúdo (Markdown)</Label>
-                  <Textarea
-                    value={formContent}
-                    onChange={e => setFormContent(e.target.value)}
-                    placeholder="# Título da aula..."
-                    rows={8}
-                    className="font-mono text-sm"
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Toggles */}
-            <div className="flex items-center gap-6 pt-2">
-              {(editMode === 'course' || editMode === 'module') && (
-                <div className="flex items-center gap-2">
-                  <Switch checked={formPublished} onCheckedChange={setFormPublished} id="published" />
-                  <Label htmlFor="published">Publicado</Label>
-                </div>
-              )}
-              {(editMode === 'course' || editMode === 'lesson') && (
-                <div className="flex items-center gap-2">
-                  <Switch checked={formFree} onCheckedChange={setFormFree} id="free" />
-                  <Label htmlFor="free">Gratuito</Label>
-                </div>
-              )}
-            </div>
-
-            <Button onClick={handleSave} disabled={saving} className="w-full bg-accent hover:bg-accent/90">
-              {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              {editItem ? 'Salvar alterações' : 'Criar'}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-      {quizLesson && (
-        <QuizManager
-          lessonId={quizLesson.id}
-          lessonTitle={quizLesson.title}
-          open={!!quizLesson}
-          onClose={() => setQuizLesson(null)}
+      {editTarget && (
+        <CourseItemDialog
+          key={`${editTarget.mode}-${editTarget.item?.id ?? 'new'}`}
+          target={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSaved={handleSaved}
         />
+      )}
+      {importOpen && <CurriculumImportDialog onClose={() => setImportOpen(false)} onImported={(courseId) => void handleImported(courseId)} />}
+      {quizLesson && (
+        <QuizManager lessonId={quizLesson.id} lessonTitle={quizLesson.title} open onClose={() => setQuizLesson(null)} />
       )}
     </SidebarProvider>
   );
