@@ -50,10 +50,10 @@
 .lv2-lead{color:var(--muted);font-size:clamp(1rem,1.6vw,1.18rem);max-width:640px}
 
 .lv2-wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-.lv2-section{padding:44px 0}
-.lv2-section-tight{padding:20px 0}
-.lv2-section-tight-bottom{padding:38px 0 18px}
-.lv2-section-head{max-width:680px;margin-bottom:32px}
+.lv2-section{padding:34px 0}
+.lv2-section-tight{padding:14px 0}
+.lv2-section-tight-bottom{padding:30px 0 14px}
+.lv2-section-head{max-width:680px;margin-bottom:24px}
 .lv2-section-head .lv2-lead{margin-top:16px}
 
 /* NAV */
@@ -97,7 +97,7 @@
 .lv2-link-cta:hover{border-color:var(--mint)}
 
 /* HERO */
-.lv2-hero{position:relative;min-height:min(760px,100svh);padding:132px 0 56px;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.lv2-hero{position:relative;min-height:min(700px,100svh);padding:112px 0 44px;overflow:hidden;display:flex;align-items:center;isolation:isolate}
 
 .lv2-hero-media{position:absolute;inset:-5% 0;z-index:-3;background:var(--ink);transform:translate3d(0,var(--hero-parallax,0),0) scale(var(--hero-scale,1));will-change:transform}
 .lv2-hero-poster,.lv2-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 44%}
@@ -117,11 +117,11 @@
   -webkit-mask-image:linear-gradient(180deg,#000,transparent 88%);
 }
 .lv2-hero-in{position:relative;max-width:780px}
-.lv2-hero h1{margin-bottom:24px}
-.lv2-hero .lv2-lead{margin-bottom:38px}
+.lv2-hero h1{margin-bottom:20px}
+.lv2-hero .lv2-lead{margin-bottom:28px}
 .lv2-hero-cta{display:flex;flex-direction:column;align-items:flex-start}
 
-.lv2-mini-map{margin-top:46px;max-width:640px}
+.lv2-mini-map{margin-top:32px;max-width:640px}
 .lv2-mini-map-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
 .lv2-mini-map-ticks{display:flex;align-items:flex-end;gap:0}
 .lv2-tick{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
@@ -136,7 +136,7 @@
 
 /* CAPÍTULOS CINEMATOGRÁFICOS */
 .lv2-cinema-chapter{
-  position:relative;min-height:clamp(260px,30vw,340px);overflow:hidden;
+  position:relative;min-height:clamp(240px,25vw,290px);overflow:hidden;
   display:flex;align-items:flex-end;isolation:isolate;border-block:1px solid var(--line);
   background:var(--ink-2);
 }
@@ -159,10 +159,10 @@
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
   background-size:72px 72px;mask-image:linear-gradient(180deg,transparent,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000);
 }
-.lv2-cinema-content{width:100%;padding-top:78px;padding-bottom:34px;transform:translate3d(0,var(--chapter-copy,0),0);will-change:transform}
+.lv2-cinema-content{width:100%;padding-top:58px;padding-bottom:26px;transform:translate3d(0,var(--chapter-copy,0),0);will-change:transform}
 .lv2-cinema-right .lv2-cinema-content{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
 .lv2-cinema-act{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--chapter-accent,var(--mint));margin-bottom:14px}
-.lv2-cinema-content h2{font-size:clamp(1.9rem,4.2vw,3.5rem);max-width:720px;margin:0 0 18px;text-wrap:balance}
+.lv2-cinema-content h2{font-size:clamp(1.8rem,3.6vw,3rem);max-width:720px;margin:0 0 12px;text-wrap:balance}
 .lv2-cinema-content p{max-width:590px;color:var(--text);font-size:clamp(.98rem,1.6vw,1.12rem);text-shadow:0 2px 20px var(--ink)}
 .lv2-cinema-line{display:block;width:96px;height:2px;margin-top:22px;background:linear-gradient(90deg,var(--chapter-accent,var(--mint)),var(--chapter-accent-2,var(--blue)))}
 
@@ -195,11 +195,11 @@
 .lv2-section[class*="lv2-act-"] .lv2-eyebrow,.lv2-section[class*="lv2-act-"] .lv2-link-cta{color:var(--section-accent)}
 .lv2-section[class*="lv2-act-"] .lv2-eyebrow::before{background:var(--section-accent)}
 .lv2-section[class*="lv2-act-"] .lv2-grad-text{background:linear-gradient(92deg,var(--section-accent),var(--section-accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lv2-section.lv2-compact-follow{padding-top:28px}
-.lv2-section.lv2-compact-follow + .lv2-section.lv2-compact-follow{padding-top:18px}
+.lv2-section.lv2-compact-follow{padding-top:18px}
+.lv2-section.lv2-compact-follow + .lv2-section.lv2-compact-follow{padding-top:10px}
 
 /* MARQUEE */
-.lv2-marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;position:relative}
+.lv2-marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;overflow:hidden;position:relative}
 .lv2-marquee-wrap::before,.lv2-marquee-wrap::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
 .lv2-marquee-wrap::before{left:0;background:linear-gradient(90deg,var(--ink),transparent)}
 .lv2-marquee-wrap::after{right:0;background:linear-gradient(-90deg,var(--ink),transparent)}
@@ -209,7 +209,7 @@
 @keyframes lv2scroll{to{transform:translateX(-50%)}}
 
 /* PROBLEMA / SOLUÇÃO */
-.lv2-pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+.lv2-pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:34px}
 @media(max-width:860px){.lv2-pain-grid{grid-template-columns:1fr}}
 .lv2-pain{border:1px solid var(--line);border-radius:var(--r);padding:24px;background:var(--ink-2)}
 .lv2-x{font-family:var(--mono);font-size:.72rem;color:#F87171;letter-spacing:.12em;display:block;margin-bottom:14px}
@@ -250,7 +250,7 @@
 .lv2-mod-body-in p{color:var(--muted);font-size:.95rem;margin-bottom:12px}
 .lv2-mod-proj{font-size:.88rem;display:flex;gap:10px;align-items:baseline;border-left:2px solid var(--mint);padding-left:14px}
 .lv2-mod-proj b{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--mint);text-transform:uppercase;flex:none}
-.lv2-map-foot{margin-top:28px;display:flex;gap:12px;align-items:center;color:var(--muted);font-size:.9rem}
+.lv2-map-foot{margin-top:20px;display:flex;gap:12px;align-items:center;color:var(--muted);font-size:.9rem}
 .lv2-dotg{width:10px;height:10px;border-radius:50%;background:var(--grad);flex:none;display:inline-block}
 
 /* RADAR */
@@ -335,7 +335,7 @@
   .lv2-section-tight{padding:14px 0}
   .lv2-section-tight-bottom{padding:24px 0 12px}
   .lv2-section-head{margin-bottom:20px}
-  .lv2-hero{min-height:calc(100svh - 8px);padding:112px 0 42px;align-items:flex-start}
+  .lv2-hero{min-height:calc(100svh - 8px);padding:92px 0 30px;align-items:flex-start}
   .lv2-hero-poster,.lv2-hero-video{object-position:68% center}
   .lv2-hero-scrim{background:linear-gradient(180deg,rgba(6,9,15,.72) 0%,rgba(6,9,15,.78) 42%,rgba(6,9,15,.94) 78%,var(--ink) 100%)}
   .lv2-hero-in{max-width:100%}
@@ -398,12 +398,12 @@
 
 
 /* 4. Live counters */
-.lv2-live{border-bottom:1px solid var(--line);padding:28px 0 30px;background:var(--ink)}
+.lv2-live{border-bottom:1px solid var(--line);padding:20px 0 22px;background:var(--ink)}
 .lv2-live-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
 .lv2-live-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);animation:lv2pulse 2s infinite;display:inline-block}
 .lv2-live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media(max-width:760px){.lv2-live-grid{grid-template-columns:repeat(3,1fr);gap:6px}.lv2-live-cell{padding:14px 8px}.lv2-live-lbl{font-size:.54rem;line-height:1.35}.lv2-live-num{font-size:1.15rem}.lv2-live-head{margin-bottom:14px}}
-.lv2-live-cell{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;background:linear-gradient(180deg,var(--ink-2),var(--ink));position:relative;overflow:hidden}
+.lv2-live-cell{border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;background:linear-gradient(180deg,var(--ink-2),var(--ink));position:relative;overflow:hidden}
 .lv2-live-cell::before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--grad);opacity:.6}
 .lv2-live-num{font-family:var(--disp);font-weight:700;font-size:clamp(1.6rem,3vw,2.1rem);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
 .lv2-live-lbl{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin-top:6px;text-transform:uppercase}
