@@ -1,382 +1,187 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { BookOpen, CheckCircle2 } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
+import { PageError, PageLoading, EmptyState } from '@/components/members/PageStates';
 import { LessonComments } from '@/components/community/LessonComments';
-import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
-import { QuizPlayer } from '@/components/course/QuizPlayer';
 import { AISandbox } from '@/components/course/AISandbox';
+import { BookmarkButton } from '@/components/course/BookmarkButton';
+import { CompleteLessonButton } from '@/components/course/CompleteLessonButton';
+import { LessonHeader } from '@/components/course/LessonHeader';
+import { LessonNavigation } from '@/components/course/LessonNavigation';
 import { LessonNotes } from '@/components/course/LessonNotes';
-import { useLessonTimeTracker } from '@/hooks/useLessonTimeTracker';
-import { supabase } from '@/integrations/supabase/client';
+import { LessonPrompts } from '@/components/course/LessonPrompts';
+import { LessonVideo } from '@/components/course/LessonVideo';
+import { LockedLesson } from '@/components/course/LockedLesson';
+import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
+import { ProjectBanner, ProjectSubmission } from '@/components/course/ProjectSubmission';
+import { QuizPlayer } from '@/components/course/QuizPlayer';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import {
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  Clock,
-  BookOpen,
-  Sparkles,
-  Award,
-  Play,
-  Bookmark,
-  BookmarkCheck
-} from 'lucide-react';
+import { useAuthUser } from '@/hooks/useAuthUser';
+import { useCompletedLessons, useLessonContext, type LessonContext } from '@/hooks/useCourseOutline';
+import { useCompleteLesson, useLesson, useProjectSubmission, type LessonRow } from '@/hooks/useLessonData';
+import { useLessonTimeTracker } from '@/hooks/useLessonTimeTracker';
+import { lessonNavigation, type LessonNavigation as LessonNavigationState } from '@/lib/curriculum';
 
-interface Lesson {
-  id: string;
-  module_id: string;
-  title: string;
-  description: string;
-  video_url: string | null;
-  duration_minutes: number;
-  estimated_minutes: number | null;
-  order_index: number;
-  content: string | null;
-  prompts: string[] | null;
-  type: string | null;
-}
-
-interface Module {
-  id: string;
-  title: string;
-  course_id: string | null;
-}
+const NO_NAVIGATION: LessonNavigationState = { previous: null, next: null, nextModule: null, isLastLesson: false };
+const AUTO_ADVANCE_MS = 800;
 
 const LessonPlayer = () => {
   const { lessonId } = useParams();
-  const navigate = useNavigate();
-  const [lesson, setLesson] = useState<Lesson | null>(null);
-  const [module, setModule] = useState<Module | null>(null);
-  const [allLessons, setAllLessons] = useState<Lesson[]>([]);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string>('');
+  const lessonQuery = useLesson(lessonId);
+  const lesson = lessonQuery.data ?? null;
+  const context = useLessonContext(lessonId, lesson?.module_id ?? null);
+  const completed = useCompletedLessons();
 
-  // Track time spent on lesson
-  useLessonTimeTracker({ lessonId: lessonId || '', userId: currentUserId });
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) setCurrentUserId(user.id);
-
-        const { data: lessonData } = await supabase
-          .from('lessons')
-          .select('*')
-          .eq('id', lessonId)
-          .maybeSingle();
-
-        if (lessonData) {
-          setLesson(lessonData as Lesson);
-
-          const { data: moduleData } = await supabase
-            .from('modules')
-            .select('id, title, course_id')
-            .eq('id', lessonData.module_id)
-            .maybeSingle();
-
-          if (moduleData) setModule(moduleData);
-
-          const { data: lessonsData } = await supabase
-            .from('lessons')
-            .select('*')
-            .eq('module_id', lessonData.module_id)
-            .order('order_index');
-
-          if (lessonsData) setAllLessons(lessonsData as Lesson[]);
-        }
-
-        if (user && lessonData) {
-          const { data: progressData } = await supabase
-            .from('lesson_progress')
-            .select('completed')
-            .eq('user_id', user.id)
-            .eq('lesson_id', lessonId)
-            .maybeSingle();
-
-          if (progressData?.completed) setIsCompleted(true);
-          else setIsCompleted(false);
-
-          // Check bookmark
-          const { data: bookmarkData } = await supabase
-            .from('lesson_bookmarks')
-            .select('id')
-            .eq('user_id', user.id)
-            .eq('lesson_id', lessonId)
-            .maybeSingle();
-          setIsBookmarked(!!bookmarkData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (lessonId) fetchData();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   }, [lessonId]);
 
-  const handleMarkComplete = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { error } = await supabase
-        .from('lesson_progress')
-        .upsert({
-          user_id: user.id,
-          lesson_id: lessonId,
-          completed: true,
-          completed_at: new Date().toISOString(),
-          status: 'completed',
-        }, { onConflict: 'user_id,lesson_id' });
-
-      if (error) throw error;
-
-      setIsCompleted(true);
-      toast({ title: "Aula concluída!", description: "Seu progresso foi salvo." });
-
-      // Auto-advance to next lesson
-      if (nextLesson) {
-        setTimeout(() => navigate(`/membros/aula/${nextLesson.id}`), 800);
-      }
-    } catch (error) {
-      console.error('Error marking complete:', error);
-      toast({ title: "Erro", description: "Não foi possível salvar seu progresso.", variant: "destructive" });
-    }
-  };
-  const toggleBookmark = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !lessonId) return;
-
-    if (isBookmarked) {
-      await supabase.from('lesson_bookmarks').delete().eq('user_id', user.id).eq('lesson_id', lessonId);
-      setIsBookmarked(false);
-      toast({ title: 'Removido dos salvos' });
-    } else {
-      await supabase.from('lesson_bookmarks').insert({ user_id: user.id, lesson_id: lessonId });
-      setIsBookmarked(true);
-      toast({ title: 'Aula salva!', description: 'Acesse suas aulas salvas no menu lateral.' });
-    }
-  };
-
-
-  const currentIndex = allLessons.findIndex(l => l.id === lessonId);
-  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
-  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
-
-  const isVideoLesson = lesson?.type === 'video' || (lesson?.video_url && lesson.type !== 'text');
-  const minutes = lesson?.estimated_minutes || lesson?.duration_minutes || 0;
-
-  if (loading) {
-    return (
-      <MembersLayout>
-        <div className="max-w-4xl mx-auto animate-pulse space-y-6">
-          <div className="h-6 bg-secondary rounded w-40" />
-          <div className="h-64 bg-secondary rounded-2xl" />
-          <div className="h-32 bg-secondary rounded-2xl" />
-        </div>
-      </MembersLayout>
+  let body;
+  if (lessonQuery.isPending || context.isPending) {
+    body = <PageLoading label="Carregando aula…" />;
+  } else if (lessonQuery.isError || context.isError) {
+    body = (
+      <PageError
+        title="Não foi possível abrir esta aula"
+        onRetry={() => {
+          void lessonQuery.refetch();
+          context.refetch();
+        }}
+      />
     );
-  }
-
-  if (!lesson || !module) {
-    return (
-      <MembersLayout>
-        <div className="text-center py-12">
-          <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Aula não encontrada</p>
-          <Button variant="outline" onClick={() => navigate('/membros/cursos')} className="mt-4">
-            Voltar aos cursos
+  } else if (!lesson && context.data) {
+    // The outline lists the lesson but RLS returns no row: the learner's plan does not open it.
+    const open = context.data.outline.lessons.filter((candidate) => candidate.accessible);
+    const openLesson = open.find((candidate) => !completed.data?.has(candidate.id)) ?? open[0] ?? null;
+    body = <LockedLesson context={context.data} openLesson={openLesson} />;
+  } else if (!lesson) {
+    body = (
+      <EmptyState
+        icon={<BookOpen className="h-12 w-12" />}
+        title="Aula não encontrada"
+        description="O link pode estar desatualizado ou a aula foi removida do curso."
+        action={
+          <Button asChild variant="outline">
+            <Link to="/membros/cursos">Ver cursos</Link>
           </Button>
-        </div>
-      </MembersLayout>
+        }
+        className="mx-auto max-w-xl"
+      />
     );
+  } else {
+    body = <LessonView key={lesson.id} lesson={lesson} context={context.data} />;
   }
+
+  return <MembersLayout>{body}</MembersLayout>;
+};
+
+function LessonTimeTracker({ lessonId, userId }: { lessonId: string; userId: string }) {
+  useLessonTimeTracker({ lessonId, userId });
+  return null;
+}
+
+function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonContext | null }) {
+  const navigate = useNavigate();
+  const { data: user } = useAuthUser();
+  const completedQuery = useCompletedLessons();
+  const completeLesson = useCompleteLesson();
+  const isProject = lesson.type === 'project';
+  const { submission, isLoading: submissionLoading } = useProjectSubmission(lesson.id, isProject);
+  const [advanceTo, setAdvanceTo] = useState<string | null>(null);
+
+  // Short pause so the "Aula concluída" toast is seen; leaving the page cancels it.
+  useEffect(() => {
+    if (!advanceTo) return;
+    const timer = setTimeout(() => navigate(`/membros/aula/${advanceTo}`), AUTO_ADVANCE_MS);
+    return () => clearTimeout(timer);
+  }, [advanceTo, navigate]);
+
+  const module = context?.module ?? null;
+  const navigation = context ? lessonNavigation(context.outline, lesson.id) : NO_NAVIGATION;
+  const isCompleted = completedQuery.data?.has(lesson.id) ?? false;
+  const isFinalProject = isProject && module?.code === 'MOD-12';
+  const minutes = lesson.estimated_minutes ?? lesson.duration_minutes ?? context?.lesson.minutes ?? 0;
+
+  const handleComplete = () => {
+    completeLesson.mutate(lesson.id, {
+      onSuccess: () => {
+        const next = navigation.next;
+        if (next?.accessible) {
+          toast({ title: 'Aula concluída!', description: 'Seu progresso foi salvo. Indo para a próxima aula…' });
+          setAdvanceTo(next.id);
+        } else if (navigation.isLastLesson) {
+          toast({ title: 'Você concluiu a última aula do curso!', description: 'Veja os requisitos do certificado.' });
+        } else {
+          toast({ title: 'Aula concluída!', description: 'Seu progresso foi salvo.' });
+        }
+      },
+      onError: () =>
+        toast({ title: 'Não foi possível salvar seu progresso', description: 'Verifique sua conexão e tente de novo.', variant: 'destructive' }),
+    });
+  };
 
   return (
-    <MembersLayout>
-      <div className="max-w-4xl mx-auto">
-        {/* Back button */}
-        <Button
-          variant="ghost"
-          onClick={() => navigate(`/membros/modulos/${module.id}`)}
-          className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          {module.title}
-        </Button>
+    <article className="mx-auto max-w-4xl">
+      <Helmet>
+        <title>{`${lesson.title} | Método IA Real`}</title>
+      </Helmet>
+      {user && <LessonTimeTracker lessonId={lesson.id} userId={user.id} />}
 
-        {/* Lesson header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-accent text-sm mb-2">
-            <BookOpen className="w-4 h-4" />
-            <span>Aula {lesson.order_index + 1}</span>
-            {minutes > 0 && (
-              <>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-muted-foreground flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  {minutes} min
-                </span>
-              </>
-            )}
-            {isCompleted && (
-              <>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-accent flex items-center gap-1 font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Concluída
-                </span>
-              </>
-            )}
-          </div>
-          <div className="flex items-start justify-between gap-4">
-            <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-              {lesson.title}
-            </h1>
-            <button
-              onClick={toggleBookmark}
-              className="p-2 hover:bg-secondary rounded-lg transition-colors flex-shrink-0 mt-1"
-              title={isBookmarked ? 'Remover dos salvos' : 'Salvar aula'}
-            >
-              {isBookmarked 
-                ? <BookmarkCheck className="w-5 h-5 text-accent" />
-                : <Bookmark className="w-5 h-5 text-muted-foreground" />
-              }
-            </button>
-          </div>
-          {lesson.description && (
-            <p className="text-muted-foreground mt-2">{lesson.description}</p>
-          )}
+      <LessonHeader
+        course={context?.course ?? null}
+        module={module}
+        position={context?.position ?? null}
+        total={context?.moduleLessonCount ?? null}
+        minutes={minutes}
+        completed={isCompleted}
+        title={lesson.title}
+        description={lesson.description}
+        reviewedAt={lesson.reviewed_at}
+        actions={<BookmarkButton lessonId={lesson.id} />}
+      />
+
+      {isProject && <ProjectBanner moduleCode={module?.code ?? null} projectTitle={module?.project_title ?? null} isFinalProject={isFinalProject} />}
+
+      <LessonVideo url={lesson.video_url} title={lesson.title} />
+
+      {lesson.content && (
+        <div className="mb-8 rounded-2xl border border-border/50 bg-card p-5 sm:p-6 md:p-8">
+          <MarkdownRenderer content={lesson.content} size="base" headingIds />
         </div>
+      )}
 
-        {/* Video (if video lesson) */}
-        {isVideoLesson && lesson.video_url && (
-          <div className="bg-secondary rounded-2xl aspect-video mb-8 overflow-hidden border border-border/50">
-            <iframe
-              src={lesson.video_url}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        )}
+      <LessonPrompts prompts={lesson.prompts} />
 
-        {/* Content */}
-        {lesson.content && (
-          <div className="bg-card rounded-2xl p-6 md:p-8 border border-border/50 mb-8">
-            <MarkdownRenderer content={lesson.content} />
-          </div>
-        )}
+      {isProject && <ProjectSubmission lessonId={lesson.id} />}
 
-        {/* Prompts */}
-        {lesson.prompts && lesson.prompts.length > 0 && (
-          <div className="bg-accent/5 border border-accent/20 rounded-2xl p-6 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-5 h-5 text-accent" />
-              <h2 className="font-display font-bold text-lg text-foreground">
-                Prompts desta Aula
-              </h2>
-            </div>
-            <div className="space-y-3">
-              {lesson.prompts.map((prompt, index) => (
-                <div
-                  key={index}
-                  className="bg-card rounded-xl p-4 border border-border/50 group cursor-pointer hover:border-accent/30 transition-colors"
-                  onClick={() => {
-                    navigator.clipboard.writeText(prompt);
-                    toast({ title: "Copiado!", description: "Prompt copiado para a área de transferência." });
-                  }}
-                >
-                  <p className="text-sm text-foreground font-mono leading-relaxed">{prompt}</p>
-                  <p className="text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Clique para copiar
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+      <LessonNotes lessonId={lesson.id} />
+      <QuizPlayer lessonId={lesson.id} />
+      <AISandbox lessonId={lesson.id} lessonTitle={lesson.title} prompts={lesson.prompts ?? undefined} />
 
-        {/* Notes */}
-        {lessonId && <LessonNotes lessonId={lessonId} />}
-
-        {/* Quiz */}
-        {lessonId && <QuizPlayer lessonId={lessonId} />}
-
-        {/* AI Sandbox */}
-        {lessonId && lesson && (
-          <AISandbox
-            lessonId={lessonId}
-            lessonTitle={lesson.title}
-            prompts={lesson.prompts || undefined}
+      <div className="mb-8 flex justify-center">
+        {isCompleted ? (
+          <p className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-400">
+            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+            Você já concluiu esta aula
+          </p>
+        ) : (
+          <CompleteLessonButton
+            pending={completeLesson.isPending || completedQuery.isPending}
+            onComplete={handleComplete}
+            confirmMissingProject={isProject && !submissionLoading && !submission}
+            isFinalProject={isFinalProject}
+            isLastLesson={navigation.isLastLesson}
           />
         )}
-
-        {/* Complete button */}
-        {!isCompleted && (
-          <div className="flex justify-center mb-8">
-            <Button
-              onClick={handleMarkComplete}
-              size="lg"
-              className="bg-accent hover:bg-accent/90 px-8"
-            >
-              <CheckCircle2 className="w-5 h-5 mr-2" />
-              Concluir aula e avançar
-            </Button>
-          </div>
-        )}
-
-        {/* Comments */}
-        {lessonId && <LessonComments lessonId={lessonId} />}
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between gap-4 pt-6 mt-8 border-t border-border/50">
-          {prevLesson ? (
-            <Button
-              variant="outline"
-              onClick={() => navigate(`/membros/aula/${prevLesson.id}`)}
-              className="flex-1 max-w-[45%] justify-start"
-            >
-              <ChevronLeft className="w-4 h-4 mr-2 flex-shrink-0" />
-              <div className="text-left min-w-0">
-                <div className="text-xs text-muted-foreground">Anterior</div>
-                <div className="truncate text-sm">{prevLesson.title}</div>
-              </div>
-            </Button>
-          ) : (
-            <div />
-          )}
-
-          {nextLesson ? (
-            <Button
-              onClick={() => navigate(`/membros/aula/${nextLesson.id}`)}
-              className="bg-accent hover:bg-accent/90 flex-1 max-w-[45%] justify-end"
-            >
-              <div className="text-right min-w-0">
-                <div className="text-xs opacity-80">Próxima</div>
-                <div className="truncate text-sm">{nextLesson.title}</div>
-              </div>
-              <ChevronRight className="w-4 h-4 ml-2 flex-shrink-0" />
-            </Button>
-          ) : (
-            <Button
-              onClick={() => navigate('/membros/certificado')}
-              className="bg-accent hover:bg-accent/90"
-            >
-              <Award className="w-4 h-4 mr-2" />
-              Ver certificado
-            </Button>
-          )}
-        </div>
       </div>
-    </MembersLayout>
+
+      <LessonComments lessonId={lesson.id} />
+      <LessonNavigation navigation={navigation} />
+    </article>
   );
-};
+}
 
 export default LessonPlayer;

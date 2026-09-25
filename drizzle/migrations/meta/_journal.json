@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790329884897,
+      "tag": "0000_security_and_billing",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790329904666,
+      "tag": "0001_greenn_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790329944200,
+      "tag": "0002_progress_integrity",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790330080189,
+      "tag": "0003_curriculum_platform",
+      "breakpoints": true
+    }
+  ]
+}

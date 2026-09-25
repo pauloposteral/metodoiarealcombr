@@ -29,6 +29,10 @@ const MembersRanking = lazy(() => import("./pages/members/MembersRanking"));
 const MembersProfile = lazy(() => import("./pages/members/MembersProfile"));
 const MembersBookmarks = lazy(() => import("./pages/members/MembersBookmarks"));
 const MembersAnalytics = lazy(() => import("./pages/members/MembersAnalytics"));
+const MembersTrail = lazy(() => import("./pages/members/MembersTrail"));
+const MembersGlossary = lazy(() => import("./pages/members/MembersGlossary"));
+const MembersTools = lazy(() => import("./pages/members/MembersTools"));
+const MembersPrompts = lazy(() => import("./pages/members/MembersPrompts"));
 const ValidateCertificate = lazy(() => import("./pages/ValidateCertificate"));
 const Downloads = lazy(() => import("./pages/Downloads"));
 const CarouselEditor = lazy(() => import("./pages/CarouselEditor"));
@@ -104,6 +108,10 @@ const App = () => (
             <Route path="/membros/perfil" element={<MembersProfile />} />
             <Route path="/membros/salvos" element={<MembersBookmarks />} />
             <Route path="/membros/analytics" element={<MembersAnalytics />} />
+            <Route path="/membros/trilha" element={<MembersTrail />} />
+            <Route path="/membros/glossario" element={<MembersGlossary />} />
+            <Route path="/membros/ferramentas" element={<MembersTools />} />
+            <Route path="/membros/prompts" element={<MembersPrompts />} />
             <Route path="/validar-certificado" element={<ValidateCertificate />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/carrossel" element={<CarrosselPage />} />

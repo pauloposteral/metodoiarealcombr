@@ -1,411 +1,293 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MembersLayout } from '@/components/members/MembersLayout';
-import { supabase } from '@/integrations/supabase/client';
-import { useGamification } from '@/hooks/useGamification';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { 
-  Play, BookOpen, Trophy, Clock, ArrowRight,
-  Sparkles, CheckCircle2, Zap, Star, GraduationCap,
-  Target, Flame, BarChart3, MessageSquare, Award
+import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import {
+  ArrowRight, BarChart3, BookOpen, CheckCircle2, Clock, Flame, GraduationCap,
+  MessageSquare, Sparkles, Star, Target, Trophy, Zap,
 } from 'lucide-react';
-
-interface CourseProgress {
-  id: string;
-  title: string;
-  slug: string;
-  thumbnail_url: string | null;
-  totalLessons: number;
-  completedLessons: number;
-  nextLessonId: string | null;
-  nextLessonTitle: string | null;
-}
-
-interface Module {
-  id: string;
-  title: string;
-  description: string;
-  order_index: number;
-}
-
-interface RecentLesson {
-  id: string;
-  title: string;
-  completed_at: string;
-}
+import { MembersLayout } from '@/components/members/MembersLayout';
+import { PageError, PageLoading } from '@/components/members/PageStates';
+import { CertificateTeaser } from '@/components/members/CertificateTeaser';
+import { ContinueLearningCard } from '@/components/members/ContinueLearningCard';
+import { TrackInviteCard } from '@/components/members/TrackInviteCard';
+import { TrackProgressCard } from '@/components/members/TrackProgressCard';
+import { ModuleSummary } from '@/components/course/ModuleSummary';
+import { ProgressBar } from '@/components/course/ProgressBar';
+import { Button } from '@/components/ui/button';
+import { useAuthUser } from '@/hooks/useAuthUser';
+import { useCompletedLessons, useCourseCatalog, type CourseCatalog } from '@/hooks/useCourseOutline';
+import { useDashboardActivity } from '@/hooks/useDashboardActivity';
+import { useGamification } from '@/hooks/useGamification';
+import { useLearningTrack } from '@/hooks/useLearningTrack';
+import { useStreak } from '@/hooks/useStreak';
+import {
+  curriculumModules,
+  findResumeLesson,
+  lessonsForTrack,
+  modulesForTrack,
+  summarizeProgress,
+  type TrackKey,
+} from '@/lib/curriculum';
 
 const MembersDashboard = () => {
-  const navigate = useNavigate();
-  const [courses, setCourses] = useState<CourseProgress[]>([]);
-  const [modules, setModules] = useState<Module[]>([]);
-  const [totalLessons, setTotalLessons] = useState(0);
-  const [completedLessons, setCompletedLessons] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState('');
-  const [userId, setUserId] = useState<string | undefined>();
-  const [streak, setStreak] = useState(0);
-  const [recentLessons, setRecentLessons] = useState<RecentLesson[]>([]);
-  const [totalAchievements, setTotalAchievements] = useState(0);
+  const catalog = useCourseCatalog();
+  const completed = useCompletedLessons();
+  const track = useLearningTrack();
 
-  const { userPoints, earnedBadges, userRank, getLevelTitle } = useGamification(userId);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setUserId(user.id);
-          setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Aluno');
-        }
-
-        // Fetch modules
-        const { data: modulesData } = await supabase
-          .from('modules')
-          .select('*')
-          .order('order_index');
-        if (modulesData) setModules(modulesData);
-
-        // Fetch total lessons
-        const { count: lessonsCount } = await supabase
-          .from('lessons')
-          .select('*', { count: 'exact', head: true });
-        setTotalLessons(lessonsCount || 0);
-
-        // Fetch completed lessons
-        let completedSet = new Set<string>();
-        if (user) {
-          const { data: progressData } = await supabase
-            .from('lesson_progress')
-            .select('lesson_id, completed')
-            .eq('user_id', user.id)
-            .eq('completed', true);
-          completedSet = new Set((progressData || []).map(p => p.lesson_id));
-          setCompletedLessons(completedSet.size);
-
-          // Calculate streak (consecutive days with completions)
-          const { data: recentProgress } = await supabase
-            .from('lesson_progress')
-            .select('completed_at')
-            .eq('user_id', user.id)
-            .eq('completed', true)
-            .order('completed_at', { ascending: false })
-            .limit(30);
-
-          if (recentProgress && recentProgress.length > 0) {
-            const days = new Set(recentProgress.map(p => 
-              new Date(p.completed_at!).toISOString().split('T')[0]
-            ));
-            const today = new Date();
-            let s = 0;
-            for (let i = 0; i < 30; i++) {
-              const d = new Date(today);
-              d.setDate(d.getDate() - i);
-              if (days.has(d.toISOString().split('T')[0])) s++;
-              else if (i > 0) break;
-            }
-            setStreak(s);
-          }
-        }
-
-          // Recent completed lessons
-          const { data: recentDone } = await supabase
-            .from('lesson_progress')
-            .select('lesson_id, completed_at, lessons(title)')
-            .eq('user_id', user.id)
-            .eq('completed', true)
-            .order('completed_at', { ascending: false })
-            .limit(5);
-
-          if (recentDone) {
-            setRecentLessons(recentDone.map((r) => ({
-              id: r.lesson_id,
-              title: r.lessons?.title || 'Aula',
-              completed_at: r.completed_at,
-            })));
-          }
-
-          // Achievements count
-          const { count: achCount } = await supabase
-            .from('user_achievements')
-            .select('id', { count: 'exact', head: true })
-            .eq('user_id', user.id);
-          setTotalAchievements(achCount || 0);
-
-        // Fetch courses with progress
-        const { data: coursesData } = await supabase
-          .from('courses')
-          .select('id, title, slug, thumbnail_url')
-          .eq('is_published', true)
-          .order('created_at');
-
-        if (coursesData && coursesData.length > 0) {
-          const courseProgressArr: CourseProgress[] = [];
-
-          for (const course of coursesData) {
-            const { data: courseModules } = await supabase
-              .from('modules')
-              .select('id')
-              .eq('course_id', course.id);
-
-            const moduleIds = (courseModules || []).map(m => m.id);
-            if (moduleIds.length === 0) {
-              courseProgressArr.push({ ...course, totalLessons: 0, completedLessons: 0, nextLessonId: null, nextLessonTitle: null });
-              continue;
-            }
-
-            const { data: courseLessons } = await supabase
-              .from('lessons')
-              .select('id, title, order_index, module_id')
-              .in('module_id', moduleIds)
-              .order('order_index');
-
-            const total = courseLessons?.length || 0;
-            const done = (courseLessons || []).filter(l => completedSet.has(l.id)).length;
-            const next = (courseLessons || []).find(l => !completedSet.has(l.id));
-
-            courseProgressArr.push({
-              ...course,
-              totalLessons: total,
-              completedLessons: done,
-              nextLessonId: next?.id || null,
-              nextLessonTitle: next?.title || null,
-            });
-          }
-          setCourses(courseProgressArr);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const progressPercentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-  const activeCourse = courses.find(c => c.nextLessonId) || courses[0];
+  let body;
+  if (catalog.isPending || completed.isPending || track.isPending) {
+    body = <PageLoading label="Carregando seu painel…" className="max-w-6xl" />;
+  } else if (catalog.isError || completed.isError || track.isError) {
+    body = (
+      <PageError
+        title="Não foi possível carregar seu painel"
+        onRetry={() => {
+          void catalog.refetch();
+          void completed.refetch();
+          void track.refetch();
+        }}
+      />
+    );
+  } else {
+    body = <DashboardView catalog={catalog.data} completed={completed.data ?? new Set<string>()} track={track.data ?? null} />;
+  }
 
   return (
     <MembersLayout>
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-navy to-navy-light rounded-2xl p-8 text-primary-foreground relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
-          
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-accent mb-2">
-                <Sparkles className="w-5 h-5" />
-                <span className="text-sm font-medium">Área de Membros</span>
-              </div>
-              <h1 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                Bem-vindo, {userName}!
-              </h1>
-              <p className="text-primary-foreground/70 max-w-xl">
-                Continue sua jornada de aprendizado em IA aplicada ao mundo real.
-              </p>
-            </div>
-
-            {activeCourse?.nextLessonId && (
-              <Button
-                onClick={() => navigate(`/membros/aula/${activeCourse.nextLessonId}`)}
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground shrink-0"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Continuar: {activeCourse.nextLessonTitle}
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-card rounded-xl p-4 border border-border/50 text-center">
-            <Target className="w-5 h-5 text-accent mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{progressPercentage}%</p>
-            <p className="text-xs text-muted-foreground">Progresso geral</p>
-          </div>
-          <div className="bg-card rounded-xl p-4 border border-border/50 text-center">
-            <CheckCircle2 className="w-5 h-5 text-accent mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{completedLessons}/{totalLessons}</p>
-            <p className="text-xs text-muted-foreground">Aulas concluídas</p>
-          </div>
-          <div className="bg-card rounded-xl p-4 border border-border/50 text-center">
-            <Zap className="w-5 h-5 text-accent mx-auto mb-2" />
-            <p className="text-2xl font-bold text-accent">{userPoints?.points || 0}</p>
-            <p className="text-xs text-muted-foreground">Nível {userPoints?.level || 1} — {getLevelTitle(userPoints?.level || 1)}</p>
-          </div>
-          <div className="bg-card rounded-xl p-4 border border-border/50 text-center">
-            <Flame className="w-5 h-5 text-orange-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-foreground">{streak}</p>
-            <p className="text-xs text-muted-foreground">{streak === 1 ? 'dia seguido' : 'dias seguidos'}</p>
-          </div>
-        </div>
-
-        {/* Courses Progress */}
-        {courses.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-display font-bold text-xl text-foreground">Meus Cursos</h2>
-              <Button variant="link" onClick={() => navigate('/membros/cursos')} className="text-accent">
-                Ver todos <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {courses.map(course => {
-                const pct = course.totalLessons > 0 ? Math.round((course.completedLessons / course.totalLessons) * 100) : 0;
-                const isComplete = pct === 100;
-
-                return (
-                  <button
-                    key={course.id}
-                    onClick={() => course.nextLessonId 
-                      ? navigate(`/membros/aula/${course.nextLessonId}`)
-                      : navigate(`/membros/cursos/${course.slug}`)
-                    }
-                    className="bg-card rounded-2xl p-5 border border-border/50 text-left hover:border-accent/30 hover:shadow-elegant transition-all group"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                        {isComplete ? <Trophy className="w-5 h-5 text-accent" /> : <GraduationCap className="w-5 h-5 text-accent" />}
-                      </div>
-                      <span className="text-xs font-bold text-accent">{pct}%</span>
-                    </div>
-                    <h3 className="font-display font-bold text-foreground mb-2 line-clamp-2">{course.title}</h3>
-                    <Progress value={pct} className="h-1.5 mb-2" />
-                    <p className="text-xs text-muted-foreground">
-                      {course.completedLessons}/{course.totalLessons} aulas
-                      {course.nextLessonTitle && !isComplete && (
-                        <span className="block mt-1 text-accent">
-                          Próxima: {course.nextLessonTitle}
-                        </span>
-                      )}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Recent Activity + Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Recent Lessons */}
-          <div className="md:col-span-2 bg-card rounded-2xl p-5 border border-border/50">
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-accent" />
-              <h2 className="font-display font-bold text-foreground">Atividade Recente</h2>
-            </div>
-            {recentLessons.length > 0 ? (
-              <div className="space-y-3">
-                {recentLessons.map((lesson) => (
-                  <button
-                    key={lesson.id}
-                    onClick={() => navigate(`/membros/aula/${lesson.id}`)}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 transition-colors text-left"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{lesson.title}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(lesson.completed_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
-                      </p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground text-center py-6">Nenhuma aula concluída ainda. Comece agora!</p>
-            )}
-          </div>
-
-          {/* Quick Actions */}
-          <div className="space-y-3">
-            <Button 
-              onClick={() => navigate('/membros/analytics')}
-              className="w-full h-auto py-4 justify-start gap-3 bg-accent/5 hover:bg-accent/10 border border-accent/20"
-              variant="ghost"
-            >
-              <BarChart3 className="w-5 h-5 text-accent" />
-              <div className="text-left">
-                <span className="font-medium text-foreground block">Meu Progresso</span>
-                <span className="text-xs text-muted-foreground">Gráficos e analytics</span>
-              </div>
-            </Button>
-
-            <Button 
-              onClick={() => navigate('/membros/ranking')}
-              className="w-full h-auto py-4 justify-start gap-3"
-              variant="ghost"
-            >
-              <Star className="w-5 h-5 text-accent" />
-              <div className="text-left">
-                <span className="font-medium text-foreground block">Ranking</span>
-                <span className="text-xs text-muted-foreground">#{userRank || '—'} · {totalAchievements} conquistas</span>
-              </div>
-            </Button>
-
-            <Button 
-              onClick={() => navigate('/membros/comunidade')}
-              className="w-full h-auto py-4 justify-start gap-3"
-              variant="ghost"
-            >
-              <MessageSquare className="w-5 h-5 text-accent" />
-              <div className="text-left">
-                <span className="font-medium text-foreground block">Comunidade</span>
-                <span className="text-xs text-muted-foreground">Tire dúvidas e compartilhe</span>
-              </div>
-            </Button>
-
-            <Button 
-              onClick={() => navigate('/membros/materiais')}
-              className="w-full h-auto py-4 justify-start gap-3"
-              variant="ghost"
-            >
-              <BookOpen className="w-5 h-5 text-accent" />
-              <div className="text-left">
-                <span className="font-medium text-foreground block">Materiais</span>
-                <span className="text-xs text-muted-foreground">Prompts e downloads</span>
-              </div>
-            </Button>
-          </div>
-        </div>
-
-        {/* Modules Overview */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display font-bold text-xl text-foreground">Módulos</h2>
-            <Button variant="link" onClick={() => navigate('/membros/modulos')} className="text-accent">
-              Ver todos <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {modules.slice(0, 8).map((module, index) => (
-              <button
-                key={module.id}
-                onClick={() => navigate(`/membros/modulos/${module.id}`)}
-                className="bg-card rounded-xl p-5 border border-border/50 text-left hover:border-accent/30 hover:shadow-elegant transition-all group"
-              >
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-3 group-hover:bg-accent/20 transition-colors">
-                  <span className="text-accent font-bold text-sm">{String(index + 1).padStart(2, '0')}</span>
-                </div>
-                <h3 className="font-display font-bold text-foreground mb-1 line-clamp-2">{module.title}</h3>
-                <p className="text-xs text-muted-foreground line-clamp-2">{module.description}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Helmet>
+        <title>Início | Método IA Real</title>
+      </Helmet>
+      {body}
     </MembersLayout>
   );
 };
+
+interface DashboardViewProps {
+  catalog: CourseCatalog;
+  completed: ReadonlySet<string>;
+  track: TrackKey | null;
+}
+
+function DashboardView({ catalog, completed, track }: DashboardViewProps) {
+  const { data: user } = useAuthUser();
+  const activity = useDashboardActivity();
+  const { userPoints, userRank, getLevelTitle } = useGamification(user?.id);
+  const { streak } = useStreak(user?.id);
+
+  const main = catalog.main;
+  const outline = main?.outline ?? null;
+  const resume = outline ? findResumeLesson(outline, track, completed) : null;
+  const resumeModule = resume && outline ? outline.modules.find((module) => module.id === resume.module_id) ?? null : null;
+  const trackLessons = outline ? lessonsForTrack(outline, track) : [];
+  const trackProgress = summarizeProgress(trackLessons, completed);
+  const remainingMinutes = trackLessons.filter((lesson) => !completed.has(lesson.id)).reduce((sum, lesson) => sum + lesson.minutes, 0);
+  const courseProgress = summarizeProgress(outline?.lessons ?? [], completed);
+  const started = (outline?.lessons ?? []).some((lesson) => completed.has(lesson.id));
+  const hasLocked = (outline?.lessons ?? []).some((lesson) => !lesson.accessible);
+  const trackModules = outline ? modulesForTrack(outline, track) : [];
+  const modules = outline ? curriculumModules(trackModules.length > 0 ? trackModules : outline.modules).slice(0, 6) : [];
+  const displayName = activity.data?.fullName ?? user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'aluno';
+  const level = userPoints?.level ?? 1;
+
+  return (
+    <div className="mx-auto max-w-6xl space-y-8">
+      <section aria-labelledby="dashboard-title" className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy to-navy-light p-6 text-white sm:p-8">
+        <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/10 blur-3xl" aria-hidden="true" />
+        <div className="relative grid grid-cols-1 gap-6 md:grid-cols-[1fr_minmax(0,24rem)] md:items-center">
+          <div>
+            <p className="flex items-center gap-2 text-sm font-medium text-accent">
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              Área de membros
+            </p>
+            <h1 id="dashboard-title" className="mt-2 font-display text-2xl font-bold md:text-3xl">Olá, {displayName}!</h1>
+            <p className="mt-2 max-w-xl text-white/75">
+              {track ? 'Siga a sua trilha: uma aula curta por vez, com um resultado prático em cada uma.' : 'Escolha a sua trilha e comece pelo que faz diferença para você.'}
+            </p>
+          </div>
+          {resume ? (
+            <ContinueLearningCard lesson={resume} module={resumeModule} started={started} />
+          ) : outline && outline.lessons.length > 0 ? (
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-5">
+              <p className="font-display font-bold">
+                {hasLocked ? 'Você concluiu todas as aulas liberadas.' : 'Você concluiu todas as aulas!'}
+              </p>
+              <Button asChild variant="cta" className="mt-4 h-auto min-h-10 whitespace-normal py-2.5 text-center">
+                <Link to={hasLocked ? '/pricing' : '/membros/certificado'}>
+                  {hasLocked ? 'Desbloquear o curso completo' : 'Ver certificado'}
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {track ? (
+          <TrackProgressCard track={track} progress={trackProgress} remainingMinutes={remainingMinutes} courseSlug={main?.course.slug ?? null} />
+        ) : (
+          <TrackInviteCard />
+        )}
+        <CertificateTeaser />
+      </div>
+
+      <ul role="list" className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <StatTile icon={<Target className="h-5 w-5" />} value={`${courseProgress.percent}%`} label="Progresso no curso" />
+        <StatTile icon={<CheckCircle2 className="h-5 w-5" />} value={`${courseProgress.completed}/${courseProgress.total}`} label="Aulas concluídas" />
+        <StatTile icon={<Zap className="h-5 w-5" />} value={String(userPoints?.points ?? 0)} label={`Nível ${level} · ${getLevelTitle(level)}`} />
+        <StatTile icon={<Flame className="h-5 w-5 text-orange-500" />} value={String(streak.current_streak)} label={streak.current_streak === 1 ? 'dia seguido' : 'dias seguidos'} />
+      </ul>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <section aria-labelledby="recent-title" className="rounded-2xl border border-border/50 bg-card p-5 md:col-span-2">
+          <h2 id="recent-title" className="mb-4 flex items-center gap-2 font-display font-bold text-foreground">
+            <Clock className="h-5 w-5 text-gold-dark dark:text-accent" aria-hidden="true" />
+            Atividade recente
+          </h2>
+          {activity.isPending ? (
+            <div className="space-y-3" role="status" aria-label="Carregando atividade">
+              {[0, 1, 2].map((item) => <div key={item} className="h-12 animate-pulse rounded-lg bg-muted" />)}
+            </div>
+          ) : activity.isError ? (
+            <p className="text-sm text-muted-foreground">Não foi possível carregar sua atividade agora.</p>
+          ) : activity.data && activity.data.recentLessons.length > 0 ? (
+            <ul role="list" className="space-y-1">
+              {activity.data.recentLessons.map((lesson) => (
+                <li key={lesson.id}>
+                  <Link
+                    to={`/membros/aula/${lesson.id}`}
+                    className="flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10" aria-hidden="true">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-foreground">{lesson.title}</span>
+                      {lesson.completedAt && (
+                        <span className="text-xs text-muted-foreground">
+                          Concluída em {new Date(lesson.completedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                        </span>
+                      )}
+                    </span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="py-6 text-center text-sm text-muted-foreground">Nenhuma aula concluída ainda. A primeira fica a um clique!</p>
+          )}
+        </section>
+
+        <nav aria-label="Atalhos" className="space-y-3">
+          <QuickLink to="/membros/analytics" icon={<BarChart3 className="h-5 w-5" />} title="Meu progresso" description="Gráficos e tempo de estudo" />
+          <QuickLink
+            to="/membros/ranking"
+            icon={<Star className="h-5 w-5" />}
+            title="Ranking"
+            description={`#${userRank ?? '—'} · ${activity.data?.achievements ?? 0} conquistas`}
+          />
+          <QuickLink to="/membros/comunidade" icon={<MessageSquare className="h-5 w-5" />} title="Comunidade" description="Tire dúvidas e mostre seus projetos" />
+          <QuickLink to="/membros/prompts" icon={<Sparkles className="h-5 w-5" />} title="Biblioteca de prompts" description="Todos os prompts das aulas liberadas" />
+        </nav>
+      </div>
+
+      {modules.length > 0 && (
+        <section aria-labelledby="modules-title">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 id="modules-title" className="font-display text-xl font-bold text-foreground">
+              {track && track !== 'completa' ? 'Módulos da sua trilha' : 'Módulos'}
+            </h2>
+            <Link
+              to="/membros/modulos"
+              className="flex items-center gap-1 rounded-sm text-sm font-medium text-foreground underline decoration-accent decoration-2 underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Ver todos
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+          <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {modules.map((module) => (
+              <li key={module.id} className="overflow-hidden rounded-2xl border border-border/50 bg-card transition-colors hover:border-accent/40">
+                <ModuleSummary module={module} completed={completed} showProject={false} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {catalog.entries.length > 1 && <CoursesSection catalog={catalog} completed={completed} />}
+    </div>
+  );
+}
+
+function StatTile({ icon, value, label }: { icon: ReactNode; value: string; label: string }) {
+  return (
+    <li className="rounded-xl border border-border/50 bg-card p-4 text-center">
+      <span className="mx-auto mb-2 flex justify-center text-gold-dark dark:text-accent" aria-hidden="true">{icon}</span>
+      <p className="text-2xl font-bold text-foreground">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
+    </li>
+  );
+}
+
+function QuickLink({ to, icon, title, description }: { to: string; icon: ReactNode; title: string; description: string }) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 rounded-xl border border-border/50 bg-card p-4 transition-colors hover:border-accent/40 hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <span className="shrink-0 text-gold-dark dark:text-accent" aria-hidden="true">{icon}</span>
+      <span className="min-w-0">
+        <span className="block font-medium text-foreground">{title}</span>
+        <span className="block text-xs text-muted-foreground">{description}</span>
+      </span>
+    </Link>
+  );
+}
+
+function CoursesSection({ catalog, completed }: { catalog: CourseCatalog; completed: ReadonlySet<string> }) {
+  return (
+    <section aria-labelledby="courses-title">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 id="courses-title" className="font-display text-xl font-bold text-foreground">Meus cursos</h2>
+        <Link
+          to="/membros/cursos"
+          className="flex items-center gap-1 rounded-sm text-sm font-medium text-foreground underline decoration-accent decoration-2 underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Ver todos
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
+      </div>
+      <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {catalog.entries.map(({ course, outline }) => {
+          const progress = summarizeProgress(outline.lessons, completed);
+          const done = progress.total > 0 && progress.completed === progress.total;
+          return (
+            <li key={course.id}>
+              <Link
+                to={`/membros/cursos/${course.slug}`}
+                className="block h-full rounded-2xl border border-border/50 bg-card p-5 transition-colors hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="mb-3 flex items-start justify-between">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/15 text-foreground" aria-hidden="true">
+                    {done ? <Trophy className="h-5 w-5" /> : <GraduationCap className="h-5 w-5" />}
+                  </span>
+                  <span className="text-xs font-bold text-foreground">{progress.percent}%</span>
+                </span>
+                <span className="mb-2 line-clamp-2 block font-display font-bold text-foreground">{course.title}</span>
+                <ProgressBar value={progress.percent} label={`Progresso em ${course.title}`} className="mb-2 h-1.5" />
+                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                  {progress.completed}/{progress.total} aulas
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
 
 export default MembersDashboard;

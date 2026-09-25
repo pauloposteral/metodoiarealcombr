@@ -1,325 +1,225 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
-import { MembersLayout } from '@/components/members/MembersLayout';
-import { CertificateTemplate } from '@/components/members/CertificateTemplate';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Award, Download, PartyPopper, Lock, CheckCircle2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { databaseRpcSingle } from '@/lib/databaseRpc';
+import { Award, CheckCircle2, Download, Loader2, Lock, PartyPopper, Play } from 'lucide-react';
+import { MembersLayout } from '@/components/members/MembersLayout';
+import { CertificateTemplate } from '@/components/members/CertificateTemplate';
+import { CertificateRequirements } from '@/components/members/CertificateRequirements';
+import { PageError, PageLoading } from '@/components/members/PageStates';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import {
+  useCertificateStatus,
+  useIssueCertificate,
+  useIssuedCertificate,
+  useProfileName,
+  type IssuedCertificate,
+} from '@/hooks/useCertificate';
+import { useCompletedLessons, useCourseCatalog } from '@/hooks/useCourseOutline';
+import { certificateRequirements, findResumeLesson, isTrackKey } from '@/lib/curriculum';
 
-interface Certificate {
-  id: string;
-  certificate_code: string;
-  student_name: string;
-  course_name: string;
-  total_hours: number;
-  completed_at: string;
+/** Friendly message for `issue_certificate()` errors (Postgres errors are plain objects). */
+function issueErrorMessage(error: unknown): string {
+  const message = error && typeof error === 'object' && 'message' in error ? String(error.message) : '';
+  if (/paid access/i.test(message)) return 'A emissão do certificado faz parte dos planos pagos.';
+  if (/final project/i.test(message)) return 'Falta concluir e entregar o projeto final do MOD-12.';
+  if (/course incomplete/i.test(message)) return 'Você ainda não concluiu as aulas necessárias da sua trilha.';
+  return 'Tente de novo em instantes.';
 }
 
 const MembersCertificate = () => {
-  const navigate = useNavigate();
+  const status = useCertificateStatus();
+  const issued = useIssuedCertificate();
+
+  let body;
+  if (issued.isPending || (status.isPending && !issued.data)) {
+    body = <PageLoading label="Carregando certificado…" />;
+  } else if (issued.isError || (status.isError && !issued.data)) {
+    body = (
+      <PageError
+        title="Não foi possível carregar o certificado"
+        onRetry={() => {
+          void issued.refetch();
+          void status.refetch();
+        }}
+      />
+    );
+  } else if (issued.data) {
+    body = <IssuedView certificate={issued.data} />;
+  } else if (status.data) {
+    body = <RequirementsView />;
+  }
+
+  return (
+    <MembersLayout>
+      <Helmet>
+        <title>Certificado | Método IA Real</title>
+      </Helmet>
+      <div className="mx-auto max-w-5xl space-y-8">
+        <header>
+          <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-foreground md:text-3xl">
+            <Award className="h-7 w-7 text-gold-dark dark:text-accent" aria-hidden="true" />
+            Certificado
+          </h1>
+          <p className="mt-1 text-muted-foreground">Conclua a sua trilha e o projeto final para emitir o certificado do Método IA Real.</p>
+        </header>
+        {body}
+      </div>
+    </MembersLayout>
+  );
+};
+
+function RequirementsView() {
+  const { toast } = useToast();
+  const status = useCertificateStatus();
+  const profileName = useProfileName();
+  const issue = useIssueCertificate();
+  const catalog = useCourseCatalog();
+  const completed = useCompletedLessons();
+
+  if (!status.data) return null;
+  const requirements = certificateRequirements(status.data);
+  const main = catalog.data?.main ?? null;
+  const resume = main && completed.data ? findResumeLesson(main.outline, isTrackKey(status.data.track) ? status.data.track : null, completed.data) : null;
+
+  const handleIssue = () => {
+    issue.mutate(undefined, {
+      onSuccess: () => toast({ title: 'Certificado emitido!', description: 'Parabéns pela conquista. Já dá para baixar o PDF.' }),
+      onError: (error) => toast({ title: 'Não foi possível emitir o certificado', description: issueErrorMessage(error), variant: 'destructive' }),
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <CertificateRequirements requirements={requirements} totalMinutes={status.data.total_minutes} />
+
+      {requirements.eligible ? (
+        <section aria-labelledby="certificate-issue-title" className="rounded-2xl border border-accent/50 bg-accent/10 p-5 sm:p-6">
+          <h2 id="certificate-issue-title" className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
+            <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+            Tudo pronto para emitir
+          </h2>
+          <p className="mt-2 text-sm text-foreground/85">
+            O certificado sai com o nome do seu perfil:{' '}
+            <strong className="text-foreground">{profileName.data ?? 'Aluno'}</strong>. Confira antes de emitir.{' '}
+            <Link
+              to="/membros/perfil"
+              className="rounded-sm font-medium text-foreground underline decoration-accent decoration-2 underline-offset-4 hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Editar nome no perfil
+            </Link>
+          </p>
+          <Button type="button" variant="cta" size="lg" className="mt-5" onClick={handleIssue} disabled={issue.isPending || profileName.isPending}>
+            {issue.isPending ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Award aria-hidden="true" />}
+            Emitir meu certificado
+          </Button>
+        </section>
+      ) : (
+        <section aria-labelledby="certificate-locked-title" className="rounded-2xl border border-border/50 bg-card p-5 text-center sm:p-8">
+          <Lock className="mx-auto mb-3 h-10 w-10 text-muted-foreground" aria-hidden="true" />
+          <h2 id="certificate-locked-title" className="font-display text-lg font-bold text-foreground">Certificado ainda bloqueado</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">Cumpra os requisitos acima e o botão para emitir aparece aqui.</p>
+          <Button asChild variant="cta" className="mt-5">
+            <Link to={resume ? `/membros/aula/${resume.id}` : main ? `/membros/cursos/${main.course.slug}` : '/membros/cursos'}>
+              <Play aria-hidden="true" />
+              Continuar estudando
+            </Link>
+          </Button>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function IssuedView({ certificate }: { certificate: IssuedCertificate }) {
   const { toast } = useToast();
   const certificateRef = useRef<HTMLDivElement>(null);
-  
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const [certificate, setCertificate] = useState<Certificate | null>(null);
-  const [progress, setProgress] = useState({ completed: 0, total: 0 });
-  const [userName, setUserName] = useState('');
-  const [showCongrats, setShowCongrats] = useState(false);
+  const completedAt = new Date(certificate.completed_at).toLocaleDateString('pt-BR');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate('/auth');
-        return;
-      }
-
-      // Get user name from profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
-        .maybeSingle();
-      
-      setUserName(profile?.full_name || user.email?.split('@')[0] || 'Aluno');
-
-      // Check existing certificate
-      const { data: existingCert } = await supabase
-        .from('certificates')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (existingCert) {
-        setCertificate(existingCert);
-      }
-
-      // Calculate progress
-      const { data: lessons } = await supabase
-        .from('lessons')
-        .select('id, duration_minutes');
-
-      const { data: completedLessons } = await supabase
-        .from('lesson_progress')
-        .select('lesson_id')
-        .eq('user_id', user.id)
-        .eq('completed', true);
-
-      const total = lessons?.length || 0;
-      const completed = completedLessons?.length || 0;
-      setProgress({ completed, total });
-
-      // If 100% completed and no certificate, generate one
-      if (total > 0 && completed >= total && !existingCert) {
-        await generateCertificate(user.id, profile?.full_name || user.email?.split('@')[0] || 'Aluno', lessons);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const generateCertificate = async (userId: string, studentName: string, lessons: { duration_minutes: number | null }[]) => {
-    setGenerating(true);
-    try {
-      const { data, error } = await databaseRpcSingle<Certificate>('issue_certificate');
-
-      if (error || !data) throw error || new Error('Certificate was not returned');
-
-      setCertificate(data);
-      setShowCongrats(true);
-      
-      toast({
-        title: "🎉 Parabéns!",
-        description: "Seu certificado foi gerado com sucesso!",
-      });
-    } catch (error) {
-      console.error('Error generating certificate:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível gerar o certificado.",
-        variant: "destructive",
-      });
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  const downloadPDF = async () => {
-    if (!certificateRef.current || !certificate) return;
-    
+  const downloadPdf = async () => {
+    if (!certificateRef.current) return;
     setDownloading(true);
     try {
-      const canvas = await html2canvas(certificateRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'px',
-        format: [canvas.width, canvas.height]
-      });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      const canvas = await html2canvas(certificateRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] });
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, canvas.width, canvas.height);
       pdf.save(`Certificado-${certificate.student_name.replace(/\s+/g, '-')}-MetodoIAReal.pdf`);
-
-      toast({
-        title: "Download iniciado",
-        description: "Seu certificado está sendo baixado.",
-      });
+      toast({ title: 'Download iniciado', description: 'Seu certificado está sendo baixado.' });
     } catch (error) {
-      console.error('Error downloading PDF:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível baixar o certificado.",
-        variant: "destructive",
-      });
+      console.error('[MembersCertificate] could not generate the PDF', error);
+      toast({ title: 'Não foi possível baixar o certificado', description: 'Tente de novo em instantes.', variant: 'destructive' });
     } finally {
       setDownloading(false);
     }
   };
 
-  const progressPercent = progress.total > 0 
-    ? Math.round((progress.completed / progress.total) * 100) 
-    : 0;
-
-  if (loading) {
-    return (
-      <MembersLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold"></div>
-        </div>
-      </MembersLayout>
-    );
-  }
-
   return (
-    <MembersLayout>
-      <div className="space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-primary-foreground mb-2">Certificado</h1>
-          <p className="text-muted-foreground">
-            Seu certificado de conclusão do curso Método IA Real
-          </p>
-        </div>
-
-        {/* Congratulations Modal */}
-        {showCongrats && (
-          <Card className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-gold/50">
-            <CardContent className="p-8 text-center">
-              <PartyPopper className="w-16 h-16 text-gold mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-primary-foreground mb-2">
-                🎉 Parabéns pela conquista!
-              </h2>
-              <p className="text-muted-foreground mb-4">
-                Você concluiu 100% do curso Método IA Real. Seu certificado está pronto!
-              </p>
-              <Button 
-                onClick={() => setShowCongrats(false)}
-                className="bg-gold hover:bg-gold/90 text-navy-dark"
-              >
-                Ver meu certificado
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Progress or Certificate */}
-        {!certificate ? (
-          <Card className="bg-card/50 border-border/50">
-            <CardContent className="p-8 text-center">
-              <Lock className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-primary-foreground mb-2">
-                Certificado bloqueado
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Complete 100% das aulas para desbloquear seu certificado.
-              </p>
-              
-              {/* Progress bar */}
-              <div className="max-w-md mx-auto">
-                <div className="flex justify-between text-sm text-muted-foreground mb-2">
-                  <span>Progresso atual</span>
-                  <span>{progressPercent}%</span>
-                </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-gold to-gold/80 rounded-full transition-all duration-500"
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {progress.completed} de {progress.total} aulas concluídas
-                </p>
-              </div>
-
-              <Button 
-                onClick={() => navigate('/membros/modulos')}
-                className="mt-6 bg-gold hover:bg-gold/90 text-navy-dark"
-              >
-                Continuar estudando
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <>
-            {/* Certificate Actions */}
-            <Card className="bg-card/50 border-border/50">
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-full bg-gold/20">
-                      <Award className="w-8 h-8 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-foreground">
-                        Certificado disponível
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Código: {certificate.certificate_code}
-                      </p>
-                    </div>
-                  </div>
-                  <Button 
-                    onClick={downloadPDF}
-                    disabled={downloading}
-                    className="bg-gold hover:bg-gold/90 text-navy-dark gap-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    {downloading ? 'Baixando...' : 'Baixar certificado'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Certificate Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-card/30 border-border/30">
-                <CardContent className="p-4 text-center">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Aluno</p>
-                  <p className="font-semibold text-primary-foreground">{certificate.student_name}</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/30">
-                <CardContent className="p-4 text-center">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Carga Horária</p>
-                  <p className="font-semibold text-primary-foreground">{certificate.total_hours} horas</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/30 border-border/30">
-                <CardContent className="p-4 text-center">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Concluído em</p>
-                  <p className="font-semibold text-primary-foreground">
-                    {new Date(certificate.completed_at).toLocaleDateString('pt-BR')}
-                  </p>
-                </CardContent>
-              </Card>
+    <div className="space-y-6">
+      <section aria-labelledby="certificate-ready-title" className="rounded-2xl border border-accent/50 bg-gradient-to-r from-accent/20 via-accent/10 to-accent/20 p-5 sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <PartyPopper className="mt-0.5 h-8 w-8 shrink-0 text-gold-dark dark:text-accent" aria-hidden="true" />
+            <div>
+              <h2 id="certificate-ready-title" className="font-display text-lg font-bold text-foreground">Parabéns, seu certificado está pronto!</h2>
+              <p className="mt-1 break-all text-sm text-muted-foreground">Código de validação: {certificate.certificate_code}</p>
             </div>
+          </div>
+          <Button type="button" variant="cta" onClick={() => void downloadPdf()} disabled={downloading} className="shrink-0">
+            {downloading ? <Loader2 className="animate-spin" aria-hidden="true" /> : <Download aria-hidden="true" />}
+            {downloading ? 'Gerando PDF…' : 'Baixar certificado (PDF)'}
+          </Button>
+        </div>
+      </section>
 
-            {/* Certificate Preview */}
-            <Card className="bg-card/50 border-border/50 overflow-hidden">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-primary-foreground mb-4">
-                  Pré-visualização
-                </h3>
-                <div className="overflow-x-auto">
-                  <div className="min-w-[1123px]">
-                    <CertificateTemplate
-                      ref={certificateRef}
-                      studentName={certificate.student_name}
-                      courseName={certificate.course_name}
-                      totalHours={certificate.total_hours}
-                      completedAt={certificate.completed_at}
-                      certificateCode={certificate.certificate_code}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
-    </MembersLayout>
+      <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <InfoTile label="Aluno" value={certificate.student_name} />
+        <InfoTile label="Curso" value={certificate.course_name} />
+        <InfoTile label="Carga horária · conclusão" value={`${certificate.total_hours} horas · ${completedAt}`} />
+      </dl>
+
+      <section aria-labelledby="certificate-preview-title" className="rounded-2xl border border-border/50 bg-card p-4 sm:p-6">
+        <h2 id="certificate-preview-title" className="mb-1 font-display text-lg font-bold text-foreground">Pré-visualização</h2>
+        <p className="mb-4 text-xs text-muted-foreground sm:hidden">Deslize para o lado para ver o certificado inteiro.</p>
+        {/* Inline-size containment keeps the 1123px template from widening the page. */}
+        <div
+          role="region"
+          aria-label="Pré-visualização do certificado"
+          tabIndex={0}
+          className="overflow-x-auto rounded-xl [contain:inline-size] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <div className="min-w-[1123px]">
+            <CertificateTemplate
+              ref={certificateRef}
+              studentName={certificate.student_name}
+              courseName={certificate.course_name}
+              totalHours={certificate.total_hours}
+              completedAt={certificate.completed_at}
+              certificateCode={certificate.certificate_code}
+            />
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          Qualquer pessoa pode confirmar a autenticidade em{' '}
+          <Link to="/validar-certificado" className="rounded-sm font-medium text-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Validar certificado
+          </Link>{' '}
+          com o código acima.
+        </p>
+      </section>
+    </div>
   );
-};
+}
+
+function InfoTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border/50 bg-card p-4">
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd className="mt-1 font-semibold text-foreground">{value}</dd>
+    </div>
+  );
+}
 
 export default MembersCertificate;

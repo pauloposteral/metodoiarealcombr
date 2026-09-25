@@ -79,7 +79,7 @@ export const CommentItem = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-primary-foreground text-sm">{userName}</span>
+                <span className="font-medium text-foreground text-sm">{userName}</span>
                 {comment.is_pinned && (
                   <span className="text-xs text-gold flex items-center gap-1">
                     <Pin className="w-3 h-3" />
