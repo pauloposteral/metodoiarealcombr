@@ -358,7 +358,8 @@
 }
 
 @media (max-width: 899px) {
-  .lcn-scene { padding-bottom: 5.5rem; }
+  .lcn-scene { padding-bottom: 6.5rem; }
+  .lcn-scene:last-child { padding-bottom: 9.5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
