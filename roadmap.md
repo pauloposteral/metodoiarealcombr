@@ -22,4 +22,4 @@
 - [x] Auditoria passo 2: mesclar branch do currículo mantendo a home cinematográfica
 - [x] Auditoria passo 3a: aplicar atualização do banco (4 migrações)
 - [x] Auditoria passo 3b: importar as 124 aulas
-- [ ] Auditoria passo 4: testar deslogado, no celular e no computador
+- [x] Auditoria passo 4: testar deslogado, no celular e no computador
