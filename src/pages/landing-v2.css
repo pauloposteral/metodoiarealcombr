@@ -50,9 +50,9 @@
 .lv2-lead{color:var(--muted);font-size:clamp(1rem,1.6vw,1.18rem);max-width:640px}
 
 .lv2-wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-.lv2-section{padding:34px 0}
-.lv2-section-tight{padding:14px 0}
-.lv2-section-tight-bottom{padding:30px 0 14px}
+.lv2-section{padding:28px 0}
+.lv2-section-tight{padding:10px 0}
+.lv2-section-tight-bottom{padding:24px 0 12px}
 .lv2-section-head{max-width:680px;margin-bottom:24px}
 .lv2-section-head .lv2-lead{margin-top:16px}
 
@@ -136,7 +136,7 @@
 
 /* CAPÍTULOS CINEMATOGRÁFICOS */
 .lv2-cinema-chapter{
-  position:relative;min-height:clamp(240px,25vw,290px);overflow:hidden;
+  position:relative;min-height:clamp(224px,23vw,270px);overflow:hidden;
   display:flex;align-items:flex-end;isolation:isolate;border-block:1px solid var(--line);
   background:var(--ink-2);
 }
@@ -173,7 +173,7 @@
 .lv2-tone-horizon{--chapter-accent:#60A5FA;--chapter-accent-2:var(--magenta)}
 
 @media(max-width:760px){
-  .lv2-cinema-chapter{min-height:244px;align-items:flex-end}
+  .lv2-cinema-chapter{min-height:220px;align-items:flex-end}
   .lv2-cinema-poster,.lv2-cinema-video{object-position:center}
   .lv2-cinema-scrim,.lv2-cinema-right .lv2-cinema-scrim{background:linear-gradient(180deg,rgba(6,9,15,.08),rgba(6,9,15,.38) 44%,rgba(6,9,15,.98) 88%)}
   .lv2-cinema-content,.lv2-cinema-right .lv2-cinema-content{padding-top:76px;padding-bottom:24px;align-items:flex-start;text-align:left;transform:none}
@@ -331,9 +331,9 @@
 @media(max-width:760px){
   .lv2{font-size:16px}
   .lv2-wrap{padding:0 18px}
-  .lv2-section{padding:26px 0}
-  .lv2-section-tight{padding:14px 0}
-  .lv2-section-tight-bottom{padding:24px 0 12px}
+  .lv2-section{padding:22px 0}
+  .lv2-section-tight{padding:10px 0}
+  .lv2-section-tight-bottom{padding:20px 0 10px}
   .lv2-section-head{margin-bottom:20px}
   .lv2-hero{min-height:calc(100svh - 8px);padding:92px 0 30px;align-items:flex-start}
   .lv2-hero-poster,.lv2-hero-video{object-position:68% center}
