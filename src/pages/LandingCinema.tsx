@@ -106,14 +106,14 @@ const LandingCinema = () => {
             {idx === 3 && (
               <ul className="lcn-ledger">
                 <li>
-                  <span>Agência de software</span>
-                  <strong>R$ 15.000 · 4 meses</strong>
-                  <em>Você: uma tarde</em>
+                  <span>Contratar uma agência</span>
+                  <strong>Meses de espera</strong>
+                  <em>Você: monta em uma tarde</em>
                 </li>
                 <li>
-                  <span>8h/dia de tarefa manual</span>
-                  <strong>160h por mês</strong>
-                  <em>Automação: 0h suas</em>
+                  <span>Tarefa manual repetida</span>
+                  <strong>Sua semana inteira</strong>
+                  <em>Automação: roda sozinha</em>
                 </li>
                 <li>
                   <span>Esperar para começar</span>

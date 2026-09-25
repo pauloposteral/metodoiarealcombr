@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -30,7 +30,6 @@ const MembersProfile = lazy(() => import("./pages/members/MembersProfile"));
 const MembersBookmarks = lazy(() => import("./pages/members/MembersBookmarks"));
 const MembersAnalytics = lazy(() => import("./pages/members/MembersAnalytics"));
 const ValidateCertificate = lazy(() => import("./pages/ValidateCertificate"));
-const CourseContentPage = lazy(() => import("./pages/CourseContent"));
 const Downloads = lazy(() => import("./pages/Downloads"));
 const CarouselEditor = lazy(() => import("./pages/CarouselEditor"));
 const CarrosselPage = lazy(() => import("./pages/CarrosselPage"));
@@ -81,7 +80,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<LandingCinema />} />
             <Route path="/completo" element={<Index />} />
-            <Route path="/curso" element={<CourseContentPage />} />
+            <Route path="/curso" element={<Navigate to="/completo" replace />} />
             <Route path="/obrigado" element={<Obrigado />} />
             <Route path="/termos" element={<Termos />} />
             <Route path="/privacidade" element={<Privacidade />} />

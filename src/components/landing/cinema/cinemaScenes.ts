@@ -50,7 +50,7 @@ export const CINEMA_SCENES: CinemaScene[] = [
     id: 'mestre',
     slate: 'CENA 03',
     chapter: 'O MESTRE',
-    kicker: '50 anos de engenharia no seu bolso',
+    kicker: 'Décadas de engenharia no seu bolso',
     title: ['Um', 'arquiteto', 'sênior', 'orientando', 'cada', 'linha.'],
     body: 'O método coloca do seu lado a cabeça de um programador com décadas de estrada — traduzida em passos que você executa hoje. O resultado é produção de equipe grande, feita por uma pessoa só.',
     poster: act4Poster,
