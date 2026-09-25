@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-/** Top scroll progress bar with gradient */
-export function TopProgressBar() {
+const CHAPTERS = ['Descoberta', 'Ruído', 'Mapa', 'Inteligência', 'Execução', 'Horizonte'];
+
+/** Top scroll progress bar segmented by the six story chapters */
+export function TopProgressBar({ activeChapter = 0 }: { activeChapter?: number }) {
   const [p, setP] = useState(0);
   useEffect(() => {
     const onScroll = () => {
@@ -14,8 +16,13 @@ export function TopProgressBar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
-    <div className="lv2-topbar" aria-hidden>
+    <div className="lv2-topbar" aria-label={`Capítulo ${activeChapter + 1} de ${CHAPTERS.length}: ${CHAPTERS[activeChapter]}`}>
       <div className="lv2-topbar-fill" style={{ width: `${p}%` }} />
+      <div className="lv2-topbar-chapters" aria-hidden="true">
+        {CHAPTERS.map((chapter, index) => (
+          <span key={chapter} className={index <= activeChapter ? 'is-active' : ''} />
+        ))}
+      </div>
     </div>
   );
 }

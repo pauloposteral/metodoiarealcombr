@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 
 interface ExpandableBlockProps {
   /** Text shown on the closed trigger, e.g. "Ver as 16 ferramentas" */
@@ -16,11 +16,22 @@ interface ExpandableBlockProps {
  */
 export const ExpandableBlock = ({ label, labelOpen, hint, children }: ExpandableBlockProps) => {
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const toggle = () => {
+    const before = rootRef.current?.getBoundingClientRect().top;
+    setOpen((value) => !value);
+    window.requestAnimationFrame(() => {
+      if (before === undefined || !rootRef.current) return;
+      const delta = rootRef.current.getBoundingClientRect().top - before;
+      if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: 'instant' });
+    });
+  };
 
   return (
-    <div className={`lv2-expand ${open ? 'open' : ''}`}>
+    <div ref={rootRef} className={`lv2-expand ${open ? 'open' : ''}`}>
       {hint && !open && <p className="lv2-expand-hint">{hint}</p>}
-      <button type="button" className="lv2-expand-btn" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+      <button type="button" className="lv2-expand-btn" onClick={toggle} aria-expanded={open}>
         {open ? labelOpen ?? 'Recolher' : label}
         <span className="lv2-expand-arr" aria-hidden>↓</span>
       </button>

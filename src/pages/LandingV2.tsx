@@ -142,6 +142,7 @@ const FAQS = [
 
 export default function LandingV2() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeChapter, setActiveChapter] = useState(0);
   const [openMod, setOpenMod] = useState<number | null>(null);
   const [showAllMods, setShowAllMods] = useState(false);
   const [openTrail, setOpenTrail] = useState<number | null>(null);
@@ -159,6 +160,19 @@ export default function LandingV2() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const chapters = Array.from(document.querySelectorAll<HTMLElement>('[data-story-chapter]'));
+    if (!chapters.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActiveChapter(Number((visible.target as HTMLElement).dataset.storyChapter ?? 0));
+    }, { rootMargin: '-22% 0px -58% 0px', threshold: [0, 0.15, 0.35] });
+    chapters.forEach((chapter) => observer.observe(chapter));
+    return () => observer.disconnect();
   }, []);
 
   // Reveal on scroll
@@ -216,7 +230,7 @@ export default function LandingV2() {
   return (
     <div className="lv2">
       <CursorGlow />
-      <TopProgressBar />
+      <TopProgressBar activeChapter={activeChapter} />
       <Helmet>
         <title>Método IA Real — O curso de IA mais organizado e atualizado do Brasil</title>
         <meta name="description" content="13 módulos, 4 trilhas por perfil e atualização mensal garantida. Você nunca fica perdido, nunca fica para trás — e termina com portfólio publicado." />
@@ -230,10 +244,10 @@ export default function LandingV2() {
         <div className="lv2-nav-in">
           <a href="#top" className="lv2-logo">Método <em>IA Real</em></a>
           <div className="lv2-nav-links">
-            <a href="#mapa">O mapa</a>
-            <a href="#radar">Radar IA</a>
-            <a href="#trilhas">Trilhas</a>
-            <a href="#oferta">Oferta</a>
+            <a href="#mapa" className={activeChapter === 2 ? 'is-active' : ''}>O mapa</a>
+            <a href="#radar" className={activeChapter === 3 ? 'is-active' : ''}>Radar IA</a>
+            <a href="#trilhas" className={activeChapter === 3 ? 'is-active' : ''}>Trilhas</a>
+            <a href="#oferta" className={activeChapter === 5 ? 'is-active' : ''}>Oferta</a>
             <CommandPalette onCta={handleCheckout} />
             <Link to="/auth" className="lv2-nav-entrar">Entrar</Link>
           </div>
@@ -241,7 +255,7 @@ export default function LandingV2() {
       </nav>
 
       {/* HERO */}
-      <section className="lv2-hero" id="top" ref={heroRef}>
+      <section className="lv2-hero lv2-act-discovery" id="top" ref={heroRef} data-story-chapter="0">
         <CinematicHeroBackground />
         <div className="lv2-hero-spot" aria-hidden />
         <div className="lv2-grid-bg" />
@@ -284,7 +298,7 @@ export default function LandingV2() {
       </div>
 
       {/* TOOLS EXPLORER */}
-      <section className="lv2-section lv2-section-tight-bottom" id="ferramentas">
+      <section className="lv2-section lv2-section-tight-bottom lv2-act-discovery" id="ferramentas">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px', maxWidth: 760 }}>
             <span className="lv2-eyebrow">As ferramentas do curso</span>
@@ -303,7 +317,7 @@ export default function LandingV2() {
       <LiveCounters />
 
       {/* LIVE TERMINAL */}
-      <section className="lv2-section">
+      <section className="lv2-section lv2-act-discovery lv2-compact-follow">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
             <span className="lv2-eyebrow">Veja funcionando</span>
@@ -322,9 +336,10 @@ export default function LandingV2() {
         poster={act2Poster}
         video={act2Video.url}
         align="right"
+        tone="noise"
       />
       {/* PROBLEMA + SOLUÇÃO */}
-      <section className="lv2-section" id="problema">
+      <section className="lv2-section lv2-act-noise" id="problema" data-story-chapter="1">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">O problema</span>
@@ -368,9 +383,10 @@ export default function LandingV2() {
         body="Cada habilidade encontra seu lugar, cada etapa termina em algo construído e o aprendizado deixa de depender de sorte."
         poster={act3Poster}
         video={act3Video.url}
+        tone="map"
       />
       {/* MAPA */}
-      <section className="lv2-section" id="mapa">
+      <section className="lv2-section lv2-act-map" id="mapa" data-story-chapter="2">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">O mapa</span>
@@ -433,10 +449,11 @@ export default function LandingV2() {
         poster={act4Poster}
         video={act4Video.url}
         align="right"
+        tone="living"
       />
 
       {/* RADAR */}
-      <section className="lv2-section" id="radar">
+      <section className="lv2-section lv2-act-living" id="radar" data-story-chapter="3">
         <div className="lv2-wrap">
           <div className="lv2-radar-grid">
             <div className="lv2-radar-copy rv">
@@ -473,7 +490,7 @@ export default function LandingV2() {
       </section>
 
       {/* TRILHAS */}
-      <section className="lv2-section" id="trilhas">
+      <section className="lv2-section lv2-act-living lv2-compact-follow" id="trilhas">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv">
             <span className="lv2-eyebrow">As trilhas</span>
@@ -544,10 +561,11 @@ export default function LandingV2() {
         body="Agora a intenção humana encontra a velocidade da IA: testar, ajustar, medir e transformar ideias em entregas concretas."
         poster={act5Poster}
         video={act5Video.url}
+        tone="execution"
       />
 
       {/* TRACK QUIZ */}
-      <section className="lv2-section lv2-section-tight-bottom" id="quiz">
+      <section className="lv2-section lv2-section-tight-bottom lv2-act-execution" id="quiz" data-story-chapter="4">
         <div className="lv2-wrap" style={{ maxWidth: 760 }}>
           <div className="rv">
             <ExpandableBlock label="Descobrir a minha trilha" labelOpen="Fechar o teste">
@@ -558,7 +576,7 @@ export default function LandingV2() {
       </section>
 
       {/* PLAYGROUND — live AI */}
-      <section className="lv2-section" id="playground">
+      <section className="lv2-section lv2-act-execution lv2-compact-follow" id="playground">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 44px' }}>
             <span className="lv2-eyebrow">Playground · 100% ao vivo</span>
@@ -572,7 +590,7 @@ export default function LandingV2() {
       </section>
 
       {/* TRUST WALL */}
-      <section className="lv2-section lv2-section-tight-bottom">
+      <section className="lv2-section lv2-section-tight-bottom lv2-act-execution lv2-compact-follow">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 20px', maxWidth: 760 }}>
             <span className="lv2-eyebrow">Alunos falando</span>
@@ -588,7 +606,7 @@ export default function LandingV2() {
       </section>
 
       {/* ROI CALCULATOR */}
-      <section className="lv2-section" id="roi">
+      <section className="lv2-section lv2-act-execution lv2-compact-follow" id="roi">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto', maxWidth: 760 }}>
             <span className="lv2-eyebrow">Calculadora honesta</span>
@@ -617,10 +635,11 @@ export default function LandingV2() {
         poster={act6Poster}
         video={act6Video.url}
         align="right"
+        tone="horizon"
       />
 
       {/* JOURNEY */}
-      <section className="lv2-section" id="jornada">
+      <section className="lv2-section lv2-act-horizon" id="jornada" data-story-chapter="5">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 50px' }}>
             <span className="lv2-eyebrow">Sua jornada · 30 dias</span>
@@ -634,14 +653,14 @@ export default function LandingV2() {
       </section>
 
       {/* INSTRUCTOR CARD */}
-      <section className="lv2-section lv2-section-tight" id="mentor">
+      <section className="lv2-section lv2-section-tight lv2-act-horizon lv2-compact-follow" id="mentor">
         <div className="lv2-wrap">
           <div className="rv"><InstructorCard /></div>
         </div>
       </section>
 
       {/* OFERTA */}
-      <section className="lv2-section lv2-offer" id="oferta">
+      <section className="lv2-section lv2-offer lv2-act-horizon lv2-compact-follow" id="oferta">
         <div className="lv2-orb lv2-orb-c" />
         <div className="lv2-wrap">
           <div className="lv2-offer-card rv">
@@ -676,14 +695,14 @@ export default function LandingV2() {
       </section>
 
       {/* GUARANTEE SHIELD */}
-      <section className="lv2-section lv2-section-tight">
+      <section className="lv2-section lv2-section-tight lv2-act-horizon lv2-compact-follow">
         <div className="lv2-wrap">
           <div className="rv"><GuaranteeShield onCta={goCheckout} /></div>
         </div>
       </section>
 
       {/* MANIFESTO */}
-      <section className="lv2-section lv2-section-tight">
+      <section className="lv2-section lv2-section-tight lv2-act-horizon lv2-compact-follow">
         <div className="lv2-wrap">
           <div className="rv">
             <ExpandableBlock label="Ler o manifesto dos fundadores" labelOpen="Recolher o manifesto">
@@ -694,7 +713,7 @@ export default function LandingV2() {
       </section>
 
       {/* FAQ */}
-      <section className="lv2-section" id="faq">
+      <section className="lv2-section lv2-act-horizon lv2-compact-follow" id="faq">
         <div className="lv2-wrap">
           <div className="lv2-section-head rv" style={{ textAlign: 'center', margin: '0 auto 30px' }}>
             <span className="lv2-eyebrow">Dúvidas frequentes</span>
