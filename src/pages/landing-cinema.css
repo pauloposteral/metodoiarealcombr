@@ -548,6 +548,62 @@
   cursor: pointer;
 }
 
+/* Logo do hero — fundo transparente, halo dourado e flutuação */
+.lcn-hero-logo {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: 1.75rem;
+  isolation: isolate;
+}
+
+.lcn-hero-logo img {
+  width: 250px;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.65));
+  animation: lcn-logo-float 7s ease-in-out infinite;
+}
+
+.lcn-hero-logo-halo {
+  position: absolute;
+  inset: -38% -14%;
+  z-index: 0;
+  background:
+    radial-gradient(58% 62% at 50% 50%, rgba(243, 223, 168, 0.92) 0%, rgba(212, 175, 55, 0.42) 46%, rgba(212, 175, 55, 0) 74%);
+  filter: blur(6px);
+  border-radius: 999px;
+  animation: lcn-logo-halo 5.5s ease-in-out infinite;
+}
+
+.lcn-hero-logo::after {
+  content: '';
+  position: absolute;
+  inset: -6% -4%;
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 246, 214, 0.5) 50%, transparent 68%);
+  background-size: 240% 100%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: lcn-logo-sheen 6.5s ease-in-out infinite;
+}
+
+@keyframes lcn-logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes lcn-logo-halo {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes lcn-logo-sheen {
+  0%, 55% { background-position: 130% 0; }
+  85%, 100% { background-position: -60% 0; }
+}
+
 @media (min-width: 900px) {
   .lcn-index { display: flex; }
   .lcn-sticky { display: none; }
