@@ -548,11 +548,13 @@
   cursor: pointer;
 }
 
-/* Logo do hero — fundo transparente, halo dourado e flutuação */
+/* Logo do hero — fundo transparente, halo dourado e flutuação, centralizada */
+.lcn-reel > .lcn-scene:first-child { justify-content: center; }
+
 .lcn-hero-logo {
   position: relative;
-  display: inline-flex;
-  margin: 1.5rem 0 2rem;
+  display: flex;
+  margin: 1.5rem auto 2rem;
   isolation: isolate;
 }
 
