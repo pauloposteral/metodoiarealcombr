@@ -87,7 +87,7 @@ const LandingCinema = () => {
               <>
                 <div className="lcn-hero-logo" aria-hidden="true">
                   <span className="lcn-hero-logo-halo" />
-                  <img src={logoIaReal} alt="" width={250} />
+                  <img src={logoIaReal} alt="" width={250} height={143} decoding="async" fetchPriority="high" />
                 </div>
                 <div className="lcn-actions">
                   <button type="button" className="lcn-cta" onClick={() => setCheckoutOpen(true)}>
