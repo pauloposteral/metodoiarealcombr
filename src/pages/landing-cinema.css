@@ -646,3 +646,6 @@ a.lcn-sticky, a.lcn-cta { text-decoration: none; text-align: center; }
   .lcn-dock { opacity: 1; transform: none; filter: none; transition: none; }
   .lcn-reel { scroll-snap-type: none; }
 }
+
+/* keep scene counter clear of the fixed account button */
+.lcn-slate-count { margin-right: 7rem; }
