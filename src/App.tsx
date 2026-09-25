@@ -39,6 +39,7 @@ const AcessoBloqueado = lazy(() => import("./pages/AcessoBloqueado"));
 const CarouselPreviewPublic = lazy(() => import("./pages/CarouselPreviewPublic"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Checkout = lazy(() => import("./pages/Checkout"));
+const LandingCinema = lazy(() => import("./pages/LandingCinema"));
 
 // Método IA SaaS
 const MetodoLanding = lazy(() => import("./pages/metodo/MetodoLanding"));
@@ -78,7 +79,8 @@ const App = () => (
           <CookieConsent />
           <Suspense fallback={<div role="status" className="min-h-screen grid place-items-center">Carregando...</div>}>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<LandingCinema />} />
+            <Route path="/completo" element={<Index />} />
             <Route path="/curso" element={<CourseContentPage />} />
             <Route path="/obrigado" element={<Obrigado />} />
             <Route path="/termos" element={<Termos />} />
