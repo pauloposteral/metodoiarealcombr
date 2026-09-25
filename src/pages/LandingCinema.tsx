@@ -152,6 +152,12 @@ const LandingCinema = () => {
         ))}
       </main>
 
+      <div className="lcn-hud-status" aria-hidden="true">
+        <span>IA REAL / SYSTEM</span>
+        <i />
+        <span>LIVE</span>
+      </div>
+
       <button type="button" className="lcn-sticky" onClick={() => setCheckoutOpen(true)}>
         Garantir meu acesso · R$ 497
       </button>
