@@ -1,0 +1,197 @@
+[
+  {
+    "slug":"como-comecar-inteligencia-artificial","module":"MOD-00","title":"Como começar a usar inteligência artificial com uma tarefa real","description":"Um primeiro experimento com IA: escolha uma tarefa simples, proteja seus dados e compare o resultado antes de pagar por ferramentas.","isFree":true,
+    "intro":"Começar por uma lista enorme de aplicativos costuma aumentar a dúvida. Um caminho mais útil é escolher uma tarefa pequena que você já sabe avaliar: organizar uma pauta, resumir um texto seu ou preparar um rascunho. Este roteiro gratuito organiza o primeiro teste sem exigir assinatura, programação ou dados de clientes.",
+    "steps":[
+      "Escolha um resultado que caiba em uma sessão: uma pauta de reunião com cinco itens, por exemplo. Escreva quem vai usar o resultado e o que não pode faltar. Evite começar por decisões de saúde, obrigações jurídicas ou movimentação de dinheiro.",
+      "Prepare um exemplo sem informação confidencial. Substitua nomes, telefones, documentos e valores internos antes de enviar. Se a tarefa exige material da empresa, confirme primeiro quais ferramentas e usos ela autoriza.",
+      "Abra o serviço pelo endereço oficial, confira o desenvolvedor do aplicativo e teste o plano disponível sem aceitar uma assinatura por impulso. Registre o nome da ferramenta, a data e qualquer limite encontrado.",
+      "Envie o pedido com contexto, tarefa e formato. Leia a resposta inteira; compare cada item com as informações fornecidas. Peça uma correção específica, em vez de simplesmente escrever que ficou ruim.",
+      "Guarde o pedido, a primeira resposta e a versão corrigida. Anote se o material ficou utilizável e quanto tempo você gastou revisando. Só amplie o teste depois de conseguir explicar por que o resultado serve."
+    ],
+    "example":"Uma pessoa precisa transformar suas próprias anotações de reunião em uma pauta. Ela informa o objetivo, fornece tópicos fictícios e pede cinco decisões a discutir. A IA inclui uma data que não estava nas notas. Em vez de aceitar, a pessoa pede que datas ausentes sejam marcadas como pendentes e confere a nova versão. O aprendizado não foi apenas gerar texto: foi identificar e corrigir uma informação inventada.",
+    "template":"Tarefa: [uma tarefa pequena]\nQuem vai usar: [público]\nInformações disponíveis: [dados não confidenciais]\nResultado esperado: [formato e tamanho]\nNão invente: [datas, nomes, números]\nComo vou conferir: [critério observável]\nFerramenta e data: [preencher após o teste]",
+    "checks":["O resultado resolve a tarefa escolhida, sem acrescentar fatos não fornecidos.","Nenhuma senha, chave ou informação confidencial foi enviada.","A revisão humana e as limitações do teste ficaram registradas."],
+    "sources":[{"label":"Ajuda oficial do ChatGPT","url":"https://help.openai.com/"},{"label":"Central de ajuda do Claude","url":"https://support.claude.com/"},{"label":"Ajuda do Gemini","url":"https://support.google.com/gemini/"}]
+  },
+  {
+    "slug":"como-verificar-respostas-ia","module":"MOD-01","title":"Como verificar uma resposta de IA antes de usar","description":"Separe opinião de fato, confira números e fontes e registre o que continua incerto antes de publicar uma resposta produzida por IA.","isFree":true,
+    "intro":"Uma resposta bem escrita pode conter erros. Conferir não significa pedir à mesma ferramenta que diga se está certa; significa comparar as afirmações importantes com evidências independentes. Use esta ficha para revisar um resumo, uma comparação ou uma explicação antes de transformá-los em uma decisão ou publicação.",
+    "steps":[
+      "Sublinhe as afirmações verificáveis: números, nomes, datas, regras e relações de causa. Separe sugestões e opiniões; elas podem ser úteis, mas não são provas. Comece pelo fato que causaria mais prejuízo se estivesse errado.",
+      "Abra a fonte citada e procure o trecho que realmente sustenta a afirmação. Um endereço existente não basta. Confira quem publicou, a data, o contexto e se o texto fala do mesmo país, produto ou versão que você está analisando.",
+      "Refaça cálculos em calculadora ou planilha com os valores de origem. Confira unidades, períodos e denominadores. Um crescimento de dez unidades não é necessariamente dez por cento, e uma média não descreve todos os casos.",
+      "Quando não houver evidência suficiente, registre a incerteza e reduza o alcance da frase. Troque uma conclusão categórica por uma hipótese claramente identificada, ou retire o trecho. Não fabrique uma referência para completar o texto.",
+      "Guarde a versão revisada e as referências. Para informação que muda, anote quando conferir novamente. Em assuntos de alto impacto, encaminhe a revisão ao profissional responsável antes de executar qualquer ação."
+    ],
+    "example":"Um rascunho afirma que uma ferramenta custa um valor mensal e funciona em qualquer plano. A fonte encontrada descreve apenas uma promoção anual de outra região. A revisão separa preço, periodicidade e disponibilidade; remove a generalização e orienta a conferir o checkout oficial. O texto fica menos impressionante, mas passa a ser utilizável sem induzir alguém a contratar com uma expectativa falsa.",
+    "template":"Afirmação: [copiar a frase]\nRisco se estiver errada: [baixo, médio, alto]\nFonte original: [endereço e trecho]\nData e contexto: [país, versão, plano]\nConferência adicional: [cálculo ou outra evidência]\nResultado: [confirmada, corrigida ou não verificada]\nTexto final: [versão revisada]",
+    "checks":["Cada afirmação central tem uma fonte que realmente a sustenta.","Números e unidades foram recalculados fora do texto gerado.","Incerteza, hipótese e opinião não aparecem como fatos comprovados."],
+    "sources":[{"label":"NIST — gestão de riscos de IA","url":"https://www.nist.gov/itl/ai-risk-management-framework"}]
+  },
+  {
+    "slug":"como-escrever-prompt","module":"MOD-02","title":"Como escrever um prompt com contexto e critério de qualidade","description":"Um modelo reutilizável para pedir à IA uma entrega clara, limitar invenções e comparar versões do seu pedido.","isFree":true,
+    "intro":"Um prompt útil explica a tarefa e o resultado esperado, mas também informa o que está disponível e como a resposta será avaliada. Não é uma senha mágica. Este modelo ajuda a reduzir ambiguidades e a descobrir, por comparação, quais instruções melhoram uma tarefa específica do seu trabalho.",
+    "steps":[
+      "Descreva a situação em duas ou três frases: quem está pedindo, para quem é a entrega e qual problema precisa ser resolvido. Inclua apenas informações relevantes; excesso de contexto irrelevante também atrapalha a revisão.",
+      "Use um verbo que indique a entrega: comparar, organizar, revisar, resumir ou propor. Quando a tarefa tiver várias partes, peça primeiro um plano curto ou divida em etapas que você possa conferir separadamente.",
+      "Defina o formato e os limites: tabela com determinadas colunas, texto de até certo tamanho ou uma lista de perguntas. Diga quais informações não podem ser inventadas e o que fazer quando algo estiver ausente.",
+      "Mostre um exemplo seu, sem dados confidenciais, se o tom ou a estrutura forem importantes. Explique o que deve ser imitado e o que não deve ser copiado. Exemplo não autoriza reproduzir conteúdo de terceiros sem permissão.",
+      "Teste duas versões com a mesma tarefa. Avalie correção, utilidade e trabalho de revisão. Registre a melhor versão com uma explicação do motivo; não escolha apenas a resposta mais longa ou mais confiante."
+    ],
+    "example":"Pedido vago: faça um texto de venda. Pedido observável: escreva uma descrição de até 90 palavras para um caderno artesanal, usando somente tamanho, material e prazo informados; não invente desconto nem estoque; termine com um convite para consultar disponibilidade. Agora a pessoa consegue verificar se a IA cumpriu a tarefa e identificar exatamente o que precisa mudar.",
+    "template":"Contexto: [situação e público]\nTarefa: [verbo + entrega]\nMaterial de referência: [conteúdo autorizado]\nFormato: [estrutura e tamanho]\nLimites: [o que não afirmar ou executar]\nInformação ausente: [perguntar ou marcar como pendente]\nCritérios: [correção, clareza, utilidade]\nAntes de responder, aponte ambiguidades relevantes.",
+    "checks":["O pedido tem uma entrega e critérios que podem ser observados.","O exemplo não inclui dados confidenciais nem promessas inventadas.","A versão escolhida reduziu retrabalho em um teste documentado."],
+    "sources":[{"label":"OpenAI — boas práticas de prompting","url":"https://platform.openai.com/docs/guides/prompt-engineering"}]
+  },
+  {
+    "slug":"organizar-projeto-chatgpt","module":"MOD-03","title":"Organize um projeto de trabalho com IA sem misturar contextos","description":"Crie um briefing, registre fontes e separe instruções permanentes de tarefas temporárias ao trabalhar com um assistente de IA.","isFree":true,
+    "intro":"Quando tarefas diferentes ficam na mesma conversa, decisões e referências se misturam. Um projeto organizado começa por um briefing pequeno e por regras de uso dos documentos. O roteiro abaixo funciona como organização de trabalho, independentemente dos nomes de menus ou dos limites do plano que você utiliza.",
+    "steps":[
+      "Dê ao projeto um objetivo concreto e uma fronteira. Por exemplo: preparar materiais de atendimento de uma loja, sem acessar pagamentos nem enviar mensagens automaticamente. Escreva também o que não pertence ao projeto.",
+      "Separe instruções duradouras, como público e tom, das tarefas do dia. Guarde as instruções em um documento curto. Quando houver recursos de projeto na sua conta, consulte a ajuda oficial antes de configurar arquivos e compartilhamento.",
+      "Escolha poucos documentos de referência, com autoria, data e permissão de uso. Retire versões antigas conflitantes. Um arquivo chamado final não é necessariamente a versão aprovada; registre explicitamente qual é a fonte vigente.",
+      "Teste o assistente com três situações conhecidas: uma tarefa comum, uma com informação faltando e outra fora do escopo. Confira se ele pede esclarecimento em vez de inventar dados e se respeita as restrições do briefing.",
+      "Mantenha um registro de decisões fora da conversa: decisão, responsável, data e motivo. Ao trocar de ferramenta ou iniciar uma nova sessão, esse registro permite reconstruir o contexto sem depender de lembranças implícitas."
+    ],
+    "example":"Uma loja prepara respostas para dúvidas sobre trocas. O briefing aponta uma política aprovada e proíbe inventar exceções. Num teste, o pedido cita um produto não coberto pela política. A resposta adequada identifica a lacuna e encaminha a dúvida à pessoa responsável. A loja salva esse caso na bateria de testes, evitando que uma mudança de instruções transforme exceções não aprovadas em promessas ao cliente.",
+    "template":"Projeto: [nome]\nObjetivo: [entrega concreta]\nFora de escopo: [ações proibidas]\nPúblico e tom: [orientações]\nFontes vigentes: [arquivo, data e responsável]\nDados permitidos: [regras internas]\nTeste comum: [caso]\nTeste com lacuna: [caso]\nDecisões aprovadas: [data e motivo]",
+    "checks":["Instruções fixas e tarefas temporárias estão separadas.","As fontes têm versão, data e autorização de uso.","O assistente foi testado em casos conhecidos e em uma situação sem resposta suficiente."],
+    "sources":[{"label":"OpenAI — projetos no ChatGPT","url":"https://help.openai.com/en/articles/10169521-using-projects-in-chatgpt"}]
+  },
+  {
+    "slug":"analisar-documentos-claude","module":"MOD-04","title":"Revise documentos com IA sem perder a referência original","description":"Um protocolo para resumir, comparar e conferir documentos longos com citações rastreáveis e revisão humana.","isFree":true,
+    "intro":"Enviar um documento e pedir um resumo não comprova que todos os trechos importantes foram considerados. O trabalho fica mais confiável quando a pergunta, as fontes e a forma de conferência estão definidas. Este protocolo ajuda a comparar documentos e a localizar evidências sem substituir a decisão de quem responde pelo assunto.",
+    "steps":[
+      "Defina uma pergunta específica: quais entregas cada proposta inclui, por exemplo. Não peça uma conclusão jurídica ou financeira definitiva a partir de um resumo. Liste previamente as informações que precisam aparecer na comparação.",
+      "Prepare arquivos autorizados e legíveis. Confira se tabelas, imagens ou páginas digitalizadas foram interpretadas corretamente. Quando a extração não for confiável, marque a limitação e leia o original antes de aceitar uma resposta.",
+      "Peça uma matriz com afirmação, documento, seção ou página e trecho de apoio. Solicite que ausência de informação seja indicada como não localizada, em vez de tratada como prova de que algo não existe.",
+      "Abra cada referência importante no original. Compare o trecho anterior e posterior para evitar uma citação fora de contexto. Se o documento tiver versões diferentes, use uma coluna para identificar a versão analisada.",
+      "Transforme o resultado revisado em perguntas para o responsável. Guarde separadamente o resumo da IA, as correções humanas e a decisão final. Isso permite descobrir depois de onde veio uma interpretação equivocada."
+    ],
+    "example":"Duas propostas de fornecedor usam nomes diferentes para suporte. A IA produz uma tabela, mas uma delas descreve suporte apenas em horário comercial numa nota de rodapé. A conferência do original corrige a equivalência e acrescenta uma pergunta sobre atendimento fora desse horário. O resultado útil é uma comparação verificável e uma dúvida bem formulada, não uma recomendação automática de compra.",
+    "template":"Pergunta da análise: [objetivo]\nDocumentos e versões: [lista]\nColunas: critério | informação | fonte | página/seção | incerteza\nCritérios obrigatórios: [lista]\nRegra: não completar informação ausente por suposição.\nConferência humana: [itens checados]\nPerguntas restantes: [responsável e prazo]",
+    "checks":["As conclusões importantes apontam para trechos do original.","Tabelas e páginas digitalizadas foram conferidas quando usadas.","Informação não localizada não foi transformada em certeza sobre sua inexistência."],
+    "sources":[{"label":"Claude — central oficial de suporte","url":"https://support.claude.com/"}]
+  },
+  {
+    "slug":"pesquisar-com-fontes-gemini","module":"MOD-05","title":"Monte uma pesquisa com fontes e perguntas verificáveis","description":"Organize documentos e perguntas para pesquisar com IA, separando evidência, interpretação e dúvidas ainda não respondidas.","isFree":true,
+    "intro":"Uma pesquisa útil não é uma coleção de links. Ela responde a uma pergunta e permite que outra pessoa confira o caminho até a conclusão. Use esta ficha para preparar uma pesquisa assistida por IA com seus documentos ou fontes públicas, sem depender de uma interface específica nem presumir que toda referência está correta.",
+    "steps":[
+      "Escreva a decisão que a pesquisa vai apoiar e três perguntas que precisam ser respondidas. Defina o período e o contexto: uma notícia antiga ou uma regra de outro país pode ser verdadeira e ainda assim não servir ao seu caso.",
+      "Monte um pequeno acervo de fontes primárias: documentação oficial, documento original, dados da organização responsável ou publicação de pesquisa. Registre endereço, autoria, data e motivo da inclusão.",
+      "Peça respostas limitadas ao acervo quando essa for a tarefa. Exija referência ao documento ou trecho utilizado. Se a ferramenta consultar a web, mantenha as novas fontes separadas até verificar relevância e confiabilidade.",
+      "Crie uma tabela com evidência, interpretação e limite. Uma fonte pode sustentar um fato sem sustentar a conclusão proposta. Procure também informação que contrarie a hipótese inicial, não apenas a confirme.",
+      "Produza uma síntese curta com o que foi respondido, o que permanece incerto e o próximo passo. Um resumo em áudio ou apresentação só deve ser publicado depois de conferido contra essa síntese e suas fontes."
+    ],
+    "example":"Uma equipe pesquisa opções de agendamento para uma pequena empresa. Em vez de perguntar qual é a melhor, define requisitos de privacidade, exportação e integração. Reúne documentação oficial de três serviços e marca os requisitos sem confirmação. A conclusão apresenta uma lista curta para teste e perguntas aos fornecedores; não transforma a ausência de informação pública em garantia de compatibilidade.",
+    "template":"Pergunta central: [decisão]\nRecorte: [período, local e público]\nFonte: [autor, título, URL e data]\nEvidência: [trecho verificável]\nInterpretação: [o que isso sugere]\nLimite: [o que não permite concluir]\nContraponto: [evidência divergente]\nPróximo passo: [teste ou pergunta]",
+    "checks":["Fontes e interpretações estão identificadas separadamente.","A pesquisa registra lacunas e contrapontos relevantes.","A síntese pode ser conferida por outra pessoa sem repetir toda a conversa."],
+    "sources":[{"label":"Google — ajuda oficial do Gemini","url":"https://support.google.com/gemini/"},{"label":"Google — pesquisa e documentos com IA","url":"https://support.google.com/notebooklm/"}]
+  },
+  {
+    "slug":"briefing-imagem-ia","module":"MOD-06","title":"Crie um briefing visual para imagens com IA","description":"Defina composição, referências autorizadas e critérios de aprovação antes de gerar imagens para uma marca ou projeto.","isFree":true,
+    "intro":"Gerar muitas imagens sem uma direção definida consome tentativas e dificulta a escolha. Um briefing visual transforma gosto em critérios: o que precisa aparecer, onde a peça será usada e o que deve permanecer consistente. Este modelo serve para dirigir a produção, não para prometer que um gerador acertará tudo na primeira tentativa.",
+    "steps":[
+      "Defina a função da imagem e o formato final: capa vertical, foto de produto, ilustração didática ou fundo. Reserve espaço para textos que serão diagramados depois, em vez de depender da geração para escrever informações essenciais.",
+      "Liste elementos obrigatórios e restrições. Para um produto real, descreva o que não pode mudar: proporção, rótulo, cor ou quantidade de peças. Para uma pessoa real, confirme autorização de uso da imagem antes de criar variações.",
+      "Descreva composição, luz, material e cenário com referências próprias ou autorizadas. Separe a referência de estilo da referência de identidade; sem essa distinção, o resultado pode copiar características que você não pretendia reproduzir.",
+      "Gere poucas alternativas controladas e altere uma variável por vez. Guarde o pedido e a referência de cada versão. Compare pelo briefing, não apenas por qual parece mais chamativa numa miniatura.",
+      "Faça inspeção ampliada: mãos, objetos, letras, bordas, perspectiva e coerência com o produto. Revise licença e condições da ferramenta para o uso pretendido. Acrescente tipografia e informações comerciais em um editor verificável."
+    ],
+    "example":"Uma cafeteria quer uma imagem de embalagem para uma campanha. O briefing exige preservar a fotografia real do rótulo e gerar somente o cenário. A equipe rejeita uma versão visualmente bonita que alterou o peso indicado. Escolhe outra, confere o produto em tamanho ampliado e adiciona preço e chamada no editor. A marca ganha consistência sem apresentar ao cliente uma embalagem que não existe.",
+    "template":"Peça e canal: [formato]\nObjetivo visual: [uma frase]\nElemento principal: [descrição]\nElementos que não podem mudar: [lista]\nLuz e cenário: [direção]\nÁrea para texto: [posição]\nReferências e direitos: [origem]\nRevisão final: [produto, anatomia, letras, licença]",
+    "checks":["O produto ou a identidade autorizada não foi alterado indevidamente.","Informações comerciais e textos foram revisados fora da geração.","Referências, permissões e versão aprovada estão registradas."],
+    "sources":[{"label":"Midjourney — documentação oficial","url":"https://docs.midjourney.com/"},{"label":"Canva — central de ajuda","url":"https://www.canva.com/help/"}]
+  },
+  {
+    "slug":"roteiro-video-ia","module":"MOD-07","title":"Planeje um vídeo curto com IA antes de gerar as cenas","description":"Um storyboard prático com objetivo, continuidade, narração, direitos de uso e revisão antes da publicação.","isFree":true,
+    "intro":"Um vídeo curto funciona melhor quando cada cena tem uma função. Criar clipes bonitos primeiro e tentar inventar a história depois aumenta o retrabalho. Este roteiro organiza uma produção pequena, com imagem, voz e montagem, sem prometer qualidade automática nem dispensar consentimento para pessoas e vozes reais.",
+    "steps":[
+      "Defina uma mensagem e uma ação final. Escolha um público concreto e escreva o que ele deve entender mesmo assistindo sem som. Não use uma promessa que o produto ou o conteúdo não consiga demonstrar.",
+      "Divida a mensagem em poucas tomadas. Para cada uma, registre duração estimada, enquadramento, ação e ligação com a próxima. Reserve tempo para leitura de legendas e para a conclusão, não apenas para a abertura.",
+      "Crie uma ficha de continuidade: personagem autorizado ou fictício, roupa, objeto, cenário e iluminação. Use a mesma referência aprovada entre as cenas e registre o que cada ferramenta realmente conseguiu preservar.",
+      "Prepare narração e trilha com direitos compatíveis. Não clone voz nem represente uma pessoa real sem autorização adequada. Guarde a origem dos materiais e verifique as exigências de identificação de conteúdo sintético do canal de publicação.",
+      "Monte, revise sem som e depois apenas pelo áudio. Confira legendas, sincronização, afirmações, transições e artefatos. Exporte uma versão de teste e assista no celular antes de publicar a versão final."
+    ],
+    "example":"Um tutorial de 30 segundos ensina a transformar um pedido vago em um prompt claro. A primeira tomada mostra o problema, a segunda apresenta contexto e formato, a terceira compara o resultado e a última convida à prática. Nenhuma cena precisa fingir um depoimento real. As legendas reproduzem a mensagem principal e a revisão confere se o exemplo mostrado corresponde ao que foi narrado.",
+    "template":"Mensagem central: [uma frase]\nPúblico e canal: [definir]\nCena | duração | imagem | ação | áudio | legenda\nContinuidade: [personagem, objeto, luz]\nMateriais e direitos: [origem]\nIdentificação de IA: [regra aplicável do canal]\nChecklist de exportação: [formato e teste no aparelho]",
+    "checks":["Cada cena contribui para a mensagem central.","Vozes, imagens e trilhas têm autorização ou licença adequada.","Legendas, continuidade e afirmações foram conferidas na exportação final."],
+    "sources":[{"label":"Runway — central oficial de ajuda","url":"https://help.runwayml.com/"},{"label":"ElevenLabs — documentação oficial","url":"https://elevenlabs.io/docs/overview"}]
+  },
+  {
+    "slug":"planejar-aplicativo-lovable","module":"MOD-08","title":"Planeje seu primeiro aplicativo sem começar pelo código","description":"Transforme uma ideia em um pequeno fluxo testável, com dados, permissões, estados de erro e critérios de publicação.","isFree":true,
+    "intro":"Uma ideia de aplicativo fica mais viável quando começa por um problema pequeno e por uma pessoa que realmente precisa resolvê-lo. O briefing abaixo ajuda a conversar com uma ferramenta de desenvolvimento por IA sem confundir uma tela bonita com um serviço pronto para receber dados e usuários.",
+    "steps":[
+      "Escolha uma pessoa e uma tarefa principal. Descreva o que ela faz hoje e o que deveria conseguir fazer no aplicativo. Exclua recursos que não sejam necessários para testar essa primeira tarefa.",
+      "Desenhe o percurso mínimo: entrar, fornecer informação, revisar e concluir. Para cada tela, escreva uma ação principal. Inclua também o que acontece quando não há dados, a rede falha ou a sessão termina.",
+      "Liste os dados que serão guardados e quem pode vê-los ou alterá-los. Diferencie usuário, administrador e visitante. Não trate um botão escondido como proteção: o servidor ou banco precisa aplicar as permissões.",
+      "Defina critérios de teste antes de pedir a construção. Use contas de teste separadas e dados fictícios. Verifique especialmente se uma pessoa consegue acessar registros de outra por URL, busca ou chamadas diretas.",
+      "Publique primeiro uma versão controlada. Confirme domínio, recuperação de acesso, cópia de segurança e caminho de reversão. Só convide mais pessoas depois de observar o fluxo funcionando e registrar os erros encontrados."
+    ],
+    "example":"Uma lista de espera de um salão começa com cadastro de nome fictício e horário desejado. O cliente só vê o próprio pedido; a equipe vê a fila necessária ao trabalho. O teste inclui alterar o identificador de um pedido na URL. Se outro registro aparecer, a versão não está pronta, mesmo que a interface esteja bonita. O problema deve ser corrigido na permissão dos dados antes da publicação.",
+    "template":"Pessoa atendida: [perfil]\nProblema: [tarefa atual]\nFluxo mínimo: [passos]\nDados: [campo, finalidade e retenção]\nPermissões: [quem lê e escreve]\nEstados: [vazio, erro, offline, sessão expirada]\nTeste de aceite: [ação e resultado]\nRollback: [como voltar à versão anterior]",
+    "checks":["Existe um fluxo pequeno e testável, não apenas uma lista de funcionalidades.","Permissões são verificadas fora da interface visual.","A publicação tem teste com dados fictícios e caminho de reversão."],
+    "sources":[{"label":"Lovable — documentação oficial","url":"https://docs.lovable.dev/"},{"label":"Supabase — Row Level Security","url":"https://supabase.com/docs/guides/database/postgres/row-level-security"}]
+  },
+  {
+    "slug":"automacao-ia-segura","module":"MOD-09","title":"Desenhe uma automação de IA com limites e supervisão","description":"Mapeie gatilho, dados, decisão, aprovação e tratamento de erros antes de automatizar uma rotina de trabalho.","isFree":true,
+    "intro":"Automação não deve significar ausência de responsabilidade. Antes de conectar ferramentas, vale desenhar quais eventos iniciam o fluxo, quais dados circulam e onde uma pessoa precisa aprovar o resultado. Este roteiro prioriza uma rotina reversível e observável, em vez de executar ações externas sem conferência.",
+    "steps":[
+      "Escolha uma tarefa repetida com entrada e saída claras. Comece por classificar um pedido ou preparar um rascunho, não por enviar cobranças, excluir registros ou tomar decisões de alto impacto automaticamente.",
+      "Desenhe o fluxo: evento inicial, validação dos dados, etapa de IA, revisão e destino. Anote quais credenciais cada etapa usa e conceda somente o acesso necessário. Segredos não entram em prompts, arquivos públicos ou logs.",
+      "Defina uma saída estruturada e valide os campos antes de prosseguir. Uma resposta da IA é dado a conferir, não uma instrução confiável para executar qualquer comando ou endereço que apareça no texto.",
+      "Planeje duplicidade e falhas: evento repetido, timeout, resposta inválida e serviço indisponível. Use um identificador do evento e verificação de processamento anterior para evitar que uma repetição produza duas ações externas.",
+      "Teste com dados fictícios e mantenha aprovação humana nas ações relevantes. Registre execução, erro e custo sem dados sensíveis desnecessários. Defina como pausar o fluxo e quem recebe o alerta quando ele falhar."
+    ],
+    "example":"Uma automação recebe solicitações por formulário e prepara um resumo para a equipe. O fluxo valida campos, classifica o tema e salva um rascunho. Uma pessoa aprova a resposta ao cliente. Quando o mesmo formulário é reenviado, o identificador impede duplicação do atendimento. Se a IA retorna um formato inválido, o fluxo para e avisa a equipe, em vez de enviar um texto incompleto.",
+    "template":"Gatilho: [evento]\nIdentificador único: [campo]\nDados permitidos: [lista]\nEtapa de IA: [tarefa e formato]\nValidação: [campos e regras]\nAprovação: [responsável]\nAção externa: [destino autorizado]\nFalha e alerta: [tratamento]\nLimite de custo e pausa: [definir]",
+    "checks":["Eventos repetidos não causam ações duplicadas.","Saídas da IA são validadas antes de qualquer ação externa.","Existe responsável, alerta de erro e forma de interromper o fluxo."],
+    "sources":[{"label":"n8n — tratamento de erros","url":"https://docs.n8n.io/flow-logic/error-handling/"},{"label":"OWASP — riscos em aplicações com LLM","url":"https://genai.owasp.org/"}]
+  },
+  {
+    "slug":"medir-produtividade-ia","module":"MOD-10","title":"Meça se a IA realmente economiza tempo no seu trabalho","description":"Compare tarefas semelhantes, inclua o tempo de revisão e avalie qualidade para não confundir geração rápida com produtividade.","isFree":true,
+    "intro":"Uma resposta gerada em segundos pode exigir muita correção. Por isso, medir produtividade pede observar o tempo total e a qualidade da entrega, não apenas a velocidade da ferramenta. Este experimento simples ajuda a decidir se vale manter a IA numa tarefa específica sem prometer ganhos universais.",
+    "steps":[
+      "Escolha uma tarefa recorrente e defina o que significa concluir bem. Por exemplo: preparar um relatório com todos os campos corretos e sem retrabalho de outra pessoa. Mantenha o critério igual nas duas formas de execução.",
+      "Registre algumas execuções sem IA, com data, dificuldade e tempo total. Separe casos muito diferentes; comparar uma mensagem simples com um relatório complexo produz uma conclusão enganosa.",
+      "Faça novas execuções comparáveis com IA. Conte preparação do pedido, espera, revisão, correções, formatação e envio. Registre erros e resultado rejeitado mesmo quando isso não favorece a ferramenta.",
+      "Compare tempo e qualidade lado a lado. Uma economia aparente que aumenta erros ou transfere revisão a outra pessoa não é necessariamente um ganho. Descreva o contexto e o tamanho pequeno do experimento.",
+      "Decida manter, ajustar ou abandonar o uso nessa tarefa. Se houver assinatura ou créditos, inclua o custo na análise. Reavalie após mudanças no fluxo, na equipe ou na ferramenta, sem generalizar o resultado para todo o trabalho."
+    ],
+    "example":"Três rascunhos de e-mail levam, sem IA, 12, 14 e 10 minutos. Com IA, a escrita inicial fica rápida, mas preparação e revisão totalizam 9, 11 e 13 minutos. A diferença observada é pequena e um caso piorou. A pessoa identifica que a IA ajuda nos e-mails repetitivos, mas não no caso delicado. O resultado do teste é uma regra de uso mais precisa, não a afirmação de que trabalha dez vezes mais rápido.",
+    "template":"Tarefa e critério de qualidade: [definir]\nData | dificuldade | método | preparação | execução | revisão | total | erros\nCusto adicional: [assinatura ou créditos]\nResultado aceito por: [responsável]\nConclusão limitada ao teste: [manter, ajustar ou abandonar]\nPróxima revisão: [data]",
+    "checks":["O tempo registrado inclui preparação e revisão, não só a geração.","Os casos comparados têm complexidade semelhante.","A conclusão apresenta limites e não promete o mesmo ganho a outras pessoas."],
+    "sources":[{"label":"NIST — avaliação e gestão de riscos de IA","url":"https://www.nist.gov/itl/ai-risk-management-framework"}]
+  },
+  {
+    "slug":"calendario-conteudo-ia","module":"MOD-11","title":"Monte um calendário de conteúdo com IA sem publicar material genérico","description":"Planeje conteúdo a partir de dúvidas reais, provas disponíveis e uma rotina de revisão, sem prometer alcance ou vendas.","isFree":true,
+    "intro":"Um calendário não fica melhor apenas porque tem muitas ideias. Ele precisa relacionar dúvidas do público, conhecimento verdadeiro da marca e capacidade de produção. Use este modelo para preparar uma semana de conteúdo útil antes de multiplicar a quantidade de posts ou automatizar publicações.",
+    "steps":[
+      "Liste perguntas que clientes ou leitores realmente fazem. Use registros autorizados e remova dados pessoais. Quando não houver pesquisa, marque as ideias como hipóteses a validar, não como desejos comprovados do público.",
+      "Escolha poucos temas e uma função para cada peça: explicar, demonstrar, responder uma objeção ou convidar a uma ação. Associe a cada tema uma prova que você possui, como uma demonstração do produto ou um exemplo próprio.",
+      "Peça à IA variações de abordagem usando sua voz e os fatos fornecidos. Proíba depoimentos, números, preços ou resultados inventados. Rejeite ideias que exigiriam uma prova inexistente, mesmo que pareçam atraentes.",
+      "Defina formato, responsável, data, revisão e ação final. Verifique se a produção cabe no tempo disponível. Uma peça útil e revisada é preferível a várias publicações sem informação concreta.",
+      "Depois de publicar, observe respostas e ações relacionadas ao objetivo. Registre também dúvidas novas. Ajuste a próxima semana com essa evidência; visualizações isoladas não demonstram receita nem satisfação."
+    ],
+    "example":"Uma pequena loja recebe perguntas sobre cuidados com um produto artesanal. Em vez de trinta frases motivacionais, prepara uma demonstração de limpeza, uma resposta sobre conservação e um relato autorizado do processo de fabricação. A IA ajuda a estruturar roteiros, mas os fatos e imagens vêm da loja. O calendário inclui revisão do responsável e não promete que a sequência aumentará vendas automaticamente.",
+    "template":"Público e dúvida real: [definir]\nTema | objetivo | prova disponível | formato | responsável | data\nTom da marca: [exemplo autorizado]\nAfirmações a conferir: [lista]\nAção final: [uma ação]\nResultado observado: [pergunta, clique ou outro sinal pertinente]\nAprendizado para a próxima semana: [registro]",
+    "checks":["Cada conteúdo responde a uma dúvida ou hipótese identificada.","Toda prova, preço e afirmação comercial pode ser conferida.","Há responsável pela revisão e capacidade real de produzir o calendário."],
+    "sources":[{"label":"Google — conteúdo útil e confiável","url":"https://developers.google.com/search/docs/fundamentals/creating-helpful-content"}]
+  },
+  {
+    "slug":"portfolio-servicos-ia","module":"MOD-12","title":"Monte um portfólio de IA com entregas e limites claros","description":"Documente um projeto, explique suas decisões e apresente uma oferta de serviço sem inventar clientes, resultados ou experiência.","isFree":true,
+    "intro":"Um portfólio convincente mostra o problema, o trabalho realizado e o que pode ser verificado. Não precisa fingir clientes nem transformar um exercício em caso comercial. Este roteiro ajuda a apresentar projetos de estudo com honestidade e a definir uma oferta pequena que você realmente consegue entregar.",
+    "steps":[
+      "Escolha um projeto concluído e identifique sua natureza: estudo, trabalho interno ou entrega a um cliente com autorização. Explique o problema original e seu papel, sem atribuir a você trabalhos de outras pessoas.",
+      "Mostre evidências proporcionais ao caso: comparação antes/depois, demonstração funcional, documento produzido ou teste reproduzível. Remova dados pessoais e obtenha permissão antes de divulgar materiais de terceiros.",
+      "Descreva as decisões e os limites. Informe o que foi feito com IA, o que exigiu revisão humana e o que ainda não foi validado. Não apresente uma interface de demonstração como um sistema operacional completo.",
+      "Transforme a experiência em um escopo de serviço: entrega, entradas necessárias, revisões, prazo estimado e exclusões. Custos de ferramentas, manutenção e responsabilidades precisam ser discutidos antes da contratação.",
+      "Prepare uma conversa de diagnóstico, não uma promessa de renda. Pergunte qual problema o interessado quer resolver e como aceitará a entrega. Só assuma uma demanda depois de confirmar capacidade, acesso e critérios de conclusão."
+    ],
+    "example":"Uma pessoa publica um organizador de conteúdo criado como exercício. Ela informa que os dados são fictícios, mostra o fluxo e registra testes de acesso. Em vez de afirmar que atende grandes marcas, oferece uma primeira adaptação com escopo limitado e revisão do cliente. O portfólio demonstra competência observável e evita vender como pronto o que ainda depende de integração, suporte ou validação de segurança.",
+    "template":"Projeto e natureza: [estudo, interno ou cliente autorizado]\nProblema: [contexto]\nMeu papel: [contribuição]\nEntrega e evidência: [link seguro]\nFerramentas e revisão humana: [registro]\nLimitações: [o que não foi validado]\nOferta: [escopo, entradas, revisões, prazo, exclusões]\nCritério de aceite: [como comprovar conclusão]",
+    "checks":["O portfólio distingue exercício, demonstração e trabalho comercial.","Os resultados apresentados têm evidência e autorização de divulgação.","A oferta descreve limites e não promete renda ou sucesso garantido."],
+    "sources":[{"label":"Google — conteúdo confiável e demonstração de experiência","url":"https://developers.google.com/search/docs/fundamentals/creating-helpful-content"}]
+  }
+]

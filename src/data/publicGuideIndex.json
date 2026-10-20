@@ -1,0 +1,67 @@
+[
+  {
+    "slug": "como-comecar-inteligencia-artificial",
+    "title": "Como começar a usar inteligência artificial com uma tarefa real",
+    "description": "Um primeiro experimento com IA: escolha uma tarefa simples, proteja seus dados e compare o resultado antes de pagar por ferramentas."
+  },
+  {
+    "slug": "como-verificar-respostas-ia",
+    "title": "Como verificar uma resposta de IA antes de usar",
+    "description": "Separe opinião de fato, confira números e fontes e registre o que continua incerto antes de publicar uma resposta produzida por IA."
+  },
+  {
+    "slug": "como-escrever-prompt",
+    "title": "Como escrever um prompt com contexto e critério de qualidade",
+    "description": "Um modelo reutilizável para pedir à IA uma entrega clara, limitar invenções e comparar versões do seu pedido."
+  },
+  {
+    "slug": "organizar-projeto-chatgpt",
+    "title": "Organize um projeto de trabalho com IA sem misturar contextos",
+    "description": "Crie um briefing, registre fontes e separe instruções permanentes de tarefas temporárias ao trabalhar com um assistente de IA."
+  },
+  {
+    "slug": "analisar-documentos-claude",
+    "title": "Revise documentos com IA sem perder a referência original",
+    "description": "Um protocolo para resumir, comparar e conferir documentos longos com citações rastreáveis e revisão humana."
+  },
+  {
+    "slug": "pesquisar-com-fontes-gemini",
+    "title": "Monte uma pesquisa com fontes e perguntas verificáveis",
+    "description": "Organize documentos e perguntas para pesquisar com IA, separando evidência, interpretação e dúvidas ainda não respondidas."
+  },
+  {
+    "slug": "briefing-imagem-ia",
+    "title": "Crie um briefing visual para imagens com IA",
+    "description": "Defina composição, referências autorizadas e critérios de aprovação antes de gerar imagens para uma marca ou projeto."
+  },
+  {
+    "slug": "roteiro-video-ia",
+    "title": "Planeje um vídeo curto com IA antes de gerar as cenas",
+    "description": "Um storyboard prático com objetivo, continuidade, narração, direitos de uso e revisão antes da publicação."
+  },
+  {
+    "slug": "planejar-aplicativo-lovable",
+    "title": "Planeje seu primeiro aplicativo sem começar pelo código",
+    "description": "Transforme uma ideia em um pequeno fluxo testável, com dados, permissões, estados de erro e critérios de publicação."
+  },
+  {
+    "slug": "automacao-ia-segura",
+    "title": "Desenhe uma automação de IA com limites e supervisão",
+    "description": "Mapeie gatilho, dados, decisão, aprovação e tratamento de erros antes de automatizar uma rotina de trabalho."
+  },
+  {
+    "slug": "medir-produtividade-ia",
+    "title": "Meça se a IA realmente economiza tempo no seu trabalho",
+    "description": "Compare tarefas semelhantes, inclua o tempo de revisão e avalie qualidade para não confundir geração rápida com produtividade."
+  },
+  {
+    "slug": "calendario-conteudo-ia",
+    "title": "Monte um calendário de conteúdo com IA sem publicar material genérico",
+    "description": "Planeje conteúdo a partir de dúvidas reais, provas disponíveis e uma rotina de revisão, sem prometer alcance ou vendas."
+  },
+  {
+    "slug": "portfolio-servicos-ia",
+    "title": "Monte um portfólio de IA com entregas e limites claros",
+    "description": "Documente um projeto, explique suas decisões e apresente uma oferta de serviço sem inventar clientes, resultados ou experiência."
+  }
+]

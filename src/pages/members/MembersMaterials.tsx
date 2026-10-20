@@ -1,90 +1,44 @@
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { BookOpen, Download, Search, X } from 'lucide-react';
 import { MembersLayout } from '@/components/members/MembersLayout';
-import { FileText, Download, ExternalLink, Sparkles, BookOpen, Video, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuthUser } from '@/hooks/useAuthUser';
+import { safeContentUrl } from '@/lib/safeUrl';
 
-const materials = [
-  {
-    category: "Biblioteca de Prompts",
-    icon: Sparkles,
-    items: [
-      { title: "Prompts para Textos", description: "50+ prompts para criar textos profissionais", type: "PDF" },
-      { title: "Prompts para Conteúdo", description: "Modelos para posts, legendas e artigos", type: "PDF" },
-      { title: "Prompts para Negócios", description: "Ofertas, vendas e atendimento", type: "PDF" },
-      { title: "Prompts para Produtividade", description: "Organização e planejamento", type: "PDF" },
-    ]
-  },
-  {
-    category: "Materiais Complementares",
-    icon: BookOpen,
-    items: [
-      { title: "Guia de Ferramentas de IA", description: "Lista completa de ferramentas recomendadas", type: "PDF" },
-      { title: "Checklist do Método", description: "Passo a passo para aplicar o método", type: "PDF" },
-      { title: "Templates de Estrutura", description: "Modelos prontos para usar", type: "DOC" },
-    ]
-  },
-];
+const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const formatLabel: Record<string, string> = { pdf: 'PDF', markdown: 'Modelo em texto', template: 'Template', checklist: 'Checklist', document: 'Documento', guide: 'Guia' };
 
-const MembersMaterials = () => {
-  return (
-    <MembersLayout>
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-            Materiais
-          </h1>
-          <p className="text-muted-foreground">
-            Todos os materiais complementares do curso em um só lugar
-          </p>
-        </div>
-
-        <div className="space-y-8">
-          {materials.map((category, index) => (
-            <div key={index}>
-              <div className="flex items-center gap-2 mb-4">
-                <category.icon className="w-5 h-5 text-accent" />
-                <h2 className="font-display font-bold text-lg text-foreground">{category.category}</h2>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                {category.items.map((item, itemIndex) => (
-                  <div
-                    key={itemIndex}
-                    className="bg-card rounded-xl p-5 border border-border/50 hover:border-accent/30 hover:shadow-elegant transition-all group cursor-pointer"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="px-2 py-0.5 bg-accent/10 text-accent text-xs font-medium rounded">
-                            {item.type}
-                          </span>
-                        </div>
-                        <h3 className="font-medium text-foreground mb-1 group-hover:text-accent transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {item.description}
-                        </p>
-                      </div>
-                      <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-accent/10 transition-colors">
-                        <Download className="w-5 h-5 text-muted-foreground group-hover:text-accent" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Coming Soon */}
-        <div className="mt-12 bg-secondary/50 rounded-2xl p-6 text-center">
-          <p className="text-muted-foreground">
-            Novos materiais são adicionados regularmente.{' '}
-            <span className="text-accent font-medium">Fique atento às atualizações!</span>
-          </p>
-        </div>
-      </div>
-    </MembersLayout>
-  );
-};
-
-export default MembersMaterials;
+export default function MembersMaterials() {
+  const [search, setSearch] = useState('');
+  const user = useAuthUser();
+  const materials = useQuery({
+    queryKey: ['materials', user.data?.id],
+    enabled: Boolean(user.data?.id),
+    staleTime: 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('materials').select('id,title,description,type,url,category').order('category').order('title');
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const terms = normalize(search.trim());
+  const rows = (materials.data ?? []).filter(item => normalize(`${item.title} ${item.description ?? ''} ${item.category ?? ''}`).includes(terms));
+  return <MembersLayout>
+    <section className="mx-auto max-w-5xl space-y-6" aria-labelledby="materials-title">
+      <header><p className="text-sm text-muted-foreground">Sua biblioteca de apoio</p><h1 id="materials-title" className="text-3xl font-bold">Materiais para colocar em prática</h1><p className="mt-2 text-muted-foreground">Abra um modelo, adapte ao seu trabalho e guarde a versão que você conferiu.</p></header>
+      <div className="relative"><label htmlFor="material-search" className="sr-only">Buscar materiais</label><Search className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-muted-foreground" aria-hidden="true" /><Input id="material-search" type="search" className="pl-10 pr-12" placeholder="Buscar por tema ou módulo" value={search} onChange={event => setSearch(event.target.value)} />{search && <Button type="button" size="icon" variant="ghost" className="absolute right-1 top-0" aria-label="Limpar busca" onClick={() => { setSearch(''); document.getElementById('material-search')?.focus(); }}><X size={18} /></Button>}</div>
+      {(user.isPending || (user.data && materials.isPending)) ? <p role="status" className="py-12 text-center">Carregando materiais…</p> : materials.isError ? <div role="alert" className="rounded-xl border p-6"><h2 className="font-semibold">Não foi possível carregar a biblioteca.</h2><p className="mt-2 text-muted-foreground">Confira sua conexão. Seus materiais não foram alterados.</p><Button className="mt-4" onClick={() => void materials.refetch()}>Tentar novamente</Button></div> : <>
+        <p className="text-sm text-muted-foreground" aria-live="polite">{rows.length} {rows.length === 1 ? 'material disponível' : 'materiais disponíveis'}</p>
+        {rows.length ? <div className="grid gap-4 md:grid-cols-2">{rows.map(item => {
+          const url = item.url ? safeContentUrl(item.url) : undefined;
+          const downloadable = Boolean(url && (url.startsWith('/recursos/') || url.startsWith('https://metodoiareal.com.br/recursos/')));
+          return <article key={item.id} className="flex flex-col rounded-2xl border bg-card p-6"><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{item.category ?? 'Apoio ao estudo'} · {formatLabel[item.type] ?? 'Material'}</p><h2 className="mt-3 text-lg font-semibold">{item.title}</h2>{item.description && <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>}{url ? <Button asChild variant="outline" className="mt-5 justify-start"><a href={url} download={downloadable ? '' : undefined} target={downloadable ? undefined : '_blank'} rel="noopener noreferrer"><Download className="mr-2 h-4 w-4" />{downloadable ? 'Baixar modelo' : 'Abrir material'}</a></Button> : <p className="mt-5 text-sm text-muted-foreground">Arquivo ainda não disponível. Consulte o suporte.</p>}</article>;
+        })}</div> : <div className="rounded-2xl border border-dashed p-8 text-center"><BookOpen className="mx-auto mb-3 h-8 w-8 text-muted-foreground" aria-hidden="true" /><h2 className="font-semibold">{search ? 'Nenhum material encontrado.' : 'Nenhum material liberado para esta conta neste momento.'}</h2><p className="mt-2 text-muted-foreground">{search ? 'Tente outro termo ou limpe a busca.' : 'Você pode começar pelos guias gratuitos enquanto consulta seu acesso.'}</p></div>}
+      </>}
+      <aside className="rounded-2xl border bg-muted/30 p-6"><h2 className="font-semibold">Guias gratuitos, sem cadastro</h2><p className="mt-2 text-sm text-muted-foreground">Roteiros originais com exemplos, checklists e modelos editáveis em texto. Materiais para aplicar no seu trabalho e acompanhar seu estudo.</p><Button asChild variant="link" className="mt-2 px-0"><a href="/aprender">Explorar os 13 guias →</a></Button></aside>
+    </section>
+  </MembersLayout>;
+}

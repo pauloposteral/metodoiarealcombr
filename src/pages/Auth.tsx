@@ -28,6 +28,8 @@ const Auth = () => {
       if (event === 'PASSWORD_RECOVERY') setMode('update');
     });
     if (searchParams.get('recovery') === '1') setMode('update');
+    else if (searchParams.get('mode') === 'reset') setMode('reset');
+    else if (searchParams.get('mode') === 'signup') setMode('signup');
     return () => subscription.unsubscribe();
   }, [searchParams]);
 

@@ -66,6 +66,8 @@ const AdminUsuarios = lazy(() => import("./pages/admin/AdminUsuarios"));
 const AdminPrompts = lazy(() => import("./pages/admin/AdminPrompts"));
 const AdminSetup = lazy(() => import("./pages/admin/AdminSetup"));
 const AdminCursos = lazy(() => import("./pages/admin/AdminCursos"));
+import { RouteSEO } from './components/seo/RouteSEO';
+const PublicLearning = lazy(() => import('./pages/PublicLearning'));
 import { Analytics } from "./components/Analytics";
 import { CookieConsent } from "./components/CookieConsent";
 
@@ -79,11 +81,14 @@ const App = () => (
         <Sonner />
         <Analytics />
         <BrowserRouter>
+          <RouteSEO />
           <CookieConsent />
           <Suspense fallback={<div role="status" className="min-h-screen grid place-items-center">Carregando...</div>}>
           <Routes>
             <Route path="/" element={<LandingCinema />} />
             <Route path="/completo" element={<Index />} />
+            <Route path="/aprender" element={<PublicLearning />} />
+            <Route path="/aprender/:slug" element={<PublicLearning />} />
             <Route path="/curso" element={<Navigate to="/completo" replace />} />
             <Route path="/obrigado" element={<Obrigado />} />
             <Route path="/termos" element={<Termos />} />

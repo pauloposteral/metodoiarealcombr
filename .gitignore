@@ -33,3 +33,6 @@ test-results
 # Backup utilities and private metadata
 *.sql.gz
 *.backup
+
+# Local Supabase CLI metadata (never publish credentials)
+supabase/.temp/
