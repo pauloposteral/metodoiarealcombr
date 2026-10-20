@@ -6,6 +6,7 @@ import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 import { LandingCinemaScene } from '@/components/landing/cinema/LandingCinemaScene';
 import { CINEMA_SCENES, GIANTS } from '@/components/landing/cinema/cinemaScenes';
 import { useAccess } from '@/hooks/useAccess';
+import { HeroLogin } from '@/components/auth/HeroLogin';
 import logoIaReal from '@/assets/logo-ia-real.png';
 import './landing-cinema.css';
 
@@ -42,20 +43,7 @@ const LandingCinema = () => {
 
   return (
     <div className="lcn-root" ref={containerRef}>
-      <Helmet>
-        <title>Método IA Real — Do uso da IA ao comando de uma máquina que produz</title>
-        <meta
-          name="description"
-          content="Aprenda IA na prática: ChatGPT, Claude, Gemini, Lovable, Cursor e n8n para criar apps, automações e produtos que geram receita. Acesso completo com 7 dias de garantia."
-        />
-        <meta property="og:title" content="Método IA Real — comande uma máquina que produz" />
-        <meta
-          property="og:description"
-          content="Seis capítulos, ferramentas completas e projetos publicados. R$ 497 ou 12× R$ 41,41, com 7 dias de garantia."
-        />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Helmet>
+      <Helmet><title>Método IA Real — Curso de inteligência artificial na prática</title></Helmet>
 
       <div className="lcn-progress" aria-hidden="true">
         <span style={{ width: `${progress}%` }} />
@@ -105,6 +93,7 @@ const LandingCinema = () => {
           >
             {idx === 0 && (
               <>
+                {!access.user && <HeroLogin />}
                 <div className="lcn-hero-logo" aria-hidden="true">
                   <span className="lcn-hero-logo-halo" />
                   <img src={logoIaReal} alt="" width={250} height={143} decoding="async" fetchPriority="high" />
@@ -117,15 +106,15 @@ const LandingCinema = () => {
                     </Link>
                   ) : (
                     <button type="button" className="lcn-cta" onClick={buy}>
-                      Entrar para o time que constrói
+                      Conhecer a formação · R$ 497
                       <ArrowRight size={18} aria-hidden="true" />
                     </button>
                   )}
                   <button type="button" className="lcn-ghost" onClick={() => goTo(1)}>
-                    Ver o que você domina
+                    Ver o programa
                   </button>
                 </div>
-                <div className="lcn-dock" aria-label="Ferramentas dominadas no método">
+                <div className="lcn-dock" aria-label="Ferramentas abordadas na formação">
                   {GIANTS.map((name) => (
                     <span key={name} className="lcn-dock-item">
                       {name}
@@ -136,31 +125,15 @@ const LandingCinema = () => {
             )}
 
             {idx === 3 && (
-              <ul className="lcn-ledger">
-                <li>
-                  <span>Contratar uma agência</span>
-                  <strong>Meses de espera</strong>
-                  <em>Você: monta em uma tarde</em>
-                </li>
-                <li>
-                  <span>Tarefa manual repetida</span>
-                  <strong>Sua semana inteira</strong>
-                  <em>Automação: roda sozinha</em>
-                </li>
-                <li>
-                  <span>Esperar para começar</span>
-                  <strong>Mais um ano igual</strong>
-                  <em>Ou os próximos 7 dias</em>
-                </li>
-              </ul>
+              <ul className="lcn-ledger"><li><span>Entenda</span><strong>Uma ideia por aula</strong><em>Com exemplos e fontes</em></li><li><span>Pratique</span><strong>Uma tarefa real</strong><em>Com revisão do resultado</em></li><li><span>Construa</span><strong>Seu portfólio</strong><em>Um projeto por módulo</em></li></ul>
             )}
 
             {idx === 5 && (
               <div className="lcn-offer">
                 <div className="lcn-price">
-                  <span className="lcn-price-old">R$ 997</span>
+
                   <strong>R$ 497</strong>
-                  <span className="lcn-price-inst">ou 12× R$ 41,41</span>
+                  <span className="lcn-price-inst">Confira as condições no checkout</span>
                 </div>
                 <div className="lcn-actions">
                   {access.hasAccess ? (
@@ -179,7 +152,7 @@ const LandingCinema = () => {
                   <ShieldCheck size={16} aria-hidden="true" /> 7 dias de garantia — cancela e devolvemos tudo.
                 </p>
                 <p className="lcn-footnote">
-                  <Link to="/curso">Programa completo</Link>
+                  <Link to="/curso">Programa completo</Link><span aria-hidden="true">·</span><a href="/aprender">Guias gratuitos</a>
                   <span aria-hidden="true">·</span>
                   <Link to="/termos">Termos</Link>
                   <span aria-hidden="true">·</span>

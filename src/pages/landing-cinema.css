@@ -649,3 +649,42 @@ a.lcn-sticky, a.lcn-cta { text-decoration: none; text-align: center; }
 
 /* keep scene counter clear of the fixed account button */
 .lcn-slate-count { margin-right: 7rem; }
+
+/* First-frame access: one compact, accessible form, using existing auth. */
+#abertura { align-items: center; padding-top: 100px; padding-bottom: 92px; }
+#abertura .lcn-content { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(300px, .8fr); column-gap: clamp(24px, 5vw, 72px); width: min(1180px, 100%); max-width: 1180px; }
+#abertura .lcn-kicker, #abertura .lcn-title, #abertura .lcn-body, #abertura .lcn-hero-logo, #abertura .lcn-actions, #abertura .lcn-dock { grid-column: 1; }
+#abertura .lcn-title { font-size: clamp(40px, 5vw, 72px); }
+#abertura .lcn-hero-logo { margin: 12px 0; width: 110px; }
+#abertura .lcn-hero-logo img { width: 110px; height: auto; }
+#abertura .lcn-dock { margin-top: 20px; }
+.lcn-login { grid-column: 2; grid-row: 1 / span 6; align-self: center; padding: 28px; border: 1px solid rgba(216,178,95,.32); border-radius: 20px; background: rgba(8,13,23,.94); box-shadow: 0 25px 90px rgba(0,0,0,.3); text-align: left; color: #f5f6fa; }
+.lcn-login-eyebrow { font-size: 12px; color: #edc36c; text-transform: uppercase; letter-spacing: .12em; }
+.lcn-login h2 { margin: 8px 0 22px; font-size: 28px; line-height: 1.2; font-weight: 650; letter-spacing: -.03em; }
+.lcn-login label { display: block; margin: 14px 0 6px; font-size: 14px; font-weight: 600; }
+.lcn-login input { display: block; width: 100%; min-height: 48px; border: 1px solid #526178; border-radius: 10px; background: #131d2b; color: #fff; padding: 10px 13px; font-size: 16px; line-height: 1.5; }
+.lcn-login input:focus-visible, .lcn-login a:focus-visible, .lcn-login button:focus-visible { outline: 3px solid #edc36c; outline-offset: 3px; }
+.lcn-login-password { position: relative; }
+.lcn-login-password input { padding-right: 50px; }
+.lcn-login-password button { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; display: grid; place-items: center; color: #d9e2ef; border-radius: 8px; cursor: pointer; }
+.lcn-login-password button:hover { background: #26364d; }
+.lcn-login-feedback { min-height: 26px; padding-top: 7px; font-size: 13px; color: #ffc5bf; line-height: 1.5; }
+.lcn-login-submit { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; min-height: 48px; background: #edc36c; border: 1px solid #edc36c; border-radius: 10px; color: #101723; font-size: 16px; font-weight: 750; cursor: pointer; }
+.lcn-login-submit:hover { background: #f6d594; }
+.lcn-login-submit:disabled { opacity: .7; cursor: wait; }
+.lcn-login-links { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; }
+.lcn-login-links a, .lcn-login-free { text-decoration: underline; text-underline-offset: 4px; }
+.lcn-login-free { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: #edc36c; font-size: 13px; }
+@media (max-width: 760px) {
+  .lcn-reel { scroll-snap-type: none; }
+  #abertura { padding-top: 90px; padding-bottom: 80px; align-items: flex-start; }
+  #abertura .lcn-content { display: flex; flex-direction: column; max-width: 100%; }
+  #abertura .lcn-title { font-size: clamp(34px, 9vw, 46px); line-height: 1.08; margin-bottom: 12px; }
+  #abertura .lcn-body { font-size: 15px; line-height: 1.5; margin-bottom: 16px; }
+  #abertura .lcn-login { order: 1; width: 100%; padding: 20px; }
+  #abertura .lcn-hero-logo { order: -1; width: 70px; margin: 0 0 10px; }
+  #abertura .lcn-hero-logo img { width: 70px; }
+  #abertura .lcn-actions { order: 2; margin-top: 22px; }
+  #abertura .lcn-dock { order: 3; }
+  .lcn-login h2 { font-size: 24px; margin-bottom: 14px; }
+}

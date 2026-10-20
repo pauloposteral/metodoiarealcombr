@@ -15,6 +15,7 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
   { scene, index, total, children },
   forwardedRef,
 ) {
+  const Heading = index === 0 ? 'h1' : 'h2';
   const localRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [shouldLoad, setShouldLoad] = useState(index === 0);
@@ -98,13 +99,13 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
 
       <div className="lcn-content">
         <span className="lcn-kicker">{scene.kicker}</span>
-        <h2 className="lcn-title">
+        <Heading className="lcn-title">
           {scene.title.map((word, i) => (
             <span key={`${word}-${i}`} className="lcn-word" style={{ transitionDelay: `${90 + i * 65}ms` }}>
               {word}
             </span>
           ))}
-        </h2>
+        </Heading>
         <p className="lcn-body">{scene.body}</p>
         {children}
       </div>
