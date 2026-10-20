@@ -34,7 +34,7 @@ export function Callout({ kind, title, children, className }: CalloutProps) {
   const Icon = style.icon;
   const titleId = useId();
   return (
-    <div role="note" aria-labelledby={titleId} className={cn('p-4 sm:p-5', style.box, className)}>
+    <div role="note" data-callout-kind={kind} aria-labelledby={titleId} className={cn('p-4 sm:p-5', style.box, className)}>
       <p id={titleId} className="flex items-start gap-2 font-display font-bold text-foreground">
         <Icon className={cn('mt-0.5 h-5 w-5 shrink-0', style.iconColor)} aria-hidden="true" />
         <span className="min-w-0">

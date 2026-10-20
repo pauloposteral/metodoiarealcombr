@@ -71,7 +71,7 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <MembersSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="min-w-0 flex-1 flex flex-col">
           <MembersHeader user={user} />
           <main className="flex-1 p-6 lg:p-8 overflow-auto">
             {children}
