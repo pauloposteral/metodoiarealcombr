@@ -102,7 +102,7 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
         <Heading className="lcn-title">
           {scene.title.map((word, i) => (
             <span key={`${word}-${i}`} className="lcn-word" style={{ transitionDelay: `${90 + i * 65}ms` }}>
-              {word}
+              {word}{i < scene.title.length - 1 ? ' ' : ''}
             </span>
           ))}
         </Heading>

@@ -14,7 +14,8 @@
     "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "test:smoke": "node scripts/smoke.mjs",
     "test:seo": "node --test tests/seo-public.test.mjs",
-    "test:seo-browser": "node scripts/seo/verify-browser.mjs"
+    "test:seo-browser": "node scripts/seo/verify-browser.mjs",
+    "audit:security": "node scripts/security/audit-policy.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

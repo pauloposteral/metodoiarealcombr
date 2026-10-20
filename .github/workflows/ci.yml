@@ -21,7 +21,10 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts --no-fund
       - run: npm run check
-      - run: npm audit --audit-level=moderate
+      - name: Runtime dependency audit (no exceptions)
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Complete dependency audit with expiring build-only review
+        run: npm run audit:security
       - run: npx playwright install --with-deps chromium
       - name: Browser smoke checks with mocked external services
         run: |
@@ -30,3 +33,4 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           node -e "for(let i=0;i<100;i++){try{if((await fetch('http://127.0.0.1:4173')).ok)break;}catch{} await new Promise(r=>setTimeout(r,100));}"
           npm run test:smoke
+          AUDIT_ORIGIN=http://127.0.0.1:4173 npm run test:seo-browser

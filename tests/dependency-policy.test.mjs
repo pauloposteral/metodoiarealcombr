@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { evaluateAudit } from '../scripts/security/audit-policy.mjs';
+const advisory='https://github.com/advisories/GHSA-vfj7-8cjw-p6xm';
+const policy={expires:'2026-11-03',advisory,packages:{braces:'3.0.3'}};
+const lock={packages:{'node_modules/braces':{version:'3.0.3',dev:true}}};
+const report={auditReportVersion:2,vulnerabilities:{braces:{severity:'high',via:[{url:advisory}],nodes:['node_modules/braces']}}};
+const now='2026-10-20';
+test('Build-only exception is explicit and not reported as zero advisories',()=>{const r=evaluateAudit(report,lock,policy,now);assert.deepEqual(r.blocked,[]);assert.deepEqual(r.accepted,['braces']);});
+test('Exception expires and blocks the release',()=>{assert.ok(evaluateAudit(report,lock,policy,'2026-11-04').blocked.length);});
+test('The same dependency in runtime is never excepted',()=>{const l=structuredClone(lock);l.packages['node_modules/braces'].dev=false;assert.ok(evaluateAudit(report,l,policy,now).blocked.length);});
+test('A new advisory on an accepted package is blocked',()=>{const a=structuredClone(report);a.vulnerabilities.braces.via.push({url:'https://github.com/advisories/NEW'});assert.ok(evaluateAudit(a,lock,policy,now).blocked.length);});
+test('Version drift requires a new review',()=>{const l=structuredClone(lock);l.packages['node_modules/braces'].version='3.0.4';assert.ok(evaluateAudit(report,l,policy,now).blocked.length);});
+test('Unrecognized audit response fails closed',()=>{assert.throws(()=>evaluateAudit({error:'network'},lock,policy,now));});
