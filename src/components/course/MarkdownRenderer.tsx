@@ -121,7 +121,7 @@ function Table({ block }: { block: Extract<BlockNode, { type: 'table' }> }) {
     return longest > 60 ? 'min-w-[15rem]' : 'min-w-[9rem]';
   });
   return (
-    <div className="mt-6 first:mt-0">
+    <div data-markdown-kind="table" className="mt-6 first:mt-0">
       {block.header.length >= 3 && (
         <p className="mb-2 text-xs text-muted-foreground sm:hidden" aria-hidden="true">
           Deslize a tabela para o lado para ver todas as colunas.

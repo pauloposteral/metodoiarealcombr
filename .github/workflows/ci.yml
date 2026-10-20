@@ -34,3 +34,4 @@ jobs:
           node -e "for(let i=0;i<100;i++){try{if((await fetch('http://127.0.0.1:4173')).ok)break;}catch{} await new Promise(r=>setTimeout(r,100));}"
           npm run test:smoke
           AUDIT_ORIGIN=http://127.0.0.1:4173 npm run test:seo-browser
+          STUDY_ORIGIN=http://127.0.0.1:4173 npm run test:study-browser

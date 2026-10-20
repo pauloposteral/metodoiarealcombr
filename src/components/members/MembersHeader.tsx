@@ -36,7 +36,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
           
           <button
             onClick={() => setSearchOpen(true)}
-            className="hidden md:flex items-center gap-2 bg-secondary rounded-lg px-3 py-2 w-64 hover:bg-secondary/80 transition-colors"
+            className="hidden lg:flex items-center gap-2 bg-secondary rounded-lg px-3 py-2 w-64 hover:bg-secondary/80 transition-colors"
           >
             <Search className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground flex-1 text-left">Buscar aulas...</span>
@@ -45,7 +45,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
 
           <button
             onClick={() => setSearchOpen(true)}
-            className="md:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
+            aria-label="Buscar aulas" className="lg:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
           >
             <Search className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -70,7 +70,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
               </span>
             </div>
             <div className="hidden sm:block">
-              <p className="text-sm font-medium text-foreground">{displayName}</p>
+              <p className="max-w-[10rem] truncate text-sm font-medium text-foreground" title={displayName}>{displayName}</p>
               <p className="text-xs text-muted-foreground">Aluno</p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BookOpen, CheckCircle2 } from 'lucide-react';
@@ -13,6 +13,8 @@ import { LessonNavigation } from '@/components/course/LessonNavigation';
 import { LessonNotes } from '@/components/course/LessonNotes';
 import { LessonPrompts } from '@/components/course/LessonPrompts';
 import { LessonVideo } from '@/components/course/LessonVideo';
+import { StudyNavigator } from '@/components/course/StudyNavigator';
+import { videoEmbedUrl } from '@/lib/httpsUrl';
 import { LockedLesson } from '@/components/course/LockedLesson';
 import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
 import { ProjectBanner, ProjectSubmission } from '@/components/course/ProjectSubmission';
@@ -91,6 +93,7 @@ function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonCon
   const isProject = lesson.type === 'project';
   const { submission, isLoading: submissionLoading } = useProjectSubmission(lesson.id, isProject);
   const [advanceTo, setAdvanceTo] = useState<string | null>(null);
+  const articleRef = useRef<HTMLElement>(null);
 
   // Short pause so the "Aula concluída" toast is seen; leaving the page cancels it.
   useEffect(() => {
@@ -124,7 +127,7 @@ function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonCon
   };
 
   return (
-    <article className="mx-auto max-w-4xl">
+    <article ref={articleRef} className="mx-auto max-w-4xl">
       <Helmet>
         <title>{`${lesson.title} | Método IA Real`}</title>
       </Helmet>
@@ -145,23 +148,25 @@ function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonCon
 
       {isProject && <ProjectBanner moduleCode={module?.code ?? null} projectTitle={module?.project_title ?? null} isFinalProject={isFinalProject} />}
 
-      <LessonVideo url={lesson.video_url} title={lesson.title} />
+      <StudyNavigator content={lesson.content} videoUrl={lesson.video_url} isProject={isProject} promptsCount={lesson.prompts?.length ?? 0} articleRef={articleRef} />
+
+      {videoEmbedUrl(lesson.video_url) && <div data-study-video><LessonVideo url={lesson.video_url} title={lesson.title} /></div>}
 
       {lesson.content && (
-        <div className="mb-8 rounded-2xl border border-border/50 bg-card p-5 sm:p-6 md:p-8">
+        <div data-study-content aria-label="Conteúdo da aula" className="mb-8 rounded-2xl border border-border/50 bg-card p-5 sm:p-6 md:p-8">
           <MarkdownRenderer content={lesson.content} size="base" headingIds />
         </div>
       )}
 
-      <LessonPrompts prompts={lesson.prompts} />
+      <div data-study-prompts aria-label="Prompts para praticar"><LessonPrompts prompts={lesson.prompts} /></div>
 
-      {isProject && <ProjectSubmission lessonId={lesson.id} />}
+      {isProject && <div data-study-project aria-label="Entrega do projeto"><ProjectSubmission lessonId={lesson.id} /></div>}
 
-      <LessonNotes lessonId={lesson.id} />
+      <div data-study-notes><LessonNotes lessonId={lesson.id} /></div>
       <QuizPlayer lessonId={lesson.id} />
       <AISandbox lessonId={lesson.id} lessonTitle={lesson.title} prompts={lesson.prompts ?? undefined} />
 
-      <div className="mb-8 flex justify-center">
+      <div data-study-review aria-label="Revisão e conclusão da aula" className="mb-8 flex justify-center">
         {isCompleted ? (
           <p className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-400">
             <CheckCircle2 className="h-4 w-4" aria-hidden="true" />

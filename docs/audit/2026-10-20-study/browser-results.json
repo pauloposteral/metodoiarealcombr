@@ -1,0 +1,60 @@
+{
+  "externalServices": "mocked, no production identity",
+  "results": [
+    {
+      "width": 360,
+      "mode": "full",
+      "steps": 4,
+      "keyboard": true,
+      "draftPreserved": true,
+      "noCompletion": true,
+      "noOverflow": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "mode": "full",
+      "steps": 4,
+      "keyboard": true,
+      "draftPreserved": true,
+      "noCompletion": true,
+      "noOverflow": true,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "mode": "full",
+      "steps": 4,
+      "keyboard": true,
+      "draftPreserved": true,
+      "noCompletion": true,
+      "noOverflow": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "mode": "full",
+      "steps": 4,
+      "keyboard": true,
+      "draftPreserved": true,
+      "noCompletion": true,
+      "noOverflow": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "mode": "minimal",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "mode": "project",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "mode": "locked",
+      "passed": true
+    }
+  ]
+}

@@ -15,7 +15,8 @@
     "test:smoke": "node scripts/smoke.mjs",
     "test:seo": "node --test tests/seo-public.test.mjs",
     "test:seo-browser": "node scripts/seo/verify-browser.mjs",
-    "audit:security": "node scripts/security/audit-policy.mjs"
+    "audit:security": "node scripts/security/audit-policy.mjs",
+    "test:study-browser": "node scripts/verify-study.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
