@@ -1,3 +1,4 @@
+import { COURSE_BENEFITS, COURSE_DISPLAY_PRICE, COURSE_PAYMENT_NOTE, COURSE_ACCESS_NOTE } from '@/lib/courseOffer';
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
@@ -122,20 +123,14 @@ const TRAILS = [
 ];
 
 
-const STACK = [
-  { label: 'Curso completo — 13 módulos, ~36h, 4 trilhas', value: 'R$ 1.497' },
-  { label: 'Radar IA — 12 meses de atualização mensal', value: 'R$ 564' },
-  { label: 'Biblioteca com 500+ prompts + 20 templates Lovable', value: 'R$ 397' },
-  { label: '12 encontros ao vivo no ano (com gravação)', value: 'R$ 497' },
-  { label: 'Comunidade + suporte em até 24h úteis', value: 'R$ 297' },
-];
+const STACK = COURSE_BENEFITS.map(label => ({ label, value: 'Incluído' }));
 
 const FAQS = [
   { q: 'Preciso saber programar ou "ser de tecnologia"?', a: 'Não. O curso começa do zero absoluto, todo jargão nasce com definição e há um glossário permanente na plataforma. Até o módulo de apps (Lovable) foi desenhado para quem nunca escreveu uma linha de código.' },
-  { q: 'Vou precisar pagar pelas ferramentas de IA?', a: 'Nenhuma aula exige ferramenta paga sem alternativa gratuita indicada na própria aula — isso é regra da escola. Você também recebe uma planilha viva com o custo real de cada ferramenta em reais, no plano grátis e no pago.' },
-  { q: 'Por quanto tempo tenho acesso?', a: '2 anos completos — incluindo todas as aulas novas, correções e os 12 meses de Radar IA do período. Em IA, dois anos de conteúdo atualizado valem mais que acesso vitalício a conteúdo morto.' },
-  { q: 'E quando as ferramentas mudarem? O curso não vai desatualizar?', a: 'Esse é o coração do método: toda aula tem selo de data e revisão obrigatória a cada 90 dias. Mudança crítica numa ferramenta vira aula corrigida em até 7 dias, registrada num changelog público. O Radar IA entra todo mês, sem exceção.' },
-  { q: 'Quanto tempo por semana eu preciso?', a: 'As trilhas têm de 15 a 18 horas no total, em aulas de 5 a 15 minutos — dá para avançar com 2 a 3 horas por semana e concluir em 6 a 8 semanas. O progresso fica salvo e você retoma de onde parou, inclusive no celular.' },
+  { q: 'Vou precisar pagar pelas ferramentas de IA?', a: 'Os planos e limites das ferramentas variam. Confira a atividade e o custo antes de assinar ou consumir créditos. Comece pelas opções disponíveis para sua conta e use dados fictícios nos testes.' },
+  { q: 'Por quanto tempo tenho acesso?', a: COURSE_ACCESS_NOTE },
+  { q: 'E quando as ferramentas mudarem? O curso não vai desatualizar?', a: 'Confira a data da revisão e as fontes de cada aula. Interfaces e planos mudam; consulte a documentação atual e informe ao suporte um trecho que precise de correção. Vídeos externos são referências complementares, não produção própria da escola.' },
+  { q: 'Quanto tempo por semana eu preciso?', a: 'A duração indicada nas aulas é uma estimativa de estudo e prática, não de vídeo gravado. Escolha um ritmo viável e use os projetos para aplicar o que aprendeu. O tempo real depende do seu ponto de partida e das tarefas escolhidas.' },
   { q: 'Como funciona a garantia?', a: '7 dias incondicionais: entre, assista, faça o primeiro projeto. Se não for para você, um e-mail resolve e devolvemos 100% do valor, sem perguntas e sem burocracia.' },
   { q: 'Vou realmente conseguir ganhar dinheiro com isso?', a: 'O módulo final mostra 5 caminhos reais de monetização — do emprego ao produto próprio — com esforço real e plano de 30 dias. O que prometemos é método, portfólio e suporte; resultado depende da sua execução. Desconfie de quem promete o contrário.' },
 ];
@@ -272,7 +267,7 @@ export default function LandingV2() {
               <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Quero aprender na prática <span className="arr">→</span></>}
               </button>
-              <p className="lv2-btn-note">R$ 497 ou 12× de R$ 41,41 · garantia de 7 dias</p>
+              <p className="lv2-btn-note">{COURSE_DISPLAY_PRICE} · consulte as condições no checkout</p>
             </div>
 
             <div className="lv2-mini-map rv">
@@ -669,7 +664,7 @@ export default function LandingV2() {
         <div className="lv2-wrap">
           <div className="lv2-offer-card rv">
             <span className="lv2-eyebrow">A oferta</span>
-            <h2>Tudo isso, pelo preço de um jantar por mês.</h2>
+            <h2>Uma formação para colocar em prática.</h2>
 
             <ul className="lv2-stack">
               {STACK.map((s, i) => (
@@ -678,11 +673,11 @@ export default function LandingV2() {
                 </li>
               ))}
             </ul>
-            <div className="lv2-stack-total rv"><span>Valor total</span><s>R$ 3.252</s></div>
+            <p className="lv2-btn-note">{COURSE_ACCESS_NOTE}</p>
 
             <div className="lv2-price-line">
-              <span className="lv2-price">R$ 497</span>
-              <span className="lv2-price-alt">à vista · ou 12× de R$ 41,41</span>
+              <span className="lv2-price">{COURSE_DISPLAY_PRICE}</span>
+              <span className="lv2-price-alt">{COURSE_PAYMENT_NOTE}</span>
             </div>
 
             <button className="lv2-btn" onClick={goCheckout} disabled={isLoading}>
@@ -691,8 +686,8 @@ export default function LandingV2() {
 
             <div className="lv2-trust">
               <span><b>◆</b> Garantia incondicional de 7 dias</span>
-              <span><b>◆</b> Acesso por 2 anos com todas as atualizações</span>
-              <span><b>◆</b> Pix ou cartão em até 12×</span>
+              <span><b>◆</b> Condições de acesso nos termos da oferta</span>
+              <span><b>◆</b> Formas disponíveis no checkout</span>
             </div>
           </div>
         </div>

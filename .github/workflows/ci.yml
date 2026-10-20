@@ -36,3 +36,7 @@ jobs:
           AUDIT_ORIGIN=http://127.0.0.1:4173 npm run test:seo-browser
           STUDY_ORIGIN=http://127.0.0.1:4173 npm run test:study-browser
           LAB_ORIGIN=http://127.0.0.1:4173 npm run test:lab-browser
+          SCHOOL_ORIGIN=http://127.0.0.1:4173 npm run test:school-browser
+          STUDY_ORIGIN=http://127.0.0.1:4173 npm run test:notes-browser
+          SCHOOL_ORIGIN=http://127.0.0.1:4173 npm run test:navigation-browser
+          SCHOOL_ORIGIN=http://127.0.0.1:4173 npm run test:touch-browser

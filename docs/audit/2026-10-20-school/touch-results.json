@@ -1,0 +1,69 @@
+{
+  "mode": "mock auth and database; no real payments",
+  "report": [
+    {
+      "width": 320,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 360,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 430,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 440,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 767,
+      "bottomNav": true,
+      "touchTargets": true,
+      "keyboardSafe": true,
+      "stepSwipe": true,
+      "noOverflow": true
+    },
+    {
+      "width": 768,
+      "desktopSidebarOnly": true
+    },
+    {
+      "width": 320,
+      "loginTouch": true,
+      "checkoutTouch": true,
+      "dialogTouch": false
+    },
+    {
+      "width": 390,
+      "loginTouch": true,
+      "checkoutTouch": true,
+      "dialogTouch": true
+    }
+  ]
+}

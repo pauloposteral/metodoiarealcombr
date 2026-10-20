@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+const files=['src/pages/LandingCinema.tsx','src/pages/LandingV2.tsx','src/pages/Checkout.tsx','src/components/landing/CheckoutDialog.tsx','src/components/landing/PricingAnchor.tsx'];
+test('Purchase surfaces use shared price presentation instead of invented discounts or scarcity',()=>{for(const file of files){const source=fs.readFileSync(file,'utf8');assert.ok(source.includes('COURSE_DISPLAY_PRICE'),file);assert.ok(!/23 vagas|R\$\s?3\.252|R\$\s?997|PIX: R\$ 447|12[×x] de R\$ 41|500\+ prompts|12 encontros ao vivo/.test(source),file);}});
+test('Live Stripe product lifetime-access benefit is preserved without inventing a two-year limit',()=>{const source=fs.readFileSync('src/lib/courseOffer.ts','utf8');assert.ok(source.includes('Compras anteriores'));assert.ok(source.includes('termos'));assert.ok(source.includes('Acesso vitalício'));assert.ok(!/2 anos/.test(source));});

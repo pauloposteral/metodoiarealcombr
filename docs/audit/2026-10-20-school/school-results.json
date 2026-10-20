@@ -1,0 +1,132 @@
+{
+  "scope": "built UI, mock auth/database/payment; no real customer or publication",
+  "results": [
+    {
+      "area": "landing",
+      "width": 360,
+      "loginAboveFold": true,
+      "responsiveLocalImage": true,
+      "noAutoplay": true,
+      "noExternalMediaRequests": true,
+      "coreFontsOnly": true,
+      "noOverflow": true
+    },
+    {
+      "area": "landing",
+      "width": 390,
+      "loginAboveFold": true,
+      "responsiveLocalImage": true,
+      "noAutoplay": true,
+      "noExternalMediaRequests": true,
+      "coreFontsOnly": true,
+      "noOverflow": true
+    },
+    {
+      "area": "landing",
+      "width": 768,
+      "loginAboveFold": true,
+      "responsiveLocalImage": true,
+      "noAutoplay": true,
+      "noExternalMediaRequests": true,
+      "coreFontsOnly": true,
+      "noOverflow": true
+    },
+    {
+      "area": "landing",
+      "width": 1440,
+      "loginAboveFold": true,
+      "responsiveLocalImage": true,
+      "noAutoplay": true,
+      "noExternalMediaRequests": true,
+      "coreFontsOnly": true,
+      "noOverflow": true
+    },
+    {
+      "area": "checkout",
+      "surface": "page",
+      "signupWithoutSessionPending": true,
+      "noPaymentBeforeSession": true,
+      "validLoginShowsPayment": true,
+      "uncharged": true
+    },
+    {
+      "area": "checkout",
+      "surface": "dialog",
+      "signupWithoutSessionPending": true,
+      "noPaymentBeforeSession": true,
+      "validLoginShowsPayment": true,
+      "uncharged": true
+    },
+    {
+      "area": "checkout",
+      "mode": "access-check-failed",
+      "noPaymentUI": true
+    },
+    {
+      "area": "reels",
+      "width": 360,
+      "sixSteps": true,
+      "draftRecovered": true,
+      "export": true,
+      "noProgressWrites": true,
+      "noOverflow": true
+    },
+    {
+      "area": "reels",
+      "width": 390,
+      "sixSteps": true,
+      "draftRecovered": true,
+      "export": true,
+      "noProgressWrites": true,
+      "noOverflow": true
+    },
+    {
+      "area": "reels",
+      "width": 768,
+      "sixSteps": true,
+      "draftRecovered": true,
+      "export": true,
+      "noProgressWrites": true,
+      "noOverflow": true
+    },
+    {
+      "area": "reels",
+      "width": 1440,
+      "sixSteps": true,
+      "draftRecovered": true,
+      "export": true,
+      "noProgressWrites": true,
+      "noOverflow": true
+    },
+    {
+      "area": "reels",
+      "mode": "laboratory-discovery",
+      "passed": true
+    },
+    {
+      "area": "checkout",
+      "mode": "already-entitled",
+      "noRepurchasePrompt": true
+    },
+    {
+      "area": "reels",
+      "mode": "sign-out-after-leaving-workshop",
+      "pendingTabDraftsCleared": true
+    },
+    {
+      "area": "reels",
+      "mode": "locked",
+      "passed": true
+    },
+    {
+      "area": "reels",
+      "mode": "guest",
+      "passed": true
+    },
+    {
+      "area": "reels",
+      "mode": "storage",
+      "passed": true
+    }
+  ]
+}

@@ -37,7 +37,7 @@ export function StudyNavigator({ content, videoUrl, isProject, promptsCount, art
 
   return <nav aria-label="Etapas de estudo" className="sticky top-20 z-20 mb-7 rounded-2xl border border-accent/25 bg-background/95 p-2 shadow-sm backdrop-blur-sm print:hidden" data-study-navigation>
     <p className="px-2 pb-2 pt-1 text-xs font-medium text-muted-foreground">Seu caminho nesta aula</p>
-    <ol className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
+    <ol className="touch-study-steps grid gap-1.5" style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
       {steps.map((step, index) => {
         const Icon = icons[step.key];
         return <li key={step.key} className="min-w-0"><button type="button" onClick={() => move(step.target, step.label)} aria-label={`${step.label}: ${step.detail}`} className="flex min-h-[64px] w-full flex-col items-center justify-center gap-1.5 rounded-xl bg-secondary/60 px-1 py-2 text-foreground transition-colors hover:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:items-start sm:px-3">

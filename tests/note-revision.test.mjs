@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+const p=new URL('../src/lib/noteRevision.ts',import.meta.url);const m=fs.existsSync(p)?await import(p.href):{noteDraftKey:()=>'',parseNoteDraft:()=>null,reconcileNoteDraft:()=>({kind:'server',content:''}),noteSaveResult:()=>({dirty:false,content:''})};
+const server={id:'note-1',content:'Versão na nuvem',updated_at:'2026-10-20T12:00:00Z'};const draft={version:1,content:'Meu texto ainda não salvo',baseUpdatedAt:server.updated_at};
+test('Note recovery key isolates both owner and lesson',()=>{assert.notEqual(m.noteDraftKey('a','one'),m.noteDraftKey('b','one'));assert.notEqual(m.noteDraftKey('a','one'),m.noteDraftKey('a','two'));});
+test('Pending draft based on current server version is restored',()=>{assert.deepEqual(m.reconcileNoteDraft(server,draft),{kind:'restore',content:draft.content});});
+test('Newer cloud version creates a conflict instead of silently overwriting',()=>{assert.equal(m.reconcileNoteDraft({...server,updated_at:'2026-10-20T12:01:00Z'},draft).kind,'conflict');});
+test('Already saved matching content does not replay a redundant write',()=>{assert.equal(m.reconcileNoteDraft({...server,content:draft.content},draft).kind,'server');});
+test('A new unsaved note can recover when no server row exists',()=>{assert.equal(m.reconcileNoteDraft(null,{...draft,baseUpdatedAt:null}).kind,'restore');});
+test('A removed cloud note is not silently recreated from a stale revision',()=>{assert.equal(m.reconcileNoteDraft(null,draft).kind,'conflict');});
+test('Late save acknowledgement never replaces text typed while request was running',()=>{assert.deepEqual(m.noteSaveResult('Texto novo','Texto enviado'),{content:'Texto novo',dirty:true});});
+test('Corrupt cached data is rejected, valid text remains literal',()=>{assert.equal(m.parseNoteDraft('bad'),null);assert.equal(m.parseNoteDraft(JSON.stringify(draft)).content,draft.content);assert.equal(m.parseNoteDraft('{"version":1,"content":42,"baseUpdatedAt":null}'),null);});

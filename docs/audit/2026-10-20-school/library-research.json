@@ -1,0 +1,167 @@
+{
+  "checkedAt": "2026-10-20T21:26:25.593Z",
+  "scope": "Selected relevant official projects, not all GitHub libraries. Metadata is not a legal reuse opinion. No automatic install.",
+  "addedDependencies": [],
+  "results": [
+    {
+      "repository": "shadcn-ui/ui",
+      "url": "https://github.com/shadcn-ui/ui",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-20T20:37:52Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Existing editable UI patterns; preserve installed components."
+    },
+    {
+      "repository": "radix-ui/primitives",
+      "url": "https://github.com/radix-ui/primitives",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-14T21:52:47Z",
+      "dependency": "@radix-ui/react-dialog",
+      "installedRange": "^1.1.14",
+      "decision": "Use existing accessible dialogs/tabs, no duplicate system."
+    },
+    {
+      "repository": "lucide-icons/lucide",
+      "url": "https://github.com/lucide-icons/lucide",
+      "archived": false,
+      "license": "NOASSERTION",
+      "updatedAt": "2026-10-20T14:40:49Z",
+      "dependency": "lucide-react",
+      "installedRange": "^0.462.0",
+      "decision": "Reuse the current icon family."
+    },
+    {
+      "repository": "TanStack/query",
+      "url": "https://github.com/TanStack/query",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-20T17:26:24Z",
+      "dependency": "@tanstack/react-query",
+      "installedRange": "^5.83.0",
+      "decision": "Reuse user-keyed query cache and mutations."
+    },
+    {
+      "repository": "react-hook-form/react-hook-form",
+      "url": "https://github.com/react-hook-form/react-hook-form",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-20T20:42:11Z",
+      "dependency": "react-hook-form",
+      "installedRange": "^7.61.1",
+      "decision": "Existing form library; no new runtime needed for this worksheet."
+    },
+    {
+      "repository": "colinhacks/zod",
+      "url": "https://github.com/colinhacks/zod",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-19T22:46:10Z",
+      "dependency": "zod",
+      "installedRange": "^3.25.76",
+      "decision": "Existing schema validation."
+    },
+    {
+      "repository": "davidjerleke/embla-carousel",
+      "url": "https://github.com/davidjerleke/embla-carousel",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-17T09:44:15Z",
+      "dependency": "embla-carousel-react",
+      "installedRange": "^8.6.0",
+      "decision": "Evaluate; no carousel needed for the core task."
+    },
+    {
+      "repository": "motiondivision/motion",
+      "url": "https://github.com/motiondivision/motion",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-20T18:49:51Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Evaluate; CSS and reduced-motion already sufficient."
+    },
+    {
+      "repository": "pmndrs/react-spring",
+      "url": "https://github.com/pmndrs/react-spring",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-20T19:07:50Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Defer: additional motion runtime adds weight without current requirement."
+    },
+    {
+      "repository": "clauderic/dnd-kit",
+      "url": "https://github.com/clauderic/dnd-kit",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-15T12:09:13Z",
+      "dependency": "@dnd-kit/core",
+      "installedRange": "^6.3.1",
+      "decision": "Already used by editors; do not add drag interactions to a beginner lesson."
+    },
+    {
+      "repository": "microsoft/playwright",
+      "url": "https://github.com/microsoft/playwright",
+      "archived": false,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-10-20T21:12:32Z",
+      "dependency": "playwright",
+      "installedRange": "^1.62.1",
+      "decision": "Use existing browser tests for public and authenticated fixtures."
+    },
+    {
+      "repository": "dequelabs/axe-core",
+      "url": "https://github.com/dequelabs/axe-core",
+      "archived": false,
+      "license": "MPL-2.0",
+      "updatedAt": "2026-10-20T17:43:03Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Candidate for accessibility test expansion; manual/keyboard checks still required."
+    },
+    {
+      "repository": "lovell/sharp",
+      "url": "https://github.com/lovell/sharp",
+      "archived": false,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-10-20T13:30:27Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "No installation: native Canvas already optimizes these generated assets."
+    },
+    {
+      "repository": "ffmpegwasm/ffmpeg.wasm",
+      "url": "https://github.com/ffmpegwasm/ffmpeg.wasm",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-09-29T21:30:20Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Defer: large browser media runtime and separate codec/license review."
+    },
+    {
+      "repository": "react-dropzone/react-dropzone",
+      "url": "https://github.com/react-dropzone/react-dropzone",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-18T06:50:52Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Defer: no new upload path needed; prevents unreviewed storage/security scope."
+    },
+    {
+      "repository": "transloadit/uppy",
+      "url": "https://github.com/transloadit/uppy",
+      "archived": false,
+      "license": "MIT",
+      "updatedAt": "2026-10-19T13:23:21Z",
+      "dependency": null,
+      "installedRange": null,
+      "decision": "Defer: a full upload framework is unnecessary for a textual production brief."
+    }
+  ]
+}

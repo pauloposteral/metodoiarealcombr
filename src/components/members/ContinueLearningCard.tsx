@@ -8,13 +8,15 @@ interface ContinueLearningCardProps {
   lesson: OutlineLesson;
   module: OutlineModule | null;
   started: boolean;
+  courseTitle?: string;
 }
 
 /** "Continue de onde parou": next incomplete lesson the learner can open, in track order. */
-export function ContinueLearningCard({ lesson, module, started }: ContinueLearningCardProps) {
+export function ContinueLearningCard({ lesson, module, started, courseTitle }: ContinueLearningCardProps) {
   return (
     <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm sm:p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-white/70">{started ? 'Continue de onde parou' : 'Comece por aqui'}</p>
+      {courseTitle && <p className="mt-2 text-xs font-semibold text-accent">{courseTitle}</p>}
       {module && (
         <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/80">
           <ModuleCodeBadge code={module.code} className="bg-white text-navy" />

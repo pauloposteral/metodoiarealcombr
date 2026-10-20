@@ -1,0 +1,108 @@
+/* Mobile-first touch layer for the student app. Desktop editors are unchanged. */
+.touch-bottom-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  border-top: 1px solid hsl(var(--border) / .7);
+  background: hsl(var(--card) / .96);
+  color: hsl(var(--muted-foreground));
+  box-shadow: 0 -10px 36px hsl(var(--foreground) / .08);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.touch-bottom-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  max-width: 560px;
+  margin-inline: auto;
+  gap: 2px;
+  padding: 6px 4px 8px;
+}
+
+.touch-bottom-nav-link {
+  display: flex;
+  min-width: 44px;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  touch-action: manipulation;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.touch-bottom-nav-link.is-active {
+  background: hsl(var(--accent) / .15);
+  color: hsl(var(--foreground));
+}
+
+.touch-bottom-nav-link.is-active svg { color: hsl(var(--accent)); }
+.touch-bottom-nav-link:active { background: hsl(var(--accent) / .22); }
+.touch-bottom-nav-link:focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: -3px;
+}
+
+@media (max-width: 767px) {
+  /* PWA standalone status bar and iPhone notch remain outside interactive controls. */
+  .touch-shell > div > header {
+    height: calc(4rem + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  body:has([data-touch-nav]) [data-sidebar="sidebar"][data-mobile="true"] {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .touch-shell [data-study-navigation] { top: calc(5rem + env(safe-area-inset-top, 0px)); }
+  .touch-main { padding-bottom: calc(7.5rem + env(safe-area-inset-bottom, 0px)); }
+  /* Cookie choices stay reachable without covering the five navigation targets. */
+  body:has([data-touch-nav]) [data-cookie-consent] {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+    padding: 10px 12px;
+  }
+  body:has([data-touch-nav]) [data-cookie-consent] button { min-height: 44px; }
+  body:has([data-touch-nav]):has([data-cookie-consent]) .touch-main {
+    padding-bottom: calc(16rem + env(safe-area-inset-bottom, 0px));
+  }
+  /* The keyboard owns the lower viewport while a student is typing. */
+  .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav-link {
+    pointer-events: none;
+  }
+  .touch-scroll-steps,
+  .touch-study-steps {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 8px;
+  }
+  .touch-scroll-steps > li { flex: 0 0 116px; scroll-snap-align: start; }
+  .touch-study-steps > li { flex: 0 0 110px; scroll-snap-align: start; }
+  .touch-main summary { min-height: 44px; display: flex; align-items: center; }
+  .touch-main .reels-step-actions button { min-height: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .touch-bottom-nav-link { transition: none; }
+  .touch-scroll-steps,
+  .touch-study-steps { scroll-behavior: auto; }
+}

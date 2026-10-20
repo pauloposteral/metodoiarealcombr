@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { X, ArrowRight, Shield, Lock, CreditCard, Banknote, CheckCircle, Award, Clock, Loader2, Mail, Eye, EyeOff, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { COURSE_PRICE_ID } from '@/lib/constants';
+import { purchaseSessionState, safeCheckoutDestination } from '@/lib/purchaseState';
+import { COURSE_BENEFITS, COURSE_DISPLAY_PRICE, COURSE_PAYMENT_NOTE, COURSE_ACCESS_NOTE } from '@/lib/courseOffer';
 import logo from '@/assets/logo-iareal.png';
 
 interface CheckoutDialogProps {
@@ -15,6 +18,9 @@ interface CheckoutDialogProps {
 }
 
 export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
+  const navigate = useNavigate();
+  const authBusy = useRef(false);
+  const [confirmationEmail, setConfirmationEmail] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,61 +28,78 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '', fullName: '' });
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [accessCheckError, setAccessCheckError] = useState(false);
 
   useEffect(() => {
     if (!open) return;
-    const checkAuth = async () => {
-      setCheckingAuth(true);
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setIsAuthenticated(true);
-        setUserEmail(session.user.email || '');
-      } else {
-        setIsAuthenticated(false);
-      }
-      setCheckingAuth(false);
-    };
-    checkAuth();
-  }, [open]);
+    let cancelled = false;
+    setCheckingAuth(true); setAccessCheckError(false); setIsAuthenticated(false);
+    void (async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!session) { if (!cancelled) setUserEmail(''); return; }
+        const [profile, role] = await Promise.all([
+          supabase.from('profiles').select('access_status').eq('id', session.user.id).maybeSingle(),
+          supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' }),
+        ]);
+        if (cancelled) return;
+        if (profile.error || role.error || (!profile.data && !role.data)) throw new Error('Access status unavailable');
+        if (role.data || profile.data?.access_status === 'active') {
+          onOpenChange(false); navigate('/membros', { replace: true }); return;
+        }
+        if (profile.data?.access_status === 'revoked') { onOpenChange(false); navigate('/acesso-bloqueado', { replace: true }); return; }
+        setIsAuthenticated(true); setUserEmail(session.user.email ?? '');
+      } catch { if (!cancelled) { setIsAuthenticated(false); setAccessCheckError(true); } }
+      finally { if (!cancelled) setCheckingAuth(false); }
+    })();
+    return () => { cancelled = true; };
+  }, [open, onOpenChange, navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    if (authBusy.current) return;
+    authBusy.current = true; setIsLoading(true);
     try {
-      if (authMode === 'login') {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/membros`,
-            data: { full_name: formData.fullName },
-          },
-        });
-        if (error) throw error;
+      const email = formData.email.trim();
+      const result = authMode === 'login'
+        ? await supabase.auth.signInWithPassword({ email, password: formData.password })
+        : await supabase.auth.signUp({ email, password: formData.password, options: { emailRedirectTo: window.location.origin + '/membros', data: { full_name: formData.fullName.trim() } } });
+      if (result.error) throw result.error;
+      const session = result.data.session;
+      const state = purchaseSessionState(authMode, session);
+      if (state === 'confirmation-pending') {
+        setIsAuthenticated(false); setConfirmationEmail(email); setFormData(previous => ({ ...previous, password: '' }));
+        return;
       }
-      setIsAuthenticated(true);
-      setUserEmail(formData.email);
-      toast.success('Autenticado com sucesso!');
+      if (state !== 'authenticated' || !session) throw new Error('Não foi possível confirmar a sessão. Entre novamente.');
+      const [profile, role] = await Promise.all([
+        supabase.from('profiles').select('access_status').eq('id', session.user.id).maybeSingle(),
+        supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' }),
+      ]);
+      if (profile.error || role.error || (!profile.data && !role.data)) throw new Error('Sua sessão foi criada, mas não foi possível conferir seu acesso. Tente entrar novamente antes de pagar.');
+      if (role.data || profile.data?.access_status === 'active') { onOpenChange(false); navigate('/membros', { replace: true }); return; }
+      if (profile.data?.access_status === 'revoked') { onOpenChange(false); navigate('/acesso-bloqueado', { replace: true }); return; }
+      setConfirmationEmail(''); setIsAuthenticated(true); setUserEmail(session.user.email ?? email);
+      setFormData(previous => ({ ...previous, password: '' }));
+      toast.success('Sessão iniciada. Confira as condições antes de pagar.');
     } catch (caught) {
+      setIsAuthenticated(false);
       const error = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       let message = error.message;
-      if (error.message.includes('Invalid login credentials')) message = 'Email ou senha incorretos.';
-      else if (error.message.includes('User already registered')) message = 'Este email já está cadastrado. Faça login.';
+      if (message.includes('Invalid login credentials')) message = 'E-mail ou senha incorretos.';
+      else if (message.includes('Email not confirmed')) message = 'Confirme seu e-mail antes de entrar.';
+      else if (message.includes('User already registered')) message = 'Este e-mail já está cadastrado. Faça login.';
       toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
+    } finally { authBusy.current = false; setIsLoading(false); }
   };
 
   const handlePayment = async () => {
     setIsLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { setIsAuthenticated(false); throw new Error('Sua sessão terminou. Entre novamente.'); }
+
       // Meta Pixel tracking
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'InitiateCheckout', {
@@ -90,11 +113,9 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
         body: { priceId: COURSE_PRICE_ID, mode: 'payment' },
       });
       if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('URL de checkout não recebida');
-      }
+      const destination = safeCheckoutDestination(data?.url);
+      if (destination) window.location.href = destination;
+      else throw new Error('Endereço de pagamento inválido.');
     } catch (caught) {
       const err = caught instanceof Error ? caught : new Error('Não foi possível concluir a operação.');
       console.error('Checkout error:', err);
@@ -104,13 +125,7 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
     }
   };
 
-  const included = [
-    'Acesso vitalício ao curso completo',
-    'Biblioteca com 100+ prompts prontos',
-    'Comunidade exclusiva de alunos',
-    'Certificado de conclusão',
-    'Atualizações futuras grátis',
-  ];
+  const included = COURSE_BENEFITS;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -118,10 +133,10 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-accent/10 to-accent/5 p-4 sm:p-6 text-center border-b border-border/50">
           <img src={logo} alt="Método IA Real" className="w-[250px] h-auto mx-auto mb-3 opacity-90 object-contain" />
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">
-            Finalizar Compra
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">Acesso imediato ao Método IA Real</p>
+          <DialogTitle className="font-display text-xl sm:text-2xl font-bold text-foreground">
+            Finalizar compra
+          </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground mt-1">Acesso liberado após a confirmação do pagamento.</DialogDescription>
         </div>
 
         <div className="p-4 sm:p-6 space-y-5">
@@ -130,8 +145,8 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
             <div className="flex items-center justify-between mb-3">
               <span className="font-semibold text-foreground">Método IA Real</span>
               <div className="text-right">
-                <span className="text-sm text-muted-foreground line-through block">R$ 3.252</span>
-                <span className="text-xl font-bold text-foreground">R$ 497</span>
+
+                <span className="text-xl font-bold text-foreground">{COURSE_DISPLAY_PRICE}</span>
               </div>
             </div>
             <div className="space-y-1.5">
@@ -144,38 +159,37 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
             </div>
           </div>
 
-          {/* Spots Counter */}
-          <div className="flex items-center justify-center gap-2 p-2.5 bg-red-500/10 border border-red-500/20 rounded-lg">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span className="text-xs font-semibold text-red-400">Apenas 23 vagas restantes com desconto</span>
-          </div>
-
           {checkingAuth ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="w-6 h-6 animate-spin text-accent" />
             </div>
+          ) : accessCheckError ? (
+            <section role="alert" className="rounded-xl border border-amber-500/40 p-5"><h2 className="font-semibold">Não foi possível verificar seu acesso.</h2><p className="mt-2 text-sm">Não inicie outra compra enquanto verificamos se você já possui acesso. Recarregue para tentar novamente.</p><Button type="button" variant="outline" className="mt-4" onClick={() => window.location.reload()}>Recarregar verificação</Button></section>
           ) : !isAuthenticated ? (
             /* Auth Form */
             <div>
               <div className="flex gap-2 mb-4">
                 <Button
                   variant={authMode === 'login' ? 'default' : 'outline'}
+                      aria-pressed={authMode === 'login'}
                   size="sm"
                   onClick={() => setAuthMode('login')}
-                  className="flex-1 text-xs"
+                  className="min-h-11 flex-1 text-xs"
                 >
                   Já tenho conta
                 </Button>
                 <Button
                   variant={authMode === 'signup' ? 'default' : 'outline'}
+                      aria-pressed={authMode === 'signup'}
                   size="sm"
                   onClick={() => setAuthMode('signup')}
-                  className="flex-1 text-xs"
+                  className="min-h-11 flex-1 text-xs"
                 >
                   Criar conta
                 </Button>
               </div>
 
+{confirmationEmail && <section role="status" className="mb-4 rounded-xl border border-accent/40 bg-accent/10 p-4 text-foreground"><h3 className="font-semibold">Confira seu e-mail</h3><p className="mt-2 text-sm leading-relaxed">Caso seja necessária confirmação para {confirmationEmail}, siga as instruções recebidas. A conta ainda não tem uma sessão ativa e nenhum pagamento foi iniciado.</p><Button type="button" variant="outline" className="mt-3 min-h-11" onClick={() => { setAuthMode('login'); setConfirmationEmail(''); }}>Já confirmei. Entrar</Button></section>}
               <form onSubmit={handleAuth} className="space-y-3">
                 {authMode === 'signup' && (
                   <div className="space-y-1.5">
@@ -184,10 +198,11 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="checkout-name"
+                        autoComplete="name"
                         placeholder="Seu nome"
                         value={formData.fullName}
                         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                        className="pl-10 h-10 bg-secondary text-sm"
+                        className="pl-10 h-11 bg-secondary text-base lg:h-10 lg:text-sm"
                         required
                       />
                     </div>
@@ -200,10 +215,11 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                     <Input
                       id="checkout-email"
                       type="email"
+                      autoComplete="email"
                       placeholder="seu@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="pl-10 h-10 bg-secondary text-sm"
+                      className="pl-10 h-11 bg-secondary text-base lg:h-10 lg:text-sm"
                       required
                     />
                   </div>
@@ -214,24 +230,25 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       id="checkout-password"
+                      autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="pl-10 pr-10 h-10 bg-secondary text-sm"
+                      className="pl-10 pr-11 h-11 bg-secondary text-base lg:h-10 lg:text-sm"
                       required
                       minLength={6}
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'} onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
-                <Button type="submit" className="w-full h-10" disabled={isLoading}>
+                <Button type="submit" className="min-h-11 w-full" disabled={isLoading}>
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                     <>
                       {authMode === 'login' ? 'Entrar e continuar' : 'Criar conta e continuar'}
@@ -260,29 +277,13 @@ export const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 ) : (
                   <>
                     <CreditCard className="w-5 h-5 mr-2" />
-                    Pagar com Cartão — 12× R$ 41,41
+                    Continuar para pagamento seguro
                     <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
               </Button>
 
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full group text-base py-5 border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50 text-foreground"
-                onClick={handlePayment}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <Banknote className="w-5 h-5 mr-2 text-green-500" />
-                    Pagar com PIX — R$447
-                    <span className="ml-1 text-xs text-green-500 font-semibold">(10% off)</span>
-                  </>
-                )}
-              </Button>
+              <p className="text-xs leading-relaxed text-muted-foreground">{COURSE_PAYMENT_NOTE}</p><p className="mt-2 text-xs leading-relaxed opacity-80">{COURSE_ACCESS_NOTE}</p>
             </div>
           )}
 

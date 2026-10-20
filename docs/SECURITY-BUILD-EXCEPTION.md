@@ -11,7 +11,7 @@ This release does **not** have a clean all-dependencies `npm audit`. After compa
 - Do not expose the development server publicly or run builds from unreviewed contributions with production secrets. The production artifact is static HTML/CSS/JS; there is no production glob-parsing service.
 - The exception expires **3 November 2026**. It then blocks CI until the vulnerable chain is removed, patched or explicitly re-reviewed. It is not automatically renewed.
 
-The safe immediate updates include source-map-js and TypeScript ESLint packages, plus tested overrides for postcss-selector-parser 7.1.7 and esbuild 0.25.12. Tailwind 3 to 4 was not forced into this release because it is a separate migration with substantial visual regression risk.
+The safe immediate updates include source-map-js and TypeScript ESLint packages, plus tested overrides for postcss-selector-parser 7.1.7 and esbuild 0.25.12. On 20 October 2026, Vite was updated from 6.4.3 to 6.4.4 to resolve three newly reported launch-editor advisories; this update was not added to the exception. Tailwind 3 to 4 was not forced into this release because it is a separate migration with substantial visual regression risk.
 
 ## Commands
 

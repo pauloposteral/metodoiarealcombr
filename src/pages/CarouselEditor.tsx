@@ -1,3 +1,4 @@
+import '@/styles/editor-fonts.css';
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';

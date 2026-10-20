@@ -30,9 +30,9 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
 
   return (
     <>
-      <header className="h-16 border-b border-border/50 bg-card/50 backdrop-blur-sm flex items-center justify-between px-4 lg:px-6 sticky top-0 z-10">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="lg:hidden" />
+      <header className="sticky top-0 z-30 flex h-16 min-w-0 items-center justify-between border-b border-border/50 bg-card/95 px-2 backdrop-blur-sm sm:px-4 lg:px-6">
+        <div className="flex min-w-0 items-center gap-1 sm:gap-4">
+          <SidebarTrigger aria-label="Abrir menu de navegação" className="h-11 w-11 lg:hidden" />
           
           <button
             onClick={() => setSearchOpen(true)}
@@ -45,17 +45,18 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
 
           <button
             onClick={() => setSearchOpen(true)}
-            aria-label="Buscar aulas" className="lg:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
+            aria-label="Buscar aulas" className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-secondary transition-colors lg:hidden"
           >
             <Search className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
-          <StreakBadge userId={user.id} />
+        <div className="flex min-w-0 items-center gap-1 sm:gap-3">
+          <div className="hidden sm:block"><StreakBadge userId={user.id} /></div>
           <button
             onClick={toggleTheme}
-            className="p-2 hover:bg-secondary rounded-lg transition-colors"
+            className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-secondary transition-colors"
+            aria-label={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
             title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
           >
             {theme === 'dark' ? <Sun className="w-5 h-5 text-accent" /> : <Moon className="w-5 h-5 text-muted-foreground" />}
@@ -63,7 +64,7 @@ export const MembersHeader = ({ user }: MembersHeaderProps) => {
 
           <NotificationBell />
 
-          <div className="flex items-center gap-3">
+          <div className="hidden items-center gap-3 sm:flex">
             <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center">
               <span className="text-accent font-semibold text-sm">
                 {displayName.charAt(0).toUpperCase()}

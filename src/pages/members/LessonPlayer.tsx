@@ -14,6 +14,7 @@ import { LessonNotes } from '@/components/course/LessonNotes';
 import { LessonPrompts } from '@/components/course/LessonPrompts';
 import { LessonVideo } from '@/components/course/LessonVideo';
 import { StudyNavigator } from '@/components/course/StudyNavigator';
+import { REELS_LESSON_ID } from '@/lib/reelsWorkbook';
 import { videoEmbedUrl } from '@/lib/httpsUrl';
 import { LockedLesson } from '@/components/course/LockedLesson';
 import { MarkdownRenderer } from '@/components/course/MarkdownRenderer';
@@ -148,6 +149,7 @@ function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonCon
 
       {isProject && <ProjectBanner moduleCode={module?.code ?? null} projectTitle={module?.project_title ?? null} isFinalProject={isFinalProject} />}
 
+      {lesson.id === REELS_LESSON_ID && <section className="mb-6 rounded-2xl border border-accent/30 bg-accent/10 p-5"><h2 className="font-display text-xl font-bold">Vamos montar seu próximo Reel?</h2><p className="mt-2 text-sm text-muted-foreground">Seis passos curtos, exemplos e um roteiro para baixar. Seu texto da aula continua abaixo.</p><Button asChild className="mt-4"><Link to="/membros/pratica-reels">Abrir oficina passo a passo</Link></Button></section>}
       <StudyNavigator content={lesson.content} videoUrl={lesson.video_url} isProject={isProject} promptsCount={lesson.prompts?.length ?? 0} articleRef={articleRef} />
 
       {videoEmbedUrl(lesson.video_url) && <div data-study-video><LessonVideo url={lesson.video_url} title={lesson.title} /></div>}

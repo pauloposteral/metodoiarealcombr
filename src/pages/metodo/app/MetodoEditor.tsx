@@ -1,3 +1,4 @@
+import '@/styles/editor-fonts.css';
 import type { User } from '@supabase/supabase-js';
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';

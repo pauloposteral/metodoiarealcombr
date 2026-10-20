@@ -4,6 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { MembersSidebar } from '@/components/members/MembersSidebar';
 import { MembersHeader } from '@/components/members/MembersHeader';
+import { MobileTouchNav } from '@/components/members/MobileTouchNav';
+import '@/styles/touch.css';
 import { OnboardingDialog } from '@/components/members/OnboardingDialog';
 import { useAchievementChecker } from '@/hooks/useAchievementChecker';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -69,14 +71,15 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="touch-shell min-h-svh flex w-full bg-background">
         <MembersSidebar />
         <div className="min-w-0 flex-1 flex flex-col">
           <MembersHeader user={user} />
-          <main className="flex-1 p-6 lg:p-8 overflow-auto">
+          <main className="touch-main min-w-0 flex-1 overflow-x-clip overflow-y-auto p-4 sm:p-6 lg:p-8">
             {children}
           </main>
         </div>
+        <MobileTouchNav />
       </div>
       <OnboardingDialog userId={user.id} />
     </SidebarProvider>
