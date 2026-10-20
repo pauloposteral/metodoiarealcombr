@@ -436,3 +436,8 @@ export function certificateRequirements(status: CertificateStatus): CertificateR
     eligible: status.eligible,
   };
 }
+
+/** Only the main formation has the existing certificate pathway. */
+export function courseCompletionDescription(courseId: string | null | undefined): string {
+  return courseId === CURRICULUM_COURSE_ID ? 'Veja os requisitos do certificado.' : 'Seu progresso foi salvo neste curso. Isso não emite um certificado automaticamente.';
+}

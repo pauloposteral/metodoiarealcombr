@@ -19,6 +19,7 @@ const MembersModules = lazy(() => import("./pages/members/MembersModules"));
 const ModuleDetail = lazy(() => import("./pages/members/ModuleDetail"));
 const LessonPlayer = lazy(() => import("./pages/members/LessonPlayer"));
 const MembersMaterials = lazy(() => import("./pages/members/MembersMaterials"));
+const MembersLaboratory = lazy(() => import("./pages/members/MembersLaboratory"));
 const MembersBonus = lazy(() => import("./pages/members/MembersBonus"));
 const MembersSupport = lazy(() => import("./pages/members/MembersSupport"));
 const MembersCertificate = lazy(() => import("./pages/members/MembersCertificate"));
@@ -103,6 +104,7 @@ const App = () => (
             <Route path="/membros/modulos/:moduleId" element={<ModuleDetail />} />
             <Route path="/membros/aula/:lessonId" element={<LessonPlayer />} />
             <Route path="/membros/materiais" element={<MembersMaterials />} />
+            <Route path="/membros/laboratorio" element={<MembersLaboratory />} />
             <Route path="/membros/bonus" element={<MembersBonus />} />
             <Route path="/membros/suporte" element={<MembersSupport />} />
             <Route path="/membros/certificado" element={<MembersCertificate />} />

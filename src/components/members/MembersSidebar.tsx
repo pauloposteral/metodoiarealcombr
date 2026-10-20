@@ -16,7 +16,7 @@ import {
   Home, BookOpen, FileText, Gift, Bell, HelpCircle,
   LogOut, ChevronLeft, Award, LayoutGrid, Users, Trophy,
   GraduationCap, Bookmark, UserCircle, BarChart3,
-  Route as RouteIcon, Sparkles, BookA, Wrench
+  Route as RouteIcon, Sparkles, BookA, Wrench, FlaskConical
 } from 'lucide-react';
 import logo from '@/assets/logo-iareal.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,6 +25,7 @@ import { toast } from '@/hooks/use-toast';
 const menuItems = [
   { title: 'Início', url: '/membros', icon: Home },
   { title: 'Cursos', url: '/membros/cursos', icon: GraduationCap },
+  { title: 'Laboratório', url: '/membros/laboratorio', icon: FlaskConical },
   { title: 'Módulos', url: '/membros/modulos', icon: BookOpen },
   { title: 'Minha trilha', url: '/membros/trilha', icon: RouteIcon },
   { title: 'Prompts', url: '/membros/prompts', icon: Sparkles },
