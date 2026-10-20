@@ -25,7 +25,7 @@ import { useAuthUser } from '@/hooks/useAuthUser';
 import { useCompletedLessons, useLessonContext, type LessonContext } from '@/hooks/useCourseOutline';
 import { useCompleteLesson, useLesson, useProjectSubmission, type LessonRow } from '@/hooks/useLessonData';
 import { useLessonTimeTracker } from '@/hooks/useLessonTimeTracker';
-import { lessonNavigation, type LessonNavigation as LessonNavigationState } from '@/lib/curriculum';
+import { courseCompletionDescription, lessonNavigation, type LessonNavigation as LessonNavigationState } from '@/lib/curriculum';
 
 const NO_NAVIGATION: LessonNavigationState = { previous: null, next: null, nextModule: null, isLastLesson: false };
 const AUTO_ADVANCE_MS = 800;
@@ -116,7 +116,7 @@ function LessonView({ lesson, context }: { lesson: LessonRow; context: LessonCon
           toast({ title: 'Aula concluída!', description: 'Seu progresso foi salvo. Indo para a próxima aula…' });
           setAdvanceTo(next.id);
         } else if (navigation.isLastLesson) {
-          toast({ title: 'Você concluiu a última aula do curso!', description: 'Veja os requisitos do certificado.' });
+          toast({ title: 'Você concluiu a última aula do curso!', description: courseCompletionDescription(context?.course?.id) });
         } else {
           toast({ title: 'Aula concluída!', description: 'Seu progresso foi salvo.' });
         }

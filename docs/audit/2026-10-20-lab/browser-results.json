@@ -1,0 +1,73 @@
+{
+  "scope": "real UI, mocked auth/database and external video player",
+  "results": [
+    {
+      "width": 360,
+      "progress": true,
+      "search": true,
+      "videos": 9,
+      "repositories": 11,
+      "noYoutubeBeforeActivation": true,
+      "iframeRemovedOnClose": true,
+      "noAutoplay": true,
+      "noWrites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "progress": true,
+      "search": true,
+      "videos": 9,
+      "repositories": 11,
+      "noYoutubeBeforeActivation": true,
+      "iframeRemovedOnClose": true,
+      "noAutoplay": true,
+      "noWrites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 768,
+      "progress": true,
+      "search": true,
+      "videos": 9,
+      "repositories": 11,
+      "noYoutubeBeforeActivation": true,
+      "iframeRemovedOnClose": true,
+      "noAutoplay": true,
+      "noWrites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 1440,
+      "progress": true,
+      "search": true,
+      "videos": 9,
+      "repositories": 11,
+      "noYoutubeBeforeActivation": true,
+      "iframeRemovedOnClose": true,
+      "noAutoplay": true,
+      "noWrites": true,
+      "noOverflow": true
+    },
+    {
+      "width": 390,
+      "mode": "empty",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "mode": "locked",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "mode": "anonymous",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "mode": "error",
+      "passed": true
+    }
+  ]
+}

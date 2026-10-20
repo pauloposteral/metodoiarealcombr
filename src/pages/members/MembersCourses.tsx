@@ -54,6 +54,8 @@ export default function MembersCourses() {
           )}
         </header>
 
+        <Link to="/membros/laboratorio" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/30 bg-primary px-5 py-4 text-primary-foreground"><div><p className="text-xs font-semibold uppercase tracking-wider text-accent">Laboratório IA Real</p><p className="mt-1 font-display text-lg font-bold">Do briefing ao aplicativo publicado.</p></div><span className="text-sm font-semibold">Abrir jornada, vídeos e código →</span></Link>
+
         {entries.length === 0 ? (
           <EmptyState
             icon={<BookOpen className="h-12 w-12" />}

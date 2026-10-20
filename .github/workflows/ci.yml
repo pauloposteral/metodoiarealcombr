@@ -35,3 +35,4 @@ jobs:
           npm run test:smoke
           AUDIT_ORIGIN=http://127.0.0.1:4173 npm run test:seo-browser
           STUDY_ORIGIN=http://127.0.0.1:4173 npm run test:study-browser
+          LAB_ORIGIN=http://127.0.0.1:4173 npm run test:lab-browser

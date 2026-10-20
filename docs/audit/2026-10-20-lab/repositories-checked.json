@@ -1,0 +1,115 @@
+{
+  "checkedAt": "2026-10-20T18:49:53.655Z",
+  "repos": [
+    {
+      "repo": "obra/superpowers",
+      "status": 200,
+      "url": "https://github.com/obra/superpowers",
+      "branch": "main",
+      "archived": false,
+      "license": "MIT",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "pushedAt": "2026-10-20T15:30:53Z"
+    },
+    {
+      "repo": "upstash/context7",
+      "status": 200,
+      "url": "https://github.com/upstash/context7",
+      "branch": "master",
+      "archived": false,
+      "license": "MIT",
+      "description": "Context7 Platform -- Up-to-date docs for AI agents",
+      "pushedAt": "2026-10-20T16:08:27Z"
+    },
+    {
+      "repo": "mendableai/firecrawl",
+      "status": 200,
+      "url": "https://github.com/firecrawl/firecrawl",
+      "branch": "main",
+      "archived": false,
+      "license": "AGPL-3.0",
+      "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "pushedAt": "2026-10-20T18:47:54Z"
+    },
+    {
+      "repo": "microsoft/playwright",
+      "status": 200,
+      "url": "https://github.com/microsoft/playwright",
+      "branch": "main",
+      "archived": false,
+      "license": "Apache-2.0",
+      "description": "Playwright is a framework for Web Testing and Automation. It allows testing Chromium, Firefox and WebKit with a single API. ",
+      "pushedAt": "2026-10-20T17:53:01Z"
+    },
+    {
+      "repo": "supabase/supabase",
+      "status": 200,
+      "url": "https://github.com/supabase/supabase",
+      "branch": "master",
+      "archived": false,
+      "license": "Apache-2.0",
+      "description": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI applications.",
+      "pushedAt": "2026-10-20T18:29:33Z"
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "status": 200,
+      "url": "https://github.com/shadcn-ui/ui",
+      "branch": "main",
+      "archived": false,
+      "license": "MIT",
+      "description": "Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.",
+      "pushedAt": "2026-10-19T09:28:57Z"
+    },
+    {
+      "repo": "resend/resend-node",
+      "status": 200,
+      "url": "https://github.com/resend/resend-node",
+      "branch": "canary",
+      "archived": false,
+      "license": "MIT",
+      "description": "Resend's Official Node.js SDK",
+      "pushedAt": "2026-10-20T15:29:42Z"
+    },
+    {
+      "repo": "stripe-samples/checkout-one-time-payments",
+      "status": 200,
+      "url": "https://github.com/stripe-samples/checkout-one-time-payments",
+      "branch": "main",
+      "archived": false,
+      "license": "MIT",
+      "description": "Use Checkout to quickly collect one-time payments.",
+      "pushedAt": "2026-06-08T14:55:03Z"
+    },
+    {
+      "repo": "cloudflare/workers-sdk",
+      "status": 200,
+      "url": "https://github.com/cloudflare/workers-sdk",
+      "branch": "main",
+      "archived": false,
+      "license": "Apache-2.0",
+      "description": "⛅️ Home to Wrangler, the CLI for Cloudflare Workers®",
+      "pushedAt": "2026-10-20T18:42:33Z"
+    },
+    {
+      "repo": "ionic-team/capacitor",
+      "status": 200,
+      "url": "https://github.com/ionic-team/capacitor",
+      "branch": "main",
+      "archived": false,
+      "license": "MIT",
+      "description": "Build cross-platform Native Progressive Web Apps for iOS, Android, and the Web ⚡️",
+      "pushedAt": "2026-10-20T11:50:15Z"
+    },
+    {
+      "repo": "n8n-io/n8n",
+      "status": 200,
+      "url": "https://github.com/n8n-io/n8n",
+      "branch": "master",
+      "archived": false,
+      "license": "NOASSERTION",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "pushedAt": "2026-10-20T18:41:01Z"
+    }
+  ]
+}

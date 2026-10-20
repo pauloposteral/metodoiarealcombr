@@ -1,0 +1,163 @@
+{
+  "checkedAt": "2026-10-20T19:18:38.777Z",
+  "scope": "HTTP/oEmbed metadata, not a full playback or content audit",
+  "results": [
+    {
+      "kind": "video-oembed",
+      "id": "mUZOySyVcuQ",
+      "status": 200,
+      "title": "Você sabe usar Issues? - Curso de Git e GitHub",
+      "author": "Curso em Vídeo",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "0g_43SQtR0M",
+      "status": 200,
+      "title": "Branding Pessoal no Canva | Como Construir uma Imagem Profissional que Vende",
+      "author": "Canva Brasil",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "rqvtLxwMklo",
+      "status": 200,
+      "title": "Master Lovable In 24 Minutes",
+      "author": "Lovable",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "i_bPeTZVlg0",
+      "status": 200,
+      "title": "Getting Started with Supabase",
+      "author": "Supabase",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "Ow_Uzedfohk",
+      "status": 200,
+      "title": "Implement Authorization using Row Level Security (RLS) with Supabase (Step By Step Guide)",
+      "author": "Supabase",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "BQrohJ3PT7I",
+      "status": 200,
+      "title": "How to use GitHub Actions | GitHub for Beginners",
+      "author": "GitHub",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "4BVTkqbn_tY",
+      "status": 200,
+      "title": "n8n Beginner Course (1/9) - Introduction to Automation",
+      "author": "n8n",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "y_cpFMF1pzk",
+      "status": 200,
+      "title": "n8n Beginner Course (2/9) - Introduction to APIs and Webhooks",
+      "author": "n8n",
+      "providedEmbed": true
+    },
+    {
+      "kind": "video-oembed",
+      "id": "QHNVPlxpqKw",
+      "status": 200,
+      "title": "Make your content accessible with fonts, alternative text, hashtags, and emojis",
+      "author": "Canva",
+      "providedEmbed": true
+    },
+    {
+      "kind": "documentation",
+      "repo": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers#the-basic-workflow",
+      "status": 200,
+      "finalUrl": "https://github.com/obra/superpowers"
+    },
+    {
+      "kind": "documentation",
+      "repo": "upstash/context7",
+      "url": "https://context7.com/docs",
+      "status": 200,
+      "finalUrl": "https://context7.com/docs/overview"
+    },
+    {
+      "kind": "documentation",
+      "repo": "firecrawl/firecrawl",
+      "url": "https://docs.firecrawl.dev/",
+      "status": 200,
+      "finalUrl": "https://docs.firecrawl.dev/introduction"
+    },
+    {
+      "kind": "documentation",
+      "repo": "shadcn-ui/ui",
+      "url": "https://ui.shadcn.com/docs",
+      "status": 200,
+      "finalUrl": "https://ui.shadcn.com/docs"
+    },
+    {
+      "kind": "documentation",
+      "repo": "supabase/supabase",
+      "url": "https://supabase.com/docs/guides/database/postgres/row-level-security",
+      "status": 200,
+      "finalUrl": "https://supabase.com/docs/guides/database/postgres/row-level-security"
+    },
+    {
+      "kind": "documentation",
+      "repo": "microsoft/playwright",
+      "url": "https://playwright.dev/docs/intro",
+      "status": 200,
+      "finalUrl": "https://playwright.dev/docs/intro"
+    },
+    {
+      "kind": "documentation",
+      "repo": "stripe-samples/checkout-one-time-payments",
+      "url": "https://docs.stripe.com/webhooks",
+      "status": 200,
+      "finalUrl": "https://docs.stripe.com/webhooks"
+    },
+    {
+      "kind": "documentation",
+      "repo": "resend/resend-node",
+      "url": "https://resend.com/docs/dashboard/emails/idempotency-keys",
+      "status": 200,
+      "finalUrl": "https://resend.com/docs/dashboard/emails/idempotency-keys"
+    },
+    {
+      "kind": "documentation",
+      "repo": "cloudflare/workers-sdk",
+      "url": "https://developers.cloudflare.com/workers/",
+      "status": 200,
+      "finalUrl": "https://developers.cloudflare.com/workers/"
+    },
+    {
+      "kind": "documentation",
+      "repo": "ionic-team/capacitor",
+      "url": "https://capacitorjs.com/docs",
+      "status": 200,
+      "finalUrl": "https://capacitorjs.com/docs"
+    },
+    {
+      "kind": "documentation",
+      "repo": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
+      "status": 200,
+      "finalUrl": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md"
+    }
+  ],
+  "corrections": [
+    {
+      "oldUrl": "https://docs.n8n.io/sustainable-use-license/",
+      "observedStatus": 404,
+      "newUrl": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
+      "checkedAt": "2026-10-20T19:25:09.408Z"
+    }
+  ]
+}

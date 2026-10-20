@@ -31,7 +31,7 @@ write('robots.txt',`User-agent: *\nAllow: /\n\n# Private content is protected by
 const base=path.join(out,'index.html');
 if(fs.existsSync(base)){
  const shell=fs.readFileSync(base,'utf8');
- const routes=['auth','checkout','obrigado','acesso-bloqueado','membros','membros/cursos','membros/modulos','membros/materiais','membros/bonus','membros/suporte','membros/certificado','membros/comunidade','membros/atualizacoes','membros/ranking','membros/perfil','membros/salvos','membros/analytics','membros/trilha','membros/glossario','membros/ferramentas','membros/prompts','admin/login','admin/setup','admin/cursos','admin/dashboard','admin/empresas','admin/leads','admin/usuarios','admin/prompts','metodo/login','metodo/app','carrossel','carrossel-old','stories'];
+ const routes=['auth','checkout','obrigado','acesso-bloqueado','membros','membros/cursos','membros/modulos','membros/materiais','membros/laboratorio','membros/bonus','membros/suporte','membros/certificado','membros/comunidade','membros/atualizacoes','membros/ranking','membros/perfil','membros/salvos','membros/analytics','membros/trilha','membros/glossario','membros/ferramentas','membros/prompts','admin/login','admin/setup','admin/cursos','admin/dashboard','admin/empresas','admin/leads','admin/usuarios','admin/prompts','metodo/login','metodo/app','carrossel','carrossel-old','stories'];
  for(const route of routes){
   const html=shell.replace(/(<meta[^>]+name="robots"[^>]+content=")[^"]*(")/,'$1noindex,nofollow$2').replace(/(<link[^>]+rel="canonical"[^>]+href=")[^"]*(")/,`$1${origin}/${route}$2`);
   write(route+'/index.html',html);
