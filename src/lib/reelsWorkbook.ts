@@ -17,6 +17,12 @@ export function emptyReelDraft(): ReelDraft {
   return { version: 1, fields: { audience: '', idea: '', hook: '', script: '', shots: '', caption: '', experiment: '' }, checks: { proof: false, rights: false, captions: false, disclosure: false } };
 }
 export function reelDraftKey(userId: string): string { return `ia-real:reel-v1:${userId}:${REELS_LESSON_ID}`; }
+export function reelStepKey(userId: string): string { return `${reelDraftKey(userId)}:step`; }
+export function parseReelStep(raw: string | null): number {
+  if (raw === null || raw.trim() === '') return 0;
+  const step = Number(raw);
+  return Number.isInteger(step) && step >= 0 && step < REELS_STEPS.length ? step : 0;
+}
 export function parseReelDraft(raw: string | null): ReelDraft | null {
   if (!raw || raw.length > 40000) return null;
   try {

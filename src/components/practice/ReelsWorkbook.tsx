@@ -3,12 +3,13 @@ import { ArrowLeft, ArrowRight, Clipboard, Download, Film, Lightbulb, ShieldChec
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
-import { emptyReelDraft, exportReelDraft, parseReelDraft, reelDraftKey, reelPrompt, reelReadiness, REELS_STEPS, REEL_CHECKS, REEL_EXAMPLES, REEL_FIELD_LIMIT, REEL_LABELS, REEL_REVIEW_LABELS, type ReelDraft, type ReelField } from '@/lib/reelsWorkbook';
+import { emptyReelDraft, exportReelDraft, parseReelDraft, reelDraftKey, reelStepKey, parseReelStep, reelPrompt, reelReadiness, REELS_STEPS, REEL_CHECKS, REEL_EXAMPLES, REEL_FIELD_LIMIT, REEL_LABELS, REEL_REVIEW_LABELS, type ReelDraft, type ReelField } from '@/lib/reelsWorkbook';
 
 export function ReelsWorkbook({ userId }: { userId: string }) {
   const key = reelDraftKey(userId);
+  const stepKey = reelStepKey(userId);
   const [draft, setDraft] = useState<ReelDraft>(() => { try { return parseReelDraft(sessionStorage.getItem(key)) ?? emptyReelDraft(); } catch { return emptyReelDraft(); } });
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => { try { return parseReelStep(sessionStorage.getItem(stepKey)); } catch { return 0; } });
   const [storageError, setStorageError] = useState(false);
   const [message, setMessage] = useState('');
   const [showPrompt, setShowPrompt] = useState(false);
@@ -21,21 +22,31 @@ export function ReelsWorkbook({ userId }: { userId: string }) {
     try { sessionStorage.setItem(key, JSON.stringify(draft)); setStorageError(false); } catch { setStorageError(true); }
   }, [draft, key]);
   useEffect(() => {
+    if (signedOut.current) return;
+    try { sessionStorage.setItem(stepKey, String(step)); } catch { setStorageError(true); }
+  }, [step, stepKey]);
+  useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT' || (session?.user && session.user.id !== userId)) {
         signedOut.current = true;
-        try { sessionStorage.removeItem(key); } catch { /* storage may be disabled */ }
-        setDraft(emptyReelDraft());
+        try { sessionStorage.removeItem(key); sessionStorage.removeItem(stepKey); } catch { /* storage may be disabled */ }
+        setDraft(emptyReelDraft()); setStep(0);
       }
     });
     return () => subscription.unsubscribe();
-  }, [key, userId]);
+  }, [key, stepKey, userId]);
   useLayoutEffect(() => {
     if (!focusStep.current) return;
     focusStep.current = false;
     title.current?.focus({ preventScroll: true });
   }, [step]);
-  function move(index: number) { focusStep.current = true; setStep(index); setMessage(''); }
+  function move(index: number) {
+    if (index < 0 || index >= REELS_STEPS.length) return;
+    try { sessionStorage.setItem(stepKey, String(index)); } catch { setStorageError(true); }
+    focusStep.current = true;
+    setStep(index);
+    setMessage('');
+  }
   function change(field: ReelField, value: string) { setDraft(previous => ({ ...previous, fields: { ...previous.fields, [field]: value.slice(0, REEL_FIELD_LIMIT) } })); }
   function download() {
     const url = URL.createObjectURL(new Blob([exportReelDraft(draft)], { type: 'text/markdown;charset=utf-8' }));
