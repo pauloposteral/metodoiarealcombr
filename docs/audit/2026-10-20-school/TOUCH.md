@@ -23,11 +23,14 @@ This does **not** replace a manual test on a real iPhone/iPad with the software 
 A read-only check of the connected live Stripe account confirmed the existing checkout price is BRL 497.00, one-time, and its active product describes lifetime access, prompts, community and certificate. The shared offer copy was aligned to preserve the lifetime benefit, with existing purchase terms still controlling entitlements. No price, product, webhook or payment was changed.
 
 ## Verified results (local build)
-- 228 automated unit/contract tests passed, zero failures. TypeScript and Vite 6.4.4 build passed. ESLint: zero errors, 35 warnings (not individually remediated in this release).
+- 229 automated unit/contract tests passed, zero failures. TypeScript and Vite 6.4.4 build passed. ESLint: zero errors, 35 warnings (not individually remediated in this release).
 - Eight browser suites passed against the local preview: smoke, SEO, study, laboratory, school, notes, cross-course navigation and Touch. The Touch suite uses Chromium mobile emulation with actual touchscreen tap events, tests widths 320, 360, 390, 430, 440 and 767px, and confirms the desktop sidebar at 768px.
 - The tested touch round trip moved from the Reels workshop to Laboratório and back without losing the draft. Checkout forms and modal fields remained at least 44px high with 16px mobile text. Cookie consent no longer covered bottom navigation. No payment, publication or completion was triggered by these checks.
 - Runtime dependency audit found zero findings. A newly reported Vite launch-editor vulnerability was addressed by updating to 6.4.4. The six dev-only braces findings remain under the documented, expiring exception (03/11/2026); the audit is not globally clean.
 - Screenshots and JSON test results in this folder contain only fictional fixtures and generated scenes, not customer data.
+
+## Cross-platform auth event stability (Context7)
+The GitHub Linux Chromium runner reproduced a step reset while the student was typing even though local Edge/Chromium passed. Current Supabase Auth documentation confirms `SIGNED_IN` can fire repeatedly on tab refocus and `TOKEN_REFRESHED` during an existing session. The members layout previously cleared its verified user and returned to a loading screen for **every** auth event, unmounting the exercise. It now keeps the same verified user's UI mounted while asynchronously rechecking the profile, and still suspends access for a different user, sign-out, revoked profile or profile lookup failure. The active Reels step remains scoped to the user and lesson in sessionStorage. The additional unit regression tests cover same-user vs changed-user transitions. No RLS, entitlement or checkout authorization was weakened.
 
 ## Other gates required before release
 `npm run check`, browser smoke, SEO, study, lab, school, notes, navigation and touch tests; runtime dependency audit and documented expiring build-only exception; GitHub Actions. Production deploy only after passing all gates. Do not claim this version is live until its served asset is verified on the custom domain.
