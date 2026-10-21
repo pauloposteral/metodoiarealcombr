@@ -49,7 +49,12 @@ try{
   results.push({area:'checkout',mode:'access-check-failed',noPaymentUI:true});await context.close();
  }
  for(const width of [360,390,768,1440]){
-  const{context,page,writes,errors}=await setup(width,'paid');await page.goto(origin+'/membros/pratica-reels',{waitUntil:'networkidle'});await page.locator('[data-reels-workbook]').waitFor();await dismissCookies(page);await page.locator('#reel-audience').fill('Pessoas que aprendem café');await page.locator('#reel-idea').fill('Comparar duas alturas do leite');await page.getByRole('button',{name:'Próximo passo',exact:true}).click();
+  const{context,page,writes,errors}=await setup(width,'paid');await page.goto(origin+'/membros/pratica-reels',{waitUntil:'networkidle'});await page.locator('[data-reels-workbook]').waitFor();await dismissCookies(page);await page.locator('#reel-audience').fill('Pessoas que aprendem café');await page.locator('#reel-idea').fill('Comparar duas alturas do leite');
+  if(width<768) {
+    assert.equal(await page.evaluate(()=>matchMedia('(pointer: coarse)').matches),false,'Desktop narrow viewport is not a touch keyboard');
+    assert.equal(await page.getByRole('navigation',{name:'Navegação rápida'}).isVisible(),true,'Physical-keyboard viewport retains navigation while typing');
+  }
+  await page.getByRole('button',{name:'Próximo passo',exact:true}).click();
   try { await page.locator('#reel-hook').waitFor({timeout:8000}); }
   catch(error) { console.log('REELS_STEP_DIAGNOSTIC',JSON.stringify({width,url:page.url(),activeSteps:await page.locator('[aria-current="step"]').allTextContents(),storedSteps:await page.evaluate(()=>Object.entries(sessionStorage).filter(([key])=>key.endsWith(':step'))),headings:await page.locator('h2').allTextContents(),pageErrors:errors,body:(await page.locator('body').innerText()).slice(-1400)})); await page.screenshot({path:`test-results/school/step-failure-${width}.png`,fullPage:true}); throw error; }
   await page.locator('#reel-hook').fill('Seu desenho sumiu?');

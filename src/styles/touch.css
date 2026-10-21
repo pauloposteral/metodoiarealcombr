@@ -11,6 +11,8 @@
   box-shadow: 0 -10px 36px hsl(var(--foreground) / .08);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
+  /* Keep the bar hidden through pointerup after a field loses focus. */
+  transition: visibility 0s linear 220ms;
 }
 
 .touch-bottom-nav-grid {
@@ -74,13 +76,17 @@
   body:has([data-touch-nav]):has([data-cookie-consent]) .touch-main {
     padding-bottom: calc(16rem + env(safe-area-inset-bottom, 0px));
   }
-  /* The keyboard owns the lower viewport while a student is typing. */
-  .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav {
-    visibility: hidden;
-    pointer-events: none;
-  }
-  .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav-link {
-    pointer-events: none;
+  /* Only touch devices have an on-screen keyboard occupying the lower viewport.
+     A narrow desktop browser with a physical keyboard must not hide the bar. */
+  @media (pointer: coarse) {
+    .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav {
+      visibility: hidden;
+      pointer-events: none;
+      transition-delay: 0s;
+    }
+    .touch-shell:has(input:focus, textarea:focus, [contenteditable="true"]:focus) .touch-bottom-nav-link {
+      pointer-events: none;
+    }
   }
   .touch-scroll-steps,
   .touch-study-steps {

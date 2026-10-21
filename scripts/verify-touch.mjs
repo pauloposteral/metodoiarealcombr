@@ -60,6 +60,7 @@ try {
     await page.locator('#reel-hook').fill('Um roteiro sem promessas');
     assert.equal(await nav.isVisible(),false,'Keyboard-focused field does not fight bottom nav');
     await page.locator('h2').filter({hasText:'Abertura'}).focus();
+    await nav.waitFor({state:'visible'});
     assert.equal(await nav.isVisible(),true);
     await page.getByRole('button',{name:/01 Uma ideia/}).click();
     await field.fill('Público de teste');
