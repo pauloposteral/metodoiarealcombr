@@ -1,15 +1,4 @@
-import heroPoster from '@/assets/landing/hero-cinematic-poster.jpg';
-import act2Poster from '@/assets/landing/cinematic-act-2-poster.jpg';
-import act3Poster from '@/assets/landing/cinematic-act-3-poster.jpg';
-import act4Poster from '@/assets/landing/cinematic-act-4-poster.jpg';
-import act5Poster from '@/assets/landing/cinematic-act-5-poster.jpg';
-import act6Poster from '@/assets/landing/cinematic-act-6-poster.jpg';
-import heroVideo from '@/assets/landing/hero-cinematic.mp4.asset.json';
-import act2Video from '@/assets/landing/cinematic-act-2-noise.mp4.asset.json';
-import act3Video from '@/assets/landing/cinematic-act-3-map.mp4.asset.json';
-import act4Video from '@/assets/landing/cinematic-act-4-living-intelligence.mp4.asset.json';
-import act5Video from '@/assets/landing/cinematic-act-5-execution.mp4.asset.json';
-import act6Video from '@/assets/landing/cinematic-act-6-horizon.mp4.asset.json';
+import { SCHOOL_MEDIA } from '@/lib/schoolMedia';
 
 export type CinemaScene = {
   id: string;
@@ -20,6 +9,7 @@ export type CinemaScene = {
   body: string;
   poster: string;
   video: string;
+  image: typeof SCHOOL_MEDIA[number];
   tone: 'abertura' | 'arsenal' | 'mestre' | 'prejuizo' | 'fabrica' | 'horizonte';
 };
 
@@ -27,67 +17,73 @@ export const CINEMA_SCENES: CinemaScene[] = [
   {
     id: 'abertura',
     slate: 'CENA 01',
-    chapter: 'ABERTURA',
-    kicker: "Aprenda. Crie. Aplique.",
+    chapter: "ABERTURA",
+    kicker: "IA para o seu mundo.",
     title: ["Não","só","use","IA.","Crie","com","ela."],
-    body: "13 módulos, 124 aulas e 13 projetos. Do primeiro prompt ao seu portfólio, com uma trilha para o seu objetivo.",
-    poster: heroPoster,
-    video: heroVideo.url,
+    body: "Aprenda criando conteúdo, vídeos e aplicativos. Um passo de cada vez, com exemplos e prática.",
+    poster: SCHOOL_MEDIA[0].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[0],
     tone: 'abertura',
   },
   {
     id: 'arsenal',
     slate: 'CENA 02',
-    chapter: 'O ARSENAL',
-    kicker: "Um caminho para o seu objetivo.",
-    title: ["Escolha","sua","trilha.","Comece","pelo","próximo","passo."],
-    body: "Carreira, negócio, conteúdo ou aplicativos. Aprenda a escolher ferramentas e aplicar a IA a tarefas do seu dia.",
-    poster: act3Poster,
-    video: act3Video.url,
+    chapter: "SEU CONTEÚDO",
+    kicker: "Da sua ideia para a tela.",
+    title: ["Mostre","o","que","você","sabe","fazer."],
+    body: "Transforme uma dúvida real em roteiro, cenas e legenda. Sem fórmula mágica de viralização.",
+    poster: SCHOOL_MEDIA[1].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[1],
     tone: 'arsenal',
   },
   {
     id: 'mestre',
     slate: 'CENA 03',
-    chapter: 'O MESTRE',
-    kicker: "Conhecimento que vira prática.",
-    title: ["Entenda.","Veja","o","exemplo.","Faça","o","seu."],
-    body: "Aulas em texto, exercícios, quizzes e projetos. Confira o resultado antes de seguir para a próxima etapa.",
-    poster: act4Poster,
-    video: act4Video.url,
+    chapter: "NA PRÁTICA",
+    kicker: "Menos leitura passiva.",
+    title: ["Entenda.","Veja.","Faça.","Revise."],
+    body: "A aula completa continua disponível. Os atalhos levam ao exemplo, à prática e à revisão.",
+    poster: SCHOOL_MEDIA[2].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[2],
     tone: 'mestre',
   },
   {
     id: 'prejuizo',
     slate: 'CENA 04',
-    chapter: 'A CONTA',
-    kicker: "Menos improviso. Mais critério.",
-    title: ["Aprenda","a","avaliar","o","que","a","IA","entrega."],
-    body: "Compare respostas, confira fontes e reconheça limites. O método inclui segurança, revisão humana e testes do que você constrói.",
-    poster: act2Poster,
-    video: act2Video.url,
+    chapter: "SEU REEL",
+    kicker: "Um roteiro que sai do papel.",
+    title: ["Uma","ideia.","Seis","passos.","Seu","próximo","Reel."],
+    body: "Prepare a abertura, a demonstração e o próximo passo. Exporte seu roteiro e grave no seu ritmo.",
+    poster: SCHOOL_MEDIA[1].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[1],
     tone: 'prejuizo',
   },
   {
     id: 'fabrica',
     slate: 'CENA 05',
-    chapter: 'A FÁBRICA',
-    kicker: "Seu portfólio começa aqui.",
-    title: ["Prompts,","conteúdo,","aplicativos","e","automações."],
-    body: "Cada módulo termina com um projeto para aplicar o aprendizado. Registre o que funciona, o que precisa de ajuste e o que ainda não foi validado.",
-    poster: act5Poster,
-    video: act5Video.url,
+    chapter: "SEU PROJETO",
+    kicker: "Aprenda construindo.",
+    title: ["Seu","primeiro","app.","Seu","próximo","projeto."],
+    body: "Do briefing ao teste: organize dados, construa com IA e confira o que realmente funciona.",
+    poster: SCHOOL_MEDIA[2].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[2],
     tone: 'fabrica',
   },
   {
     id: 'horizonte',
     slate: 'CENA 06',
-    chapter: 'O HORIZONTE',
-    kicker: "Comece pelo primeiro resultado.",
-    title: ["Seu","próximo","passo","começa","aqui."],
-    body: "Conheça o programa, experimente os guias gratuitos e escolha sua trilha. A formação completa inclui os 13 módulos e a área do aluno.",
-    poster: act6Poster,
-    video: act6Video.url,
+    chapter: "COMECE AQUI",
+    kicker: "Conheça antes de decidir.",
+    title: ["O","próximo","passo","é","seu."],
+    body: "Explore os guias gratuitos ou entre para continuar. A formação completa está a um passo.",
+    poster: SCHOOL_MEDIA[0].sources[2].src,
+    video: '',
+    image: SCHOOL_MEDIA[0],
     tone: 'horizonte',
   },
 ];

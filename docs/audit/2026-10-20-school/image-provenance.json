@@ -1,0 +1,98 @@
+{
+  "createdAt": "2026-10-20T21:17:55.499Z",
+  "images": [
+    {
+      "name": "work",
+      "job": "b6e7b6b5-96b6-4347-b525-7034f26460d2",
+      "generator": "Higgsfield / gpt_image_2_5",
+      "syntheticPeople": true,
+      "usage": "Fictional illustrative work scenes, not students or testimonials",
+      "sourceSha256": "f282fd7ff74c4cb5799ae35ab58c5d77cfa32d38deae56a41f0abf0cc79a9caa",
+      "sizes": [
+        {
+          "file": "work-480.webp",
+          "width": 480,
+          "height": 269,
+          "bytes": 11342,
+          "sha256": "847b4fe364270297dc3383048f230b8809544a2042e79ac32b0035c0974ddf68"
+        },
+        {
+          "file": "work-800.webp",
+          "width": 800,
+          "height": 448,
+          "bytes": 21724,
+          "sha256": "870d345645dc816f1ceb9cbc73f26fa38135847de2cf9958c5f99d3d077916f7"
+        },
+        {
+          "file": "work-1344.webp",
+          "width": 1344,
+          "height": 752,
+          "bytes": 41872,
+          "sha256": "996974bcb833cf7d24274a210aa47fbaa191c096ba5d27f3f834408ce424f01e"
+        }
+      ]
+    },
+    {
+      "name": "creator",
+      "job": "c85535d6-8603-4956-9cd5-77ed3dcd8c4a",
+      "generator": "Higgsfield / gpt_image_2_5",
+      "syntheticPeople": true,
+      "usage": "Fictional illustrative work scenes, not students or testimonials",
+      "sourceSha256": "dafa5e445cca821504a707342229b415a0899a32b09bee09cbb4bcb7c0a602ab",
+      "sizes": [
+        {
+          "file": "creator-480.webp",
+          "width": 480,
+          "height": 362,
+          "bytes": 25830,
+          "sha256": "1c2d0586b54cf2143d2dbb73cede7f4e3a6125eb4d61ed9e525e5fd630168691"
+        },
+        {
+          "file": "creator-800.webp",
+          "width": 800,
+          "height": 603,
+          "bytes": 52108,
+          "sha256": "d4fc5a57456a483000f9dbf4eacee44fe0909e69492a639932fb48b6ef86d808"
+        },
+        {
+          "file": "creator-1344.webp",
+          "width": 1168,
+          "height": 880,
+          "bytes": 87924,
+          "sha256": "df5692a655dcd2615bc6963b2290ca08c6696cd344958439648a13daa174c8d8"
+        }
+      ]
+    },
+    {
+      "name": "builder",
+      "job": "bda3cacc-5246-41c3-8969-42f1a414467f",
+      "generator": "Higgsfield / gpt_image_2_5",
+      "syntheticPeople": true,
+      "usage": "Fictional illustrative work scenes, not students or testimonials",
+      "sourceSha256": "1af3bf2bd1c39dc51a76b14c7798a2c687c43aaa3943f56014a498a4bcb73fb6",
+      "sizes": [
+        {
+          "file": "builder-480.webp",
+          "width": 480,
+          "height": 362,
+          "bytes": 19698,
+          "sha256": "f1bc5684eb587598c6cef4c96f4c84a3685f474d1e873cfc4e69b3ff2e3752e8"
+        },
+        {
+          "file": "builder-800.webp",
+          "width": 800,
+          "height": 603,
+          "bytes": 38564,
+          "sha256": "a4f3ae8eda02464a01f5b994d08ac1932c72cc6f62420010a5f42b00f9fd6d91"
+        },
+        {
+          "file": "builder-1344.webp",
+          "width": 1168,
+          "height": 880,
+          "bytes": 63140,
+          "sha256": "83a12f655829ee3fb0723609c46ceb61ef2b9732a0e069b6bef5ca860f3822bc"
+        }
+      ]
+    }
+  ]
+}

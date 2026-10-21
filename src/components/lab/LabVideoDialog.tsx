@@ -9,7 +9,7 @@ export function LabVideoDialog({ video, onClose }: { video: LabVideo; onClose: (
   const embed = youtubeEmbedUrl(video.videoId);
   const watch = youtubeWatchUrl(video.videoId);
   return <Dialog open onOpenChange={open => { if (!open) onClose(); }}>
-    <DialogContent className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl p-5 sm:p-7">
+    <DialogContent onKeyDownCapture={event => { if (event.key === 'Escape' && !event.defaultPrevented) { event.preventDefault(); event.stopPropagation(); onClose(); } }} className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto rounded-2xl p-5 sm:p-7">
       <div className="pr-7"><p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Referência externa · {video.author}</p><DialogTitle className="font-display text-2xl leading-tight">{video.title}</DialogTitle><DialogDescription className="mt-2">{video.originalTitle}</DialogDescription></div>
       <p className="text-sm text-muted-foreground">{videoDuration(video.durationSeconds)} · {video.language === 'pt' ? 'Português · legenda automática' : video.captionsPt ? 'Inglês · legenda em português identificada' : 'Inglês · tradução depende do player'}</p>
       <div className="overflow-hidden rounded-xl border bg-slate-950 text-slate-100">

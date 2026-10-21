@@ -1,3 +1,4 @@
+import { COURSE_BENEFITS, COURSE_DISPLAY_PRICE, COURSE_PAYMENT_NOTE, COURSE_ACCESS_NOTE } from '@/lib/courseOffer';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Clock, Award, CheckCircle, Sparkles, Banknote, Loader2, Lock, CreditCard } from 'lucide-react';
@@ -7,16 +8,7 @@ import { CheckoutDialog } from '@/components/landing/CheckoutDialog';
 export const PricingAnchor = () => {
   const { handleCheckout, isLoading, showCheckoutDialog, setShowCheckoutDialog } = useCheckout();
 
-  const included = [
-    'Acesso vitalício ao curso completo',
-    'Biblioteca com 100+ prompts prontos',
-    'Comunidade exclusiva de alunos',
-    'Certificado de conclusão',
-    'Atualizações futuras grátis',
-    'Aula bônus: Como Estudar com IA',
-    'Aula bônus: Como Ensinar com IA',
-    'Suporte na comunidade',
-  ];
+  const included = COURSE_BENEFITS;
 
   return (
     <section className="py-10 md:py-16 bg-gradient-to-b from-background to-muted/30 relative overflow-hidden">
@@ -41,28 +33,11 @@ export const PricingAnchor = () => {
             <div className="relative bg-card border-2 border-accent/30 rounded-2xl p-6 md:p-8 shadow-[0_8px_40px_-8px_hsl(43_75%_55%_/_0.2)]">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="bg-accent text-accent-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-gold">
-                  MAIS POPULAR
+                  FORMAÇÃO COMPLETA
                 </span>
               </div>
 
-              <div className="text-center mb-5 pt-2">
-                <p className="text-sm text-muted-foreground mb-1">De</p>
-                <p className="text-2xl font-bold text-muted-foreground line-through">R$ 997</p>
-                <p className="text-sm text-accent font-semibold mb-2">Desconto de 50% por tempo limitado</p>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-sm text-muted-foreground">por</span>
-                  <span className="text-5xl md:text-6xl font-display font-bold text-foreground">R$497</span>
-                </div>
-                <p className="text-lg font-semibold text-accent mt-2">ou 12x de R$ 41,42</p>
-                <p className="text-xs text-muted-foreground mt-1">no cartão de crédito sem juros</p>
-              </div>
-
-              {/* PIX badge */}
-              <div className="flex items-center justify-center gap-2 mb-5 p-2.5 bg-green-500/10 border border-green-500/20 rounded-xl">
-                <Banknote className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-semibold text-green-500">PIX: R$ 447 (10% off extra)</span>
-              </div>
-
+              <div className="text-center mb-5 pt-2"><p className="text-5xl font-display font-bold">{COURSE_DISPLAY_PRICE}</p><p className="mt-3 text-sm text-muted-foreground">{COURSE_PAYMENT_NOTE}</p></div>
               <div className="space-y-2.5 mb-5">
                 {included.map((item, index) => (
                   <div key={index} className="flex items-start gap-2.5">
@@ -96,7 +71,7 @@ export const PricingAnchor = () => {
                 </div>
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Clock className="w-4 h-4 text-accent" />
-                  <span className="text-xs font-medium">Acesso vitalício</span>
+                  <span className="text-xs font-medium">Acesso conforme a oferta</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Award className="w-4 h-4 text-accent" />
@@ -112,7 +87,7 @@ export const PricingAnchor = () => {
                 </div>
                 <div className="flex items-center gap-1 text-muted-foreground/60">
                   <CreditCard className="w-3 h-3" />
-                  <span className="text-[10px]">Visa / Master / PIX</span>
+                  <span className="text-[10px]">Pagamento no provedor</span>
                 </div>
                 <div className="flex items-center gap-1 text-muted-foreground/60">
                   <Shield className="w-3 h-3" />
@@ -121,14 +96,7 @@ export const PricingAnchor = () => {
               </div>
             </div>
 
-            <div className="mt-4 text-center">
-              <p className="text-sm text-muted-foreground">
-                Valor total dos bônus: <span className="line-through">R$ 688</span>
-              </p>
-              <p className="text-sm text-accent font-semibold">
-                Tudo incluído no acesso por R$ 497
-              </p>
-            </div>
+            <p className="mt-4 text-center text-sm text-muted-foreground">{COURSE_ACCESS_NOTE}</p>
           </div>
         </ScrollReveal>
       </div>

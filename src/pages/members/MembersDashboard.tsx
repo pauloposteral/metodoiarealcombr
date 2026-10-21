@@ -19,10 +19,11 @@ import { useCompletedLessons, useCourseCatalog, type CourseCatalog } from '@/hoo
 import { useDashboardActivity } from '@/hooks/useDashboardActivity';
 import { useGamification } from '@/hooks/useGamification';
 import { useLearningTrack } from '@/hooks/useLearningTrack';
+import { useRecentLessonIds } from '@/hooks/useRecentLessonIds';
+import { findCrossCourseResume } from '@/lib/crossCourseResume';
 import { useStreak } from '@/hooks/useStreak';
 import {
   curriculumModules,
-  findResumeLesson,
   lessonsForTrack,
   modulesForTrack,
   summarizeProgress,
@@ -33,6 +34,7 @@ const MembersDashboard = () => {
   const catalog = useCourseCatalog();
   const completed = useCompletedLessons();
   const track = useLearningTrack();
+  const recent = useRecentLessonIds();
 
   let body;
   if (catalog.isPending || completed.isPending || track.isPending) {
@@ -49,7 +51,7 @@ const MembersDashboard = () => {
       />
     );
   } else {
-    body = <DashboardView catalog={catalog.data} completed={completed.data ?? new Set<string>()} track={track.data ?? null} />;
+    body = <DashboardView catalog={catalog.data} completed={completed.data ?? new Set<string>()} track={track.data ?? null} recentIds={recent.data ?? []} recentError={recent.isError} />;
   }
 
   return (
@@ -66,9 +68,11 @@ interface DashboardViewProps {
   catalog: CourseCatalog;
   completed: ReadonlySet<string>;
   track: TrackKey | null;
+  recentIds: readonly string[];
+  recentError: boolean;
 }
 
-function DashboardView({ catalog, completed, track }: DashboardViewProps) {
+function DashboardView({ catalog, completed, track, recentIds, recentError }: DashboardViewProps) {
   const { data: user } = useAuthUser();
   const activity = useDashboardActivity();
   const { userPoints, userRank, getLevelTitle } = useGamification(user?.id);
@@ -76,13 +80,14 @@ function DashboardView({ catalog, completed, track }: DashboardViewProps) {
 
   const main = catalog.main;
   const outline = main?.outline ?? null;
-  const resume = outline ? findResumeLesson(outline, track, completed) : null;
-  const resumeModule = resume && outline ? outline.modules.find((module) => module.id === resume.module_id) ?? null : null;
+  const continuation = findCrossCourseResume(catalog.entries, main?.course.id ?? null, recentIds, track, completed);
+  const resume = continuation?.lesson ?? null;
+  const resumeModule = continuation?.module ?? null;
   const trackLessons = outline ? lessonsForTrack(outline, track) : [];
   const trackProgress = summarizeProgress(trackLessons, completed);
   const remainingMinutes = trackLessons.filter((lesson) => !completed.has(lesson.id)).reduce((sum, lesson) => sum + lesson.minutes, 0);
   const courseProgress = summarizeProgress(outline?.lessons ?? [], completed);
-  const started = (outline?.lessons ?? []).some((lesson) => completed.has(lesson.id));
+  const started = continuation?.fromRecent === true || catalog.entries.some(entry => entry.outline.lessons.some(lesson => completed.has(lesson.id)));
   const hasLocked = (outline?.lessons ?? []).some((lesson) => !lesson.accessible);
   const trackModules = outline ? modulesForTrack(outline, track) : [];
   const modules = outline ? curriculumModules(trackModules.length > 0 ? trackModules : outline.modules).slice(0, 6) : [];
@@ -105,7 +110,7 @@ function DashboardView({ catalog, completed, track }: DashboardViewProps) {
             </p>
           </div>
           {resume ? (
-            <ContinueLearningCard lesson={resume} module={resumeModule} started={started} />
+            <ContinueLearningCard lesson={resume} module={resumeModule} started={started} courseTitle={continuation?.courseTitle} />
           ) : outline && outline.lessons.length > 0 ? (
             <div className="rounded-2xl border border-white/15 bg-white/10 p-5">
               <p className="font-display font-bold">
@@ -122,6 +127,7 @@ function DashboardView({ catalog, completed, track }: DashboardViewProps) {
         </div>
       </section>
 
+      {recentError && <p role="status" className="text-sm text-muted-foreground">Não foi possível carregar a última atividade. Mostramos uma próxima aula disponível; seu progresso não foi alterado.</p>}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {track ? (
           <TrackProgressCard track={track} progress={trackProgress} remainingMinutes={remainingMinutes} courseSlug={main?.course.slug ?? null} />
@@ -132,8 +138,8 @@ function DashboardView({ catalog, completed, track }: DashboardViewProps) {
       </div>
 
       <ul role="list" className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <StatTile icon={<Target className="h-5 w-5" />} value={`${courseProgress.percent}%`} label="Progresso no curso" />
-        <StatTile icon={<CheckCircle2 className="h-5 w-5" />} value={`${courseProgress.completed}/${courseProgress.total}`} label="Aulas concluídas" />
+        <StatTile icon={<Target className="h-5 w-5" />} value={`${courseProgress.percent}%`} label="Progresso na formação principal" />
+        <StatTile icon={<CheckCircle2 className="h-5 w-5" />} value={`${courseProgress.completed}/${courseProgress.total}`} label="Aulas da formação principal" />
         <StatTile icon={<Zap className="h-5 w-5" />} value={String(userPoints?.points ?? 0)} label={`Nível ${level} · ${getLevelTitle(level)}`} />
         <StatTile icon={<Flame className="h-5 w-5 text-orange-500" />} value={String(streak.current_streak)} label={streak.current_streak === 1 ? 'dia seguido' : 'dias seguidos'} />
       </ul>

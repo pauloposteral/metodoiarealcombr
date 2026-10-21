@@ -62,11 +62,11 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
         else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
       }}
       id={scene.id}
-      className={`lcn-scene lcn-tone-${scene.tone}`}
+      className={`lcn-scene lcn-human lcn-tone-${scene.tone}`}
       aria-label={`${scene.slate} — ${scene.chapter}`}
     >
       <div className="lcn-frame">
-        <img className="lcn-poster" src={scene.poster} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
+        <img className="lcn-poster" src={scene.poster} srcSet={scene.image.sources.map(source => `${source.src} ${source.width}w`).join(', ')} sizes="100vw" width={scene.image.sources[2].width} height={scene.image.sources[2].height} alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" fetchPriority={index === 0 ? 'high' : 'auto'} />
         {shouldLoad && canPlay && !hasFailed && (
           <video
             ref={videoRef}
@@ -86,7 +86,7 @@ export const LandingCinemaScene = forwardRef<HTMLElement, Props>(function Landin
         <div className="lcn-vignette" aria-hidden="true" />
       </div>
 
-      <CinemaVectorOverlay index={index} />
+      {index === 2 && <CinemaVectorOverlay index={index} />}
 
       <div className="lcn-slate" aria-hidden="true">
         <span>{scene.slate}</span>

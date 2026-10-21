@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { MembersSidebar } from '@/components/members/MembersSidebar';
 import { MembersHeader } from '@/components/members/MembersHeader';
+import { MobileTouchNav } from '@/components/members/MobileTouchNav';
+import '@/styles/touch.css';
+import { shouldSuspendMemberLayout } from '@/lib/memberAccessState';
 import { OnboardingDialog } from '@/components/members/OnboardingDialog';
 import { useAchievementChecker } from '@/hooks/useAchievementChecker';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -18,6 +21,8 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [accessError, setAccessError] = useState(false);
+  // Repeated SIGNED_IN and TOKEN_REFRESHED events for the same verified user must not unmount the lesson.
+  const verifiedUserId = useRef<string | null>(null);
 
   // Hook must be called unconditionally before any returns
   useAchievementChecker(user?.id);
@@ -27,16 +32,19 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
     let generation = 0;
     const checkAccess = async (session: Session | null) => {
       const request = ++generation;
-      setLoading(true); setAccessError(false); setUser(null);
-      if (!session) { navigate('/auth', { replace: true }); setLoading(false); return; }
+      const sameVerifiedUser = !shouldSuspendMemberLayout(verifiedUserId.current, session?.user.id ?? null);
+      if (!sameVerifiedUser) { setLoading(true); setUser(null); }
+      setAccessError(false);
+      if (!session) { verifiedUserId.current = null; navigate('/auth', { replace: true }); setLoading(false); return; }
       try {
         const { data: profile, error } = await supabase.from('profiles').select('access_status').eq('id', session.user.id).single();
         if (disposed || request !== generation) return;
-        if (error || !profile) { setAccessError(true); return; }
-        if (profile.access_status === 'revoked') { navigate('/acesso-bloqueado', { replace: true }); return; }
-        setUser(session.user);
+        if (error || !profile) { verifiedUserId.current = null; setUser(null); setAccessError(true); return; }
+        if (profile.access_status === 'revoked') { verifiedUserId.current = null; setUser(null); navigate('/acesso-bloqueado', { replace: true }); return; }
+        verifiedUserId.current = session.user.id;
+        if (!sameVerifiedUser) setUser(session.user);
       } catch {
-        if (!disposed && request === generation) setAccessError(true);
+        if (!disposed && request === generation) { verifiedUserId.current = null; setUser(null); setAccessError(true); }
       } finally {
         if (!disposed && request === generation) setLoading(false);
       }
@@ -69,14 +77,15 @@ export const MembersLayout = ({ children }: MembersLayoutProps) => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="touch-shell min-h-svh flex w-full bg-background">
         <MembersSidebar />
         <div className="min-w-0 flex-1 flex flex-col">
           <MembersHeader user={user} />
-          <main className="flex-1 p-6 lg:p-8 overflow-auto">
+          <main className="touch-main min-w-0 flex-1 overflow-x-clip overflow-y-auto p-4 sm:p-6 lg:p-8">
             {children}
           </main>
         </div>
+        <MobileTouchNav />
       </div>
       <OnboardingDialog userId={user.id} />
     </SidebarProvider>

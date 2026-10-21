@@ -25,6 +25,7 @@ export const CookieConsent = () => {
 
   return (
     <div
+      data-cookie-consent
       className="fixed bottom-0 left-0 right-0 z-[100] p-3 md:p-4 bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-8px_32px_hsl(var(--navy-dark)/0.35)] animate-fade-in"
       role="dialog"
       aria-live="polite"
@@ -47,7 +48,7 @@ export const CookieConsent = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="flex-1 md:flex-none text-xs"
+            className="min-h-11 flex-1 md:flex-none text-xs"
             onClick={() => set('declined')}
           >
             Apenas essenciais
@@ -55,7 +56,7 @@ export const CookieConsent = () => {
           <Button
             variant="hero"
             size="sm"
-            className="flex-1 md:flex-none text-xs"
+            className="min-h-11 flex-1 md:flex-none text-xs"
             onClick={() => set('accepted')}
           >
             Aceitar todos

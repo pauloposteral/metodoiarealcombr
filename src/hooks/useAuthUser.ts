@@ -1,6 +1,7 @@
 import { useQuery, type QueryClient, useQueryClient } from '@tanstack/react-query';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { clearAccountDrafts } from '@/lib/accountDrafts';
 
 export const AUTH_USER_QUERY_KEY = ['auth-user'] as const;
 
@@ -13,6 +14,12 @@ function syncAuthUser(queryClient: QueryClient) {
   supabase.auth.onAuthStateChange((_event, session) => {
     const next = session?.user ?? null;
     const previous = queryClient.getQueryData<User | null>(AUTH_USER_QUERY_KEY);
+    if (typeof window !== 'undefined') {
+      try {
+        if (_event === 'SIGNED_OUT') clearAccountDrafts(window.sessionStorage);
+        else if (previous?.id && previous.id !== next?.id) clearAccountDrafts(window.sessionStorage, previous.id);
+      } catch { /* Storage may be disabled; authentication must continue. */ }
+    }
     if (previous?.id !== next?.id) queryClient.setQueryData(AUTH_USER_QUERY_KEY, next);
   });
 }

@@ -674,6 +674,7 @@ a.lcn-sticky, a.lcn-cta { text-decoration: none; text-align: center; }
 .lcn-login-submit:disabled { opacity: .7; cursor: wait; }
 .lcn-login-links { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; }
 .lcn-login-links a, .lcn-login-free { text-decoration: underline; text-underline-offset: 4px; }
+.lcn-login-links a { display: inline-flex; align-items: center; min-height: 44px; }
 .lcn-login-free { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: #edc36c; font-size: 13px; }
 @media (max-width: 760px) {
   .lcn-reel { scroll-snap-type: none; }
@@ -688,3 +689,39 @@ a.lcn-sticky, a.lcn-cta { text-decoration: none; text-align: center; }
   #abertura .lcn-dock { order: 3; }
   .lcn-login h2 { font-size: 24px; margin-bottom: 14px; }
 }
+
+/* Human work scenes: lightweight responsive photography, no unrelated autoplay. */
+.lcn-human .lcn-poster { filter: saturate(.95) contrast(1.02) brightness(.87); object-position: center; }
+.lcn-human .lcn-vignette { background: linear-gradient(90deg, rgba(8,13,23,.94) 0%, rgba(8,13,23,.82) 27%, rgba(8,13,23,.25) 70%), linear-gradient(0deg, rgba(8,13,23,.93) 0%, transparent 78%); box-shadow: none; }
+.lcn-human .lcn-grain { opacity: .04; }
+.lcn-human .lcn-body { color: #d9e0e9; max-width: 40rem; }
+.lcn-human .lcn-title { text-wrap: balance; }
+#abertura .lcn-human-strip { grid-column: 1; display: flex; align-items: center; gap: 16px; margin: 16px 0; width: min(440px, 100%); padding: 9px; border: 1px solid rgba(237,195,108,.25); border-radius: 16px; background: rgba(8,13,23,.7); }
+.lcn-human-strip img { width: 124px; height: 92px; object-fit: cover; object-position: 50% 34%; border-radius: 10px; }
+.lcn-human-strip strong, .lcn-human-strip span { display: block; font-size: 14px; line-height: 1.5; }
+.lcn-human-strip span { margin-top: 4px; color: #c4cedd; font-size: 12px; }
+#abertura .lcn-login { grid-row: 1 / span 8; align-self: center; }
+.lcn-workshop-preview { max-width: 570px; margin-top: 24px; padding: 24px; border: 1px solid rgba(237,195,108,.3); border-radius: 22px; background: rgba(8,13,23,.94); }
+.lcn-workshop-preview > p { font: 11px/1.4 'Space Mono',monospace; color: #edc36c; letter-spacing: .14em; }
+.lcn-workshop-preview ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; padding: 0; list-style: none; margin: 18px 0; }
+.lcn-workshop-preview li { padding: 14px 10px; border: 1px solid #344158; border-radius: 12px; font-size: 14px; background: #131e30; }
+.lcn-workshop-preview li span { display: block; margin-bottom: 5px; font-size: 11px; color: #edc36c; }
+.lcn-workshop-preview a { display: inline-flex; align-items: center; min-height: 44px; color: #edc36c; text-decoration: underline; text-underline-offset: 5px; font-weight: 600; }
+.lcn-workshop-preview small { display: block; margin-top: 8px; font-size: 12px; line-height: 1.6; color: #b9c7d9; }
+.lcn-ai-notice { max-width: 480px; margin-top: 20px; color: #c5ccd8; font-size: 12px; line-height: 1.6; }
+@media (min-width: 1100px) { #abertura .lcn-content { max-width: 1220px; grid-template-columns: minmax(0,1.35fr) minmax(300px,.75fr); } #abertura .lcn-title { font-size: clamp(42px,4.5vw,65px); } }
+@media (max-width: 760px) {
+  #abertura .lcn-human-strip { display: flex; width: 100%; max-width: 340px; margin: 8px 0 10px; padding: 7px; gap: 12px; }
+  #abertura .lcn-human-strip img { width: 88px; height: 66px; }
+  #abertura .lcn-human-strip strong { font-size: 12px; }
+  #abertura .lcn-human-strip span { font-size: 11px; }
+  .lcn-human .lcn-vignette { background: linear-gradient(0deg, rgba(8,13,23,.98) 0%,rgba(8,13,23,.86) 48%,rgba(8,13,23,.48) 100%); }
+  #abertura .lcn-poster { object-position: 66% top; }
+  .lcn-workshop-preview { padding: 18px; }
+  .lcn-workshop-preview ol { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .lcn-ai-notice { padding-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .lcn-human * { scroll-behavior: auto !important; } }
+
+#abertura .lcn-first-disclosure { grid-column: 1; color: #c3ccd9; font-size: 11px; line-height: 1.5; margin: 2px 0 8px; }
+@media(max-width:760px){ #abertura .lcn-first-disclosure { font-size: 10px; margin: 0 0 14px; } }

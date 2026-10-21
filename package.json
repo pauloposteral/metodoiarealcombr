@@ -10,14 +10,18 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.edge.json",
-    "test": "node --experimental-vm-modules --test tests/*.test.mjs",
+    "test": "node --experimental-vm-modules --test --test-concurrency=1 tests/*.test.mjs",
     "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "test:smoke": "node scripts/smoke.mjs",
     "test:seo": "node --test tests/seo-public.test.mjs",
     "test:seo-browser": "node scripts/seo/verify-browser.mjs",
     "audit:security": "node scripts/security/audit-policy.mjs",
     "test:study-browser": "node scripts/verify-study.mjs",
-    "test:lab-browser": "node scripts/verify-lab.mjs"
+    "test:lab-browser": "node scripts/verify-lab.mjs",
+    "test:school-browser": "node scripts/verify-school.mjs",
+    "test:notes-browser": "node scripts/verify-note-draft.mjs",
+    "test:navigation-browser": "node scripts/verify-school-navigation.mjs",
+    "test:touch-browser": "node scripts/verify-touch.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -99,10 +103,10 @@
     "postgres": "^3.4.9",
     "stripe": "^18.5.0",
     "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
-    "vite": "^6.4.3",
-    "tailwindcss-animate": "^1.0.7"
+    "vite": "^6.4.4"
   },
   "engines": {
     "node": ">=24 <25"
